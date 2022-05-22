@@ -1,0 +1,13 @@
+.hod-container {
+
+}
+
+.hod-text-1 {
+    font-size: 40px;
+    color: green;
+       float: center ;
+    width: 20%;
+    position: relative;
+    left: 50%;
+
+}

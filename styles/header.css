@@ -1,0 +1,16 @@
+.header {
+    background-color: #cfc ;
+}
+
+.header-content {
+    display: table;
+    margin: 0 auto;
+}
+
+.header-text {
+    color: black;
+    font-size: 30px;
+    text-align: center;
+    vertical-align: center;
+
+}

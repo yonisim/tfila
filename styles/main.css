@@ -1,0 +1,28 @@
+.container {
+    height: 80%;
+    float: center ;
+}
+
+.text-item {
+    padding: 10px;
+    border: 1px solid green;
+    height: 65vh;
+    width: 100%;
+    border-radius:25px;
+    -moz-border-radius:25px; 
+    -moz-box-shadow:    1px 1px 1px #ccc;
+    -webkit-box-shadow: 1px 1px 1px 1px #ccc;
+     box-shadow:         1px 2px 2px 2px #ccc;
+}
+
+.my-text {
+    color: black;
+    font-size: 30px;
+    text-align: center;
+    vertical-align: center;
+
+}
+
+.hidden_element{
+    display: none;
+}
