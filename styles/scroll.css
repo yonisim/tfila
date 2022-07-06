@@ -1,11 +1,11 @@
-#scroll-container {
+.scroll-container {
   border: 3px solid white;
   border-radius: 5px;
   height: 100%;
   overflow: hidden;
 }
 
-#scroll-text {
+.scroll-text {
   height: 100%;
   text-align: center;
   
@@ -16,7 +16,7 @@
   
   -moz-animation: my-animation 5s linear infinite;
   -webkit-animation: my-animation 5s linear infinite;
-  animation: my-animation 15s linear infinite;
+  animation: my-animation 10s linear;
 }
 
 /* for Firefox */
@@ -35,7 +35,7 @@
   from {
     -moz-transform: translateY(100%);
     -webkit-transform: translateY(100%);
-    transform: translateY(100%);
+    transform: translateY(10%);
   }
   to {
     -moz-transform: translateY(-100%);

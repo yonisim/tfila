@@ -4,29 +4,36 @@
         "sunrise": "06:01",
         "sunset": "19:25",
         "special_occations": ["SFIRAT_HAOMER"],
-        "sfirat_haomer": 25
+        "omer": 25
     },
     "2022-05-12": {
         "hebrew_date": "12/04",
         "sunrise": "06:03",
         "sunset": "19:26",
         "special_occations": ["SFIRAT_HAOMER"],
-        "sfirat_haomer": 26
+        "omer": 26
     },
     "2022-05-13": {
         "sunrise": "06:04",
         "sunset": "19:28",
         "special_occations": ["SFIRAT_HAOMER"],
-        "sfirat_haomer": 27,
+        "omer": 27,
         "shabat_in": "19:07",
         "shabat_out": "20:08"
+    },
+    "2022-05-14": {
+        "hebrew_date": "14/04",
+        "sunrise": "06:04",
+        "sunset": "19:28",
+        "special_occations": ["SFIRAT_HAOMER"],
+        "omer": 28
     },
     "2022-05-15": {
         "hebrew_date": "15/04",
         "sunrise": "06:04",
         "sunset": "19:28",
         "special_occations": ["SFIRAT_HAOMER"],
-        "sfirat_haomer": 28,
+        "omer": 29,
         "shabat_in": "19:07",
         "shabat_out": "20:08"
     },
@@ -35,7 +42,7 @@
         "sunrise": "06:04",
         "sunset": "19:28",
         "special_occations": ["SFIRAT_HAOMER"],
-        "sfirat_haomer": 28,
+        "omer": 30,
         "shabat_in": "19:07",
         "shabat_out": "20:08"
     }

@@ -1,16 +1,33 @@
 .header {
-    background-color: #cfc ;
 }
 
 .header-content {
-    display: table;
-    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
 }
 
 .header-text {
     color: black;
-    font-size: 30px;
+    font-size: 50px;
+    font-weight: bold;
     text-align: center;
     vertical-align: center;
 
 }
+
+.left-position {
+    margin-left: 100px;
+}
+
+.right-position {
+    margin-right: 100px;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .block {
+  }

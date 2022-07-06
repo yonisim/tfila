@@ -4,14 +4,15 @@ var hebrew_days = ["א","ב","ג","ד","ה","ו","ז","ח","ט","י","יא","י�
 var hebrew_months = ["תשרי","חשוון","כסליו","טבת"];
 var current_year = 'תשפ"ב';
 
-var number_to_hebrew_word = ["אחד","שני","שלושה","ארבעה","שישה","שבעה"];
+var number_to_hebrew_word = ["אחד","שני","שלושה","ארבעה","חמישה","שישה","שבעה","שמונה","תשעה","עשרה"];
 var tens_number_to_hebrew_word = ["עשר","עשרים","שלושים","ארבעים"];
 
 var hayom = "היום";
+var yom = "יום";
 var ones_and_tens_connector = ' ו';
 var days_descriptor = 'יום';
 var laomer = 'לעומר';
-
+var shehem = "שהם";
 
 export function parse_hebrew_date(hebrew_date_orig_format){
     var splitted = hebrew_date_orig_format.split('/');
@@ -26,7 +27,8 @@ export function parse_hebrew_date(hebrew_date_orig_format){
 
 export function parse_sfirat_haomer(sfirat_haomer_numeric){
     var days_count_hebrew = omer_days_count_to_hebrew(sfirat_haomer_numeric);
-    var omer_hebrew = [days_count_hebrew, laomer].join(' ');
+    var omer_days_hebrew = [days_count_hebrew, laomer].join(' ');
+    return omer_days_hebrew;
 }
 
 function omer_days_count_to_hebrew(sfirat_haomer_numeric){
@@ -46,6 +48,6 @@ function omer_days_count_to_hebrew(sfirat_haomer_numeric){
             tens_hebrew = ones_and_tens_connector + tens_hebrew;
         }
     }
-    var first_part_result = hayom + ones_hebrew + tens_hebrew;
+    var first_part_result = [hayom, ones_hebrew, tens_hebrew, yom].join(' ');
     return first_part_result;
 }

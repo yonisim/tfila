@@ -1,12 +1,12 @@
 .container {
-    height: 80%;
+    height: 100%;
     float: center ;
 }
 
 .text-item {
     padding: 10px;
     border: 1px solid green;
-    height: 65vh;
+    height: 100%;
     width: 100%;
     border-radius:25px;
     -moz-border-radius:25px; 
@@ -17,7 +17,7 @@
 
 .my-text {
     color: black;
-    font-size: 30px;
+    font-size: 3vw;
     text-align: center;
     vertical-align: center;
 
@@ -26,3 +26,67 @@
 .hidden_element{
     display: none;
 }
+
+
+.bg {
+
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+
+.main-bg {
+    background: url(../images/curtain-2.png);
+    background-size: 100% auto;
+    background-repeat: repeat;
+  }
+
+  .hexagon {
+    position: relative;
+    width: 124px;
+    height: 100px;
+    background: rgb(88, 232, 78);
+  }
+  
+  .hexagon:after,
+  .hexagon:before {
+    position: absolute;
+    content: "";
+    z-index: 1;
+    top: 0;  
+    width: 0px;
+    background: #fff;
+    border-top: 50px transparent solid; 
+    border-bottom: 50px transparent solid;
+  }
+  
+  .hexagon:before {
+      left: 0;
+      border-right: 30px rgb(88, 232, 78) solid; 
+  }
+  .hexagon:after {
+      right: 0;
+      border-left: 30px rgb(88, 232, 78) solid; 
+  }
+
+  .oval {
+    width: 100%;
+    height: 80px;
+    background: rgb(88, 232, 78);
+    border-radius: 40px;
+  }
+
+  .circle {
+    width: 100px;
+    height: 100px;
+    line-height: 80px;
+    border-radius: 50%;
+    background: rgb(137, 11, 247);
+  }
+  
+  .clock {
+    width: 75%;
+    text-align: center;
+  }

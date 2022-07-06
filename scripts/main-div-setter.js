@@ -20,6 +20,14 @@ export function set_element_data(dest_element_id, data){
     document.getElementById(dest_element_id).textContent = data;
 }
 
+export function set_element_html(dest_element_id, html_data){
+    var element = document.getElementById(dest_element_id);
+    console.log(document);
+    console.log(element);
+    console.log(html_data);
+    element.innerHTML = html_data;
+}
+
 export function activate_element(element_id, parent_element_id){
     var parent_elem = document.getElementById(parent_element_id);
     for (var child_elem of parent_elem.children){
@@ -27,6 +35,7 @@ export function activate_element(element_id, parent_element_id){
     }
     var element = document.getElementById(element_id);
     element.style.display = 'block';
+    element.parentElement.style.display = 'block';
 }
 
 export function waitForElm(selector) {
@@ -48,3 +57,21 @@ export function waitForElm(selector) {
         });
     });
 }
+
+export function set_element_background(elem_id, image_name){
+    var element = document.getElementById(elem_id);
+    //element.style.backgroundImage = "url(images/" + image_name + ".jpg)";
+}
+
+export function set_element_background_image(elem_id, image_url){
+    var element = document.getElementById(elem_id);
+    element.style.backgroundImage = image_url;
+}
+
+export function get_element_background(elem_id){
+    var element = document.getElementById(elem_id);
+    return element.style.backgroundImage;
+}
+
+
+

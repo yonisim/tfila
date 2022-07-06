@@ -1,9 +1,14 @@
 'esversion: 8';
 
 export function current_date(){
+    let cur_date = new Date('2022-05-14T19:28:02');
     let time = new Date();
     let current_date = time.toISOString().split('T')[0];
-    return current_date;
+    return cur_date;
+}
+
+export function get_date_from_Date(date){
+    return date.toISOString().split('T')[0];
 }
 
 function current_date_local(){
