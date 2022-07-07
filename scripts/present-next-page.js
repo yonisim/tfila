@@ -69,12 +69,13 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
+    slide_show_items.push('messages');
     if (today_times['omer']){
-        slide_show_items.push('omer');
+        //slide_show_items.push('omer');
     }
     var week_day = date.getDay();
     if (week_day == 6 | week_day == 7){
-        slide_show_items.push('shabat');
+        //slide_show_items.push('shabat');
     }
     slide_show_items.push('tormim');
     return slide_show_items;
@@ -161,7 +162,7 @@ function scroll_updated(){
 }
 
 function present_donators(date){
-    load_file('tormim.txt', data => {
+    load_file('tormim.txt').then(data => {
         var content = data.split("\n").join("<br>");
         document.getElementById('output')
             .innerHTML=content;
@@ -176,14 +177,27 @@ function present_donators(date){
 }
 
 function present_messages(date){
-    load_file();
-    var el = document.getElementsByClassName('scroll-text')[0];
-    wait_for_animation = true;
-    el.addEventListener('animationend', () => {
-        console.log('Animation ended');
-        wait_for_animation = false;
+    function display_message(messages_list, elem){
+        var message = messages_list[0];
+        console.log("message for display: " + message);
+        var res_html = "<p class='my-text'>" + message +  "</p>";
+        elem.innerHTML=res_html;
+        messages_list.shift();
+        return sleep_seconds(wait_seconds).then(() => {
+            if (messages_list.length) {
+                return display_message(messages_list, elem);
+            }
+        });
+    }
+
+    return load_file('./data/messages.txt').then(data => {
+        var messages_list = data.split("\n");
+        console.log("messages: " + data);
+        var elem = document.getElementById('messages-text');
+        var total_messages_time = wait_seconds * messages_list.length;
+        display_message(messages_list, elem);
+        return sleep_seconds(total_messages_time);
       });
-    return waitForAnimation();
 }
 
 function set_main_area_background(date){
@@ -204,7 +218,9 @@ let item_funcs = {
 };
 
 async function loop_pages(){
-    while (true){
+    var iter = 0;
+    while (iter <= 1000){
+        iter = iter +1;
         current_date_obj = current_date();
         set_main_area_background(current_date_obj);
         present_header_dates(current_date_obj);
