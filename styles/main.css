@@ -6,19 +6,23 @@ html, body, article {
 
 .container {
     height: 100%;
+    width: 50%;
     float: center ;
+    position: absolute;
+    left: 25%;
+    margin-top: 10%;
 }
 
 .text-item {
     padding: 10px;
-    border: 1px solid green;
+    /* border: 1px solid green; */
     height: 100%;
     width: 100%;
     border-radius:25px;
     -moz-border-radius:25px; 
     -moz-box-shadow:    1px 1px 1px #ccc;
     -webkit-box-shadow: 1px 1px 1px 1px #ccc;
-     box-shadow:         1px 2px 2px 2px #ccc;
+    /* box-shadow:         1px 2px 2px 2px #ccc; */
 }
 
 .my-text {
