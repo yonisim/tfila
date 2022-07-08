@@ -69,7 +69,6 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    slide_show_items.push('messages');
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
@@ -77,6 +76,7 @@ function get_slide_show_items_ids(){
     if (week_day == 6 | week_day == 7){
         slide_show_items.push('shabat');
     }
+    slide_show_items.push('messages');
     slide_show_items.push('tormim');
     return slide_show_items;
 }
