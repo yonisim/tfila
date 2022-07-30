@@ -37,52 +37,12 @@ html, body, article {
     display: none;
 }
 
-
-.bg {
-
-
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% auto;
+.main-bg {
+  background: url(../images/mishkan-tkiya.JPG) no-repeat center center fixed;
+  background-size: cover;
 }
 
-.main-bg {
-    background: url(../images/curtain-2.png);
-    background-size: 100% auto;
-    background-repeat: repeat;
-  }
-
-  .hexagon {
-    position: relative;
-    width: 124px;
-    height: 100px;
-    background: rgb(88, 232, 78);
-  }
-  
-  .hexagon:after,
-  .hexagon:before {
-    position: absolute;
-    content: "";
-    z-index: 1;
-    top: 0;  
-    width: 0px;
-    background: #fff;
-    border-top: 50px transparent solid; 
-    border-bottom: 50px transparent solid;
-  }
-  
-  .hexagon:before {
-      left: 0;
-      border-right: 30px rgb(88, 232, 78) solid; 
-  }
-  .hexagon:after {
-      right: 0;
-      border-left: 30px rgb(88, 232, 78) solid; 
-  }
-
   .oval {
-    width: 100%;
     height: 80px;
     background: rgb(88, 232, 78);
     border-radius: 40px;
@@ -97,6 +57,14 @@ html, body, article {
   }
   
   .clock {
-    width: 75%;
+    width: 100%;
     text-align: center;
+  }
+
+  .my-div {
+    height: 100%;
+  }
+
+  h1 {
+    font-size: 15vh;
   }

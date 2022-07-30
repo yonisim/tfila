@@ -69,6 +69,7 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
+    slide_show_items.push('tfilot');
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
@@ -89,7 +90,8 @@ let mincha_regular_days = ["מנחה: 19:20"];
 let mincha_friday = ["מנחה גדולה: 13:15", "מנחה מניין פלג: 17:45", "מנחה קטנה: 19:28"];
 
 function present_prayer_times(current_date){
-    var res_html = '';
+    var res_html_1 = '';
+    var res_html_2 = '';
     var elem_id = 'tfilot';
     var prayer_times = [];
     if (current_date.getDay() == 6){
@@ -103,10 +105,19 @@ function present_prayer_times(current_date){
         prayer_times.push.apply(prayer_times, shacharit_regular_days);
         prayer_times.push.apply(prayer_times, mincha_regular_days);
     }
+    var index = 1;
     for (var prayer_time of prayer_times){
-        res_html += "<p class='my-text'>" + prayer_time + "</p>";
+        var item =  "<p class='my-text'>" + prayer_time + "</p>";
+        if(index % 2 == 0){
+            res_html_1 += item;
+        } else{
+            res_html_2 += item;
+        }
+        index += 1;
     }
-    set_element_html(elem_id, res_html);
+    set_element_html(elem_id, res_html_1);
+    set_element_html(elem_id + "-2", res_html_2);
+    return sleep_seconds(wait_seconds);
 }
 
 function present_sfirat_haomer(current_date){
