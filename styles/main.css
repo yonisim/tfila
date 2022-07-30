@@ -43,7 +43,7 @@ html, body, article {
 }
 
   .oval {
-    height: 80px;
+    height: 100%;
     background: rgb(88, 232, 78);
     border-radius: 40px;
   }
