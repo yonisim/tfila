@@ -1,0 +1,15 @@
+.tfilot-weekdays-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    background-color: transparent;
+    color: #444;
+    direction: rtl;
+}
+
+.grid-box {
+    background-color: rgba(26, 140, 211, 0.662);
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px;
+  }

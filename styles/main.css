@@ -1,17 +1,21 @@
 html, body, article {
   background: var(--bgColor);
   font-family: 'DS-DIGI', sans-serif;
-  height: 100%;
+  height: 100vh;
+}
+
+#main-div {
+  height: 70%;
 }
 
 .container {
     height: 100%;
     width: 50%;
-    float: center ;
-    position: absolute;
+    position: relative;
     left: 25%;
-    margin-top: 10%;
+    margin-top: 3%;
 }
+
 
 .text-item {
     padding: 10px;
@@ -19,15 +23,12 @@ html, body, article {
     height: 100%;
     width: 100%;
     border-radius:25px;
-    -moz-border-radius:25px; 
-    -moz-box-shadow:    1px 1px 1px #ccc;
-    -webkit-box-shadow: 1px 1px 1px 1px #ccc;
     /* box-shadow:         1px 2px 2px 2px #ccc; */
 }
 
 .my-text {
     color: black;
-    font-size: 3vw;
+    font-size: 5vw;
     text-align: center;
     vertical-align: center;
 
@@ -44,7 +45,7 @@ html, body, article {
 
   .oval {
     height: 100%;
-    background: rgb(88, 232, 78);
+    /* background: rgba(62, 115, 228, 0.724); */
     border-radius: 40px;
   }
 

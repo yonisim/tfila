@@ -1,10 +1,14 @@
 #header {
     height: 8vw;
+    background-color: rgba(62, 115, 228, 0.724);
   }
 
 #header-content {
     display: grid;
-    grid-template-columns: 30vw 2vw 30vw 2vw 35vw;
+    /* grid-template-columns: 30vw 2vw 30vw 2vw 35vw; */
+    grid-template-columns: auto repeat(2, 1fr);
+    justify-content: first baseline;
+    direction: rtl;
 }
 
 .header-text {
@@ -12,8 +16,6 @@
     font-size: 5vw;
     font-weight: bold;
     text-align: center;
-    vertical-align: center;
-
 }
 
 .left-position {

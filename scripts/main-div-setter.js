@@ -34,8 +34,7 @@ export function activate_element(element_id, parent_element_id){
         child_elem.style.display = 'none';
     }
     var element = document.getElementById(element_id);
-    element.style.display = 'block';
-    element.parentElement.style.display = 'block';
+    element.style.display = '';
 }
 
 export function waitForElm(selector) {

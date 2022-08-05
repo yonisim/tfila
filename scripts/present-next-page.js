@@ -77,47 +77,27 @@ function get_slide_show_items_ids(){
     if (week_day == 6 | week_day == 7){
         slide_show_items.push('shabat');
     }
-    slide_show_items.push('messages');
-    slide_show_items.push('tormim');
+    //slide_show_items.push('messages');
+    //slide_show_items.push('tormim');
     return slide_show_items;
 }
 
 
-let shacharit_regular_days = ['שחרית א: 06:00', 'שחרית ב: 06:50'];
+let shacharit_regular_days = ['06:00', '06:50', '08:30'];
 let shacharit_shabat_and_chag = ['06:00', '07:20', '08:30'];
 let mincha_shabat_and_chag = ["מנחה א: 13:15", "מנחה ב: 14:00", "מנחה קטנה: 18:00"];
-let mincha_regular_days = ["מנחה: 19:20"];
+let mincha_regular_days = ["19:20"];
 let mincha_friday = ["מנחה גדולה: 13:15", "מנחה מניין פלג: 17:45", "מנחה קטנה: 19:28"];
+let arvit_regular_days = ['20:00', '21:00']
 
 function present_prayer_times(current_date){
-    var res_html_1 = '';
-    var res_html_2 = '';
-    var elem_id = 'tfilot';
-    var prayer_times = [];
-    if (current_date.getDay() == 6){
-        prayer_times.push.apply(prayer_times, shacharit_shabat_and_chag);
-        prayer_times.push.apply(prayer_times, mincha_shabat_and_chag);
-    } else if (current_date.getDay() == 5){
-        prayer_times.push.apply(prayer_times, shacharit_regular_days);
-        prayer_times.push.apply(prayer_times, mincha_friday);
-    }
-     else {
-        prayer_times.push.apply(prayer_times, shacharit_regular_days);
-        prayer_times.push.apply(prayer_times, mincha_regular_days);
-    }
-    var index = 1;
-    for (var prayer_time of prayer_times){
-        var item =  "<p class='my-text'>" + prayer_time + "</p>";
-        if(index % 2 == 0){
-            res_html_1 += item;
-        } else{
-            res_html_2 += item;
-        }
-        index += 1;
-    }
-    set_element_html(elem_id, res_html_1);
-    set_element_html(elem_id + "-2", res_html_2);
-    return sleep_seconds(wait_seconds);
+    var shacharit_times = shacharit_regular_days.join('<br>');
+    var mincha_times = mincha_regular_days.join('<br>');
+    var arvit_times = arvit_regular_days.join('<br>');
+    set_element_html('shachrit-regulr-days', shacharit_times);
+    set_element_html('mincha-regulr-days', mincha_times);
+    set_element_html('arvit-regulr-days', arvit_times);
+    return sleep_seconds(wait_seconds *20);
 }
 
 function present_sfirat_haomer(current_date){
