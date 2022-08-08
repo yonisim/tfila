@@ -6,7 +6,6 @@ import {set_element_data, set_element_html, set_element_background,
 import {parse_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
-import { toggle } from "slide-element";
 
 var day_times;
 var current_date_obj;
