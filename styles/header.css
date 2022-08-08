@@ -1,13 +1,11 @@
 #header {
-    height: 8vw;
+    height: fit-content;
     background-color: rgba(62, 115, 228, 0.724);
   }
 
 #header-content {
     display: grid;
-    /* grid-template-columns: 30vw 2vw 30vw 2vw 35vw; */
     grid-template-columns: auto repeat(2, 1fr);
-    justify-content: first baseline;
     direction: rtl;
 }
 

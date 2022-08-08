@@ -1,6 +1,5 @@
-.tfilot-weekdays-grid{
+.tfilot-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
     column-gap: 5vw;
     background-color: transparent;
     color: #444;
@@ -8,15 +7,24 @@
     margin-top: 20px;
 }
 
+.tfilot-weekdays-grid{
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.tfilot-shabat-grid{
+    grid-template-columns: repeat(4, 1fr);
+}
+
 .grid-header-box {
-    background-color: greenyellow;
+    background-color: rgba(30, 77, 219, 0.815);
+    color: white;
 }
 
 .grid-body-box {
     background-color: rgba(245, 245, 245, 0.779);
+    color: black;
 }
 
 .grid-box {
-    color: black;
     padding: 5px;
   }

@@ -31,14 +31,15 @@ html, body, article {
   font-size: 7vw;
   text-align: center;
   font-weight: bold;
-  vertical-align: center;
-  margin: 0 auto;
-  background-color: aqua;
+  margin: 10px auto;
+  border-radius: 10px;
+  width: 60%;
+  background-color: rgba(30, 77, 219, 0.815);
 }
 
 .my-text {
     color: black;
-    font-size: 7vw;
+    font-size: 6vw;
     text-align: center;
     font-weight: bold;
     vertical-align: center;

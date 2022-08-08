@@ -6,6 +6,7 @@ import {set_element_data, set_element_html, set_element_background,
 import {parse_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
+import { toggle } from "slide-element";
 
 var day_times;
 var current_date_obj;
@@ -84,11 +85,12 @@ function get_slide_show_items_ids(){
 
 
 let shacharit_regular_days = ['06:00', '06:50', '08:30'];
-let shacharit_shabat_and_chag = ['06:00', '07:20', '08:30'];
-let mincha_shabat_and_chag = ["מנחה א: 13:15", "מנחה ב: 14:00", "מנחה קטנה: 18:00"];
 let mincha_regular_days = ["19:20"];
-let mincha_friday = ["מנחה גדולה: 13:15", "מנחה מניין פלג: 17:45", "מנחה קטנה: 19:28"];
-let arvit_regular_days = ['20:00', '21:00']
+let arvit_regular_days = ['20:00', '21:00'];
+let shacharit_shabat = ['06:00', '07:20', '08:30'];
+let mincha_shabat = ["13:20","14:00","18:00"];
+let arvit_shabat = ['20:00'];
+
 
 function present_prayer_times(current_date){
     var shacharit_times = shacharit_regular_days.join('<br>');
@@ -97,7 +99,18 @@ function present_prayer_times(current_date){
     set_element_html('shachrit-regulr-days', shacharit_times);
     set_element_html('mincha-regulr-days', mincha_times);
     set_element_html('arvit-regulr-days', arvit_times);
-    return sleep_seconds(wait_seconds *20);
+    return sleep_seconds(wait_seconds);
+}
+
+function present_shabat_prayer_times(current_date){
+    var shacharit_times = shacharit_shabat.join('<br>');
+    var mincha_times = mincha_shabat.join('<br>');
+    var arvit_times = arvit_shabat.join('<br>');
+    set_element_html('kabalat-shabat', "19:00");
+    set_element_html('shachrit-shabat', shacharit_times);
+    set_element_html('mincha-shabat', mincha_times);
+    set_element_html('arvit-shabat', arvit_times);
+    return sleep_seconds(wait_seconds);
 }
 
 function present_sfirat_haomer(current_date){
@@ -203,7 +216,7 @@ function set_main_area_background(date){
 let item_funcs = {
     'tfilot': present_prayer_times,
     'omer': present_sfirat_haomer,
-    'shabat': present_shabat_times,
+    'shabat': present_shabat_prayer_times,
     'tormim': present_donators,
     'messages': present_messages
 };
