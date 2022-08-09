@@ -34,7 +34,7 @@ export function activate_element(element_id, parent_element_id){
         child_elem.style.display = 'none';
     }
     var element = document.getElementById(element_id);
-    element.style.display = '';
+    element.style.display = 'contents';
 }
 
 export function waitForElm(selector) {

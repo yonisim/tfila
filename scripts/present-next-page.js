@@ -78,7 +78,7 @@ function get_slide_show_items_ids(){
         slide_show_items.push('shabat');
     }
     //slide_show_items.push('messages');
-    //slide_show_items.push('tormim');
+    slide_show_items.push('tormim');
     return slide_show_items;
 }
 
