@@ -77,7 +77,7 @@ function get_slide_show_items_ids(){
     if (week_day == 6 | week_day == 7){
         slide_show_items.push('shabat');
     }
-    //slide_show_items.push('messages');
+    slide_show_items.push('messages');
     slide_show_items.push('tormim');
     return slide_show_items;
 }
