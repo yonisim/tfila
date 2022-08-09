@@ -165,7 +165,7 @@ function scroll_updated(){
 }
 
 function present_donators(date){
-    load_file('tormim.txt').then(data => {
+    load_file('./data/tormim.txt').then(data => {
         var content = data.split("\n").join("<br>");
         document.getElementById('output')
             .innerHTML=content;
