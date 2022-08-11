@@ -14,7 +14,7 @@ var days_descriptor = 'יום';
 var laomer = 'לעומר';
 var shehem = "שהם";
 
-export function parse_hebrew_date(hebrew_date_orig_format){
+export function get_hebrew_date(hebrew_date_orig_format){
     var splitted = hebrew_date_orig_format.split('/');
     var hebrew_day_numeric = splitted[0];
     var hebrew_month_numeric = splitted[1];

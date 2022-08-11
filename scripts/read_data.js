@@ -4,7 +4,7 @@ export function current_date(){
     let cur_date = new Date('2022-05-14T19:28:02');
     let time = new Date();
     let current_date = time.toISOString().split('T')[0];
-    return cur_date;
+    return time;
 }
 
 export function get_date_from_Date(date){

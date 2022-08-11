@@ -83,3 +83,22 @@ html, body, article {
   h1 {
     font-size: 15vh;
   }
+
+  .fade-in {
+    animation: fadeIn 1s;
+  }
+
+  .fade-out {
+    opacity: 0;
+    animation: fadeOut 1s;
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }

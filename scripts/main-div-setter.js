@@ -1,5 +1,7 @@
 'esversion: 6';
 
+var wait_for_animation = false;
+
 export function insert_html(source_file, dest_element_id){
     return fetch(source_file)
       .then(response => response.text())
@@ -22,19 +24,25 @@ export function set_element_data(dest_element_id, data){
 
 export function set_element_html(dest_element_id, html_data){
     var element = document.getElementById(dest_element_id);
-    console.log(document);
-    console.log(element);
-    console.log(html_data);
     element.innerHTML = html_data;
 }
 
-export function activate_element(element_id, parent_element_id){
-    var parent_elem = document.getElementById(parent_element_id);
-    for (var child_elem of parent_elem.children){
-        child_elem.style.display = 'none';
-    }
+export function activate_element(element_id){
     var element = document.getElementById(element_id);
     element.style.display = 'contents';
+    for (var child_elem of element.children){
+        child_elem.classList.add('fade-in');
+    }
+    return wait_for_scroll(child_elem);
+}
+
+export function deactivate_element(element_id){
+    var element = document.getElementById(element_id);
+    for (var child_elem of element.children){
+        child_elem.classList.remove('fade-in');
+        child_elem.classList.add('fade-out');
+    }
+    return wait_for_scroll(child_elem);
 }
 
 export function waitForElm(selector) {
@@ -72,5 +80,26 @@ export function get_element_background(elem_id){
     return element.style.backgroundImage;
 }
 
+function waitForAnimation () {
+    // Test if ANY/ALL page animations are currently active
+    return new Promise((resolve) => {
+        var testAnimationInterval = setInterval(function () {
+            if (!wait_for_animation) { // any page animations finished
+                clearInterval(testAnimationInterval);
+                console.log('finished animation');
+                resolve();
+            }
+        }, 25);
+    });
+};
+
+export function wait_for_scroll(el){
+    wait_for_animation = true;
+    el.addEventListener('animationend', () => {
+        console.log('Animation ended');
+        wait_for_animation = false;
+      });
+    return waitForAnimation();
+}
 
 

@@ -1,15 +1,15 @@
 'esversion: 8';
-import { insert_html, append_html, activate_element, waitForElm } from "./main-div-setter.js";
+import { insert_html, append_html, activate_element, deactivate_element,
+    waitForElm, wait_for_scroll } from "./main-div-setter.js";
 import {current_date, get_date_from_Date, read_json} from "./read_data.js";
 import {set_element_data, set_element_html, set_element_background, 
     get_element_background, set_element_background_image} from "./main-div-setter.js";
-import {parse_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
+import {get_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
 
 var day_times;
 var current_date_obj;
-var wait_for_animation = false;
 var main_div = 'main-div';
 
 var my_promise = read_json("./data/day_times.json");
@@ -17,7 +17,7 @@ my_promise.then(times => {
     day_times = times;
     present_first_page(day_times);
 });
-var wait_seconds = 3;
+var wait_seconds = 4;
 
 function get_today_times(current_date){
     return day_times[current_date];
@@ -25,7 +25,7 @@ function get_today_times(current_date){
 
 function present_hebrew_date_in_header(current_date){
     var today_times = get_today_times_according_to_sunset(current_date);
-    set_element_data("hebrew_date", parse_hebrew_date(today_times['hebrew_date']));
+    set_element_data("hebrew_date", today_times['hebrew_date']);
 }
 
 function present_first_page(){
@@ -73,10 +73,7 @@ function get_slide_show_items_ids(){
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
-    var week_day = date.getDay();
-    if (week_day == 6 | week_day == 7){
-        slide_show_items.push('shabat');
-    }
+    slide_show_items.push('shabat');
     slide_show_items.push('messages');
     slide_show_items.push('tormim');
     return slide_show_items;
@@ -160,23 +157,13 @@ function present_shabat_times(date){
     return sleep_seconds(wait_seconds);
 }
 
-function scroll_updated(){
-    console.log('scroll updated');
-}
-
 function present_donators(date){
     load_file('./data/tormim.txt').then(data => {
         var content = data.split("\n").join("<br>");
         document.getElementById('output')
             .innerHTML=content;
       });
-    var el = document.getElementsByClassName('scroll-text')[0];
-    wait_for_animation = true;
-    el.addEventListener('animationend', () => {
-        console.log('Animation ended');
-        wait_for_animation = false;
-      });
-    return waitForAnimation();
+    return wait_for_scroll(document.getElementById('output'));
 }
 
 function present_messages(date){
@@ -230,8 +217,9 @@ async function loop_pages(){
         for (var item of get_slide_show_items_ids()){
             await insert_html('./html/'+ item + '.html', "main-div");
             var item_func = item_funcs[item];
-            activate_element(item, "main-div");
+            activate_element(item);
             await item_func(current_date_obj);
+            await deactivate_element(item);
         }
     }
 }
@@ -275,17 +263,4 @@ function animationsTest (callback) {
             callback();
         }
     }, 25);
-};
-
-function waitForAnimation () {
-    // Test if ANY/ALL page animations are currently active
-    return new Promise((resolve) => {
-        var testAnimationInterval = setInterval(function () {
-            if (!wait_for_animation) { // any page animations finished
-                clearInterval(testAnimationInterval);
-                console.log('finished animation');
-                resolve();
-            }
-        }, 25);
-    });
 };
