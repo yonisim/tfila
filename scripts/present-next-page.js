@@ -17,8 +17,8 @@ my_promise.then(times => {
     day_times = times;
     present_first_page(day_times);
 });
-var wait_seconds = 4;
-var donators_start_point = 100;
+var wait_seconds = 12;
+var donators_start_point = 0;
 var donators_slice_count = 20;
 
 function get_today_times(current_date){
@@ -71,26 +71,26 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    //slide_show_items.push('tfilot');
+    slide_show_items.push('tfilot');
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
     slide_show_items.push('shabat');
-    //slide_show_items.push('messages');
+    slide_show_items.push('messages');
     slide_show_items.push('tormim');
     return slide_show_items;
 }
 
 
 let shacharit_regular_days = ['06:00', '06:50', '08:30'];
-let mincha_regular_days = ["19:20"];
-let arvit_regular_days = ['20:00', '21:00'];
+let mincha_regular_days = ["19:10"];
+let arvit_regular_days = ['19:50', '21:00'];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
 let mincha_shabat = ["13:20","14:00","18:00"];
-let arvit_shabat = ['20:00'];
+let arvit_shabat = ['19:56'];
 
 
-function present_prayer_times(current_date){
+function present_prayer_times(current_date){    
     var shacharit_times = shacharit_regular_days.join('<br>');
     var mincha_times = mincha_regular_days.join('<br>');
     var arvit_times = arvit_regular_days.join('<br>');
@@ -104,7 +104,7 @@ function present_shabat_prayer_times(current_date){
     var shacharit_times = shacharit_shabat.join('<br>');
     var mincha_times = mincha_shabat.join('<br>');
     var arvit_times = arvit_shabat.join('<br>');
-    set_element_html('kabalat-shabat', "19:00");
+    set_element_html('kabalat-shabat', "19:11");
     set_element_html('shachrit-shabat', shacharit_times);
     set_element_html('mincha-shabat', mincha_times);
     set_element_html('arvit-shabat', arvit_times);
