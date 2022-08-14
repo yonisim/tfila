@@ -29,13 +29,8 @@ html, body, article {
 .page-title {
   color: red;
   font-size: 7vw;
+  text-decoration-line: underline;
   text-align: center;
-  font-weight: bold;
-  margin: 10px auto;
-  border-radius: 10px;
-  width: fit-content;
-  padding: 0px 10px;
-  background-color: rgba(30, 77, 219, 0.815);
 }
 
 .my-text {

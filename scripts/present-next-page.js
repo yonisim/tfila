@@ -12,7 +12,7 @@ var day_times;
 var current_date_obj;
 var main_div = 'main-div';
 
-var my_promise = read_json("./data/day_times.json");
+var my_promise = read_json("./data/parsed_dates.json");
 my_promise.then(times => {
     day_times = times;
     present_first_page(day_times);
