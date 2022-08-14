@@ -1,6 +1,4 @@
 .scroll-container {
-  border: 3px solid white;
-  border-radius: 5px;
   height: 100%;
   overflow: hidden;
 }
@@ -15,7 +13,7 @@
   
   -moz-animation: my-animation 5s linear infinite;
   -webkit-animation: my-animation 5s linear infinite;
-  animation: my-animation 60s linear;
+  animation: my-animation 20s linear;
 }
 
 /* for Firefox */

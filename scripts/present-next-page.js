@@ -18,6 +18,8 @@ my_promise.then(times => {
     present_first_page(day_times);
 });
 var wait_seconds = 4;
+var donators_start_point = 100;
+var donators_slice_count = 20;
 
 function get_today_times(current_date){
     return day_times[current_date];
@@ -69,12 +71,12 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    slide_show_items.push('tfilot');
+    //slide_show_items.push('tfilot');
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
     slide_show_items.push('shabat');
-    slide_show_items.push('messages');
+    //slide_show_items.push('messages');
     slide_show_items.push('tormim');
     return slide_show_items;
 }
@@ -158,8 +160,19 @@ function present_shabat_times(date){
 }
 
 function present_donators(date){
-    load_file('./data/tormim.txt').then(data => {
-        var content = data.split("\n").join("<br>");
+    load_file('./data/tormim.txt').then(lines => {
+        var donators_end_point = donators_start_point + donators_slice_count;
+        if(lines.length - donators_start_point > donators_slice_count && 
+            lines.length - (donators_start_point + donators_slice_count) < donators_slice_count/2){
+            donators_end_point = lines.length;
+        }
+        var lines_for_present = lines.slice(donators_start_point, donators_end_point);
+        if(donators_end_point >= lines.length){
+            donators_start_point = 0;
+        } else {
+            donators_start_point += donators_slice_count;
+        }
+        var content = lines_for_present.join("<br>");
         document.getElementById('output')
             .innerHTML=content;
       });
@@ -180,9 +193,7 @@ function present_messages(date){
         });
     }
 
-    return load_file('./data/messages.txt').then(data => {
-        var messages_list = data.split("\n");
-        console.log("messages: " + data);
+    return load_file('./data/messages.txt').then(messages_list => {
         var elem = document.getElementById('messages-text');
         var total_messages_time = wait_seconds * messages_list.length;
         display_message(messages_list, elem);
