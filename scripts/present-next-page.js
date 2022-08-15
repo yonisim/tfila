@@ -219,9 +219,7 @@ let item_funcs = {
 };
 
 async function loop_pages(){
-    var iter = 0;
-    while (iter <= 1000){
-        iter = iter +1;
+    while (true){
         current_date_obj = current_date();
         set_main_area_background(current_date_obj);
         present_header_dates(current_date_obj);
