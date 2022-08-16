@@ -183,7 +183,7 @@ function present_messages(date){
     function display_message(messages_list, elem){
         var message = messages_list[0];
         console.log("message for display: " + message);
-        var res_html = "<p class='my-text'>" + message +  "</p>";
+        var res_html = message;
         elem.innerHTML=res_html;
         messages_list.shift();
         return sleep_seconds(wait_seconds).then(() => {

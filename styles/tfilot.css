@@ -21,10 +21,11 @@
 }
 
 .grid-body-box {
-    background-color: rgba(245, 245, 245, 0.779);
+    background-color: var(--default-text-background-color);
     color: black;
 }
 
 .grid-box {
     padding: 5px;
+    text-align: center;
   }
