@@ -1,6 +1,6 @@
 'esversion: 8';
 import { insert_html, append_html, activate_element, deactivate_element,
-    waitForElm, wait_for_scroll } from "./main-div-setter.js";
+    waitForElm, wait_for_scroll, toggle_element_show } from "./main-div-setter.js";
 import {current_date, get_date_from_Date, read_json} from "./read_data.js";
 import {set_element_data, set_element_html, set_element_background, 
     get_element_background, set_element_background_image} from "./main-div-setter.js";
@@ -71,7 +71,6 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    //slide_show_items.push('advertisement');
     slide_show_items.push('tfilot');
     if (today_times['omer']){
         //slide_show_items.push('omer');
@@ -79,6 +78,7 @@ function get_slide_show_items_ids(){
     slide_show_items.push('shabat');
     slide_show_items.push('messages');
     slide_show_items.push('tormim');
+    slide_show_items.push('advertisement');
     return slide_show_items;
 }
 
@@ -211,9 +211,18 @@ function set_main_area_background(date){
     
 }
 
-function present_advertisement(date){
-    //set_element_background_image('advertisement', 'images/IMG-20220816-WA0010.jpg')
-    return sleep_seconds(wait_seconds);
+async function present_advertisement(){
+    var body = document.getElementsByTagName('body')[0];
+    var header_element = document.getElementsByTagName('header')[0];
+    var main_div_element = document.getElementById('main-div');
+    toggle_element_show(header_element, true);
+    toggle_element_show(main_div_element, true);
+    var body_classes = body.className;
+    body.className = 'advertisement';
+    await sleep_seconds(3);
+    body.className = body_classes;
+    toggle_element_show(header_element, false);
+    toggle_element_show(main_div_element, false);
 }
 
 let item_funcs = {
@@ -231,11 +240,15 @@ async function loop_pages(){
         set_main_area_background(current_date_obj);
         present_header_dates(current_date_obj);
         for (var item of get_slide_show_items_ids()){
-            await insert_html('./html/'+ item + '.html', "main-div");
-            var item_func = item_funcs[item];
-            activate_element(item);
-            await item_func(current_date_obj);
-            await deactivate_element(item);
+            if (item == 'advertisement'){
+                await present_advertisement();
+            }else{
+                await insert_html('./html/'+ item + '.html', "main-div");
+                var item_func = item_funcs[item];
+                activate_element(item);
+                await item_func(current_date_obj);
+                await deactivate_element(item);
+            }
         }
     }
 }

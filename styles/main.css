@@ -3,6 +3,7 @@ html, body, article {
   font-family: 'DS-DIGI', sans-serif;
   height: 100vh;
   --default-text-background-color:  rgba(245, 245, 245, 0.779);
+  overflow: hidden;
 }
 
 #main-div {
@@ -50,7 +51,7 @@ html, body, article {
 
 .advertisement {
   background: url(../images/IMG-20220816-WA0010.jpg);
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
 }
 

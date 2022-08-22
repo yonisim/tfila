@@ -48,6 +48,14 @@ export function deactivate_element(element_id){
     return wait_for_scroll(element);
 }
 
+export function toggle_element_show(element, hide){
+    if(hide === true){
+        element.classList.add('hidden_element');
+    } else {
+        element.classList.remove('hidden_element');
+    }
+}
+
 export function waitForElm(selector) {
     return new Promise(resolve => {
         if (document.querySelector(selector)) {
