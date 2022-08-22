@@ -4,7 +4,7 @@
 }
 
 .scroll-text {
-  padding-top: 100vh;
+  padding-top: 85vh;
   padding-bottom: 100vh;
   /* animation properties */
   -moz-transform: translateY(100%);
