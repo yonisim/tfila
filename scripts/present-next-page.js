@@ -87,11 +87,11 @@ function get_slide_show_items_ids(){
 
 
 let shacharit_regular_days = ['06:00', '06:50', '08:30'];
-let mincha_regular_days = ["19:10"];
-let arvit_regular_days = ['19:50', '21:00'];
+let mincha_regular_days = ["19:00"];
+let arvit_regular_days = ['19:40', '21:00'];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
-let mincha_shabat = ["13:20","14:00","18:00"];
-let arvit_shabat = ['19:56'];
+let mincha_shabat = ["13:15","14:00","18:00"];
+let arvit_shabat = ['19:47'];
 
 
 function present_prayer_times(current_date){    
@@ -108,7 +108,7 @@ function present_shabat_prayer_times(current_date){
     var shacharit_times = shacharit_shabat.join('<br>');
     var mincha_times = mincha_shabat.join('<br>');
     var arvit_times = arvit_shabat.join('<br>');
-    set_element_html('kabalat-shabat', "19:11");
+    set_element_html('kabalat-shabat', "19:03");
     set_element_html('shachrit-shabat', shacharit_times);
     set_element_html('mincha-shabat', mincha_times);
     set_element_html('arvit-shabat', arvit_times);
