@@ -6,7 +6,7 @@ html, body, article {
 }
 
 #main-div {
-  height: 70%;
+  height: 85vh;
 }
 
 .container {
@@ -46,6 +46,12 @@ html, body, article {
 .main-bg {
   background: url(../images/mishkan-tkiya.JPG) no-repeat center center fixed;
   background-size: cover;
+}
+
+.advertisement {
+  background: url(../images/IMG-20220816-WA0010.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
   .oval {

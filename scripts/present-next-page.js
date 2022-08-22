@@ -17,7 +17,7 @@ my_promise.then(times => {
     day_times = times;
     present_first_page(day_times);
 });
-var wait_seconds = 12;
+var wait_seconds = 3;
 var donators_start_point = 0;
 var donators_slice_count = 20;
 
@@ -71,6 +71,7 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
+    //slide_show_items.push('advertisement');
     slide_show_items.push('tfilot');
     if (today_times['omer']){
         //slide_show_items.push('omer');
@@ -210,12 +211,18 @@ function set_main_area_background(date){
     
 }
 
+function present_advertisement(date){
+    //set_element_background_image('advertisement', 'images/IMG-20220816-WA0010.jpg')
+    return sleep_seconds(wait_seconds);
+}
+
 let item_funcs = {
     'tfilot': present_prayer_times,
     'omer': present_sfirat_haomer,
     'shabat': present_shabat_prayer_times,
     'tormim': present_donators,
-    'messages': present_messages
+    'messages': present_messages,
+    'advertisement': present_advertisement
 };
 
 async function loop_pages(){
