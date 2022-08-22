@@ -1,6 +1,6 @@
 'esversion: 6';
 
-var wait_for_animation = false;
+var wait_for_animation_flags = {};
 
 export function insert_html(source_file, dest_element_id){
     return fetch(source_file)
@@ -30,20 +30,22 @@ export function set_element_html(dest_element_id, html_data){
 export function activate_element(element_id){
     var element = document.getElementById(element_id);
     element.style.display = 'contents';
-    var first_child = element.firstChild;
+    element.classList.add('fade-in');
     for (var child_elem of element.children){
         child_elem.classList.add('fade-in');
     }
-    return wait_for_scroll(first_child);
+    return wait_for_scroll(element);
 }
 
 export function deactivate_element(element_id){
     var element = document.getElementById(element_id);
+    element.classList.remove('fade-in');
+    element.classList.add('fade-out');
     for (var child_elem of element.children){
         child_elem.classList.remove('fade-in');
         child_elem.classList.add('fade-out');
     }
-    return wait_for_scroll(child_elem);
+    return wait_for_scroll(element);
 }
 
 export function waitForElm(selector) {
@@ -81,11 +83,11 @@ export function get_element_background(elem_id){
     return element.style.backgroundImage;
 }
 
-function waitForAnimation () {
+function waitForAnimation (element) {
     // Test if ANY/ALL page animations are currently active
     return new Promise((resolve) => {
         var testAnimationInterval = setInterval(function () {
-            if (!wait_for_animation) { // any page animations finished
+            if (!wait_for_animation_flags[element.id]) { // any page animations finished
                 clearInterval(testAnimationInterval);
                 console.log('finished animation');
                 resolve();
@@ -95,12 +97,12 @@ function waitForAnimation () {
 };
 
 export function wait_for_scroll(el){
-    wait_for_animation = true;
+    wait_for_animation_flags[el.id] = true;
     el.addEventListener('animationend', () => {
         console.log('Animation ended');
-        wait_for_animation = false;
+        wait_for_animation_flags[el.id] = false;
       });
-    return waitForAnimation();
+    return waitForAnimation(el);
 }
 
 
