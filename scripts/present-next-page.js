@@ -108,7 +108,7 @@ function present_shabat_prayer_times(current_date){
     var shacharit_times = shacharit_shabat.join('<br>');
     var mincha_times = mincha_shabat.join('<br>');
     var arvit_times = arvit_shabat.join('<br>');
-    set_element_html('kabalat-shabat', "19:03");
+    set_element_html('kabalat-shabat', "17:35*<br>19:03<br><span class='small-text'>*מוקדמת</span>");
     set_element_html('shachrit-shabat', shacharit_times);
     set_element_html('mincha-shabat', mincha_times);
     set_element_html('arvit-shabat', arvit_times);

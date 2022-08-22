@@ -40,6 +40,11 @@ html, body, article {
 
 }
 
+.small-text{
+  font-size: 3vw;
+  color: red;
+}
+
 .hidden_element{
     display: none;
 }
