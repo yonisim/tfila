@@ -17,7 +17,8 @@ my_promise.then(times => {
     day_times = times;
     present_first_page(day_times);
 });
-var wait_seconds = 3;
+var wait_seconds = 12;
+var message_wait_seconds = 5;
 var donators_start_point = 0;
 var donators_slice_count = 20;
 
@@ -182,14 +183,15 @@ function present_donators(date){
     return wait_for_scroll(document.getElementById('output'));
 }
 
-function present_messages(date){
-    function display_message(messages_list, elem){
+async function present_messages(date){
+    async function display_message(messages_list, elem){
         var message = messages_list[0];
-        console.log("message for display: " + message);
-        var res_html = message;
-        elem.innerHTML=res_html;
+        elem.innerText = message;
+        elem.classList.add('fade-in');
+        await wait_for_scroll(elem);
+        elem.classList.remove('fade-in');
         messages_list.shift();
-        return sleep_seconds(wait_seconds).then(() => {
+        return sleep_seconds(message_wait_seconds).then(() => {
             if (messages_list.length) {
                 return display_message(messages_list, elem);
             }
@@ -198,9 +200,7 @@ function present_messages(date){
 
     return load_file('./data/messages.txt').then(messages_list => {
         var elem = document.getElementById('messages-text');
-        var total_messages_time = wait_seconds * messages_list.length;
-        display_message(messages_list, elem);
-        return sleep_seconds(total_messages_time);
+        return display_message(messages_list, elem);
       });
 }
 
@@ -221,7 +221,7 @@ async function present_advertisement(){
     toggle_element_show(main_div_element, true);
     var body_classes = body.className;
     body.className = 'advertisement';
-    await sleep_seconds(3);
+    await sleep_seconds(wait_seconds);
     body.className = body_classes;
     toggle_element_show(header_element, false);
     toggle_element_show(main_div_element, false);
