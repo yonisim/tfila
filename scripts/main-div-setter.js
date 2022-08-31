@@ -81,9 +81,8 @@ export function set_element_background(elem_id, image_name){
     //element.style.backgroundImage = "url(images/" + image_name + ".jpg)";
 }
 
-export function set_element_background_image(elem_id, image_url){
-    var element = document.getElementById(elem_id);
-    element.style.backgroundImage = image_url;
+export function set_element_background_image(element, image_url){
+    element.style.backgroundImage = "url(" + image_url + ")";
 }
 
 export function get_element_background(elem_id){

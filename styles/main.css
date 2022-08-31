@@ -55,9 +55,9 @@ html, body, article {
 }
 
 .advertisement {
-  background: url(../images/IMG-20220816-WA0010.jpg);
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
 }
 
   .oval {

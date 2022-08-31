@@ -17,8 +17,9 @@ my_promise.then(times => {
     day_times = times;
     present_first_page(day_times);
 });
-var wait_seconds = 12;
+var wait_seconds = 15;
 var message_wait_seconds = 5;
+var ad_wait_seconds = 10;
 var donators_start_point = 0;
 var donators_slice_count = 20;
 
@@ -33,7 +34,6 @@ function present_hebrew_date_in_header(current_date){
 
 function present_first_page(){
     var date = current_date();
-    var current_date_var = get_date_from_Date(date);
     build_page_structure().then((promise) => {
         clockFunc();
     });
@@ -76,7 +76,9 @@ function get_slide_show_items_ids(){
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
-    slide_show_items.push('shabat');
+    if (date.getDay() >= 4){
+        slide_show_items.push('shabat');
+    }
     slide_show_items.push('messages');
     slide_show_items.push('tormim');
     if (date < new Date('2022-09-07')){
@@ -87,11 +89,12 @@ function get_slide_show_items_ids(){
 
 
 let shacharit_regular_days = ['06:00', '06:50', '08:30'];
-let mincha_regular_days = ["19:00"];
-let arvit_regular_days = ['19:40', '21:00'];
+let mincha_regular_days = ["18:50"];
+let arvit_regular_days = ['19:30', '21:00'];
+let kabalat_shabat = ['17:20*', '18:39', "<span class='small-text'>*מוקדמת</span>"];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
 let mincha_shabat = ["13:15","14:00","18:00"];
-let arvit_shabat = ['19:47'];
+let arvit_shabat = ['19:38', '19:53'];
 
 
 function present_prayer_times(current_date){    
@@ -105,10 +108,11 @@ function present_prayer_times(current_date){
 }
 
 function present_shabat_prayer_times(current_date){
+    var kabalat_shabat_times = kabalat_shabat.join('<br');
     var shacharit_times = shacharit_shabat.join('<br>');
     var mincha_times = mincha_shabat.join('<br>');
     var arvit_times = arvit_shabat.join('<br>');
-    set_element_html('kabalat-shabat', "17:35*<br>19:03<br><span class='small-text'>*מוקדמת</span>");
+    set_element_html('kabalat-shabat', "17:20*<br>18:55<br><span class='small-text'>*מוקדמת</span>");
     set_element_html('shachrit-shabat', shacharit_times);
     set_element_html('mincha-shabat', mincha_times);
     set_element_html('arvit-shabat', arvit_times);
@@ -205,15 +209,28 @@ async function present_messages(date){
 }
 
 function set_main_area_background(date){
-    var background = 'regular';
+    var background = "images/mishkan-tkiya.JPG";
     if (date.getDay() == 6){
         background = 'shabat_2';
     }
-    set_element_background('main-div', background);
+    var body_elem = document.getElementsByTagName('body')[0];
+    set_element_background_image(body_elem, background);
     
 }
 
-async function present_advertisement(){
+function get_advertisements(current_date){
+    var ads = [];
+    if (current_date < new Date('2022-09-07')){
+        ads.push('IMG-20220816-WA0010.jpg');
+        ads.push('IMG-20220831-WA0010.jpg');
+    }
+    if (current_date <= new Date('2022-09-03')){
+        ads.push('IMG-20220831-WA0005.jpg');
+    }
+    return ads;
+}
+
+async function present_advertisement(current_date){
     var body = document.getElementsByTagName('body')[0];
     var header_element = document.getElementsByTagName('header')[0];
     var main_div_element = document.getElementById('main-div');
@@ -221,7 +238,10 @@ async function present_advertisement(){
     toggle_element_show(main_div_element, true);
     var body_classes = body.className;
     body.className = 'advertisement';
-    await sleep_seconds(wait_seconds);
+    for (var ad_file_name of get_advertisements(current_date)){
+        set_element_background_image(body, 'images/' + ad_file_name);
+        await sleep_seconds(ad_wait_seconds);
+    }
     body.className = body_classes;
     toggle_element_show(header_element, false);
     toggle_element_show(main_div_element, false);
@@ -243,7 +263,7 @@ async function loop_pages(){
         present_header_dates(current_date_obj);
         for (var item of get_slide_show_items_ids()){
             if (item == 'advertisement'){
-                await present_advertisement();
+                await present_advertisement(current_date_obj);
             }else{
                 await insert_html('./html/'+ item + '.html', "main-div");
                 var item_func = item_funcs[item];
