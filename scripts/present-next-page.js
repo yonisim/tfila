@@ -9,13 +9,16 @@ import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
 
 var day_times;
+var week_times;
 var current_date_obj;
 var main_div = 'main-div';
 
-var my_promise = read_json("./data/parsed_dates.json");
-my_promise.then(times => {
+read_json("./data/parsed_dates.json").then(times => {
     day_times = times;
-    present_first_page(day_times);
+    read_json("./data/mincha_maariv.json").then(prayer_times => {
+        week_times = prayer_times;
+        present_first_page(day_times);
+    });
 });
 var wait_seconds = 15;
 var message_wait_seconds = 5;
@@ -96,11 +99,30 @@ let shacharit_shabat = ['06:00', '07:20', '08:30'];
 let mincha_shabat = ["13:15","14:00","18:00"];
 let arvit_shabat = ['19:38', '19:53'];
 
+function get_week_start_date(current_date){
+    var start_of_week = new Date(current_date);
+    start_of_week.setDate(current_date.getDate() - current_date.getDay());
+    return start_of_week;
+}
+
+function get_week_times(current_date){
+    var week_start_date = get_week_start_date(current_date);
+    return week_times[get_date_from_Date(week_start_date)];
+}
+
+function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
+    var prayer_times = date_obj[prayer_name];
+    if (Array.isArray(prayer_times)){
+        prayer_times = prayer_times.join('<br>');
+    }
+    return prayer_times;
+}
 
 function present_prayer_times(current_date){    
     var shacharit_times = shacharit_regular_days.join('<br>');
-    var mincha_times = mincha_regular_days.join('<br>');
-    var arvit_times = arvit_regular_days.join('<br>');
+    var this_week_times = get_week_times(current_date);
+    var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+    var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
     set_element_html('shachrit-regulr-days', shacharit_times);
     set_element_html('mincha-regulr-days', mincha_times);
     set_element_html('arvit-regulr-days', arvit_times);

@@ -6,8 +6,22 @@ export function current_date(){
     return time;
 }
 
+function formatDate(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+  if (month.length < 2) 
+      month = '0' + month;
+  if (day.length < 2) 
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
 export function get_date_from_Date(date){
-    return date.toISOString().split('T')[0];
+    return formatDate(date);
 }
 
 function current_date_local(){
