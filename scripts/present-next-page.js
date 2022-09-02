@@ -247,6 +247,9 @@ function get_advertisements(current_date){
     if (current_date <= new Date('2022-09-03')){
         ads.push('IMG-20220831-WA0005.jpg');
     }
+    if (current_date.getDay() === 5 || current_date.getDay() === 2){
+        ads.push('IMG-20220902-WA0014.jpg');
+    }
     return ads;
 }
 
