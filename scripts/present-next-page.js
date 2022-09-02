@@ -91,13 +91,11 @@ function get_slide_show_items_ids(){
 }
 
 
-let shacharit_regular_days = ['06:00', '06:50', '08:30'];
-let mincha_regular_days = ["18:50"];
-let arvit_regular_days = ['19:30', '21:00'];
+let shacharit_regular_days = ['06:00', '06:50', '08:30(שישי)'];
 let kabalat_shabat = ['17:20*', '18:39', "<span class='small-text'>*מוקדמת</span>"];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
 let mincha_shabat = ["13:15","14:00","18:00"];
-let arvit_shabat = ['19:38', '19:53'];
+let arvit_shabat = ['19:39', '19:54'];
 
 function get_week_start_date(current_date){
     var start_of_week = new Date(current_date);
@@ -134,7 +132,7 @@ function present_shabat_prayer_times(current_date){
     var shacharit_times = shacharit_shabat.join('<br>');
     var mincha_times = mincha_shabat.join('<br>');
     var arvit_times = arvit_shabat.join('<br>');
-    set_element_html('kabalat-shabat', "17:20*<br>18:55<br><span class='small-text'>*מוקדמת</span>");
+    set_element_html('kabalat-shabat', "17:25*<br>18:52<br><span class='small-text'>*מוקדמת</span>");
     set_element_html('shachrit-shabat', shacharit_times);
     set_element_html('mincha-shabat', mincha_times);
     set_element_html('arvit-shabat', arvit_times);
