@@ -27,9 +27,9 @@ async function read_initial_data(){
 read_initial_data().then(() => {
     present_first_page(day_times);
 });
-var wait_seconds = 3;
+var wait_seconds = 15;
 var message_wait_seconds = 5;
-var ad_wait_seconds = 3;
+var ad_wait_seconds = 10;
 var donators_start_point = 0;
 var donators_slice_count = 20;
 
@@ -87,10 +87,10 @@ function get_slide_show_items_ids(){
         //slide_show_items.push('omer');
     }
     if (date.getDay() >= 4){
-        //slide_show_items.push('shabat');
+        slide_show_items.push('shabat');
     }
-    //slide_show_items.push('messages');
-    //slide_show_items.push('tormim');
+    slide_show_items.push('messages');
+    slide_show_items.push('tormim');
     slide_show_items.push('advertisement');
     return slide_show_items;
 }

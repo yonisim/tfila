@@ -2,14 +2,11 @@
     "erev_retima": {
         "image": "IMG-20220816-WA0010.jpg",
         "from": "2022-08-20",
-        "until": "2022-09-04T23:35",
-        "weekdays": [0,2,6],
-        "ratio": "1:3",
-        "exposure_time_seconds": 3
+        "until": "2022-09-10",
+        "exposure_time_seconds": 10
     },
     "parents_and_kids": {
         "image": "IMG-20220902-WA0014.jpg",
-        "weekdays": [0,2,6],
-        "ratio": "1:3"
+        "weekdays": [1,2,6,7]
     }
 }
