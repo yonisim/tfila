@@ -8,21 +8,28 @@ import {get_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
 
-var day_times;
-var week_times;
+var day_times, week_times, advertisements;
 var current_date_obj;
 var main_div = 'main-div';
 
-read_json("./data/parsed_dates.json").then(times => {
-    day_times = times;
-    read_json("./data/mincha_maariv.json").then(prayer_times => {
-        week_times = prayer_times;
-        present_first_page(day_times);
+async function read_initial_data(){
+    return read_json("./data/parsed_dates.json").then(times => {
+        day_times = times;
+        return read_json("./data/mincha_maariv.json").then(prayer_times => {
+            week_times = prayer_times;
+            return read_json("./data/advertisements.json").then(ads => {
+                advertisements = ads;
+            });
+        });
     });
+}
+
+read_initial_data().then(() => {
+    present_first_page(day_times);
 });
-var wait_seconds = 15;
+var wait_seconds = 3;
 var message_wait_seconds = 5;
-var ad_wait_seconds = 10;
+var ad_wait_seconds = 3;
 var donators_start_point = 0;
 var donators_slice_count = 20;
 
@@ -80,13 +87,11 @@ function get_slide_show_items_ids(){
         //slide_show_items.push('omer');
     }
     if (date.getDay() >= 4){
-        slide_show_items.push('shabat');
+        //slide_show_items.push('shabat');
     }
-    slide_show_items.push('messages');
-    slide_show_items.push('tormim');
-    if (date < new Date('2022-09-07')){
-        slide_show_items.push('advertisement');
-    }
+    //slide_show_items.push('messages');
+    //slide_show_items.push('tormim');
+    slide_show_items.push('advertisement');
     return slide_show_items;
 }
 
@@ -238,17 +243,30 @@ function set_main_area_background(date){
     
 }
 
+function should_present_ad_between_dates(ad_definition, current_date){
+    var is_after_from = true;
+    var is_before_until = true;
+    if (ad_definition["from"]){
+        var from_date = new Date(ad_definition["from"]);
+        if (current_date < from_date){
+            is_after_from = false;
+        }
+    }
+    if (ad_definition["until"]){
+        var from_date = new Date(ad_definition["until"]);
+        if (current_date > from_date){
+            is_before_until = false;
+        }
+    }
+    return is_after_from && is_before_until;
+}
+
 function get_advertisements(current_date){
     var ads = [];
-    if (current_date < new Date('2022-09-07')){
-        ads.push('IMG-20220816-WA0010.jpg');
-        ads.push('IMG-20220831-WA0010.jpg');
-    }
-    if (current_date <= new Date('2022-09-03')){
-        ads.push('IMG-20220831-WA0005.jpg');
-    }
-    if (current_date.getDay() === 6 || current_date.getDay() === 2){
-        ads.push('IMG-20220902-WA0014.jpg');
+    for (var [key,advertisement_definition] of Object.entries(advertisements)){
+        if (should_present_ad_between_dates(advertisement_definition, current_date)){
+            ads.push(advertisement_definition);
+        }
     }
     return ads;
 }
@@ -261,7 +279,8 @@ async function present_advertisement(current_date){
     toggle_element_show(main_div_element, true);
     var body_classes = body.className;
     body.className = 'advertisement';
-    for (var ad_file_name of get_advertisements(current_date)){
+    for (var ad_definition of get_advertisements(current_date)){
+        var ad_file_name = ad_definition.image;
         set_element_background_image(body, 'images/' + ad_file_name);
         await sleep_seconds(ad_wait_seconds);
     }
