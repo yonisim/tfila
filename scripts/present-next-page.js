@@ -282,7 +282,8 @@ async function present_advertisement(current_date){
     for (var ad_definition of get_advertisements(current_date)){
         var ad_file_name = ad_definition.image;
         set_element_background_image(body, 'images/' + ad_file_name);
-        await sleep_seconds(ad_wait_seconds);
+        var exposure_time = ad_definition.exposure_time_seconds || ad_wait_seconds;
+        await sleep_seconds(exposure_time);
     }
     body.className = body_classes;
     toggle_element_show(header_element, false);
