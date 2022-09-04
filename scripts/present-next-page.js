@@ -261,10 +261,29 @@ function should_present_ad_between_dates(ad_definition, current_date){
     return is_after_from && is_before_until;
 }
 
+function should_present_ad_in_weekday(ad_definition, current_date){
+    var is_in_weekdays = true;
+    var current_day = current_date.getDay();
+    if (ad_definition.weekdays){
+        if (!ad_definition.weekdays.includes(current_day)){
+            is_in_weekdays = false;
+        }
+    }
+    return is_in_weekdays;
+}
+
 function get_advertisements(current_date){
     var ads = [];
     for (var [key,advertisement_definition] of Object.entries(advertisements)){
-        if (should_present_ad_between_dates(advertisement_definition, current_date)){
+        var present_ad = true;
+        if (!should_present_ad_between_dates(advertisement_definition, current_date)){
+            present_ad = false;
+        }
+        if (!should_present_ad_in_weekday(advertisement_definition, current_date)){
+            present_ad = false;
+        }
+
+        if (present_ad){
             ads.push(advertisement_definition);
         }
     }
