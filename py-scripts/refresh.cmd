@@ -8,7 +8,7 @@
         :continue_update
         echo updating
         taskkill /F /im electron.exe
-        npm start
+        START npm start
         goto :continue_loop
     ) ELSE (
         echo Not connected to the internet.
