@@ -26,7 +26,7 @@ IF %ERRORLEVEL% EQU 1 (
     goto :finally
 ) ELSE (
     echo up to date
-    goto :continue_loop
+    goto :finally
 )
 
 :start_the_process
