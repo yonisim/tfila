@@ -30,7 +30,7 @@ tasklist  /FI "IMAGENAME eq electron.exe" | find "No tasks are running"
 IF %ERRORLEVEL% EQU 0 (
     echo starting the process
     START npm start
-}
+)
 goto :continue_loop
 
 :kill_the_process
