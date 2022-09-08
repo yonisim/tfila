@@ -19,6 +19,11 @@
     },
     "parents_and_kids": {
         "image": "IMG-20220902-WA0014.jpg",
-        "weekdays": [1,2,6,7]
+        "weekdays": [1,3,6,7]
+    },
+    "seuda_shlishit_ki_tetze": {
+        "image": "seuda_shlishit_ki_tetze.jpg",
+        "from": "2022-09-08",
+        "until": "2022-09-10:T19:15"
     }
 }
