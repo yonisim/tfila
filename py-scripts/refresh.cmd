@@ -13,7 +13,7 @@
     echo before start the process
     goto :start_the_process
     :continue_loop
-    timeout 5
+    timeout 60
     goto :while
 
 :pull
