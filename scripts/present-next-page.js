@@ -252,7 +252,7 @@ async function present_messages(date){
 function set_main_area_background(date){
     var background = "images/mishkan-tkiya.JPG";
     if (date.getDay() == 6){
-        background = 'shabat_2';
+        //background = 'shabat_2';
     }
     var body_elem = document.getElementsByTagName('body')[0];
     set_element_background_image(body_elem, background);
