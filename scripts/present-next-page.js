@@ -108,8 +108,19 @@ function get_week_start_date(current_date){
     return start_of_week;
 }
 
+function get_next_week_start_date(current_date){
+    var start_of_next_week = new Date(current_date);
+    start_of_next_week.setDate(current_date.getDate() - current_date.getDay() + 7);
+    return start_of_next_week;
+}
+
 function get_week_times(current_date){
     var week_start_date = get_week_start_date(current_date);
+    return week_times[get_date_from_Date(week_start_date)];
+}
+
+function get_next_week_times(current_date){
+    var week_start_date = get_next_week_start_date(current_date);
     return week_times[get_date_from_Date(week_start_date)];
 }
 
@@ -123,7 +134,12 @@ function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
 
 function present_prayer_times(current_date){    
     var shacharit_times = shacharit_regular_days.join('<br>');
-    var this_week_times = get_week_times(current_date);
+    var this_week_times;
+    if ([5,6].includes(current_date.getDay())){
+        this_week_times = get_next_week_times(current_date);
+    } else {
+        this_week_times = get_week_times(current_date);
+    }
     var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
     var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
     set_element_html('shachrit-regulr-days', shacharit_times);
