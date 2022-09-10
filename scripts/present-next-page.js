@@ -39,7 +39,11 @@ function get_today_times(current_date){
 
 function present_hebrew_date_in_header(current_date){
     var today_times = get_today_times_according_to_sunset(current_date);
-    set_element_data("hebrew_date", today_times['hebrew_date']);
+    var hebrew_date_text = today_times['hebrew_date'];
+    if (is_after_sunset(current_date)){
+        hebrew_date_text = "אור ל" + hebrew_date_text;
+    }
+    set_element_data("hebrew_date", hebrew_date_text);
 }
 
 function present_first_page(){
