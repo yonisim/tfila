@@ -142,6 +142,7 @@ function present_prayer_times(current_date){
     }
     var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
     var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
     set_element_html('shachrit-regulr-days', shacharit_times);
     set_element_html('mincha-regulr-days', mincha_times);
     set_element_html('arvit-regulr-days', arvit_times);
@@ -149,6 +150,8 @@ function present_prayer_times(current_date){
 }
 
 function present_shabat_prayer_times(current_date){
+    var this_week_times = get_week_times(current_date);
+    document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
     var kabalat_shabat_times = kabalat_shabat.join('<br');
     var shacharit_times = shacharit_shabat.join('<br>');
     var mincha_times = mincha_shabat.join('<br>');
