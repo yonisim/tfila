@@ -25,5 +25,17 @@
         "image": "seuda_shlishit_ki_tetze.jpg",
         "from": "2022-09-08",
         "until": "2022-09-10T19:15"
+    },
+    "sunday_in_kolel":{
+        "image": "havurut_sundays.jpeg",
+        "weekdays": [0]
+    },
+    "wendsday_in_kolel":{
+        "image": "rav_tasma.jpeg",
+        "weekdays": [3]
+    },
+    "thursdays_in_kolel":{
+        "image": "rav_levental_thursdays.jpeg",
+        "weekdays": [4]
     }
 }
