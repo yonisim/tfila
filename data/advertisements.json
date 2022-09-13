@@ -37,5 +37,9 @@
     "thursdays_in_kolel":{
         "image": "rav_levental_thursdays.jpeg",
         "weekdays": [4]
+    },
+    "slihot":{
+        "image": "slihot",
+        "until": "2022-09-28"
     }
 }
