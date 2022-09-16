@@ -38,8 +38,14 @@
         "image": "rav_levental_thursdays.jpeg",
         "weekdays": [4]
     },
+    "toda":{
+        "image": "toda.jpeg",
+        "until": "2022-09-18",
+        "exposure_time_seconds": 15
+    },
     "slihot":{
         "image": "slihot.jpeg",
-        "until": "2022-09-28"
+        "until": "2022-09-28",
+        "exposure_time_seconds": 15
     }
 }
