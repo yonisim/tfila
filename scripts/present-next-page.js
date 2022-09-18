@@ -40,7 +40,7 @@ function get_today_times(current_date){
 function present_hebrew_date_in_header(current_date){
     var today_times = get_today_times_according_to_sunset(current_date);
     var hebrew_date_text = today_times['hebrew_date'];
-    if (is_after_sunset(current_date)){
+    if (is_night(current_date)){
         hebrew_date_text = "אור ל" + hebrew_date_text;
     }
     set_element_data("hebrew_date", hebrew_date_text);
@@ -371,6 +371,19 @@ function is_after_sunset(date){
     var sunset_hour_and_minutes = today_times['sunset'].split(':');
     sunset_time.setHours(sunset_hour_and_minutes[0], sunset_hour_and_minutes[1], '00');
     return date > sunset_time;
+}
+
+function is_before_sunrise(date){
+    var current_date_var = get_date_from_Date(date);
+    var today_times = get_today_times(current_date_var);
+    var sunrise_time = new Date(date);
+    var sunrise_hour_and_minutes = today_times['sunrise'].split(':');
+    sunrise_time.setHours(sunrise_hour_and_minutes[0], sunrise_hour_and_minutes[1], '00');
+    return date < sunrise_time;
+}
+
+function is_night(date){
+    return is_after_sunset(date) || is_before_sunrise(date);
 }
 
 function addDays(date, days) {
