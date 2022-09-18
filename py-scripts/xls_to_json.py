@@ -1,3 +1,4 @@
+import codecs
 from datetime import datetime
 import json
 import os
@@ -30,4 +31,19 @@ def xls_to_json(xls_file_path, output_file_path):
         f.write(json_for_print)
 
 
-xls_to_json("C:/Users/Yonatans/Downloads/calander_jewish_times.xlsx", "./data/parsed_dates.json")
+#xls_to_json("C:/Users/Yonatans/Downloads/calander_jewish_times.xlsx", "./data/parsed_dates.json")
+
+print(os.getcwd())
+with codecs.open('C:\\Users\\Yonatans\\git\\electron-quick-start\\data\\shagririm.txt', 'r', 'utf-8') as f:
+    lines = f.readlines()
+    splitted_lines = []
+    for line in lines:
+        line = line.strip()
+        splitted = line.split()
+        splitted_lines.append(splitted)
+    sorted_lines = sorted(splitted_lines, key= lambda item: item[-1])
+    print(sorted_lines)
+
+with codecs.open('C:\\Users\\Yonatans\\git\\electron-quick-start\\data\\shagririm_sorted.txt', 'w+', 'utf-8') as f:
+    for line in sorted_lines:
+        print(' '.join(line), file=f)
