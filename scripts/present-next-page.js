@@ -216,7 +216,7 @@ function present_shabat_times(date){
 }
 
 function present_donators(date){
-    load_file('./data/tormim.txt').then(lines => {
+    load_file('./data/shagririm_sorted.txt').then(lines => {
         var donators_end_point = donators_start_point + donators_slice_count;
         if(lines.length - donators_start_point > donators_slice_count && 
             lines.length - (donators_start_point + donators_slice_count) < donators_slice_count/2){
