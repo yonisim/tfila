@@ -82,6 +82,7 @@ function prepare_slide_show_pages(day_times_object){
 }
 
 function get_slide_show_items_ids(){
+    //return ['day_times'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -90,6 +91,7 @@ function get_slide_show_items_ids(){
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
+    slide_show_items.push('day_times');
     if (date.getDay() >= 4){
         slide_show_items.push('shabat');
     }
@@ -152,6 +154,13 @@ function present_prayer_times(current_date){
     set_element_html('arvit-regulr-days', arvit_times);
     return sleep_seconds(wait_seconds);
 }
+
+function present_day_times(current_date){
+    set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
+    set_element_data('sunset', format_hour_and_minutes(get_today_sunset(current_date)));
+    return sleep_seconds(wait_seconds);
+}
+
 
 function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
@@ -334,6 +343,7 @@ async function present_advertisement(current_date){
 
 let item_funcs = {
     'tfilot': present_prayer_times,
+    'day_times': present_day_times,
     'omer': present_sfirat_haomer,
     'shabat': present_shabat_prayer_times,
     'tormim': present_donators,
@@ -364,26 +374,40 @@ function build_page_structure(){
     return insert_html('./html/header.html', "header");
 }
 
-function is_after_sunset(date){
+function get_today_property(date, property_name){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
+    return today_times[property_name];
+}
+
+function get_today_sunrise(date){
+    return get_today_property(date, 'sunrise');
+}
+
+function get_today_sunset(date){
+    return get_today_property(date, 'sunset');
+}
+
+function is_after_sunset(date){
     var sunset_time = new Date(date);
-    var sunset_hour_and_minutes = today_times['sunset'].split(':');
+    var sunset_hour_and_minutes = get_today_sunset(date).split(':');
     sunset_time.setHours(sunset_hour_and_minutes[0], sunset_hour_and_minutes[1], '00');
     return date > sunset_time;
 }
 
 function is_before_sunrise(date){
-    var current_date_var = get_date_from_Date(date);
-    var today_times = get_today_times(current_date_var);
     var sunrise_time = new Date(date);
-    var sunrise_hour_and_minutes = today_times['sunrise'].split(':');
+    var sunrise_hour_and_minutes = get_today_sunrise(date).split(':');
     sunrise_time.setHours(sunrise_hour_and_minutes[0], sunrise_hour_and_minutes[1], '00');
     return date < sunrise_time;
 }
 
 function is_night(date){
     return is_after_sunset(date) || is_before_sunrise(date);
+}
+
+function format_hour_and_minutes(full_time_string){
+    return full_time_string.substring(0, 5);
 }
 
 function addDays(date, days) {
