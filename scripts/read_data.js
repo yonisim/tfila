@@ -1,9 +1,9 @@
 'esversion: 8';
 
 export function current_date(){
-    let cur_date = new Date('2022-09-28T06:28:02');
+    let cur_date = new Date('2022-09-26T17:28:02');
     let time = new Date();
-    return time;
+    return cur_date;
 }
 
 function formatDate(date) {
