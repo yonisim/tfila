@@ -45,7 +45,12 @@
     },
     "slihot":{
         "image": "slihot.jpeg",
-        "until": "2022-09-28",
+        "until": "2022-09-23",
         "exposure_time_seconds": 15
+    },
+    "shana_tova":{
+        "image": "shana_tova_3.jpg",
+        "from": "2022-09-23", 
+        "until": "2022-09-27T21:00"
     }
 }

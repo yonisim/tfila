@@ -27,7 +27,7 @@ async function read_initial_data(){
 read_initial_data().then(() => {
     present_first_page(day_times);
 });
-var wait_seconds = 15;
+var wait_seconds = 4;
 var message_wait_seconds = 5;
 var ad_wait_seconds = 10;
 var donators_start_point = 0;
@@ -81,21 +81,46 @@ function prepare_slide_show_pages(day_times_object){
     return ["tfilot_times", "sfirat_haomer"];
 }
 
+function is_between_dates(date, start_date, end_date){
+    var is_between_dates = true;
+    if (start_date){
+        is_between_dates = date >= new Date(start_date);
+    }
+    if (end_date){
+        is_between_dates = is_between_dates && date <= new Date(end_date);
+    }
+    return is_between_dates;
+}
+
 function get_slide_show_items_ids(){
     //return ['day_times'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    slide_show_items.push('tfilot');
+    if (!is_between_dates(date, "2022-09-23T10:00", "2022-09-27T17:00")){
+      slide_show_items.push('tfilot');
+    }
+    if (date.getDay() >= 4){
+        slide_show_items.push('shabat');
+    }
+    if (is_between_dates(date, "2022-09-23T10:00", "2022-09-25T19:10")){
+        slide_show_items.push('rosh_hashana_eve');
+    }
+    if (is_between_dates(date, "2022-09-23T10:00", "2022-09-26T19:30")){
+        slide_show_items.push('rosh_hashana_a');
+    }
+    if (is_between_dates(date, "2022-09-26T17:00", "2022-09-27T19:30")){
+        slide_show_items.push('rosh_hashana_b');
+    }
+    if (is_between_dates(date, "2022-09-27T17:00", "2022-09-28T19:30")){
+    //    slide_show_items.push('gedalia');
+    }
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
     slide_show_items.push('day_times');
-    if (date.getDay() >= 4){
-        slide_show_items.push('shabat');
-    }
-    slide_show_items.push('messages');
+    //slide_show_items.push('messages');
     slide_show_items.push('tormim');
     slide_show_items.push('advertisement');
     return slide_show_items;
@@ -103,10 +128,10 @@ function get_slide_show_items_ids(){
 
 
 let shacharit_regular_days = ['06:00', '06:50', '08:30(שישי)'];
-let kabalat_shabat = ['18:33'];
+let kabalat_shabat = ['18:20'];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
 let mincha_shabat = ["13:15","14:00","18:00"];
-let arvit_shabat = ['19:20', '19:35'];
+let arvit_shabat = ['19:08', '19:23'];
 
 function get_week_start_date(current_date){
     var start_of_week = new Date(current_date);
@@ -158,6 +183,14 @@ function present_prayer_times(current_date){
 function present_day_times(current_date){
     set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
     set_element_data('sunset', format_hour_and_minutes(get_today_sunset(current_date)));
+    return sleep_seconds(wait_seconds);
+}
+
+function present_chag_times(date){
+    //set_element_data('chag_name', 'ראש השנה');
+    //load_file('./data/rosh_hashana_a.txt').then(lines => {
+    //    set_element_data('rosh_hashana_a', lines);
+    //});
     return sleep_seconds(wait_seconds);
 }
 
@@ -304,6 +337,19 @@ function should_present_ad_in_weekday(ad_definition, current_date){
     return is_in_weekdays;
 }
 
+function should_remove_ad_specific_date_range(ad_definition, current_date){
+    var is_date_in_range = false;
+    var exclude_date_range = ad_definition.exclude_date_range;
+    if (exclude_date_range){
+        is_date_in_range = is_between_dates(current_date, exclude_date_range.from, exclude_date_range.until);
+    }
+    return is_date_in_range;
+}
+
+function get_rosh_hashana_ads(){
+    return [advertisements.shana_tova];
+}
+
 function get_advertisements(current_date){
     var ads = [];
     for (var [key,advertisement_definition] of Object.entries(advertisements)){
@@ -312,6 +358,9 @@ function get_advertisements(current_date){
             present_ad = false;
         }
         if (!should_present_ad_in_weekday(advertisement_definition, current_date)){
+            present_ad = false;
+        }
+        if (should_remove_ad_specific_date_range(advertisement_definition, current_date)){
             present_ad = false;
         }
 
@@ -330,7 +379,13 @@ async function present_advertisement(current_date){
     toggle_element_show(main_div_element, true);
     var body_classes = body.className;
     body.className = 'advertisement';
-    for (var ad_definition of get_advertisements(current_date)){
+    var ads_for_present;
+    if (is_between_dates(current_date, "2022-09-23", "2022-09-27T21:00")){
+        ads_for_present = get_rosh_hashana_ads();
+    } else {
+        ads_for_present = get_advertisements(current_date);
+    }
+    for (var ad_definition of ads_for_present){
         var ad_file_name = ad_definition.image;
         set_element_background_image(body, 'images/' + ad_file_name);
         var exposure_time = ad_definition.exposure_time_seconds || ad_wait_seconds;
@@ -348,7 +403,11 @@ let item_funcs = {
     'shabat': present_shabat_prayer_times,
     'tormim': present_donators,
     'messages': present_messages,
-    'advertisement': present_advertisement
+    'advertisement': present_advertisement,
+    'rosh_hashana_a': present_chag_times,
+    'rosh_hashana_b': present_chag_times,
+    'rosh_hashana_eve': present_chag_times,
+    'gedalia': present_chag_times
 };
 
 async function loop_pages(){

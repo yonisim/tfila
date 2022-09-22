@@ -29,7 +29,7 @@ export function set_element_html(dest_element_id, html_data){
 
 export function activate_element(element_id){
     var element = document.getElementById(element_id);
-    element.style.display = 'contents';
+    //element.style.display = 'contents';
     element.classList.add('fade-in');
     for (var child_elem of element.children){
         child_elem.classList.add('fade-in');
