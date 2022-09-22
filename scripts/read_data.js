@@ -3,7 +3,7 @@
 export function current_date(){
     let cur_date = new Date('2022-09-26T17:28:02');
     let time = new Date();
-    return cur_date;
+    return time;
 }
 
 function formatDate(date) {
