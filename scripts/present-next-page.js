@@ -27,7 +27,7 @@ async function read_initial_data(){
 read_initial_data().then(() => {
     present_first_page(day_times);
 });
-var wait_seconds = 15;
+var wait_seconds = 4;
 var message_wait_seconds = 5;
 var ad_wait_seconds = 10;
 var donators_start_point = 0;
@@ -93,7 +93,7 @@ function is_between_dates(date, start_date, end_date){
 }
 
 function get_slide_show_items_ids(){
-    //return ['day_times'];
+    //return ['rosh_hashana_a'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -186,11 +186,46 @@ function present_day_times(current_date){
     return sleep_seconds(wait_seconds);
 }
 
-function present_chag_times(date){
+async function present_rosh_eve_times(date){
     //set_element_data('chag_name', 'ראש השנה');
-    //load_file('./data/rosh_hashana_a.txt').then(lines => {
-    //    set_element_data('rosh_hashana_a', lines);
-    //});
+    fetch('./html/rosh_hashana_eve_1.html')
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html('rosh_hashana_times', lines);
+    });
+    await sleep_seconds(wait_seconds);
+    fetch('./html/rosh_hashana_eve_2.html')
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html('rosh_hashana_times', lines);
+    });
+    return sleep_seconds(wait_seconds);
+}
+
+async function present_rosh_a_times(date){
+    //set_element_data('chag_name', 'ראש השנה');
+    await sleep_seconds(wait_seconds);
+    fetch('./html/rosh_hashana_a_2.html')
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html('rosh_hashana_times', lines);
+    });
+    return sleep_seconds(wait_seconds);
+}
+
+async function present_rosh_b_times(date){
+    //set_element_data('chag_name', 'ראש השנה');
+    fetch('./html/rosh_hashana_b_1.html')
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html('rosh_hashana_times', lines);
+    });
+    await sleep_seconds(wait_seconds);
+    fetch('./html/rosh_hashana_b_2.html')
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html('rosh_hashana_times', lines);
+    });
     return sleep_seconds(wait_seconds);
 }
 
@@ -404,10 +439,9 @@ let item_funcs = {
     'tormim': present_donators,
     'messages': present_messages,
     'advertisement': present_advertisement,
-    'rosh_hashana_a': present_chag_times,
-    'rosh_hashana_b': present_chag_times,
-    'rosh_hashana_eve': present_chag_times,
-    'gedalia': present_chag_times
+    'rosh_hashana_a': present_rosh_a_times,
+    'rosh_hashana_b': present_rosh_b_times,
+    'rosh_hashana_eve': present_rosh_eve_times
 };
 
 async function loop_pages(){
