@@ -128,10 +128,10 @@ function get_slide_show_items_ids(){
 
 
 let shacharit_regular_days = ['06:00', '06:50', '08:30(שישי)'];
-let kabalat_shabat = ['18:20'];
+let kabalat_shabat = ['18:27'];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
 let mincha_shabat = ["13:15","14:00","18:00"];
-let arvit_shabat = ['19:08', '19:23'];
+let arvit_shabat = ['19:10', '19:25'];
 
 function get_week_start_date(current_date){
     var start_of_week = new Date(current_date);
