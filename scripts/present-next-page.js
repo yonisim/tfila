@@ -27,7 +27,7 @@ async function read_initial_data(){
 read_initial_data().then(() => {
     present_first_page(day_times);
 });
-var wait_seconds = 4;
+var wait_seconds = 15;
 var message_wait_seconds = 5;
 var ad_wait_seconds = 10;
 var donators_start_point = 0;
@@ -93,7 +93,7 @@ function is_between_dates(date, start_date, end_date){
 }
 
 function get_slide_show_items_ids(){
-    //return ['rosh_hashana_a'];
+    //return ['rosh_hashana_b'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
