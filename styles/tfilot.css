@@ -7,12 +7,24 @@
     margin-top: 20px;
 }
 
+.shabat-grid {
+    display: grid;
+    background-color: transparent;
+    color: #444;
+    direction: rtl;
+    margin-top: 20px;
+}
+
 .tfilot-weekdays-grid{
     grid-template-columns: repeat(3, 1fr);
 }
 
 .tfilot-shabat-grid{
     grid-template-columns: repeat(4, 1fr);
+}
+
+.tfilot-shabat-grid-horizontal{
+    grid-template-columns: repeat(2, max-content);
 }
 
 .grid-header-box {
@@ -28,4 +40,10 @@
 .grid-box {
     padding: 5px;
     text-align: center;
+  }
+
+.grid-box-right {
+    padding: 5px;
+    padding-left: 20px;
+    text-align: right;
   }

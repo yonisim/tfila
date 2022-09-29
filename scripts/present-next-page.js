@@ -93,7 +93,7 @@ function is_between_dates(date, start_date, end_date){
 }
 
 function get_slide_show_items_ids(){
-    //return ['rosh_hashana_b'];
+    //return ['shabat'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -128,10 +128,10 @@ function get_slide_show_items_ids(){
 
 
 let shacharit_regular_days = ['06:00', '06:50', '08:30(שישי)'];
-let kabalat_shabat = ['18:27'];
+let kabalat_shabat = ['18:04', '18:14'];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
 let mincha_shabat = ["13:15","14:00","18:00"];
-let arvit_shabat = ['19:10', '19:25'];
+let arvit_shabat = ['19:01', '19:16'];
 
 function get_week_start_date(current_date){
     var start_of_week = new Date(current_date);
@@ -143,6 +143,12 @@ function get_next_week_start_date(current_date){
     var start_of_next_week = new Date(current_date);
     start_of_next_week.setDate(current_date.getDate() - current_date.getDay() + 7);
     return start_of_next_week;
+}
+
+function get_date_plus_minutes(current_date, initial_time, add_minutes){
+    var result = new Date(current_date);
+    result.setMinutes(current_date.getMinutes() + add_minutes);
+    return result;
 }
 
 function get_week_times(current_date){
@@ -230,17 +236,39 @@ async function present_rosh_b_times(date){
 }
 
 
-function present_shabat_prayer_times(current_date){
+async function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
     document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
-    var kabalat_shabat_times = kabalat_shabat.join('<br');
-    var shacharit_times = shacharit_shabat.join('<br>');
-    var mincha_times = mincha_shabat.join('<br>');
     var arvit_times = arvit_shabat.join('<br>');
-    set_element_html('kabalat-shabat', kabalat_shabat_times);
-    set_element_html('shachrit-shabat', shacharit_times);
-    set_element_html('mincha-shabat', mincha_times);
-    set_element_html('arvit-shabat', arvit_times);
+    
+    var mincha_kabalat_shabat = kabalat_shabat[1];
+
+    set_element_html('hadlakat-nerot', kabalat_shabat[0]);
+    set_element_html('kabalat-shabat', mincha_kabalat_shabat);
+    await sleep_seconds(wait_seconds);
+
+    fetch('./html/shabat_2.html')
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html('shabat_times', lines);
+    });
+    await sleep_seconds(wait_seconds);
+
+    fetch('./html/shabat_3.html')
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html('shabat_times', lines);
+    });
+    await sleep_seconds(wait_seconds);
+
+    fetch('./html/shabat_4.html')
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html('shabat_times', lines);
+        set_element_html('arvit-shabat', arvit_shabat[0]);
+        set_element_html('arvit-shabat-2', arvit_shabat[1]);
+    });
+
     return sleep_seconds(wait_seconds);
 }
 
