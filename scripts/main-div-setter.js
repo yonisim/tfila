@@ -50,9 +50,11 @@ export function deactivate_element(element_id){
 
 export function toggle_element_show(element, hide){
     if(hide === true){
-        element.classList.add('hidden_element');
+        element.classList.remove('show-element');
+        element.classList.add('hidden-element');
     } else {
-        element.classList.remove('hidden_element');
+        element.classList.remove('hidden-element');
+        element.classList.add('show-element');
     }
 }
 
