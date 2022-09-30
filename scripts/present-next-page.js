@@ -288,13 +288,15 @@ async function present_friday_prayer_times(current_date){
     
     var mincha_kabalat_shabat = kabalat_shabat[1];
 
-    await load_html_into_page('shacharit.html', 'friday_prayers', () => {
-        show_slichot(current_date);
-        var elements = document.getElementsByClassName('friday-shacharit');
-        for (var element of elements){
-            element.classList.add('show-element');
-        }
-    });
+    if(is_in_weekdays(current_date, [4]) || (is_in_weekdays(current_date, [5]) && !is_after_time(current_date, '10:00'))){
+        await load_html_into_page('shacharit.html', 'friday_prayers', () => {
+            show_slichot(current_date);
+            var elements = document.getElementsByClassName('friday-shacharit');
+            for (var element of elements){
+                element.classList.add('show-element');
+            }
+        });
+    }
     return load_html_into_page('friday_times.html', 'friday_prayers', () => {
         set_element_html('hadlakat-nerot', kabalat_shabat[0]);
         set_element_html('kabalat-shabat', mincha_kabalat_shabat);
