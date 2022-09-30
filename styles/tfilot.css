@@ -13,6 +13,8 @@
     color: #444;
     direction: rtl;
     margin-top: 20px;
+    width: 92%;
+    margin-right: 4%;
 }
 
 .tfilot-weekdays-grid{
@@ -24,7 +26,7 @@
 }
 
 .tfilot-shabat-grid-horizontal{
-    grid-template-columns: repeat(2, max-content);
+    grid-template-columns: max-content 1fr;
 }
 
 .grid-header-box {
@@ -44,6 +46,5 @@
 
 .grid-box-right {
     padding: 5px;
-    padding-left: 20px;
     text-align: right;
   }
