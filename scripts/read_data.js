@@ -6,7 +6,7 @@ export function current_date(){
     return time;
 }
 
-function formatDate(date) {
+function formatDate(date, reverse) {
   var d = new Date(date),
       month = '' + (d.getMonth() + 1),
       day = '' + d.getDate(),
@@ -17,11 +17,19 @@ function formatDate(date) {
   if (day.length < 2) 
       day = '0' + day;
 
-  return [year, month, day].join('-');
+  var formatted = [year, month, day];
+  if (reverse){
+    formatted = [day, month, year];
+  }
+  return formatted.join('-');
 }
 
 export function get_date_from_Date(date){
     return formatDate(date);
+}
+
+export function get_date_from_Date_for_header(date){
+    return formatDate(date, true);
 }
 
 function current_date_local(){

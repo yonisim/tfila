@@ -1,7 +1,7 @@
 'esversion: 8';
 import { insert_html, append_html, activate_element, deactivate_element,
     waitForElm, wait_for_scroll, toggle_element_show } from "./main-div-setter.js";
-import {current_date, get_date_from_Date, read_json} from "./read_data.js";
+import {current_date, get_date_from_Date, get_date_from_Date_for_header, read_json} from "./read_data.js";
 import {set_element_data, set_element_html, set_element_background, 
     get_element_background, set_element_background_image} from "./main-div-setter.js";
 import {get_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
@@ -60,7 +60,7 @@ function present_header_dates(date){
             present_hebrew_date_in_header(date);
         });
         waitForElm('#gregorian_date').then((greg_date_elm) => {
-            set_element_data("gregorian_date", get_date_from_Date(date));
+            set_element_data("gregorian_date", get_date_from_Date_for_header(date));
         });
     });
 }
