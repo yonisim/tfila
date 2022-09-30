@@ -92,16 +92,25 @@ function is_between_dates(date, start_date, end_date){
     return is_between_dates;
 }
 
+function is_in_weekdays(date, weekdays){
+    return weekdays.includes(date.getDay());
+}
+
 function get_slide_show_items_ids(){
-    //return ['shabat'];
+    //return ['friday'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
     if (!is_between_dates(date, "2022-09-23T10:00", "2022-09-27T17:00")){
-      slide_show_items.push('tfilot');
+        if(!is_in_weekdays(date, [5]) && is_after_time(date, '16:00')){
+            slide_show_items.push('tfilot');
+        }
     }
-    if (date.getDay() >= 4){
+    if (is_in_weekdays(date, [4,5])){
+        slide_show_items.push('friday');
+    }
+    if (is_in_weekdays(date, [5]) || (is_in_weekdays(date, [6]) && !is_after_time(date, arvit_shabat[1], 20))){
         slide_show_items.push('shabat');
     }
     if (is_between_dates(date, "2022-09-23T10:00", "2022-09-25T19:10")){
@@ -163,13 +172,21 @@ function get_next_week_times(current_date){
 
 function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
     var prayer_times = date_obj[prayer_name];
-    if (Array.isArray(prayer_times)){
-        prayer_times = prayer_times.join('<br>');
-    }
     return prayer_times;
 }
 
-function present_prayer_times(current_date){    
+function show_slichot(date){
+    if(is_between_dates(date, '2022-09-29', '2022-10-03T10:00')){
+        set_element_data('shacharit_a', '05:50');
+        set_element_data('shacharit_b', '06:55');
+        var elements = document.getElementsByClassName('slichot');
+        for (var element of elements){
+            element.classList.add('show-element');
+        }
+    }
+}
+
+async function present_prayer_times(current_date){    
     var shacharit_times = shacharit_regular_days.join('<br>');
     var this_week_times;
     if ([5,6].includes(current_date.getDay())){
@@ -180,11 +197,16 @@ function present_prayer_times(current_date){
     var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
     var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
     document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
-    set_element_html('shachrit-regulr-days', shacharit_times);
-    set_element_html('mincha-regulr-days', mincha_times);
-    set_element_html('arvit-regulr-days', arvit_times);
-    return sleep_seconds(wait_seconds);
+
+    await load_html_into_page('shacharit.html', 'tfilot_times', () => {
+        show_slichot(current_date);
+    });
+    return load_html_into_page('mincha_arvit.html', 'tfilot_times', () => {
+        set_element_html('mincha-regulr-days', mincha_times);
+        set_element_html('arvit-regulr-days', arvit_times[0]);
+    });
 }
+
 
 function present_day_times(current_date){
     set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
@@ -236,40 +258,47 @@ async function present_rosh_b_times(date){
 }
 
 
+function load_html_into_page(html_file_name, parent_element, callback){
+    fetch('./html/' + html_file_name)
+    .then(response => response.text())
+    .then(lines => {
+        set_element_html(parent_element, lines);
+        if(callback){
+            callback();
+        }
+    });
+    return sleep_seconds(wait_seconds);
+}
+
 async function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
     document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
-    var arvit_times = arvit_shabat.join('<br>');
+    await sleep_seconds(wait_seconds);
+    
+    await load_html_into_page('shabat_2.html', 'shabat_times');
+    return load_html_into_page('shabat_3.html', 'shabat_times', () => {
+        set_element_html('arvit-shabat', arvit_shabat[0]);
+        set_element_html('arvit-shabat-2', arvit_shabat[1]);        
+    });
+}
+
+async function present_friday_prayer_times(current_date){
+    var this_week_times = get_week_times(current_date);
+    document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
     
     var mincha_kabalat_shabat = kabalat_shabat[1];
 
-    set_element_html('hadlakat-nerot', kabalat_shabat[0]);
-    set_element_html('kabalat-shabat', mincha_kabalat_shabat);
-    await sleep_seconds(wait_seconds);
-
-    fetch('./html/shabat_2.html')
-    .then(response => response.text())
-    .then(lines => {
-        set_element_html('shabat_times', lines);
+    await load_html_into_page('shacharit.html', 'friday_prayers', () => {
+        show_slichot(current_date);
+        var elements = document.getElementsByClassName('friday-shacharit');
+        for (var element of elements){
+            element.classList.add('show-element');
+        }
     });
-    await sleep_seconds(wait_seconds);
-
-    fetch('./html/shabat_3.html')
-    .then(response => response.text())
-    .then(lines => {
-        set_element_html('shabat_times', lines);
+    return load_html_into_page('friday_times.html', 'friday_prayers', () => {
+        set_element_html('hadlakat-nerot', kabalat_shabat[0]);
+        set_element_html('kabalat-shabat', mincha_kabalat_shabat);
     });
-    await sleep_seconds(wait_seconds);
-
-    fetch('./html/shabat_4.html')
-    .then(response => response.text())
-    .then(lines => {
-        set_element_html('shabat_times', lines);
-        set_element_html('arvit-shabat', arvit_shabat[0]);
-        set_element_html('arvit-shabat-2', arvit_shabat[1]);
-    });
-
-    return sleep_seconds(wait_seconds);
 }
 
 function present_sfirat_haomer(current_date){
@@ -464,6 +493,7 @@ let item_funcs = {
     'day_times': present_day_times,
     'omer': present_sfirat_haomer,
     'shabat': present_shabat_prayer_times,
+    'friday': present_friday_prayer_times,
     'tormim': present_donators,
     'messages': present_messages,
     'advertisement': present_advertisement,
@@ -511,9 +541,18 @@ function get_today_sunset(date){
 
 function is_after_sunset(date){
     var sunset_time = new Date(date);
-    var sunset_hour_and_minutes = get_today_sunset(date).split(':');
-    sunset_time.setHours(sunset_hour_and_minutes[0], sunset_hour_and_minutes[1], '00');
-    return date > sunset_time;
+    var sunset_time = get_today_sunset(date);
+    return is_after_time(date, sunset_time);
+}
+
+function is_after_time(date, time, plus_minutes){
+    var date_time = new Date(date);
+    var hour_and_minutes = time.split(':');
+    if(plus_minutes){
+        hour_and_minutes[1] = parseInt(hour_and_minutes[1]) + plus_minutes;
+    }
+    date_time.setHours(hour_and_minutes[0], hour_and_minutes[1], '00');
+    return date > date_time;
 }
 
 function is_before_sunrise(date){
@@ -525,6 +564,10 @@ function is_before_sunrise(date){
 
 function is_night(date){
     return is_after_sunset(date) || is_before_sunrise(date);
+}
+
+function add_minutes(date, minutes) {
+    return new Date(date.getTime() + minutes*60*1000);
 }
 
 function format_hour_and_minutes(full_time_string){

@@ -47,6 +47,13 @@ html, body, article {
 
 .hidden_element{
 }
+.hidden-element{
+  display: none;
+}
+
+.show-element{
+  display: block;
+}
 
 .main-bg {
   background: url(../images/mishkan-tkiya.JPG) no-repeat center center fixed;
