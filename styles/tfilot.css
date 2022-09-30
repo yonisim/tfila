@@ -9,12 +9,13 @@
 
 .shabat-grid {
     display: grid;
-    background-color: transparent;
+    background-color: var(--default-text-background-color);
     color: #444;
     direction: rtl;
-    margin-top: 20px;
+    margin-top: 5px;
     width: 92%;
     margin-right: 4%;
+    column-gap: 1vw;
 }
 
 .tfilot-weekdays-grid{
