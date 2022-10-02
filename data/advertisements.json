@@ -58,5 +58,10 @@
         "from": "2022-08-28",
         "until": "2022-10-01T19:00",
         "exposure_time_seconds": 15
+    },
+    "kipur":{
+        "image": "kipur_6.jpg",
+        "from": "2022-10-04", 
+        "until": "2022-10-05T21:00"
     }
 }
