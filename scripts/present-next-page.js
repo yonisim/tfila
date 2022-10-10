@@ -209,7 +209,7 @@ async function present_prayer_times(current_date){
 
     await load_html_into_page('shacharit.html', 'tfilot_times', () => {
         show_slichot(current_date);
-        if(is_between_dates(date, '2022-10-10', '2022-10-13T10:00')){
+        if(is_between_dates(current_date, '2022-10-10', '2022-10-13T10:00')){
             var elements = document.getElementsByClassName('friday-shacharit');
             for (var element of elements){
                 element.classList.add('show-element');
