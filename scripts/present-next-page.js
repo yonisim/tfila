@@ -97,7 +97,7 @@ function is_in_weekdays(date, weekdays){
 }
 
 function get_slide_show_items_ids(){
-    //return ['kipur'];
+    //return ['advertisement'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -484,8 +484,7 @@ function should_remove_ad_specific_date_range(ad_definition, current_date){
 }
 
 function get_sukot_ads(){
-    return [];
-    //return [advertisements.sukot];
+    return [advertisements.sukot];
 }
 
 function get_kipur_ads(){
