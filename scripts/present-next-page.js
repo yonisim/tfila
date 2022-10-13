@@ -102,7 +102,7 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    if (!is_between_dates(date, "2022-10-09T05:00", "2022-10-10T17:00")){
+    if (!is_between_dates(date, "2022-10-13T21:20", "2022-10-17T17:00")){
         if(!(is_in_weekdays(date, [5]) && is_after_time(date, '16:00'))){
             slide_show_items.push('tfilot');
         }
@@ -133,6 +133,13 @@ function get_slide_show_items_ids(){
     }
     if (is_between_dates(date, "2022-10-09T05:00", "2022-10-10T19:30")){
         slide_show_items.push('sukot');
+    }
+    if (is_between_dates(date, "2022-10-15T17:00", "2022-10-16T13:30")){
+        slide_show_items.push('hoshana_raba');
+    }
+    if (is_between_dates(date, "2022-10-15T17:00", "2022-10-17T18:50")){
+        slide_show_items.push('simchat_tora_eve');
+        slide_show_items.push('simchat_tora');
     }
     if (today_times['omer']){
         //slide_show_items.push('omer');
@@ -323,6 +330,20 @@ async function present_sukot_eve_times(current_date){
 async function present_sukot_times(current_date){
     await sleep_seconds(wait_seconds);
     return load_html_into_page('sukot_a.html', 'tfilot_times');
+}
+
+async function present_hoshana_raba_times(current_date){
+    return sleep_seconds(wait_seconds);
+}
+
+async function present_simchat_tora_eve_times(current_date){
+    return sleep_seconds(wait_seconds);
+}
+
+async function present_simchat_tora_times(current_date){
+    await sleep_seconds(wait_seconds);
+    await load_html_into_page('simchat_tora_a.html', 'tfilot_times');
+    return load_html_into_page('simchat_tora_b.html', 'tfilot_times');
 }
 
 async function present_friday_prayer_times(current_date){
@@ -521,7 +542,7 @@ async function present_advertisement(current_date){
     var body_classes = body.className;
     body.className = 'advertisement';
     var ads_for_present;
-    if (is_between_dates(current_date, "2022-10-09", "2022-10-19")){
+    if (is_between_dates(current_date, "2022-10-09", "2022-10-18")){
         ads_for_present = get_sukot_ads();
     } else if (is_between_dates(current_date, "2022-10-04", "2022-10-06")){
         ads_for_present = get_kipur_ads();
@@ -554,7 +575,10 @@ let item_funcs = {
     'kipur_eve': present_kipur_eve_times,
     'kipur': present_kipur_times,
     'sukot_eve': present_sukot_eve_times,
-    'sukot': present_sukot_times
+    'sukot': present_sukot_times,
+    'hoshana_raba': present_hoshana_raba_times,
+    'simchat_tora_eve': present_simchat_tora_eve_times,
+    'simchat_tora': present_simchat_tora_times
 };
 
 async function loop_pages(){
