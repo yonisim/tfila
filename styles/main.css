@@ -1,3 +1,7 @@
+* {
+  cursor: none;
+  }
+
 html, body, article {
   background: var(--bgColor);
   font-family: 'DS-DIGI', sans-serif;
