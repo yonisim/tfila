@@ -103,7 +103,7 @@ function is_in_weekdays(date, weekdays){
 }
 
 function get_slide_show_items_ids(){
-    //return ['friday'];
+    return ['day_times'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -248,8 +248,11 @@ async function present_prayer_times(current_date){
 
 
 function present_day_times(current_date){
+    set_element_data('dawn', format_hour_and_minutes(get_today_dawn(current_date)));
     set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
+    set_element_data('mid_day', format_hour_and_minutes(get_today_mid_day(current_date)));
     set_element_data('sunset', format_hour_and_minutes(get_today_sunset(current_date)));
+    set_element_data('stars', format_hour_and_minutes(get_today_stars(current_date)));
     return sleep_seconds(wait_seconds);
 }
 
@@ -629,12 +632,24 @@ function get_today_property(date, property_name){
     return today_times[property_name];
 }
 
+function get_today_dawn(date){
+    return get_today_property(date, 'dawn');
+}
+
 function get_today_sunrise(date){
     return get_today_property(date, 'sunrise');
 }
 
+function get_today_mid_day(date){
+    return get_today_property(date, 'mid_day');
+}
+
 function get_today_sunset(date){
     return get_today_property(date, 'sunset');
+}
+
+function get_today_stars(date){
+    return get_today_property(date, 'stars');
 }
 
 function is_after_sunset(date){
