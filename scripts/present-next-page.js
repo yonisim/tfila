@@ -102,6 +102,10 @@ function is_in_weekdays(date, weekdays){
     return weekdays.includes(date.getDay());
 }
 
+function is_weekend(date){
+    return is_in_weekdays(date, [5]) | (is_in_weekdays(date, [6]) && is_before_time(date, '16:00'));
+}
+
 function get_slide_show_items_ids(){
     //return ['day_times'];
     var date = current_date();
@@ -109,7 +113,7 @@ function get_slide_show_items_ids(){
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
     if (!is_between_dates(date, "2022-10-13T21:20", "2022-10-17T17:00")){
-        if(!(is_in_weekdays(date, [5]) && is_after_time(date, '16:00'))){
+        if(!is_weekend(date)){
             slide_show_items.push('tfilot');
         }
     }
@@ -666,6 +670,13 @@ function is_after_time(date, time, plus_minutes){
     }
     date_time.setHours(hour_and_minutes[0], hour_and_minutes[1], '00');
     return date > date_time;
+}
+
+function is_before_time(date, time){
+    var date_time = new Date(date);
+    var hour_and_minutes = time.split(':');
+    date_time.setHours(hour_and_minutes[0], hour_and_minutes[1], '00');
+    return date < date_time;
 }
 
 function is_before_sunrise(date){
