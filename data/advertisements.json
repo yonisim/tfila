@@ -68,5 +68,14 @@
         "image": "simchat_tora.png",
         "from": "2022-10-10", 
         "until": "2022-10-13T21:00"
+    },
+    "mashiv_haruach":{
+        "image": "mashiv.jpg",
+        "until": "2022-10-31T16:00"
+    },
+    "tal_umatar":{
+        "image": "tal_umatar.jpg",
+        "from": "2022-10-31T16:01", 
+        "until": "2022-11-14T21:10"
     }
 }
