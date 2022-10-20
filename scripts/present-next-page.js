@@ -103,7 +103,7 @@ function is_in_weekdays(date, weekdays){
 }
 
 function get_slide_show_items_ids(){
-    return ['day_times'];
+    //return ['day_times'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
