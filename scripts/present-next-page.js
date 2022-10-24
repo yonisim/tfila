@@ -252,7 +252,7 @@ async function present_prayer_times(current_date){
 
 
 function present_day_times(current_date){
-    set_element_data('dawn', format_hour_and_minutes(get_today_dawn(current_date)));
+    set_element_data('tfilin', format_hour_and_minutes(get_today_talit_and_tfilin(current_date)));
     set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
     set_element_data('mid_day', format_hour_and_minutes(get_today_mid_day(current_date)));
     set_element_data('sunset', format_hour_and_minutes(get_today_sunset(current_date)));
@@ -638,6 +638,10 @@ function get_today_property(date, property_name){
 
 function get_today_dawn(date){
     return get_today_property(date, 'dawn');
+}
+
+function get_today_talit_and_tfilin(date){
+    return get_today_property(date, 'tfilin');
 }
 
 function get_today_sunrise(date){
