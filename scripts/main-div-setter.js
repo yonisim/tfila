@@ -10,13 +10,17 @@ export function insert_html(source_file, dest_element_id){
       });
 }
 
-export function append_html(source_file, dest_element_id){
-    return fetch(source_file)
+export async function append_html(source_file, dest_element_id, callback){
+    return fetch('./html/' + source_file)
       .then(response => response.text())
       .then(data => {
         document.getElementById(dest_element_id).innerHTML += data;
+        if(callback){
+            callback();
+        }
       });
 }
+
 
 export function set_element_data(dest_element_id, data){
     document.getElementById(dest_element_id).textContent = data;

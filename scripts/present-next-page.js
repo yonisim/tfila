@@ -235,8 +235,12 @@ async function present_prayer_times(current_date){
     var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
     document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
 
-    await load_html_into_page('shacharit.html', 'tfilot_times', () => {
+    return load_html_into_page('shacharit.html', 'tfilot_times', () => {
         show_slichot(current_date);
+        append_html('mincha_arvit.html', 'tfilot_times').then(() => {
+            set_element_html('mincha-regulr-days', mincha_times);
+            set_element_html('arvit-regulr-days', arvit_times[0]);
+        });
         if(is_between_dates(current_date, '2022-10-10', '2022-10-13T10:00')){
             var elements = document.getElementsByClassName('friday-shacharit');
             for (var element of elements){
@@ -244,10 +248,12 @@ async function present_prayer_times(current_date){
             }
         }
     });
-    return load_html_into_page('mincha_arvit.html', 'tfilot_times', () => {
-        set_element_html('mincha-regulr-days', mincha_times);
-        set_element_html('arvit-regulr-days', arvit_times[0]);
-    });
+    //.then(response => {
+    //    append_html('mincha_arvit.html', 'tfilot_times').then()
+    //    set_element_html('mincha-regulr-days', mincha_times);
+    //    set_element_html('arvit-regulr-days', arvit_times[0]);
+    //    return sleep_seconds(wait_seconds);
+    //});
 }
 
 

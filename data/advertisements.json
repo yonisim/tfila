@@ -77,5 +77,10 @@
         "image": "tal_umatar.jpg",
         "from": "2022-10-31T16:01", 
         "until": "2022-11-14T21:10"
+    },
+    "elections":{
+        "image": "elections_2.png",
+        "from": "2022-10-26T17:30", 
+        "until": "2022-11-27T19:00"
     }
 }
