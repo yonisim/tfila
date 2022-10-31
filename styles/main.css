@@ -44,6 +44,10 @@ html, body, article {
 
 }
 
+.my-text-smaller {
+  font-size: 9vh;
+}
+
 .small-text{
   font-size: 3vw;
   color: red;
