@@ -156,7 +156,7 @@ function get_slide_show_items_ids(){
     }
     slide_show_items.push('day_times');
     //slide_show_items.push('messages');
-    slide_show_items.push('tormim');
+    //slide_show_items.push('tormim');
     slide_show_items.push('advertisement');
     return slide_show_items;
 }
@@ -258,9 +258,9 @@ async function present_prayer_times(current_date){
 
 
 function present_day_times(current_date){
-    set_element_data('tfilin', format_hour_and_minutes(get_today_talit_and_tfilin(current_date)));
     set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
-    set_element_data('mid_day', format_hour_and_minutes(get_today_mid_day(current_date)));
+    set_element_data('shma_end', format_hour_and_minutes(get_today_shma_end(current_date)));
+    set_element_data('mincha_gedola', format_hour_and_minutes(get_today_mincha_gedola(current_date)));
     set_element_data('sunset', format_hour_and_minutes(get_today_sunset(current_date)));
     set_element_data('stars', format_hour_and_minutes(get_today_stars(current_date)));
     return sleep_seconds(wait_seconds);
@@ -650,12 +650,20 @@ function get_today_talit_and_tfilin(date){
     return get_today_property(date, 'tfilin');
 }
 
+function get_today_shma_end(date){
+    return get_today_property(date, 'shma_end');
+}
+
 function get_today_sunrise(date){
     return get_today_property(date, 'sunrise');
 }
 
 function get_today_mid_day(date){
     return get_today_property(date, 'mid_day');
+}
+
+function get_today_mincha_gedola(date){
+    return get_today_property(date, 'mincha_gedola');
 }
 
 function get_today_sunset(date){
