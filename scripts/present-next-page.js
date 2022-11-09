@@ -107,7 +107,7 @@ function is_weekend(date){
 }
 
 function get_slide_show_items_ids(){
-    //return ['day_times'];
+    //return ['messages'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -155,7 +155,7 @@ function get_slide_show_items_ids(){
         //slide_show_items.push('omer');
     }
     slide_show_items.push('day_times');
-    //slide_show_items.push('messages');
+    slide_show_items.push('messages');
     //slide_show_items.push('tormim');
     slide_show_items.push('advertisement');
     return slide_show_items;
@@ -482,7 +482,8 @@ async function present_messages(date){
         });
     }
 
-    return load_file('./data/messages.txt').then(messages_list => {
+    return read_json('./data/messages.json').then(messages_dict => {
+        var messages_list = get_items_to_present(date, messages_dict).map(item => item.message);
         var elem = document.getElementById('messages-text');
         return display_message(messages_list, elem);
       });
@@ -544,22 +545,22 @@ function get_kipur_ads(){
     return [advertisements.kipur];
 }
 
-function get_advertisements(current_date){
+function get_items_to_present(current_date, items){
     var ads = [];
-    for (var [key,advertisement_definition] of Object.entries(advertisements)){
+    for (var [key, item_definition] of Object.entries(items)){
         var present_ad = true;
-        if (!should_present_ad_between_dates(advertisement_definition, current_date)){
+        if (!should_present_ad_between_dates(item_definition, current_date)){
             present_ad = false;
         }
-        if (!should_present_ad_in_weekday(advertisement_definition, current_date)){
+        if (!should_present_ad_in_weekday(item_definition, current_date)){
             present_ad = false;
         }
-        if (should_remove_ad_specific_date_range(advertisement_definition, current_date)){
+        if (should_remove_ad_specific_date_range(item_definition, current_date)){
             present_ad = false;
         }
 
         if (present_ad){
-            ads.push(advertisement_definition);
+            ads.push(item_definition);
         }
     }
     return ads;
@@ -579,7 +580,7 @@ async function present_advertisement(current_date){
     } else if (is_between_dates(current_date, "2022-10-04", "2022-10-06")){
         ads_for_present = get_kipur_ads();
     } else {
-        ads_for_present = get_advertisements(current_date);
+        ads_for_present = get_items_to_present(current_date, advertisements);
     }
     for (var ad_definition of ads_for_present){
         var ad_file_name = ad_definition.image;
