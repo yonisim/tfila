@@ -155,7 +155,7 @@ function get_slide_show_items_ids(){
         //slide_show_items.push('omer');
     }
     slide_show_items.push('day_times');
-    slide_show_items.push('messages');
+    //slide_show_items.push('messages');
     //slide_show_items.push('tormim');
     slide_show_items.push('advertisement');
     return slide_show_items;
