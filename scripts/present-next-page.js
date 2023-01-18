@@ -358,15 +358,19 @@ async function present_shabat_prayer_times(current_date){
         set_element_html('hadlakat-nerot', shabat_in);
         set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
     });
-    load_html_into_page_elem_end('shabat_3.html', 'second_column', () => {
+    load_html_into_page_elem_start('shabat_3.html', 'second_column', () => {
         set_element_html('arvit-shabat', arvit_shabat);
         set_element_html('arvit-shabat-2', add_minutes_to_time(arvit_shabat, 15));
     });
 
-    load_html_into_page_elem_end('day_times_inner.html', 'second_column', () => {
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
-    });    
-    return sleep_seconds(2);
+    });
+
+    //load_html_into_page_elem_end('day_times_inner.html', 'mincha_arvit', () => {
+    //    present_day_times(current_date);
+    //});
+    return sleep_seconds(10*60);
 }
 
 function load_friday_shacharit_times(current_date){
