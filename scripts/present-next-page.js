@@ -366,7 +366,7 @@ async function present_shabat_prayer_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'second_column', () => {
         present_day_times(current_date);
     });    
-    return sleep_seconds(wait_seconds);
+    return sleep_seconds(2);
 }
 
 function load_friday_shacharit_times(current_date){
@@ -418,7 +418,7 @@ async function present_friday_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
     
     if(is_in_weekdays(current_date, [4]) || (is_in_weekdays(current_date, [5]) && !is_after_time(current_date, '10:00'))){
-        await load_html_into_page('shacharit.html', 'friday_prayers', () => {
+        await load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
             show_slichot(current_date);
             var elements = document.getElementsByClassName('friday-shacharit');
             for (var element of elements){
@@ -656,6 +656,10 @@ async function loop_pages(){
         for (var item of get_slide_show_items_ids()){
             if (item == 'advertisement'){
                 await present_advertisement(current_date_obj);
+            }else if(is_weekend(current_date_obj)){
+                await insert_html('./html/'+ item + '.html', "main-div");
+                var item_func = item_funcs[item];
+                await item_func(current_date_obj);
             }else{
                 await insert_html('./html/'+ item + '.html', "main-div");
                 var item_func = item_funcs[item];
