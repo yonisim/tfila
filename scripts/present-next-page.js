@@ -2,7 +2,8 @@
 import { insert_html, append_html, activate_element, deactivate_element,
     waitForElm, wait_for_scroll, toggle_element_show } from "./main-div-setter.js";
 import {current_date, get_date_from_Date, get_date_from_Date_for_header, read_json} from "./read_data.js";
-import {set_element_data, set_element_html, set_element_background, 
+import {set_element_data, set_element_html, set_element_background, insert_html_at_start_of_element,
+    insert_html_at_end_of_element,
     get_element_background, set_element_background_image} from "./main-div-setter.js";
 import {get_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
@@ -107,7 +108,7 @@ function is_weekend(date){
 }
 
 function get_slide_show_items_ids(){
-    //return ['messages'];
+    return ['shabat_single_page'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -322,18 +323,50 @@ function load_html_into_page(html_file_name, parent_element, callback){
     return sleep_seconds(wait_seconds);
 }
 
+function load_html_into_page_elem_start(html_file_name, parent_element, callback){
+    fetch('./html/' + html_file_name)
+    .then(response => response.text())
+    .then(lines => {
+        insert_html_at_start_of_element(parent_element, lines);
+        if(callback){
+            callback();
+        }
+    });
+    return sleep_seconds(wait_seconds);
+}
+
+function load_html_into_page_elem_end(html_file_name, parent_element, callback){
+    fetch('./html/' + html_file_name)
+    .then(response => response.text())
+    .then(lines => {
+        insert_html_at_end_of_element(parent_element, lines);
+        if(callback){
+            callback();
+        }
+    });
+    return sleep_seconds(wait_seconds);
+}
+
 async function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
     var this_shabat_times = get_shabat_times(current_date);
-    var arvit_shabat = this_shabat_times["out"];
     document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
-    await sleep_seconds(wait_seconds);
-    
-    await load_html_into_page('shabat_2.html', 'shabat_times');
-    return load_html_into_page('shabat_3.html', 'shabat_times', () => {
-        set_element_html('arvit-shabat', arvit_shabat);
-        set_element_html('arvit-shabat-2', add_minutes_to_time(arvit_shabat, 15));    
+    var shabat_in = this_shabat_times["in"];
+    var arvit_shabat = this_shabat_times["out"];
+
+    load_html_into_page_elem_start('friday_times.html', 'first_column', () => {
+        set_element_html('hadlakat-nerot', shabat_in);
+        set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
     });
+    load_html_into_page_elem_end('shabat_3.html', 'second_column', () => {
+        set_element_html('arvit-shabat', arvit_shabat);
+        set_element_html('arvit-shabat-2', add_minutes_to_time(arvit_shabat, 15));
+    });
+
+    load_html_into_page_elem_end('day_times_inner.html', 'second_column', () => {
+        present_day_times(current_date);
+    });    
+    return sleep_seconds(wait_seconds);
 }
 
 function load_friday_shacharit_times(current_date){
@@ -598,6 +631,7 @@ let item_funcs = {
     'day_times': present_day_times,
     'omer': present_sfirat_haomer,
     'shabat': present_shabat_prayer_times,
+    'shabat_single_page': present_shabat_prayer_times,
     'friday': present_friday_prayer_times,
     'tormim': present_donators,
     'messages': present_messages,

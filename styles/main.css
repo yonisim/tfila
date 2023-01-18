@@ -48,6 +48,10 @@ html, body, article {
   font-size: 9vh;
 }
 
+.text-single-page-shabat {
+  font-size: 2rem;
+}
+
 .small-text{
   font-size: 3vw;
   color: red;

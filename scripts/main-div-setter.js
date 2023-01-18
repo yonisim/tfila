@@ -31,6 +31,16 @@ export function set_element_html(dest_element_id, html_data){
     element.innerHTML = html_data;
 }
 
+export function insert_html_at_start_of_element(dest_element_id, html_data){
+    var element = document.getElementById(dest_element_id);
+    element.innerHTML = html_data + element.innerHTML;
+}
+
+export function insert_html_at_end_of_element(dest_element_id, html_data){
+    var element = document.getElementById(dest_element_id);
+    element.innerHTML += html_data;
+}
+
 export function activate_element(element_id){
     var element = document.getElementById(element_id);
     //element.style.display = 'contents';
