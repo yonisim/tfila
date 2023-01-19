@@ -3,7 +3,7 @@
 export function current_date(){
     let cur_date = new Date('2023-01-21T11:35:02');
     let time = new Date();
-    return cur_date;
+    return time;
 }
 
 function formatDate(date, reverse) {
