@@ -12,8 +12,7 @@
     background-color: var(--default-text-background-color);
     color: #444;
     direction: rtl;
-    margin-top: 5px;
-    width: 50%;
+    width: 100%;
     margin-right: 1%;
     column-gap: 1vw;
 }
@@ -26,8 +25,29 @@
     grid-template-columns: repeat(4, 1fr);
 }
 
+
 .tfilot-shabat-grid-horizontal{
     grid-template-columns: max-content 1fr;
+}
+
+.two-column-grid-equal{
+    display: grid;
+    direction: rtl;
+    width: 100%;
+    column-gap: 1vw;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.two-column-grid-left-side{
+    display: grid;
+    direction: rtl;
+    width: 100%;
+    column-gap: 1vw;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+
+.column-of-grid{
+    background-color: var(--default-text-background-color);   
 }
 
 .inline-table-header{
@@ -36,6 +56,10 @@
 .grid-header-box {
     background-color: rgba(30, 77, 219, 0.815);
     color: white;
+}
+
+.grid-title-margin{
+    margin-top: 1vh;
 }
 
 .grid-body-box {
