@@ -369,9 +369,12 @@ async function present_shabat_prayer_times(current_date){
         present_day_times(current_date);
     });
 
-    //load_html_into_page_elem_end('day_times_inner.html', 'mincha_arvit', () => {
-    //    present_day_times(current_date);
-    //});
+    this_week_times = get_next_week_times(current_date);
+    var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+    var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    set_element_html('mincha-regulr-days', mincha_times);
+    set_element_html('arvit-regulr-days', arvit_times[0]);
+
     return sleep_seconds(10*60);
 }
 
