@@ -107,6 +107,10 @@ function is_weekend(date){
     return is_in_weekdays(date, [5]) | (is_in_weekdays(date, [6]) && is_before_time(date, '16:00'));
 }
 
+function is_shabat_time(date){
+    return (is_in_weekdays(date, [5]) && is_after_time(date, '16:00')) | (is_in_weekdays(date, [6]) && is_before_time(date, '18:00'));
+}
+
 function get_slide_show_items_ids(){
     //return ['shabat_single_page'];
     var date = current_date();
@@ -662,19 +666,22 @@ async function loop_pages(){
         current_date_obj = current_date();
         set_main_area_background(current_date_obj);
         present_header_dates(current_date_obj);
-        for (var item of get_slide_show_items_ids()){
-            if (item == 'advertisement'){
-                await present_advertisement(current_date_obj);
-            }else if(is_weekend(current_date_obj)){
-                await insert_html('./html/'+ item + '.html', "main-div");
-                var item_func = item_funcs[item];
-                await item_func(current_date_obj);
-            }else{
-                await insert_html('./html/'+ item + '.html', "main-div");
-                var item_func = item_funcs[item];
-                activate_element(item);
-                await item_func(current_date_obj);
-                await deactivate_element(item);
+        if(is_shabat_time(current_date_obj)){
+            item = 'shabat_single_page'
+            await insert_html('./html/'+ item + '.html', "main-div");
+            var item_func = item_funcs[item];
+            await item_func(current_date_obj);
+        }else{
+            for (var item of get_slide_show_items_ids()){
+                if (item == 'advertisement'){
+                    await present_advertisement(current_date_obj);
+                }else{
+                    await insert_html('./html/'+ item + '.html', "main-div");
+                    var item_func = item_funcs[item];
+                    activate_element(item);
+                    await item_func(current_date_obj);
+                    await deactivate_element(item);
+                }
             }
         }
     }
