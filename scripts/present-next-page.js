@@ -126,7 +126,7 @@ function get_slide_show_items_ids(){
         slide_show_items.push('friday');
     }
     if (is_in_weekdays(date, [5]) || (is_in_weekdays(date, [6]) && !is_after_time(date, arvit_shabat[1], 20))){
-        slide_show_items.push('shabat');
+        slide_show_items.push('shabat_single_page');
     }
     if (is_between_dates(date, "2022-09-23T10:00", "2022-09-25T19:10")){
         slide_show_items.push('rosh_hashana_eve');
