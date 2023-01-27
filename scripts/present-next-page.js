@@ -108,7 +108,7 @@ function is_weekend(date){
 }
 
 function is_shabat_time(date){
-    return (is_in_weekdays(date, [5]) && is_after_time(date, '16:00')) | (is_in_weekdays(date, [6]) && is_before_time(date, '18:00'));
+    return (is_in_weekdays(date, [5]) && is_after_time(date, '14:00')) | (is_in_weekdays(date, [6]) && is_before_time(date, '21:00'));
 }
 
 function get_slide_show_items_ids(){
@@ -117,16 +117,11 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    if (!is_between_dates(date, "2022-10-13T21:20", "2022-10-17T17:00")){
-        if(!is_weekend(date)){
-            slide_show_items.push('tfilot');
-        }
+    if(!is_weekend(date)){
+        slide_show_items.push('tfilot');
     }
     if (is_in_weekdays(date, [4,5])){
         slide_show_items.push('friday');
-    }
-    if (is_in_weekdays(date, [5]) || (is_in_weekdays(date, [6]) && !is_after_time(date, arvit_shabat[1], 20))){
-        slide_show_items.push('shabat_single_page');
     }
     if (is_between_dates(date, "2022-09-23T10:00", "2022-09-25T19:10")){
         slide_show_items.push('rosh_hashana_eve');
@@ -431,7 +426,7 @@ async function present_friday_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
     
     if(is_in_weekdays(current_date, [4]) || (is_in_weekdays(current_date, [5]) && !is_after_time(current_date, '10:00'))){
-        await load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
+        load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
             show_slichot(current_date);
             var elements = document.getElementsByClassName('friday-shacharit');
             for (var element of elements){
@@ -439,7 +434,7 @@ async function present_friday_prayer_times(current_date){
             }
         });
     }
-    return load_html_into_page('friday_times.html', 'friday_prayers', () => {
+    return load_html_into_page_elem_end('friday_times.html', 'friday_prayers', () => {
         set_element_html('hadlakat-nerot', shabat_in);
         set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
     });
