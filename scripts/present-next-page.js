@@ -118,7 +118,7 @@ function get_slide_show_items_ids(){
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
     if(!is_weekend(date)){
-        slide_show_items.push('tfilot');
+        slide_show_items.push('tfilot_single_page');
     }
     if (is_in_weekdays(date, [4,5])){
         slide_show_items.push('friday');
@@ -154,7 +154,7 @@ function get_slide_show_items_ids(){
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
-    slide_show_items.push('day_times');
+    //slide_show_items.push('day_times');
     //slide_show_items.push('messages');
     //slide_show_items.push('tormim');
     //slide_show_items.push('advertisement');
@@ -223,6 +223,29 @@ function show_slichot(date){
     }
 }
 
+async function present_prayer_times_single_page(current_date){
+    var this_week_times;
+    if ([5,6].includes(current_date.getDay())){
+        this_week_times = get_next_week_times(current_date);
+    } else {
+        this_week_times = get_week_times(current_date);
+    }
+    var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+    var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    //document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
+    load_html_into_page_elem_start('shacharit.html', 'prayer_times');
+
+    load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
+        set_element_html('mincha-regulr-days', mincha_times);
+        set_element_html('arvit-regulr-days', arvit_times[0]);
+    });
+
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date);
+    });
+    return sleep_seconds(wait_seconds*5);
+}    
+
 async function present_prayer_times(current_date){    
     var shacharit_times = shacharit_regular_days.join('<br>');
     var this_week_times;
@@ -258,6 +281,7 @@ async function present_prayer_times(current_date){
 
 
 function present_day_times(current_date){
+    set_element_data('talit_tfilin', format_hour_and_minutes(get_today_talit_and_tfilin(current_date)));
     set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
     set_element_data('shma_end', format_hour_and_minutes(get_today_shma_end(current_date)));
     set_element_data('mincha_gedola', format_hour_and_minutes(get_today_mincha_gedola(current_date)));
@@ -635,7 +659,7 @@ async function present_advertisement(current_date){
 }
 
 let item_funcs = {
-    'tfilot': present_prayer_times,
+    'tfilot_single_page': present_prayer_times_single_page,
     'day_times': present_day_times,
     'omer': present_sfirat_haomer,
     'shabat': present_shabat_prayer_times,

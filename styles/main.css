@@ -31,16 +31,20 @@ html, body, article {
 }
 
 .title{
-  color: red;
+  color: darkblue;
   text-decoration-line: underline;
   text-align: center;  
 }
 
 .page-title {
   font-size: 7vw;
-  color: red;
+  color: darkblue;
   text-decoration-line: underline;
   text-align: center;  
+}
+
+.half-page-title{
+  font-size: 5vw;
 }
 
 .my-text {
@@ -51,7 +55,7 @@ html, body, article {
 }
 
 .my-text-smaller {
-  font-size: 9vh;
+  font-size: 4.5vw;
 }
 
 .text-single-page-shabat {
