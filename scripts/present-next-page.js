@@ -241,7 +241,7 @@ async function present_prayer_times_single_page(current_date){
     });
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date);
+        present_day_times(current_date, true);
     });
     return sleep_seconds(wait_seconds*5);
 }    
@@ -280,7 +280,13 @@ async function present_prayer_times(current_date){
 }
 
 
-function present_day_times(current_date){
+function present_day_times(current_date, show_talit_tfilin){
+    if (show_talit_tfilin){
+        var elements = document.getElementsByClassName('talit_tfilin');
+        for (var element of elements){
+            element.classList.add('show-element');
+        }
+    }
     set_element_data('talit_tfilin', format_hour_and_minutes(get_today_talit_and_tfilin(current_date)));
     set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
     set_element_data('shma_end', format_hour_and_minutes(get_today_shma_end(current_date)));

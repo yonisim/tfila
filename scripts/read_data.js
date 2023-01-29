@@ -1,9 +1,9 @@
 'esversion: 8';
 
 export function current_date(){
-    let cur_date = new Date('2023-01-21T11:35:02');
+    let cur_date = new Date('2023-01-29T11:35:02');
     let time = new Date();
-    return time;
+    return cur_date;
 }
 
 function formatDate(date, reverse) {
