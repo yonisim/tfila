@@ -9,6 +9,16 @@ import {get_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
 
+const chokidar = require('chokidar');
+async function watch_files(){
+    chokidar.watch('./data').on('all', (event, path) => {
+        console.log(event, path);
+        if(event == 'change'){
+            read_initial_data()
+        }
+      });
+}
+
 var day_times, week_times, shabat_times, advertisements;
 var current_date_obj;
 var main_div = 'main-div';
@@ -34,6 +44,7 @@ async function read_initial_data(){
 read_initial_data().then(() => {
     present_first_page(day_times);
 });
+
 var wait_seconds = 15;
 var message_wait_seconds = 5;
 var ad_wait_seconds = 10;
@@ -57,6 +68,7 @@ function present_first_page(){
     var date = current_date();
     build_page_structure().then((promise) => {
         clockFunc();
+        watch_files();
     });
     loop_pages();
 }
