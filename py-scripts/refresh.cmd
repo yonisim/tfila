@@ -1,4 +1,9 @@
 @ECHO OFF
+
+SET TFILA_DATA_REPO=https://github.com/yonisim/tfila-data.git
+SET DATA_RELATIVE_PATH=..\tfila-data
+SET TFILA_REPO=https://github.com/yonisim/tfila.git
+
 :while
     ping -n 2 -w 700 8.8.8.8 | find "TTL="
     echo %ERRORLEVEL%
@@ -17,8 +22,20 @@
     goto :while
 
 :pull
+IF exist %DATA_RELATIVE_PATH% (
+    setlocal
+    SET cwd="%~dp0"
+    echo current working dir %cwd%
+    echo changing dir to %DATA_RELATIVE_PATH%
+    cd %DATA_RELATIVE_PATH% & git pull %TFILA_DATA_REPO%
+    cd %cwd%
+    echo returned to working dir %cwd%
+    endlocal
+) else (
+    git clone %TFILA_DATA_REPO% %DATA_RELATIVE_PATH%
+)
 git reset --hard
-git pull https://github.com/yonisim/tfila.git | find "up to date"
+git pull %TFILA_REPO% | find "up to date"
 echo %ERRORLEVEL%
 IF %ERRORLEVEL% EQU 1 (
     goto :kill_the_process
@@ -33,7 +50,7 @@ IF %ERRORLEVEL% EQU 1 (
 tasklist  /FI "IMAGENAME eq electron.exe" | find "No tasks are running"
 IF %ERRORLEVEL% EQU 0 (
     echo starting the process
-    START npm start
+    START npm start %DATA_RELATIVE_PATH%/data/
 )
 goto :continue_loop
 
