@@ -11,7 +11,7 @@ import { clockFunc } from "./clock-time.js";
 
 const chokidar = require('chokidar');
 async function watch_files(){
-    chokidar.watch('./data').on('all', (event, path) => {
+    chokidar.watch(data_dir).on('all', (event, path) => {
         console.log(event, path);
         if(event == 'change'){
             read_initial_data()
@@ -22,20 +22,22 @@ async function watch_files(){
 var day_times, week_times, shabat_times, advertisements;
 var current_date_obj;
 var main_div = 'main-div';
+var data_dir = process.env.npm_config_data_dir || "./data/";
+console.log(data_dir);
 
 async function read_initial_data(){
-    return read_json("./data/parsed_dates.json").then(times => {
+    return read_json(`${data_dir}/parsed_dates.json`).then(times => {
         day_times = times;
     }).then(() => {
-        return read_json("./data/mincha_maariv.json").then(prayer_times => {
+        return read_json(`${data_dir}/mincha_maariv.json`).then(prayer_times => {
             week_times = prayer_times;
         });
     }).then(() => {
-        return read_json("./data/shabat.json").then(prayer_times => {
+        return read_json(`${data_dir}/shabat.json`).then(prayer_times => {
             shabat_times = prayer_times;
         });
     }).then(() => {
-        return read_json("./data/advertisements.json").then(ads => {
+        return read_json(`${data_dir}/advertisements.json`).then(ads => {
             advertisements = ads;
         });
     });
@@ -505,7 +507,7 @@ function get_data_presedence(key, precedence_items){
 }
 
 function present_shabat_times(date){
-    read_json('./data/special_day_timeline.json').then(data => {
+    read_json(`${data_dir}/special_day_timeline.json`).then(data => {
         var items = [];
         var general_times = data['shabat'];
         var today_special_times = data[get_date_from_Date(date)];
@@ -531,7 +533,7 @@ function present_shabat_times(date){
 }
 
 function present_donators(date){
-    load_file('./data/shagririm_sorted.txt').then(lines => {
+    load_file(`${data_dir}/shagririm_sorted.txt`).then(lines => {
         var donators_end_point = donators_start_point + donators_slice_count;
         if(lines.length - donators_start_point > donators_slice_count && 
             lines.length - (donators_start_point + donators_slice_count) < donators_slice_count/2){
@@ -565,7 +567,7 @@ async function present_messages(date){
         });
     }
 
-    return read_json('./data/messages.json').then(messages_dict => {
+    return read_json(`${data_dir}/messages.json`).then(messages_dict => {
         var messages_list = get_items_to_present(date, messages_dict).map(item => item.message);
         var elem = document.getElementById('messages-text');
         return display_message(messages_list, elem);
