@@ -50,7 +50,7 @@ IF %ERRORLEVEL% EQU 1 (
 tasklist  /FI "IMAGENAME eq electron.exe" | find "No tasks are running"
 IF %ERRORLEVEL% EQU 0 (
     echo starting the process
-    START npm start %DATA_RELATIVE_PATH%/data/
+    START npm start --data_dir=%DATA_RELATIVE_PATH%/data/
 )
 goto :continue_loop
 
