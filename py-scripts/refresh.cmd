@@ -3,7 +3,7 @@
 SET TFILA_DATA_REPO=https://github.com/yonisim/tfila-data.git
 SET DATA_RELATIVE_PATH=..\tfila-data
 CALL :NORMALIZEPATH "..\tfila-data"
-SET DATA_ABSOLUTE_PATH=%RETVAL%
+SET DATA_ABSOLUTE_PATH=%RETVAL:\=/%
 SET TFILA_REPO=https://github.com/yonisim/tfila.git
 
 :while
