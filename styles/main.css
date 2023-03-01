@@ -6,7 +6,7 @@ html, body, article {
   background: var(--bgColor);
   font-family: 'DS-DIGI', sans-serif;
   height: 100vh;
-  --default-text-background-color:  rgba(245, 245, 245, 0.779);
+  --default-text-background-color:  rgba(245, 245, 245, 0.4);
   overflow: hidden;
   direction: rtl;
 }
