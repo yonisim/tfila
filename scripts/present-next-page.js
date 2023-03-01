@@ -22,7 +22,9 @@ async function watch_files(){
 var day_times, week_times, shabat_times, advertisements;
 var current_date_obj;
 var main_div = 'main-div';
-var data_dir = process.env.npm_config_data_dir || "./data/";
+var base_data_folder = process.env.npm_config_data_dir || ".";
+var data_dir = `${base_data_folder}/data`;
+var images_dir = `${base_data_folder}/images`;
 console.log(data_dir);
 
 async function read_initial_data(){
@@ -126,7 +128,7 @@ function is_shabat_time(date){
 }
 
 function get_slide_show_items_ids(){
-    //return ['shabat_single_page'];
+    //return ['advertisement'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -575,7 +577,7 @@ async function present_messages(date){
 }
 
 function set_main_area_background(date){
-    var background = "images/mishkan-tkiya.JPG";
+    var background = `${images_dir}/mishkan-tkiya.JPG`;
     if (date.getDay() == 6){
         //background = 'shabat_2';
     }
@@ -669,7 +671,7 @@ async function present_advertisement(current_date){
     }
     for (var ad_definition of ads_for_present){
         var ad_file_name = ad_definition.image;
-        set_element_background_image(body, 'images/' + ad_file_name);
+        set_element_background_image(body, `${images_dir}/${ad_file_name}`);
         var exposure_time = ad_definition.exposure_time_seconds || ad_wait_seconds;
         await sleep_seconds(exposure_time);
     }
