@@ -15,6 +15,13 @@ async function watch_files(){
         console.log(event, path);
         if(event == 'change'){
             read_initial_data()
+            var main_div_elem_id = "main-div";
+            load_html_into_page_elem_end("data_updated_notification.html", main_div_elem_id);
+            setTimeout(function(){
+                var notification_elem = document.getElementById("data_updated_notification");
+                notification_elem.classList.add('fade-out');
+                wait_for_scroll(notification_elem).then(() => {notification_elem.remove()});
+            }, 10000);
         }
       });
 }

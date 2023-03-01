@@ -151,3 +151,10 @@ html, body, article {
   text-align: right;
   padding-right: 15%;
 }
+
+.notification{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: green;
+}
