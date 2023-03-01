@@ -6,7 +6,7 @@ CALL :NORMALIZEPATH "..\tfila-data"
 SET DATA_ABSOLUTE_PATH=%RETVAL:\=/%
 SET TFILA_REPO=https://github.com/yonisim/tfila.git
 
-CALL check_for_updates.bat
+CALL "%~dp0"/check_for_updates.bat
 
 :NORMALIZEPATH
   SET RETVAL=%~f1
