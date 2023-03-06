@@ -134,13 +134,17 @@ function is_shabat_time(date){
     return (is_in_weekdays(date, [5]) && is_after_time(date, '14:00')) | (is_in_weekdays(date, [6]) && is_before_time(date, '21:00'));
 }
 
+function is_purim(date){
+    return is_between_dates(date, "2023-03-06T13:00", "2023-03-07T18:00");
+}
+
 function get_slide_show_items_ids(){
-    //return ['advertisement'];
+    //return ['purim'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    if(!is_weekend(date)){
+    if(!is_weekend(date) & !is_purim(date)){
         slide_show_items.push('tfilot_single_page');
     }
     if (is_in_weekdays(date, [4,5])){
@@ -177,10 +181,14 @@ function get_slide_show_items_ids(){
     if (today_times['omer']){
         //slide_show_items.push('omer');
     }
+    if (is_purim(date)){
+        slide_show_items.push('purim');
+        slide_show_items.push('megila');
+    }
     //slide_show_items.push('day_times');
     //slide_show_items.push('messages');
     //slide_show_items.push('tormim');
-    slide_show_items.push('advertisement');
+    //slide_show_items.push('advertisement');
     return slide_show_items;
 }
 
@@ -267,7 +275,21 @@ async function present_prayer_times_single_page(current_date){
         present_day_times(current_date, true);
     });
     return sleep_seconds(wait_seconds*5);
-}    
+}
+
+async function present_megila_times(){
+    load_html_into_page('megila_times_night.html', 'night');
+    load_html_into_page('megila_times_day.html', 'day');
+    return sleep_seconds(wait_seconds*5);
+}
+
+async function present_purim_times(current_date){
+    load_html_into_page_elem_start('purim_tfilot.html', 'prayer_times');
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date, true);
+    });
+    return sleep_seconds(wait_seconds*5);
+}
 
 async function present_prayer_times(current_date){    
     var shacharit_times = shacharit_regular_days.join('<br>');
@@ -706,7 +728,9 @@ let item_funcs = {
     'sukot': present_sukot_times,
     'hoshana_raba': present_hoshana_raba_times,
     'simchat_tora_eve': present_simchat_tora_eve_times,
-    'simchat_tora': present_simchat_tora_times
+    'simchat_tora': present_simchat_tora_times,
+    'megila': present_megila_times,
+    'purim': present_purim_times
 };
 
 async function loop_pages(){

@@ -58,6 +58,10 @@ html, body, article {
   font-size: 4.5vw;
 }
 
+.my-text-smaller-2 {
+  font-size: 7vh;
+}
+
 .text-single-page-shabat {
   font-size: 5vh;
 }
