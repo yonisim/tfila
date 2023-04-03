@@ -56,7 +56,7 @@ read_initial_data().then(() => {
     present_first_page(day_times);
 });
 
-var wait_seconds = 15;
+var wait_seconds = 2;
 var message_wait_seconds = 5;
 var ad_wait_seconds = 10;
 var donators_start_point = 0;
@@ -138,9 +138,18 @@ function is_purim(date){
     return is_between_dates(date, "2023-03-06T13:00", "2023-03-07T18:00");
 }
 
+function is_present_pesach_eve(date){
+    return is_between_dates(date, "2023-04-04T17:00", "2023-04-05T17:00");
+}
+
+function is_pesach_eve(date){
+    return is_between_dates(date, "2023-04-05T00:00", "2023-04-05T17:00");
+}
+
 function is_pesach_first_chag(date){
     return is_between_dates(date, "2023-04-05T17:00", "2023-04-06T19:45:00");
 }
+
 
 function get_slide_show_items_ids(){
     //return ['purim'];
@@ -148,7 +157,7 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    if(!is_weekend(date) & !is_pesach_first_chag(date)){
+    if(!is_weekend(date) & !is_pesach_eve(date)){
         slide_show_items.push('tfilot_single_page');
     }
     if (is_in_weekdays(date, [4,5])){
@@ -188,6 +197,10 @@ function get_slide_show_items_ids(){
     if (is_purim(date)){
         slide_show_items.push('purim');
         slide_show_items.push('megila');
+    }
+
+    if(is_present_pesach_eve(date)){
+        slide_show_items.push('pesach_eve')
     }
     //slide_show_items.push('day_times');
     //slide_show_items.push('messages');
@@ -423,6 +436,29 @@ function load_html_into_page_elem_end(html_file_name, parent_element, callback){
         }
     });
     return sleep_seconds(wait_seconds);
+}
+
+function get_pesach_times(){
+    return ["18:39", "19:39"];
+}
+
+async function present_pesach_eve(current_date){
+    load_html_into_page_elem_start('shacharit.html', 'tfilot_times', () => {
+        var elements = document.getElementsByClassName('friday-shacharit');
+        for (var element of elements){
+            element.classList.add('show-element');
+        }
+    });
+    
+    var pesach_times = get_pesach_times();
+    var pesach_in = pesach_times[0]
+    set_element_html('hadlakat-nerot', pesach_in);
+    set_element_html('kabalat-shabat', add_minutes_to_time(pesach_in, 10));
+
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date, true);
+    });
+    return sleep_seconds(wait_seconds*5);
 }
 
 
@@ -755,6 +791,7 @@ let item_funcs = {
     'simchat_tora': present_simchat_tora_times,
     'megila': present_megila_times,
     'purim': present_purim_times,
+    'pesach_eve': present_pesach_eve,
     'pesach_single_page': present_pesach_times
 };
 
