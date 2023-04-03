@@ -450,7 +450,7 @@ async function present_pesach_eve(current_date){
         }
     });
     
-    load_html_into_page_elem_start('pesach_eve_times.html', 'tfilot_times', () => {
+    load_html_into_page_elem_end('pesach_eve_times.html', 'tfilot_times', () => {
         var pesach_times = get_pesach_times();
         var pesach_in = pesach_times[0]
         set_element_html('hadlakat-nerot', pesach_in);
