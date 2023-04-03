@@ -450,10 +450,12 @@ async function present_pesach_eve(current_date){
         }
     });
     
-    var pesach_times = get_pesach_times();
-    var pesach_in = pesach_times[0]
-    set_element_html('hadlakat-nerot', pesach_in);
-    set_element_html('kabalat-shabat', add_minutes_to_time(pesach_in, 10));
+    load_html_into_page_elem_start('pesach_eve_times.html', 'tfilot_times', () => {
+        var pesach_times = get_pesach_times();
+        var pesach_in = pesach_times[0]
+        set_element_html('hadlakat-nerot', pesach_in);
+        set_element_html('kabalat-shabat', add_minutes_to_time(pesach_in, 10));
+    });
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
@@ -463,16 +465,16 @@ async function present_pesach_eve(current_date){
 
 
 async function present_pesach_times(current_date){
-    var this_week_times = get_week_times(current_date);
-    var this_shabat_times = get_shabat_times(current_date);
-    var shabat_in = this_shabat_times["in"];
-    var arvit_shabat = this_shabat_times["out"];
-
-    set_element_html('hadlakat-nerot', shabat_in);
-    set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
+    var pesach_times = get_pesach_times();
+    var pesach_in = pesach_times[0];
+    var pesach_out = pesach_times[1];
+    load_html_into_page_elem_start('pesach_eve_times.html', 'first_column', () => {
+        set_element_html('hadlakat-nerot', pesach_in);
+        set_element_html('kabalat-shabat', add_minutes_to_time(pesach_in, 10));
+    });
     
-    set_element_html('arvit-shabat', arvit_shabat);
-    set_element_html('arvit-shabat-2', add_minutes_to_time(arvit_shabat, 15));
+    set_element_html('arvit-shabat', pesach_out);
+    set_element_html('arvit-shabat-2', add_minutes_to_time(pesach_out, 15));
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
