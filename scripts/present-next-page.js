@@ -56,7 +56,7 @@ read_initial_data().then(() => {
     present_first_page(day_times);
 });
 
-var wait_seconds = 2;
+var wait_seconds = 15;
 var message_wait_seconds = 5;
 var ad_wait_seconds = 10;
 var donators_start_point = 0;
