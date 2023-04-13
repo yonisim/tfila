@@ -65,6 +65,8 @@
 .grid-body-box {
     background-color: var(--default-text-background-color);
     color: black;
+    line-height: 4.5vh;
+    font-weight: bold;
 }
 
 .grid-box {
