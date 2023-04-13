@@ -129,3 +129,7 @@ export function wait_for_scroll(el){
 }
 
 
+export function show_by_id(elem_id){
+    var element = document.getElementById(elem_id);
+    element.classList.add('show-element');
+}

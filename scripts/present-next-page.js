@@ -1,11 +1,11 @@
 'esversion: 8';
 import { insert_html, append_html, activate_element, deactivate_element,
-    waitForElm, wait_for_scroll, toggle_element_show } from "./main-div-setter.js";
+    waitForElm, wait_for_scroll, toggle_element_show, show_by_id } from "./main-div-setter.js";
 import {current_date, get_date_from_Date, get_date_from_Date_for_header, read_json} from "./read_data.js";
 import {set_element_data, set_element_html, set_element_background, insert_html_at_start_of_element,
     insert_html_at_end_of_element,
     get_element_background, set_element_background_image} from "./main-div-setter.js";
-import {get_hebrew_date, parse_sfirat_haomer} from "./parse_hebrew_date.js";
+import {get_hebrew_date, parse_sfirat_haomer, omer_days_count_to_hebrew, omer_days_count_to_hebrew_weeks} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
 
@@ -271,6 +271,31 @@ function show_slichot(date){
     }
 }
 
+function get_omer_numeric(date){
+    var omer_start_date = new Date('2023-04-07');
+    var omer_time_diff = date - omer_start_date;
+    var omer_days = Math.ceil(omer_time_diff / (1000 * 3600 * 24));
+    if(is_after_sunset(date)){
+        omer_days += 1;
+    }
+    return omer_days;
+}
+
+function set_sfirat_haomer_regular_days(date){
+    var laomer = 'לעומר';
+    var omer_numeric = get_omer_numeric(date);
+    var omer_days = omer_days_count_to_hebrew(omer_numeric);
+    var omer_weeks = omer_days_count_to_hebrew_weeks(omer_numeric);
+    if(omer_weeks){
+        omer_weeks = [omer_weeks, laomer].join(' ');
+        show_by_id('omer-text-weeks');
+    } else{
+        omer_days = [omer_days, laomer].join(' ');
+    }
+    set_element_data('omer-text', omer_days);
+    set_element_data('omer-text-weeks', omer_weeks);
+}
+
 async function present_prayer_times_single_page(current_date){
     var this_week_times;
     if ([5,6].includes(current_date.getDay())){
@@ -280,7 +305,6 @@ async function present_prayer_times_single_page(current_date){
     }
     var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
     var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
-    //document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
     load_html_into_page_elem_start('shacharit.html', 'prayer_times');
 
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
@@ -291,6 +315,10 @@ async function present_prayer_times_single_page(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
+    if(is_between_dates(current_date, '2023-04-07', '2023-05-25T19:00')){
+       set_sfirat_haomer_regular_days(current_date);
+       show_by_id('omer');
+    }
     return sleep_seconds(wait_seconds*5);
 }
 

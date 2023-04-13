@@ -162,3 +162,12 @@ html, body, article {
   right: 10px;
   background-color: green;
 }
+
+.fouter{
+  height: fit-content;
+  background-color: rgba(13, 218, 61, 0.724);
+  color: bisque;
+  align-items: center;
+  text-align: center;
+  line-height: 35px;
+}
