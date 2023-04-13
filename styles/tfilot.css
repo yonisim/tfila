@@ -1,10 +1,16 @@
-.tfilot-grid {
+.my-grid{
     display: grid;
-    column-gap: 5vw;
-    background-color: transparent;
+    background-color: var(--default-text-background-color);
     color: #444;
     direction: rtl;
-    margin-top: 20px;
+    width: 100%;
+    margin-right: 1%;
+    column-gap: 1vw;
+}
+
+.tfilot-grid {
+    line-height: 4.5vh;
+    font-weight: bold;
 }
 
 .shabat-grid {
@@ -15,6 +21,8 @@
     width: 100%;
     margin-right: 1%;
     column-gap: 1vw;
+    line-height: 4.5vh;
+    font-weight: bold;
 }
 
 .tfilot-weekdays-grid{
@@ -65,8 +73,6 @@
 .grid-body-box {
     background-color: var(--default-text-background-color);
     color: black;
-    line-height: 4.5vh;
-    font-weight: bold;
 }
 
 .grid-box {

@@ -296,6 +296,15 @@ function set_sfirat_haomer_regular_days(date){
     set_element_data('omer-text-weeks', omer_weeks);
 }
 
+async function show_sfirat_haomer_if_needed(current_date){
+    if(is_between_dates(current_date, '2023-04-07', '2023-05-25T19:00')){
+        load_html_into_page_elem_end('omer_fouter.html', 'tfilot_single_page', () => {
+            set_sfirat_haomer_regular_days(current_date);
+            show_by_id('omer');
+        });
+    }
+}
+
 async function present_prayer_times_single_page(current_date){
     var this_week_times;
     if ([5,6].includes(current_date.getDay())){
@@ -315,10 +324,7 @@ async function present_prayer_times_single_page(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    if(is_between_dates(current_date, '2023-04-07', '2023-05-25T19:00')){
-       set_sfirat_haomer_regular_days(current_date);
-       show_by_id('omer');
-    }
+    show_sfirat_haomer_if_needed(current_date);
     return sleep_seconds(wait_seconds*5);
 }
 
