@@ -281,7 +281,7 @@ function get_omer_numeric(date){
     return omer_days;
 }
 
-function set_sfirat_haomer_regular_days(date){
+function set_sfirat_haomer_regular_days(date, two_lines){
     var laomer = 'לעומר';
     var omer_numeric = get_omer_numeric(date);
     var omer_days = omer_days_count_to_hebrew(omer_numeric);
@@ -292,14 +292,19 @@ function set_sfirat_haomer_regular_days(date){
     } else{
         omer_days = [omer_days, laomer].join(' ');
     }
-    set_element_data('omer-text', omer_days);
-    set_element_data('omer-text-weeks', omer_weeks);
+    if(two_lines){
+        set_element_data('omer-text', omer_days);
+        set_element_data('omer-text-weeks', omer_weeks);
+    } else{
+        set_element_data('omer-text', omer_days + ' ' + omer_weeks);
+    }
+    
 }
 
-async function show_sfirat_haomer_if_needed(current_date){
+async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_lines){
     if(is_between_dates(current_date, '2023-04-07', '2023-05-25T19:00')){
-        load_html_into_page_elem_end('omer_fouter.html', 'tfilot_single_page', () => {
-            set_sfirat_haomer_regular_days(current_date);
+        load_html_into_page_elem_end('omer_fouter.html', into_elem_id, () => {
+            set_sfirat_haomer_regular_days(current_date, two_lines);
             show_by_id('omer');
         });
     }
@@ -324,7 +329,7 @@ async function present_prayer_times_single_page(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    show_sfirat_haomer_if_needed(current_date);
+    show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);
     return sleep_seconds(wait_seconds*5);
 }
 
@@ -545,6 +550,7 @@ async function present_shabat_prayer_times(current_date){
     set_element_html('mincha-regulr-days', mincha_times);
     set_element_html('arvit-regulr-days', arvit_times[0]);
 
+    show_sfirat_haomer_if_needed(current_date, 'shabat_single_page', false);
     return sleep_seconds(10*60);
 }
 
