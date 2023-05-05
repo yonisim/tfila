@@ -131,7 +131,7 @@ function is_weekend(date){
 }
 
 function is_shabat_time(date){
-    return (is_in_weekdays(date, [5]) && is_after_time(date, '14:00')) | (is_in_weekdays(date, [6]) && is_before_time(date, '21:00'));
+    return (is_in_weekdays(date, [5]) && is_after_time(date, '18:30')) | (is_in_weekdays(date, [6]) && is_before_time(date, '21:00'));
 }
 
 function is_purim(date){
@@ -602,15 +602,14 @@ async function present_friday_single_page(current_date){
     var shabat_in = this_shabat_times["in"];
     document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
     
-    if(is_in_weekdays(current_date, [4]) || (is_in_weekdays(current_date, [5]) && !is_after_time(current_date, '10:00'))){
-        load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
-            show_slichot(current_date);
-            var elements = document.getElementsByClassName('friday-shacharit');
-            for (var element of elements){
-                element.classList.add('show-element');
-            }
-        });
-    }
+    load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
+        show_slichot(current_date);
+        var elements = document.getElementsByClassName('friday-shacharit');
+        for (var element of elements){
+            element.classList.add('show-element');
+        }
+    });
+    
     
     var kabalat_shabat_early_mincha = '17:40';
     var plag = '17:57';
