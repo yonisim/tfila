@@ -47,6 +47,10 @@ html, body, article {
   font-size: 5vw;
 }
 
+.medium-title{
+  font-size: 4vw;
+}
+
 .my-text {
     color: black;
     font-size: 10vh;

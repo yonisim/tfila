@@ -54,6 +54,14 @@
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
 }
 
+.two-column-grid-right-side{
+    display: grid;
+    direction: rtl;
+    width: 100%;
+    column-gap: 1vw;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.5fr);
+}
+
 .column-of-grid{
     background-color: var(--default-text-background-color);   
 }
