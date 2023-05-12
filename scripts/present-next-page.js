@@ -612,7 +612,7 @@ async function present_friday_single_page(current_date){
     
     
     var kabalat_shabat_early_mincha = '17:40';
-    var plag = '17:57';
+    var plag = '18:01';
     load_html_into_page_elem_end('kabalat_shabat_early.html', 'plag', () => {
         set_element_html('kabalat-shabat-early-mincha', kabalat_shabat_early_mincha);
         set_element_html('kabalat-shabat-early', plag);
