@@ -59,7 +59,7 @@
     direction: rtl;
     width: 100%;
     column-gap: 1vw;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
 }
 
 .two-column-grid-left-side{

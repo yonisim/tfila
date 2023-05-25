@@ -538,6 +538,10 @@ async function present_pesach_times(current_date){
 }
 
 async function present_shavuot_prayer_times(current_date){
+    load_html_into_page_elem_end('shavuot_right_column.html', 'first_column');
+    load_html_into_page_elem_end('shavuot_afternoon.html', 'second_column');
+    load_html_into_page_elem_end('shavuot_shiurim.html', 'shiurim');
+    
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
     });
