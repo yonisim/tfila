@@ -46,6 +46,22 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
+.two-column-grid-shavuot-main{
+    display: grid;
+    direction: rtl;
+    width: 100%;
+    column-gap: 1vw;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+}
+
+.two-column-grid-shavuot-left-bottom{
+    display: grid;
+    direction: rtl;
+    width: 100%;
+    column-gap: 1vw;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+}
+
 .two-column-grid-left-side{
     display: grid;
     direction: rtl;
