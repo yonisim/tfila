@@ -150,9 +150,25 @@ function is_pesach_first_chag(date){
     return is_between_dates(date, "2023-04-05T17:00", "2023-04-06T19:45:00");
 }
 
+function is_shavout(date){
+    return is_between_dates(date, "2023-05-25T11:00", "2023-05-26T18:30:00");
+}
+
+function get_specific_single_page(current_date){
+    var item = null
+    if(is_shabat_time(current_date_obj)){
+        item = 'shabat_single_page'
+    } else if(is_pesach_first_chag(current_date_obj)){
+        item = 'pesach_single_page'
+    } else if(is_shavout(current_date_obj)){
+        item = 'shavuot_single_page'
+    }
+    return item
+}
+
 
 function get_slide_show_items_ids(){
-    //return ['purim'];
+    //return ['advertisement'];
     var date = current_date();
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
@@ -330,7 +346,7 @@ async function present_prayer_times_single_page(current_date){
         present_day_times(current_date, true);
     });
     show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);
-    return sleep_seconds(wait_seconds*5);
+    return sleep_seconds(5);
 }
 
 async function present_megila_times(){
@@ -521,6 +537,12 @@ async function present_pesach_times(current_date){
     return sleep_seconds(10*60);
 }
 
+async function present_shavuot_prayer_times(current_date){
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date);
+    });
+    return sleep_seconds(10*60);
+}
 
 async function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
@@ -869,7 +891,8 @@ let item_funcs = {
     'megila': present_megila_times,
     'purim': present_purim_times,
     'pesach_eve': present_pesach_eve,
-    'pesach_single_page': present_pesach_times
+    'pesach_single_page': present_pesach_times,
+    'shavuot_single_page': present_shavuot_prayer_times
 };
 
 async function loop_pages(){
@@ -877,19 +900,12 @@ async function loop_pages(){
         current_date_obj = current_date();
         set_main_area_background(current_date_obj);
         present_header_dates(current_date_obj);
-        if(is_shabat_time(current_date_obj)){
-            item = 'shabat_single_page'
-            await insert_html('./html/'+ item + '.html', "main-div");
-            var item_func = item_funcs[item];
+        var single_page_item = get_specific_single_page(current_date_obj)
+        if(single_page_item){
+            await insert_html('./html/'+ single_page_item + '.html', "main-div");
+            var item_func = item_funcs[single_page_item];
             await item_func(current_date_obj);
-        }
-        else if(is_pesach_first_chag(current_date_obj)){
-            item = 'pesach_single_page'
-            await insert_html('./html/'+ item + '.html', "main-div");
-            var item_func = item_funcs[item];
-            await item_func(current_date_obj);
-        }
-        else{
+        } else{
             for (var item of get_slide_show_items_ids()){
                 if (item == 'advertisement'){
                     await present_advertisement(current_date_obj);
