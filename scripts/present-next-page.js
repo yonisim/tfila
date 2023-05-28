@@ -276,6 +276,20 @@ function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
     return prayer_times;
 }
 
+function round_to_five(some_date){
+    var hour_and_minutes = some_date.split(':');
+    var minutes = parseInt(hour_and_minutes[1]);
+    var modulu_five = minutes % 5;
+    var minutes_diff = 0;
+    if (modulu_five == 1){
+        minutes_diff = -1;
+    } else if (modulu_five > 1){
+        minutes_diff = 5 - modulu_five;
+    }
+    var rounded = add_minutes_to_time(some_date, minutes_diff);
+    return rounded;
+}
+
 function show_slichot(date){
     if(is_between_dates(date, '2022-09-29', '2022-10-03T10:00')){
         set_element_data('shacharit_a', '05:50');
@@ -636,12 +650,12 @@ async function present_friday_single_page(current_date){
         }
     });
     
-    
-    var kabalat_shabat_early_mincha = '17:40';
-    var plag = '18:01';
+    var plag = get_today_plag(current_date);
+    var rounded = round_to_five(plag);
+    var kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
     load_html_into_page_elem_end('kabalat_shabat_early.html', 'plag', () => {
-        set_element_html('kabalat-shabat-early-mincha', kabalat_shabat_early_mincha);
-        set_element_html('kabalat-shabat-early', plag);
+        set_element_html('kabalat-shabat-early-mincha', format_hour_and_minutes(kabalat_shabat_early_mincha));
+        set_element_html('kabalat-shabat-early', format_hour_and_minutes(plag));
     });
     
     load_html_into_page_elem_end('friday_times.html', 'kabalat-shabat-parent', () => {
@@ -957,6 +971,10 @@ function get_today_mid_day(date){
 
 function get_today_mincha_gedola(date){
     return get_today_property(date, 'mincha_gedola');
+}
+
+function get_today_plag(date){
+    return get_today_property(date, 'plag');
 }
 
 function get_today_sunset(date){
