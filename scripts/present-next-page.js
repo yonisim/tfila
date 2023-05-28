@@ -38,7 +38,7 @@ async function read_initial_data(){
     return read_json(`${data_dir}/parsed_dates.json`).then(times => {
         day_times = times;
     }).then(() => {
-        return read_json(`${data_dir}/mincha_maariv.json`).then(prayer_times => {
+        return read_json(`${data_dir}/mincha_maariv_v2.json`).then(prayer_times => {
             week_times = prayer_times;
         });
     }).then(() => {
@@ -333,20 +333,20 @@ async function present_prayer_times_single_page(current_date){
     } else {
         this_week_times = get_week_times(current_date);
     }
-    var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
-    var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+    var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
     load_html_into_page_elem_start('shacharit.html', 'prayer_times');
 
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
-        set_element_html('mincha-regulr-days', mincha_times);
-        set_element_html('arvit-regulr-days', arvit_times[0]);
+        set_element_html('mincha-regulr-days', mincha_time);
+        set_element_html('arvit-regulr-days', arvit_time);
     });
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
     show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);
-    return sleep_seconds(5);
+    return sleep_seconds(wait_seconds*10);
 }
 
 async function present_megila_times(){
@@ -551,7 +551,7 @@ async function present_shavuot_prayer_times(current_date){
 async function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
     var this_shabat_times = get_shabat_times(current_date);
-    document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
+    document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
 
@@ -571,10 +571,10 @@ async function present_shabat_prayer_times(current_date){
     });
 
     this_week_times = get_next_week_times(current_date);
-    var mincha_times = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
-    var arvit_times = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
-    set_element_html('mincha-regulr-days', mincha_times);
-    set_element_html('arvit-regulr-days', arvit_times[0]);
+    var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+    var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    set_element_html('mincha-regulr-days', mincha_time);
+    set_element_html('arvit-regulr-days', arvit_time);
 
     show_sfirat_haomer_if_needed(current_date, 'shabat_single_page', false);
     return sleep_seconds(10*60);
@@ -626,7 +626,7 @@ async function present_friday_single_page(current_date){
     var this_week_times = get_week_times(current_date);
     var this_shabat_times = get_shabat_times(current_date);
     var shabat_in = this_shabat_times["in"];
-    document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
+    document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     
     load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
         show_slichot(current_date);
