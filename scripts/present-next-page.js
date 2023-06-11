@@ -568,6 +568,7 @@ async function present_shabat_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
+    var mincha_ktana = '18:30';
 
     load_html_into_page_elem_start('friday_times.html', 'first_column', () => {
         set_element_html('hadlakat-nerot', shabat_in);
@@ -576,6 +577,11 @@ async function present_shabat_prayer_times(current_date){
     load_html_into_page_elem_end('shabat_first_column.html', 'first_column');
 
     load_html_into_page_elem_start('shabat_3.html', 'second_column', () => {
+        set_element_html('lesson-halacha', add_minutes_to_time(mincha_ktana, -60));
+        set_element_html('mincha-ktana', mincha_ktana);
+        set_element_html('tehilim', mincha_ktana);
+        set_element_html('lesson-pirkei-avot', add_minutes_to_time(mincha_ktana, 20));
+
         set_element_html('arvit-shabat', arvit_shabat);
         set_element_html('arvit-shabat-2', add_minutes_to_time(arvit_shabat, 15));
     });
@@ -921,6 +927,8 @@ async function loop_pages(){
         var single_page_item = get_specific_single_page(current_date_obj)
         if(single_page_item){
             await insert_html('./html/'+ single_page_item + '.html', "main-div");
+            var element = document.getElementById(single_page_item);
+            element.classList.add('background-opac');
             var item_func = item_funcs[single_page_item];
             await item_func(current_date_obj);
         } else{

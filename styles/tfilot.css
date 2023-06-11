@@ -1,6 +1,9 @@
+.background-opac{
+    background-color: var(--default-text-background-color);
+}
+
 .my-grid{
     display: grid;
-    background-color: var(--default-text-background-color);
     color: #444;
     direction: rtl;
     width: 100%;
@@ -15,7 +18,6 @@
 
 .shabat-grid {
     display: grid;
-    background-color: var(--default-text-background-color);
     color: #444;
     direction: rtl;
     width: 100%;
@@ -79,7 +81,6 @@
 }
 
 .column-of-grid{
-    background-color: var(--default-text-background-color);   
 }
 
 .inline-table-header{
@@ -95,7 +96,6 @@
 }
 
 .grid-body-box {
-    background-color: var(--default-text-background-color);
     color: black;
 }
 

@@ -6,7 +6,7 @@ html, body, article {
   background: var(--bgColor);
   font-family: 'DS-DIGI', sans-serif;
   height: 100vh;
-  --default-text-background-color:  rgba(245, 245, 245, 0.4);
+  --default-text-background-color:  rgba(245, 245, 245, 0.5);
   overflow: hidden;
   direction: rtl;
 }
@@ -67,7 +67,7 @@ html, body, article {
 }
 
 .text-single-page-shabat {
-  font-size: 5vh;
+  font-size: 5.8vh;
 }
 
 .small-text{
