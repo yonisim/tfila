@@ -126,6 +126,13 @@ function is_in_weekdays(date, weekdays){
     return weekdays.includes(date.getDay());
 }
 
+function is_shacharit_8_30(date){
+    if(is_between_dates(date, '2023-06-24', '2023-08-29')){
+        return true;
+    }
+    return false;
+}
+
 function is_weekend(date){
     return is_in_weekdays(date, [5]) | (is_in_weekdays(date, [6]) && is_before_time(date, '16:00'));
 }
@@ -301,6 +308,13 @@ function show_slichot(date){
     }
 }
 
+function show_shacharit_8_30(){
+    var elements = document.getElementsByClassName('friday-shacharit');
+    for (var element of elements){
+        element.classList.add('show-element');
+    }
+}
+
 function get_omer_numeric(date){
     var omer_start_date = new Date('2023-04-07');
     var omer_time_diff = date - omer_start_date;
@@ -349,7 +363,11 @@ async function present_prayer_times_single_page(current_date){
     }
     var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
     var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
-    load_html_into_page_elem_start('shacharit.html', 'prayer_times');
+    load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
+        if(is_shacharit_8_30(current_date)){
+            show_shacharit_8_30();
+        }
+    });
 
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
         set_element_html('mincha-regulr-days', mincha_time);
