@@ -150,7 +150,7 @@ function is_present_pesach_eve(date){
 }
 
 function is_taanit(date){
-    return is_between_dates(date, "2023-07-06T00:00", "2023-07-06T23:00");
+    return is_between_dates(date, "2023-07-25T23:00", "2023-07-27T23:00");
 }
 
 function is_pesach_eve(date){
@@ -404,16 +404,7 @@ async function present_purim_times(current_date){
 }
 
 async function present_taanit_times(current_date){
-    load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
-        if(is_shacharit_8_30(current_date)){
-            show_shacharit_8_30();
-        }
-    });
-
-    load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
-        set_element_html('mincha-regulr-days', '19:20');
-        set_element_html('arvit-regulr-days', '20:11');
-    });
+    load_html_into_page_elem_start('tisha_beav.html', 'taanit_times');
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
