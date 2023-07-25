@@ -75,6 +75,11 @@ html, body, article {
   color: red;
 }
 
+.very-small-text{
+  font-size: 4vh;
+  color: red;
+}
+
 .hidden_element{
 }
 .hidden-element{
