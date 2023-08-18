@@ -165,6 +165,10 @@ function is_shavout(date){
     return is_between_dates(date, "2023-05-25T11:00", "2023-05-26T18:30:00");
 }
 
+function is_elul(date){
+    return is_between_dates(date, "2023-08-17T00:00", "2023-09-18T23:00");
+}
+
 function get_specific_single_page(current_date){
     var item = null
     if(is_shabat_time(current_date_obj)){
@@ -309,6 +313,15 @@ function show_slichot(date){
     if(is_between_dates(date, '2022-09-29', '2022-10-03T10:00')){
         set_element_data('shacharit_a', '05:50');
         set_element_data('shacharit_b', '06:55');
+        var elements = document.getElementsByClassName('slichot');
+        for (var element of elements){
+            element.classList.add('show-element');
+        }
+    }
+}
+
+function show_siftei_renanot(date){
+    if(is_elul(date)){
         var elements = document.getElementsByClassName('slichot');
         for (var element of elements){
             element.classList.add('show-element');
@@ -603,13 +616,15 @@ async function present_shabat_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
-    var mincha_ktana = '18:30';
+    var mincha_ktana = '18:00';
 
     load_html_into_page_elem_start('friday_times.html', 'first_column', () => {
         set_element_html('hadlakat-nerot', shabat_in);
         set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
     });
-    load_html_into_page_elem_end('shabat_first_column.html', 'first_column');
+    load_html_into_page_elem_end('shabat_first_column.html', 'first_column', () => {
+        show_siftei_renanot(current_date);
+    });
 
     load_html_into_page_elem_start('shabat_3.html', 'second_column', () => {
         set_element_html('lesson-halacha', add_minutes_to_time(mincha_ktana, -60));
