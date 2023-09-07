@@ -169,6 +169,10 @@ function is_elul(date){
     return is_between_dates(date, "2023-08-17T00:00", "2023-09-18T23:00");
 }
 
+function is_rosh_hashana_eve(date){
+    return is_between_dates(date, "2023-09-14T00:01", "2023-09-15T19:00");
+}
+
 function get_specific_single_page(current_date){
     var item = null
     if(is_shabat_time(current_date_obj)){
@@ -177,6 +181,8 @@ function get_specific_single_page(current_date){
         item = 'pesach_single_page'
     } else if(is_shavout(current_date_obj)){
         item = 'shavuot_single_page'
+    } else if(is_rosh_hashana_eve(current_date_obj)){
+        item = 'rosh_hashana_eve_single_page'
     }
     return item
 }
@@ -197,7 +203,7 @@ function get_slide_show_items_ids(){
     if (is_in_weekdays(date, [4,5])){
         slide_show_items.push('friday_single_page');
     }
-    if (is_between_dates(date, "2022-09-23T10:00", "2022-09-25T19:10")){
+    if (is_between_dates(date, "2023-09-14T10:00", "2023-09-15T19:10")){
         slide_show_items.push('rosh_hashana_eve');
     }
     if (is_between_dates(date, "2022-09-23T10:00", "2022-09-26T19:30")){
@@ -310,7 +316,7 @@ function round_to_five(some_date){
 }
 
 function show_slichot(date){
-    if(is_between_dates(date, '2022-09-29', '2022-10-03T10:00')){
+    if(is_between_dates(date, '2023-09-09', '2023-09-22T10:00')){
         set_element_data('shacharit_a', '05:50');
         set_element_data('shacharit_b', '06:55');
         var elements = document.getElementsByClassName('slichot');
@@ -375,6 +381,17 @@ async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_line
     }
 }
 
+async function show_footer_custom_message_if_needed(current_date, into_elem_id){
+    var message = '';
+    if(is_between_dates(current_date, '2023-09-07', '2023-09-10T03:00')){
+        message = 'סליחות במוצאי שבת בשעה 00:35';
+        load_html_into_page_elem_end('custom_fouter.html', into_elem_id, () => {
+            set_element_data('footer-custom-message', message);
+            show_by_id('custom-footer');
+        });
+    }
+}
+
 async function present_prayer_times_single_page(current_date){
     var this_week_times;
     if ([5,6].includes(current_date.getDay())){
@@ -388,6 +405,7 @@ async function present_prayer_times_single_page(current_date){
         if(is_shacharit_8_30(current_date)){
             show_shacharit_8_30();
         }
+        show_slichot(current_date);
     });
 
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
@@ -399,6 +417,7 @@ async function present_prayer_times_single_page(current_date){
         present_day_times(current_date, true);
     });
     show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);
+    show_footer_custom_message_if_needed(current_date, 'tfilot_single_page');
     return sleep_seconds(wait_seconds*10);
 }
 
@@ -610,6 +629,16 @@ async function present_shavuot_prayer_times(current_date){
     return sleep_seconds(10*60);
 }
 
+async function present_rosh_hashana_prayer_times(current_date){
+    load_html_into_page_elem_end('rosh_hashana_eve_1.html', 'first_column');
+    load_html_into_page_elem_end('rosh_hashana_eve_2.html', 'first_column');
+    
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date);
+    });
+    return sleep_seconds(10*60);
+}
+
 async function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
     var this_shabat_times = get_shabat_times(current_date);
@@ -647,6 +676,7 @@ async function present_shabat_prayer_times(current_date){
     set_element_html('arvit-regulr-days', arvit_time);
 
     show_sfirat_haomer_if_needed(current_date, 'shabat_single_page', false);
+    show_footer_custom_message_if_needed(current_date, 'shabat_single_page');
     return sleep_seconds(10*60);
 }
 
@@ -723,6 +753,7 @@ async function present_friday_single_page(current_date){
         present_day_times(current_date, true);
     });
     show_sfirat_haomer_if_needed(current_date, 'friday_single_page', true);
+    show_footer_custom_message_if_needed(current_date, 'friday_single_page')
     return sleep_seconds(wait_seconds*5);
 }
 
@@ -954,7 +985,7 @@ let item_funcs = {
     'advertisement': present_advertisement,
     'rosh_hashana_a': present_rosh_a_times,
     'rosh_hashana_b': present_rosh_b_times,
-    'rosh_hashana_eve': present_rosh_eve_times,
+    'rosh_hashana_eve_single_page': present_rosh_hashana_prayer_times,
     'kipur_eve': present_kipur_eve_times,
     'kipur': present_kipur_times,
     'sukot_eve': present_sukot_eve_times,
