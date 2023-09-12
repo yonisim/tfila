@@ -959,12 +959,16 @@ async function present_messages(date){
 }
 
 function set_main_area_background(date){
-    var background = `${images_dir}/mishkan-tkiya.JPG`;
+    var background = 'mishkan-tkiya.JPG';
     if (date.getDay() == 6){
         //background = 'shabat_2';
     }
+    if(is_between_dates(date, '2023-09-12T00:00', '2023-09-27T00:00')){
+        background = 'shofar.jpg';
+    }
+    var background_file_path = `${images_dir}/${background}`
     var body_elem = document.getElementsByTagName('body')[0];
-    set_element_background_image(body_elem, background);
+    set_element_background_image(body_elem, background_file_path);
     
 }
 
