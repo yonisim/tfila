@@ -657,7 +657,7 @@ async function present_rosh_hashana_eve_prayer_times(current_date){
     load_html_into_page_elem_end('rosh_hashana_a.html', 'rosh_hashana_day');
     
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date);
+        present_day_times(new Date('2023-09-15'));
     });
     return sleep_seconds(10*60);
 }
