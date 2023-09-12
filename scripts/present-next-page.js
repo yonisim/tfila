@@ -178,15 +178,15 @@ function is_rosh_hashana_eve(date){
 }
 
 function is_rosh_hashana(date){
-    return is_between_dates(date, "2023-09-15T18:00", "2023-09-16T18:00");
+    return is_between_dates(date, "2023-09-15T18:00", "2023-09-16T23:59");
 }
 
 function is_rosh_hashana_b(date){
-    return is_between_dates(date, "2023-09-17", "2023-09-17T19:00");
+    return is_between_dates(date, "2023-09-17T00:00", "2023-09-17T19:00");
 }
 
 function is_gedalia(date){
-    return is_between_dates(date, "2023-09-17T19:00", "2023-09-18T19:00");
+    return is_between_dates(date, "2023-09-17T19:00", "2023-09-18T23:00");
 }
 
 function get_specific_single_page(current_date){
