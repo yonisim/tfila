@@ -169,6 +169,10 @@ function is_elul(date){
     return is_between_dates(date, "2023-08-17T00:00", "2023-09-18T23:00");
 }
 
+function is_slihot_days(date){
+    return is_between_dates(date, "2023-08-17T00:00", "2023-09-24T23:00");
+}
+
 function is_minyan_plag_active(date){
     return is_between_dates(date, "2023-06-17T00:00", "2023-09-10T23:00");
 }
@@ -353,7 +357,7 @@ function show_slichot(date){
 }
 
 function show_siftei_renanot(date){
-    if(is_elul(date)){
+    if(is_slihot_days(date)){
         var elements = document.getElementsByClassName('slichot');
         for (var element of elements){
             element.classList.add('show-element');
