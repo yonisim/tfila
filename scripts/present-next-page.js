@@ -169,6 +169,10 @@ function is_elul(date){
     return is_between_dates(date, "2023-08-17T00:00", "2023-09-18T23:00");
 }
 
+function is_minyan_plag_active(date){
+    return is_between_dates(date, "2023-06-17T00:00", "2023-09-10T23:00");
+}
+
 function is_show_rosh_hashana_eve(date){
     return is_between_dates(date, "2023-09-14", "2023-09-15T18:00");
 }
@@ -338,7 +342,7 @@ function round_to_five(some_date){
 }
 
 function show_slichot(date){
-    if(is_between_dates(date, '2023-09-09', '2023-09-22T10:00')){
+    if(is_between_dates(date, '2023-09-09', '2023-09-22T18:00')){
         set_element_data('shacharit_a', '05:50');
         set_element_data('shacharit_b', '06:55');
         var elements = document.getElementsByClassName('slichot');
@@ -826,15 +830,10 @@ async function present_friday_single_page(current_date){
         }
     });
     
-    var plag = get_today_plag(current_date);
-    var rounded = round_to_five(plag);
-    var kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
-    load_html_into_page_elem_end('kabalat_shabat_early.html', 'plag', () => {
-        set_element_html('kabalat-shabat-early-mincha', format_hour_and_minutes(kabalat_shabat_early_mincha));
-        set_element_html('kabalat-shabat-early', format_hour_and_minutes(plag));
-    });
-    
-    load_html_into_page_elem_end('friday_times.html', 'kabalat-shabat-parent', () => {
+    if(is_minyan_plag_active(current_date)){
+        show_minyan_plag(current_date);
+    }
+    load_html_into_page_elem_end('friday_times.html', 'friday_prayers', () => {
         set_element_html('hadlakat-nerot', shabat_in);
         set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
     });
@@ -845,6 +844,20 @@ async function present_friday_single_page(current_date){
     show_sfirat_haomer_if_needed(current_date, 'friday_single_page', true);
     show_footer_custom_message_if_needed(current_date, 'friday_single_page')
     return sleep_seconds(wait_seconds*5);
+}
+
+function show_minyan_plag(current_date) {
+    var elements = document.getElementsByClassName('plag-block');
+        for (var element of elements){
+            element.classList.add('show-element');
+    }
+    var plag = get_today_plag(current_date);
+    var rounded = round_to_five(plag);
+    var kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
+    load_html_into_page_elem_end('kabalat_shabat_early.html', 'plag', () => {
+        set_element_html('kabalat-shabat-early-mincha', format_hour_and_minutes(kabalat_shabat_early_mincha));
+        set_element_html('kabalat-shabat-early', format_hour_and_minutes(plag));
+    });
 }
 
 async function present_friday_prayer_times(current_date){
