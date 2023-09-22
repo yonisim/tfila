@@ -127,7 +127,8 @@ function is_in_weekdays(date, weekdays){
 }
 
 function is_shacharit_8_30(date){
-    if(is_between_dates(date, '2023-06-24', '2023-08-29')){
+    if(is_between_dates(date, '2023-06-24', '2023-08-29') | is_between_dates(
+        date, '2023-09-24', '2023-10-08')){
         return true;
     }
     return false;
@@ -217,6 +218,8 @@ function get_specific_single_page(current_date){
         item = 'gedalia'
     } else if (is_between_dates(current_date_obj, "2023-09-24T10:00", "2023-09-24T21:30")){
         item = 'kipur_eve_single_page';
+    } else if (is_between_dates(current_date_obj, "2023-09-24T21:30", "2023-09-25T19:00")){
+        item = 'kipur_single_page';
     } else if(is_shabat_time(current_date_obj)){
         item = 'shabat_single_page'
     }
@@ -803,18 +806,52 @@ async function present_day_times_page(current_date){
 }
 
 async function present_kipur_eve_times(current_date){
-    load_html_into_page_elem_start('kipur_eve_morning.html', 'kipur_eve_times');
+    if(is_between_dates(current_date, '2023-09-23T19:00', '2023-09-24T09:00')){
+        load_html_into_page_elem_start('kipur_eve_morning.html', 'kipur_eve_times');
+    } else {
+        load_html_into_page_elem_end('day_times_embedded_with_title.html', 'first_column', () => {
+            load_html_into_page_elem_start('day_times_inner.html', 'day_times_inner', () => {
+                present_day_times(current_date);
+            });
+        });
+    }
+    
     load_html_into_page_elem_end('kipur_eve_a.html', 'kipur_eve_times');
     load_html_into_page_elem_start('kipur.html', 'kipur_day');
     load_html_into_page_elem_end('kipur_a.html', 'kipur_day');
     
-    return sleep_seconds(60);
+    return sleep_seconds(60*3);
 }
 
 async function present_kipur_times(current_date){
-    await sleep_seconds(wait_seconds);
-    return load_html_into_page('kipur_a.html', 'tfilot_times');
+    load_html_into_page_elem_start('kipur.html', 'kipur_day');
+    load_html_into_page_elem_end('kipur_a.html', 'kipur_day');
+
+    load_html_into_page_elem_start('day_times_embedded_with_title.html', 'second_column', () => {
+        load_html_into_page_elem_start('day_times_inner.html', 'day_times_inner', () => {
+            present_day_times(new Date('2023-09-25'));
+        });
+    });
+
+    var this_week_times = get_week_times(current_date);
+    var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+    var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+
+    load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
+        if(is_shacharit_8_30(current_date)){
+            show_shacharit_8_30();
+        }
+        show_slichot(current_date);
+    });
+
+    load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
+        set_element_html('mincha-regulr-days', mincha_time);
+        set_element_html('arvit-regulr-days', arvit_time);
+    });
+    
+    return sleep_seconds(60*3);
 }
+
 async function present_sukot_eve_times(current_date){
     return sleep_seconds(wait_seconds);
 }
@@ -1117,7 +1154,7 @@ let item_funcs = {
     'rosh_hashana_b_single_page': present_rosh_hashana_b_prayer_times,
     'gedalia': present_gedalia_times,
     'kipur_eve_single_page': present_kipur_eve_times,
-    'kipur': present_kipur_times,
+    'kipur_single_page': present_kipur_times,
     'sukot_eve': present_sukot_eve_times,
     'sukot': present_sukot_times,
     'hoshana_raba': present_hoshana_raba_times,
