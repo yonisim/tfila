@@ -596,7 +596,7 @@ function load_html_into_page(html_file_name, parent_element, callback){
     return sleep_seconds(wait_seconds);
 }
 
-function load_html_into_page_elem_start(html_file_name, parent_element, callback){
+async function load_html_into_page_elem_start(html_file_name, parent_element, callback){
     fetch('./html/' + html_file_name)
     .then(response => response.text())
     .then(lines => {
@@ -605,10 +605,9 @@ function load_html_into_page_elem_start(html_file_name, parent_element, callback
             callback();
         }
     });
-    return sleep_seconds(wait_seconds);
 }
 
-function load_html_into_page_elem_end(html_file_name, parent_element, callback){
+async function load_html_into_page_elem_end(html_file_name, parent_element, callback){
     fetch('./html/' + html_file_name)
     .then(response => response.text())
     .then(lines => {
@@ -617,7 +616,6 @@ function load_html_into_page_elem_end(html_file_name, parent_element, callback){
             callback();
         }
     });
-    return sleep_seconds(wait_seconds);
 }
 
 function get_pesach_times(){
@@ -862,19 +860,24 @@ async function present_sukot_eve_times(current_date){
     return sleep_seconds(wait_seconds);
 }
 
+async function insert_blank_table_row(elem_id, num_rows){
+    Array.from({ length: num_rows }, () => {
+        load_html_into_page_elem_end('blank_table_row.html', elem_id); 
+    });
+}
+
 async function present_sukot_times(current_date){
     if(is_present_sukot_eve(current_date)){
         load_html_into_page_elem_start('simchat_tora_eve.html', 'first_column');
-    }
-    load_html_into_page_elem_end('simchat_tora.html', 'first_column');
-    var mid_day_times_parent_elem_id = 'first_column';
-    if(is_present_sukot_eve(current_date)){
-        mid_day_times_parent_elem_id = 'sukot_column_b';
-    }
-    load_html_into_page_elem_end('simchat_tora_a.html', mid_day_times_parent_elem_id);
-    load_html_into_page_elem_end('simchat_tora_b.html', 'sukot_column_b');
-
-    if(!is_present_sukot_eve(current_date)){
+        insert_blank_table_row('first_column', 3);
+        load_html_into_page_elem_end('simchat_tora.html', 'first_column');
+        load_html_into_page_elem_start('simchat_tora_a.html', 'sukot_column_b');
+        insert_blank_table_row('sukot_column_b', 3);
+        load_html_into_page_elem_end('simchat_tora_b.html', 'sukot_column_b');
+    } else {
+        load_html_into_page_elem_start('simchat_tora.html', 'first_column');
+        load_html_into_page_elem_end('simchat_tora_a.html', 'first_column');
+        load_html_into_page_elem_start('simchat_tora_b.html', 'sukot_column_b');
         load_html_into_page_elem_end('shabat_inner_table.html', 'second_column', () => {
             load_html_into_page_elem_start('day_times_inner.html', 'day_times', () => {
                 present_day_times(current_date);
