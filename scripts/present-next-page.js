@@ -142,6 +142,10 @@ function is_shabat_time(date){
     return (is_in_weekdays(date, [5]) && is_after_time(date, '18:30')) | (is_in_weekdays(date, [6]) && is_before_time(date, '21:00'));
 }
 
+function is_present_sukot_eve(date){
+    return is_between_dates(date, '2023-10-06T10:00', '2023-10-06T20:00');
+}
+
 function is_purim(date){
     return is_between_dates(date, "2023-03-06T13:00", "2023-03-07T18:00");
 }
@@ -220,6 +224,8 @@ function get_specific_single_page(current_date){
         item = 'kipur_eve_single_page';
     } else if (is_between_dates(current_date_obj, "2023-09-24T21:30", "2023-09-25T19:00")){
         item = 'kipur_single_page';
+    } else if (is_between_dates(current_date_obj, "2023-10-06T17:30", "2023-10-07T21:00")){
+        item = 'sukot_single_page';
     } else if(is_shabat_time(current_date_obj)){
         item = 'shabat_single_page'
     }
@@ -857,8 +863,27 @@ async function present_sukot_eve_times(current_date){
 }
 
 async function present_sukot_times(current_date){
-    await sleep_seconds(wait_seconds);
-    return load_html_into_page('sukot_a.html', 'tfilot_times');
+    if(is_present_sukot_eve(current_date)){
+        load_html_into_page_elem_start('simchat_tora_eve.html', 'first_column');
+    }
+    load_html_into_page_elem_end('simchat_tora.html', 'first_column');
+    load_html_into_page_elem_end('simchat_tora_a.html', 'first_column');
+    load_html_into_page_elem_end('simchat_tora_b.html', 'sukot_column_b');
+
+    load_html_into_page_elem_end('shabat_inner_table.html', 'second_column', () => {
+        load_html_into_page_elem_start('day_times_inner.html', 'day_times', () => {
+            present_day_times(current_date);
+        });
+        var this_week_times = get_next_week_times(current_date);
+        var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+        var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+        set_element_html('mincha-regulr-days', mincha_time);
+        set_element_html('arvit-regulr-days', arvit_time);
+    });
+
+
+    show_footer_custom_message_if_needed(current_date, 'shabat_single_page');
+    return sleep_seconds(10*60);
 }
 
 async function present_hoshana_raba_times(current_date){
@@ -1156,7 +1181,7 @@ let item_funcs = {
     'kipur_eve_single_page': present_kipur_eve_times,
     'kipur_single_page': present_kipur_times,
     'sukot_eve': present_sukot_eve_times,
-    'sukot': present_sukot_times,
+    'sukot_single_page': present_sukot_times,
     'hoshana_raba': present_hoshana_raba_times,
     'simchat_tora_eve': present_simchat_tora_eve_times,
     'simchat_tora': present_simchat_tora_times,
