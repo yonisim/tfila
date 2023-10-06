@@ -867,19 +867,25 @@ async function present_sukot_times(current_date){
         load_html_into_page_elem_start('simchat_tora_eve.html', 'first_column');
     }
     load_html_into_page_elem_end('simchat_tora.html', 'first_column');
-    load_html_into_page_elem_end('simchat_tora_a.html', 'first_column');
+    var mid_day_times_parent_elem_id = 'first_column';
+    if(is_present_sukot_eve(current_date)){
+        mid_day_times_parent_elem_id = 'sukot_column_b';
+    }
+    load_html_into_page_elem_end('simchat_tora_a.html', mid_day_times_parent_elem_id);
     load_html_into_page_elem_end('simchat_tora_b.html', 'sukot_column_b');
 
-    load_html_into_page_elem_end('shabat_inner_table.html', 'second_column', () => {
-        load_html_into_page_elem_start('day_times_inner.html', 'day_times', () => {
-            present_day_times(current_date);
+    if(!is_present_sukot_eve(current_date)){
+        load_html_into_page_elem_end('shabat_inner_table.html', 'second_column', () => {
+            load_html_into_page_elem_start('day_times_inner.html', 'day_times', () => {
+                present_day_times(current_date);
+            });
+            var this_week_times = get_next_week_times(current_date);
+            var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+            var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+            set_element_html('mincha-regulr-days', mincha_time);
+            set_element_html('arvit-regulr-days', arvit_time);
         });
-        var this_week_times = get_next_week_times(current_date);
-        var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
-        var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
-        set_element_html('mincha-regulr-days', mincha_time);
-        set_element_html('arvit-regulr-days', arvit_time);
-    });
+    }
 
 
     show_footer_custom_message_if_needed(current_date, 'shabat_single_page');
