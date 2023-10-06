@@ -429,8 +429,17 @@ async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_line
 
 async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     var message = '';
+    var show_footer = false;
     if(is_between_dates(current_date, '2023-09-07', '2023-09-10T03:00')){
         message = 'סליחות במוצאי שבת בשעה 00:35';
+        show_footer = true;
+    }
+    if(is_between_dates(current_date, '2023-10-07T10:00', '2023-10-12T09:00')){
+        message = 'מוריד הטל';
+        show_footer = true;
+    }
+
+    if(show_footer){
         load_html_into_page_elem_end('custom_fouter.html', into_elem_id, () => {
             set_element_data('footer-custom-message', message);
             show_by_id('custom-footer');
@@ -889,9 +898,7 @@ async function present_sukot_times(current_date){
             set_element_html('arvit-regulr-days', arvit_time);
         });
     }
-
-
-    show_footer_custom_message_if_needed(current_date, 'shabat_single_page');
+    show_footer_custom_message_if_needed(current_date, 'sukot_single_page');
     return sleep_seconds(10*60);
 }
 
