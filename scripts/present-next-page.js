@@ -435,7 +435,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
     if(is_between_dates(current_date, '2023-10-07T10:00', '2023-10-12T09:00')){
-        message = 'מוריד הטל';
+        message = 'משיב הרוח ומוריד הגשם';
         show_footer = true;
     }
 
