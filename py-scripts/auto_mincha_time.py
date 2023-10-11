@@ -59,4 +59,4 @@ def generate_mincha_maariv_times(input_file_path, output_file_path):
     with open(output_file_path, 'w+') as f:
         f.write(json.dumps(mincha_maariv_result, indent=4))
 
-generate_mincha_maariv_times('../tfila-data/tfila-data/data/parsed_dates.json', '../tfila-data/tfila-data/data/mincha_maariv_v2.json')
+generate_mincha_maariv_times('../tfila-data/data/parsed_dates_2023_2025.json', '../tfila-data/data/mincha_maariv_2023_2025.json')

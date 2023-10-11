@@ -38,7 +38,7 @@ def xls_to_json(xls_file_path, output_file_path):
         f.write(json_for_print)
 
 
-xls_to_json("C:/Users/Yonatans/Downloads/calander_jewish_times.xlsx", "../tfila-data/tfila-data/data/parsed_dates.json")
+xls_to_json("C:/Users/Yonatan.Simkins/Downloads/calander_times_2023_2025.xlsx", "../tfila-data/data/parsed_dates_2023_2025.json")
 
 def sort_shagririm():
     print(os.getcwd())
