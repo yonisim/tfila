@@ -439,6 +439,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2023-10-21T18:30', '2023-10-26T22:00')){
+        message = 'ותן טל ומטר לברכה';
+        show_footer = true;
+    }
+
     if(show_footer){
         load_html_into_page_elem_end('custom_fouter.html', into_elem_id, () => {
             set_element_data('footer-custom-message', message);
