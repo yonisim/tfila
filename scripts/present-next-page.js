@@ -126,9 +126,16 @@ function is_in_weekdays(date, weekdays){
     return weekdays.includes(date.getDay());
 }
 
+function is_war(date){
+    return is_between_dates(date, '2023-10-07', '2024-03-01');
+}
+
 function is_shacharit_8_30(date){
     if(is_between_dates(date, '2023-06-24', '2023-08-29') | is_between_dates(
         date, '2023-09-24', '2023-10-08')){
+        return true;
+    }
+    if(is_war(date)){
         return true;
     }
     return false;
@@ -776,7 +783,7 @@ async function present_shabat_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
-    var mincha_ktana = '17:30';
+    var mincha_ktana = '16:00';
 
     load_html_into_page_elem_start('friday_times.html', 'first_column', () => {
         set_element_html('hadlakat-nerot', shabat_in);
