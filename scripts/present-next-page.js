@@ -146,12 +146,18 @@ function is_weekend(date){
 }
 
 function is_shabat_time(date){
+    var is_shabat_time = false;
     var this_shabat_times = get_shabat_times(date);
-    var shabat_in = this_shabat_times["in"];
-    var shabat_in_minus_half_hour = add_minutes_to_time(shabat_in, -30);
-    var shabat_out = this_shabat_times["out"];
-    var shabat_out_plus_half_hour = add_minutes_to_time(shabat_out, 30);
-    return (is_in_weekdays(date, [5]) && is_after_time(date, shabat_in_minus_half_hour)) | (is_in_weekdays(date, [6]) && is_before_time(date, shabat_out_plus_half_hour));
+    if (is_in_weekdays(date, [5])){
+        var shabat_in = this_shabat_times["in"];
+        var shabat_in_minus_half_hour = add_minutes_to_time(shabat_in, -30);
+        is_shabat_time = is_after_time(date, shabat_in_minus_half_hour)
+    } else if (is_in_weekdays(date, [6])){
+        var shabat_out = this_shabat_times["out"];
+        var shabat_out_plus_half_hour = add_minutes_to_time(shabat_out, 30);
+        is_shabat_time = is_before_time(date, shabat_out_plus_half_hour);
+    }
+    return is_shabat_time;
 }
 
 function is_present_sukot_eve(date){
