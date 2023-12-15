@@ -127,7 +127,7 @@ function is_in_weekdays(date, weekdays){
 }
 
 function is_war(date){
-    return is_between_dates(date, '2023-10-07', '2024-03-01');
+    return is_between_dates(date, '2023-10-07', '2023-12-15');
 }
 
 function is_shacharit_8_30(date){
