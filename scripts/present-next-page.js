@@ -795,10 +795,8 @@ async function present_shabat_prayer_times(current_date){
     var arvit_shabat = this_shabat_times["out"];
     var mincha_ktana = '16:00';
 
-    load_html_into_page_elem_start('friday_times.html', 'first_column', () => {
-        set_element_html('hadlakat-nerot', shabat_in);
-        set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
-    });
+    show_shabat_eve_times(current_date, shabat_in, 'first_column');
+    
     load_html_into_page_elem_end('shabat_first_column.html', 'first_column', () => {
         show_siftei_renanot(current_date);
     });
@@ -963,16 +961,7 @@ async function present_friday_single_page(current_date){
     if(is_minyan_plag_active(current_date)){
         show_minyan_plag(current_date);
     }
-    var friday_times_html = 'friday_times.html';
-    if (is_10_tevet_friday(current_date_obj)){
-        friday_times_html = 'friday_times_10_tevet.html';
-    }
-    load_html_into_page_elem_end(friday_times_html, 'friday_prayers', () => {
-        set_element_html('hadlakat-nerot', shabat_in);
-        if (!is_10_tevet_friday(current_date_obj)){
-            set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
-        }
-    });
+    show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
@@ -980,6 +969,19 @@ async function present_friday_single_page(current_date){
     show_sfirat_haomer_if_needed(current_date, 'friday_single_page', true);
     show_footer_custom_message_if_needed(current_date, 'friday_single_page')
     return sleep_seconds(wait_seconds*5);
+}
+
+function show_shabat_eve_times(current_date, shabat_in, parent_element) {
+    var friday_times_html = 'friday_times.html';
+    if (is_10_tevet_friday(current_date)) {
+        friday_times_html = 'friday_times_10_tevet.html';
+    }
+    load_html_into_page_elem_end(friday_times_html, parent_element, () => {
+        set_element_html('hadlakat-nerot', shabat_in);
+        if (!is_10_tevet_friday(current_date)) {
+            set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
+        }
+    });
 }
 
 function show_minyan_plag(current_date) {
