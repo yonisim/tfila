@@ -220,6 +220,10 @@ function is_gedalia(date){
     return is_between_dates(date, "2023-09-17T19:00", "2023-09-18T23:00");
 }
 
+function is_10_tevet_friday(date){
+    return is_between_dates(date, "2023-12-21T11:00", "2023-12-22T17:00");
+}
+
 function is_kipur(date){
     return is_between_dates(date, "2023-09-23T19:00", "2023-09-25T18:30");
 }
@@ -238,12 +242,12 @@ function get_specific_single_page(current_date){
         item = 'rosh_hashana_b_single_page'
     } else if(is_gedalia(current_date_obj)){
         item = 'gedalia'
-    } else if (is_between_dates(current_date_obj, "2023-09-24T10:00", "2023-09-24T21:30")){
-        item = 'kipur_eve_single_page';
     } else if (is_between_dates(current_date_obj, "2023-09-24T21:30", "2023-09-25T19:00")){
         item = 'kipur_single_page';
     } else if (is_between_dates(current_date_obj, "2023-10-06T17:30", "2023-10-07T21:00")){
         item = 'sukot_single_page';
+    } else if(is_gedalia(current_date_obj)){
+        item = 'gedalia'
     } else if(is_shabat_time(current_date_obj)){
         item = 'shabat_single_page'
     }
@@ -956,9 +960,15 @@ async function present_friday_single_page(current_date){
     if(is_minyan_plag_active(current_date)){
         show_minyan_plag(current_date);
     }
-    load_html_into_page_elem_end('friday_times.html', 'friday_prayers', () => {
+    var friday_times_html = 'friday_times.html';
+    if (is_10_tevet_friday(current_date_obj)){
+        friday_times_html = 'friday_times_10_tevet.html';
+    }
+    load_html_into_page_elem_end(friday_times_html, 'friday_prayers', () => {
         set_element_html('hadlakat-nerot', shabat_in);
-        set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
+        if (!is_10_tevet_friday(current_date_obj)){
+            set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
+        }
     });
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
