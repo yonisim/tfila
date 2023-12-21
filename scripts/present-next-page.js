@@ -948,6 +948,9 @@ async function present_friday_single_page(current_date){
     var this_shabat_times = get_shabat_times(current_date);
     var shabat_in = this_shabat_times["in"];
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
+    if (is_10_tevet_friday(current_date_obj)){
+        document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'] + ' (עשרה בטבת)';
+    }
     
     load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
         show_slichot(current_date);
