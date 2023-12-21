@@ -221,7 +221,7 @@ function is_gedalia(date){
 }
 
 function is_10_tevet_friday(date){
-    return is_between_dates(date, "2023-12-21T11:00", "2023-12-22T17:00");
+    return is_between_dates(date, "2023-12-21T11:00", "2023-12-23T19:00");
 }
 
 function is_kipur(date){
