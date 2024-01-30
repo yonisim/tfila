@@ -9,6 +9,7 @@ html, body, article {
   --default-text-background-color:  rgba(245, 245, 245, 0.5);
   overflow: hidden;
   direction: rtl;
+  margin: 0;
 }
 
 #main-div {

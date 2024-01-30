@@ -25,8 +25,9 @@
 
 .left-position {
     justify-self: end;
+    margin-left: 1%;
 }
 
 .right-position {
-    margin-right: 100px;
+    margin-right: 1%;
 }
