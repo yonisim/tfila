@@ -12,6 +12,8 @@
     echo before start the process
     goto :start_the_process
     :continue_loop
+    goto :manage_monitor
+    :continue_after_monitor_check
     timeout 60
     goto :while
 
@@ -52,3 +54,9 @@ goto :continue_loop
 echo killing the process
 taskkill /F /im electron.exe
 goto :continue_update
+
+:manage_monitor
+.\py-scripts\nircmd.exe monitor off
+timeout 10
+.\py-scripts\nircmd.exe monitor on
+goto :continue_after_monitor_check
