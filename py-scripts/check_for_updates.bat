@@ -12,8 +12,6 @@
     echo before start the process
     goto :start_the_process
     :continue_loop
-    goto :manage_monitor
-    :continue_after_monitor_check
     timeout 60
     goto :while
 
