@@ -248,7 +248,7 @@ function get_specific_single_page(current_date){
         item = 'sukot_single_page';
     } else if(is_gedalia(current_date_obj)){
         item = 'gedalia'
-    } else if(is_shabat_time(current_date_obj)){
+    } else if(is_shabat_time(current_date_obj) && !is_between_dates(current_date_obj, "2024-03-21T15:00", "2024-03-23T21:00")){
         item = 'shabat_single_page'
     }
     return item
@@ -261,13 +261,15 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    if(!is_weekend(date) & !is_pesach_eve(date) & !is_taanit(date) & !is_kipur(date)){
+    if(!is_shabat_time(date) & !is_pesach_eve(date) & !is_taanit(date) & !is_kipur(date)){
         slide_show_items.push('tfilot_single_page');
+    } else if(is_shabat_time(date)){
+        slide_show_items.push('shabat_single_page')
     }
     if(is_taanit(date)){
         slide_show_items.push('taanit');
     }
-    if (is_in_weekdays(date, [4,5]) & !is_show_rosh_hashana_eve(date)){
+    if (is_in_weekdays(date, [4,5]) & !is_shabat_time(current_date_obj) & !is_show_rosh_hashana_eve(date)){
         slide_show_items.push('friday_single_page');
     }
     if (is_show_rosh_hashana_eve(date)){
@@ -823,7 +825,7 @@ async function present_shabat_prayer_times(current_date){
 
     show_sfirat_haomer_if_needed(current_date, 'shabat_single_page', false);
     show_footer_custom_message_if_needed(current_date, 'shabat_single_page');
-    return sleep_seconds(10*60);
+    return sleep_seconds(wait_seconds*10);
 }
 
 function load_friday_shacharit_times(current_date){
