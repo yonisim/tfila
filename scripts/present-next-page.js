@@ -197,7 +197,7 @@ function is_slihot_days(date){
 }
 
 function is_minyan_plag_active(date){
-    return is_between_dates(date, "2023-06-17T00:00", "2023-09-10T23:00");
+    return is_between_dates(date, "2024-03-28T00:00", "2024-09-10T23:00");
 }
 
 function is_show_rosh_hashana_eve(date){
@@ -261,7 +261,7 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    if(!is_shabat_time(date) & !is_pesach_eve(date) & !is_taanit(date) & !is_kipur(date)){
+    if(!is_in_weekdays(date, [5]) & !is_shabat_time(date) & !is_pesach_eve(date) & !is_taanit(date) & !is_kipur(date)){
         slide_show_items.push('tfilot_single_page');
     } else if(is_shabat_time(date)){
         slide_show_items.push('shabat_single_page')
@@ -270,7 +270,11 @@ function get_slide_show_items_ids(){
         slide_show_items.push('taanit');
     }
     if (is_in_weekdays(date, [4,5]) & !is_shabat_time(current_date_obj) & !is_show_rosh_hashana_eve(date)){
-        slide_show_items.push('friday_single_page');
+        if(is_minyan_plag_active(date)){
+            slide_show_items.push('friday_single_page_plag')
+        } else {
+            slide_show_items.push('tfilot_single_page');
+        }
     }
     if (is_show_rosh_hashana_eve(date)){
         slide_show_items.push('rosh_hashana_eve_single_page');
@@ -1227,6 +1231,7 @@ let item_funcs = {
     'shabat_single_page': present_shabat_prayer_times,
     'friday': present_friday_prayer_times,
     'friday_single_page': present_friday_single_page,
+    'friday_single_page_plag': present_friday_single_page,
     'tormim': present_donators,
     'messages': present_messages,
     'advertisement': present_advertisement,
