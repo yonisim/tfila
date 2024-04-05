@@ -375,18 +375,27 @@ function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
     return prayer_times;
 }
 
-function round_to_five(some_date){
+function roundToNearest(numToRound, numToRoundTo, prefer_floor=true) {
+    var round_func = Math.round;
+    if(prefer_floor){
+        round_func = Math.floor;
+    }
+    return round_func(numToRound / numToRoundTo) * numToRoundTo;
+}
+
+function round_to_five(some_date, round_down=false, reverse_round_offset=1){
     var hour_and_minutes = some_date.split(':');
     var minutes = parseInt(hour_and_minutes[1]);
     var modulu_five = minutes % 5;
-    var minutes_diff = 0;
-    if (modulu_five == 1){
-        minutes_diff = -1;
-    } else if (modulu_five > 1){
-        minutes_diff = 5 - modulu_five;
+    var prefer_floor = true;
+    if (modulu_five == 4){
+        prefer_floor = false;
     }
-    var rounded = add_minutes_to_time(some_date, minutes_diff);
-    return rounded;
+    var rounded = roundToNearest(minutes, 5, prefer_floor=prefer_floor);
+    if(rounded < 10){
+        rounded = '0' + rounded;
+    }
+    return hour_and_minutes[0] + ':' + rounded;
 }
 
 function show_slichot(date){
