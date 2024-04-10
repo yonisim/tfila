@@ -131,7 +131,7 @@ function is_war(date){
 }
 
 function is_shacharit_8_30(date){
-    if(is_between_dates(date, '2023-06-24', '2023-08-29') | is_between_dates(
+    if(is_between_dates(date, '2024-04-14', '2024-04-30') | is_between_dates(
         date, '2023-09-24', '2023-10-08')){
         return true;
     }
