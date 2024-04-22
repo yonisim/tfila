@@ -169,7 +169,7 @@ function is_purim(date){
 }
 
 function is_present_pesach_eve(date){
-    return is_between_dates(date, "2023-04-04T17:00", "2023-04-05T17:00");
+    return is_between_dates(date, "2024-04-21T01:00", "2024-04-22T17:00");
 }
 
 function is_taanit(date){
@@ -177,7 +177,7 @@ function is_taanit(date){
 }
 
 function is_pesach_eve(date){
-    return is_between_dates(date, "2023-04-05T00:00", "2023-04-05T17:00");
+    return is_between_dates(date, "2024-04-22T00:00", "2024-04-22T17:00");
 }
 
 function is_pesach_first_chag(date){
@@ -670,7 +670,7 @@ async function load_html_into_page_elem_end(html_file_name, parent_element, call
 }
 
 function get_pesach_times(){
-    return ["18:39", "19:39"];
+    return ["18:52", "19:53"];
 }
 
 async function present_pesach_eve(current_date){
@@ -691,7 +691,7 @@ async function present_pesach_eve(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    return sleep_seconds(wait_seconds*5);
+    return sleep_seconds(wait_seconds*10);
 }
 
 
