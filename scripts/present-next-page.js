@@ -181,7 +181,7 @@ function is_pesach_eve(date){
 }
 
 function is_pesach_first_chag(date){
-    return is_between_dates(date, "2023-04-05T17:00", "2023-04-06T19:45:00");
+    return is_between_dates(date, "2024-04-22T17:00", "2024-04-23T20:00:00");
 }
 
 function is_shavout(date){
@@ -318,7 +318,7 @@ function get_slide_show_items_ids(){
     }
     
     //slide_show_items.push('day_times');
-    //slide_show_items.push('messages');
+    slide_show_items.push('messages');
     //slide_show_items.push('tormim');
     slide_show_items.push('advertisement');
     return slide_show_items;
@@ -691,7 +691,7 @@ async function present_pesach_eve(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    return sleep_seconds(wait_seconds*10);
+    return sleep_seconds(wait_seconds*5);
 }
 
 
@@ -705,7 +705,6 @@ async function present_pesach_times(current_date){
     });
     
     set_element_html('arvit-shabat', pesach_out);
-    set_element_html('arvit-shabat-2', add_minutes_to_time(pesach_out, 15));
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
