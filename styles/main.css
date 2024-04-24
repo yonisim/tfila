@@ -182,3 +182,7 @@ html, body, article {
   text-align: center;
   line-height: 5.5vh;
 }
+
+.table-line{
+  line-height: 110%;
+}
