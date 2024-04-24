@@ -46,7 +46,7 @@ export function omer_days_count_to_hebrew(sfirat_haomer_numeric){
     var tens = sfirat_haomer_numeric - ones;
     var ones_hebrew = '';
     if (ones > 0){
-        if(ones == 2){
+        if(ones == 2 && tens > 0){
             ones_hebrew = 'שנים';
         }else{
             ones_hebrew = number_to_hebrew_word[ones - 1];
@@ -60,6 +60,10 @@ export function omer_days_count_to_hebrew(sfirat_haomer_numeric){
         }
     }
     var first_part_result = [hayom, ones_hebrew, tens_hebrew, days_descriptor].join(' ');
+    if(sfirat_haomer_numeric == 1){
+        first_part_result = [hayom, yom, ones_hebrew].join(' ');
+    }
+    
     return first_part_result;
 }
 

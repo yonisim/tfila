@@ -426,7 +426,7 @@ function show_shacharit_8_30(){
 }
 
 function get_omer_numeric(date){
-    var omer_start_date = new Date('2023-04-07');
+    var omer_start_date = new Date('2024-04-24');
     var omer_time_diff = date - omer_start_date;
     var omer_days = Math.ceil(omer_time_diff / (1000 * 3600 * 24));
     if(is_after_sunset(date)){
@@ -456,7 +456,7 @@ function set_sfirat_haomer_regular_days(date, two_lines){
 }
 
 async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_lines){
-    if(is_between_dates(current_date, '2023-04-07', '2023-05-25T19:00')){
+    if(is_between_dates(current_date, '2024-04-24', '2024-06-13T19:00')){
         load_html_into_page_elem_end('omer_fouter.html', into_elem_id, () => {
             set_sfirat_haomer_regular_days(current_date, two_lines);
             show_by_id('omer');
@@ -959,6 +959,7 @@ async function present_friday_single_page(current_date){
     var this_week_times = get_week_times(current_date);
     var this_shabat_times = get_shabat_times(current_date);
     var shabat_in = this_shabat_times["in"];
+    var main_page_id = 'friday_single_page';
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     if (is_10_tevet_friday(current_date_obj)){
         document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'] + ' (עשרה בטבת)';
@@ -974,14 +975,15 @@ async function present_friday_single_page(current_date){
     
     if(is_minyan_plag_active(current_date)){
         show_minyan_plag(current_date);
+        main_page_id += '_plag'
     }
     show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    show_sfirat_haomer_if_needed(current_date, 'friday_single_page', true);
-    show_footer_custom_message_if_needed(current_date, 'friday_single_page')
+    show_sfirat_haomer_if_needed(current_date, main_page_id, true);
+    show_footer_custom_message_if_needed(current_date, main_page_id)
     return sleep_seconds(wait_seconds*5);
 }
 
