@@ -1,5 +1,5 @@
 #header {
-    height: fit-content;
+    height: 10vh;
     background-color: rgba(62, 115, 228, 0.724);
   }
 
@@ -29,5 +29,6 @@
 }
 
 .right-position {
+    justify-self: right;
     margin-right: 1%;
 }
