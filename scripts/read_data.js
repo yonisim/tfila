@@ -1,7 +1,7 @@
 'esversion: 8';
 
 export function current_date(){
-    let cur_date = new Date('2023-05-25T19:40:02');
+    let cur_date = new Date('2023-05-26T19:40:02');
     let time = new Date();
     return cur_date;
 }
