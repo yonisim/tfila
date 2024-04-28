@@ -9,5 +9,7 @@ def json_to_xls(input_file, output_file):
     df = pd.DataFrame(list(zip(dates, mincha, maariv)), columns=['תאריך','מנחה','ערבית'])
     df.to_excel(output_file)
 
-json_to_xls("C:\\Users\\Yonatan.Simkins\\git\\tfila-data\\data\\mincha_maariv_v2.json",
- "C:\\Users\\Yonatan.Simkins\\Downloads\\mincha_maariv.xlsx")
+json_to_xls("C:\\Users\\Yonatan.Simkins\\git\\tfila-data\\data\\mincha_maariv_2023_2025.json",
+ "C:\\Users\\Yonatan.Simkins\\Downloads\\mincha_maariv_2025.xlsx")
+
+"C:\\Users\\Yonatan.Simkins\\git\\tfila-data\\data\\parsed_dates_2023_2025.json"
