@@ -184,6 +184,10 @@ function is_pesach_first_chag(date){
     return is_between_dates(date, "2024-04-22T17:00", "2024-04-23T20:00:00");
 }
 
+function is_pesach_7(date){
+    return is_between_dates(date, "2024-04-28T12:00", "2024-04-29T20:00:00");
+}
+
 function is_shavout(date){
     return is_between_dates(date, "2023-05-25T11:00", "2023-05-26T18:30:00");
 }
@@ -232,6 +236,8 @@ function get_specific_single_page(current_date){
     var item = null
     if(is_pesach_first_chag(current_date_obj)){
         item = 'pesach_single_page'
+    } else if(is_pesach_7(current_date_obj)){
+        item = 'pesach_7'
     } else if(is_shavout(current_date_obj)){
         item = 'shavuot_single_page'
     } else if(is_rosh_hashana_eve(current_date_obj)){
@@ -673,6 +679,10 @@ function get_pesach_times(){
     return ["18:52", "19:53"];
 }
 
+function get_pesach_7_times(){
+    return ["18:56", "19:58"];
+}
+
 async function present_pesach_eve(current_date){
     load_html_into_page_elem_start('shacharit.html', 'tfilot_times', () => {
         var elements = document.getElementsByClassName('friday-shacharit');
@@ -709,6 +719,25 @@ async function present_pesach_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
     });
+    return sleep_seconds(10*60);
+}
+
+async function present_pesach_7_times(current_date){
+    var pesach_times = get_pesach_7_times();
+    var pesach_in = pesach_times[0];
+    var pesach_out = pesach_times[1];
+    load_html_into_page_elem_start('pesach_eve_times.html', 'first_column', () => {
+        set_element_html('hadlakat-nerot', pesach_in);
+        set_element_html('kabalat-shabat', add_minutes_to_time(pesach_in, 10));
+    });
+    
+    set_element_html('arvit-shabat', pesach_out);
+    set_element_html('arvit-shabat-2', add_minutes_to_time(pesach_out, 15));
+
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date);
+    });
+    show_sfirat_haomer_if_needed(current_date, 'pesach_7', true);
     return sleep_seconds(10*60);
 }
 
@@ -1260,6 +1289,7 @@ let item_funcs = {
     'purim': present_purim_times,
     'pesach_eve': present_pesach_eve,
     'pesach_single_page': present_pesach_times,
+    'pesach_7': present_pesach_7_times,
     'shavuot_single_page': present_shavuot_prayer_times,
     'taanit': present_taanit_times,
     'day_times': present_day_times_page
