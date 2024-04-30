@@ -324,7 +324,12 @@ function get_slide_show_items_ids(){
     }
     
     //slide_show_items.push('day_times');
-    //slide_show_items.push('messages');
+    read_json(`${data_dir}/messages.json`).then(messages_dict => {
+        var messages_list = get_items_to_present(date, messages_dict).map(item => item.message);
+        if (messages_list.length) {
+            slide_show_items.push('messages');
+        } 
+    });
     //slide_show_items.push('tormim');
     slide_show_items.push('advertisement');
     return slide_show_items;
@@ -1150,7 +1155,11 @@ async function present_messages(date){
     return read_json(`${data_dir}/messages.json`).then(messages_dict => {
         var messages_list = get_items_to_present(date, messages_dict).map(item => item.message);
         var elem = document.getElementById('messages-text');
-        return display_message(messages_list, elem);
+        if (messages_list.length) {
+            return display_message(messages_list, elem);
+        } else{
+            return sleep_seconds(0);
+        }
       });
 }
 
