@@ -1040,6 +1040,9 @@ function show_minyan_plag(current_date) {
             element.classList.add('show-element');
     }
     var plag = get_today_plag(current_date);
+    if(is_in_weekdays(current_date, [4])){
+        plag = get_today_plag(addDays(current_date, 1));
+    }
     var rounded = round_to_five(plag);
     var kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
     load_html_into_page_elem_end('kabalat_shabat_early.html', 'plag', () => {
