@@ -1026,7 +1026,7 @@ function show_shabat_eve_times(current_date, shabat_in, parent_element) {
     if (is_10_tevet_friday(current_date)) {
         friday_times_html = 'friday_times_10_tevet.html';
     }
-    load_html_into_page_elem_end(friday_times_html, parent_element, () => {
+    load_html_into_page_elem_start(friday_times_html, parent_element, () => {
         set_element_html('hadlakat-nerot', shabat_in);
         if (!is_10_tevet_friday(current_date)) {
             set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
