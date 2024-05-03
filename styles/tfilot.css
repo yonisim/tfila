@@ -80,6 +80,14 @@
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.5fr);
 }
 
+.two-column-grid-right-side-shabat-day-times{
+    display: grid;
+    direction: rtl;
+    width: 100%;
+    column-gap: 1vw;
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+}
+
 .column-of-grid{
 }
 
