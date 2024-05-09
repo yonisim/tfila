@@ -186,3 +186,7 @@ html, body, article {
 .table-line{
   line-height: 110%;
 }
+
+.table-line-height-less{
+  line-height: 100%;
+}
