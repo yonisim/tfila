@@ -670,7 +670,7 @@ async function load_html_into_page_elem_start(html_file_name, parent_element, ca
 }
 
 async function load_html_into_page_elem_end(html_file_name, parent_element, callback){
-    fetch('./html/' + html_file_name)
+    return fetch('./html/' + html_file_name)
     .then(response => response.text())
     .then(lines => {
         insert_html_at_end_of_element(parent_element, lines);
@@ -843,7 +843,7 @@ async function present_shabat_prayer_times(current_date){
     var arvit_shabat = this_shabat_times["out"];
     var mincha_ktana = '18:00';
 
-    show_shabat_eve_times(current_date, shabat_in, 'first_column');
+    await show_shabat_eve_times(current_date, shabat_in, 'first_column');
     
     load_html_into_page_elem_end('shabat_first_column.html', 'first_column', () => {
         show_siftei_renanot(current_date);
@@ -1021,12 +1021,12 @@ async function present_friday_single_page(current_date){
     return sleep_seconds(wait_seconds*5);
 }
 
-function show_shabat_eve_times(current_date, shabat_in, parent_element) {
+async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
     var friday_times_html = 'friday_times.html';
     if (is_10_tevet_friday(current_date)) {
         friday_times_html = 'friday_times_10_tevet.html';
     }
-    load_html_into_page_elem_start(friday_times_html, parent_element, () => {
+    return load_html_into_page_elem_end(friday_times_html, parent_element, () => {
         set_element_html('hadlakat-nerot', shabat_in);
         if (!is_10_tevet_friday(current_date)) {
             set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
