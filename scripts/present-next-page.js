@@ -1220,6 +1220,9 @@ function set_main_area_background(date){
     if(is_between_dates(date, '2023-09-12T00:00', '2023-09-27T00:00')){
         background = 'shofar.jpg';
     }
+    if(is_between_dates(date, '2024-05-13T01:00', '2024-05-27T00:00')){
+        background = 'degel.jpg';
+    }
     var background_file_path = `${images_dir}/${background}`
     var body_elem = document.getElementsByTagName('body')[0];
     set_element_background_image(body_elem, background_file_path);
@@ -1364,7 +1367,7 @@ async function loop_pages(){
         if(single_page_item){
             await insert_html('./html/'+ single_page_item + '.html', "main-div");
             var element = document.getElementById(single_page_item);
-            element.classList.add('background-opac');
+            //element.classList.add('background-opac');
             var item_func = item_funcs[single_page_item];
             await item_func(current_date_obj);
         } else{
