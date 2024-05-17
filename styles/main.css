@@ -2,14 +2,22 @@
   cursor: none;
   }
 
-html, body, article {
-  background: var(--bgColor);
+html{
+  --default-text-background-color:  rgba(245, 245, 245, 0.3);
+  --title-color: rgb(44, 90, 160);
+  }
+
+body, article {
+  #background: var(--bgColor);  
   font-family: 'DS-DIGI', sans-serif;
   height: 100vh;
-  --default-text-background-color:  rgba(245, 245, 245, 0.5);
   overflow: hidden;
-  direction: rtl;
+  direction: rtl; 
   margin: 0;
+}
+
+.background-color{
+  background-color: var(--default-text-background-color);
 }
 
 #main-div {
@@ -32,14 +40,16 @@ html, body, article {
 }
 
 .title{
-  color: darkblue;
+  #color: darkblue;
+  color: var(--title-color);
   text-decoration-line: underline;
   text-align: center;  
 }
 
 .page-title {
   font-size: 7vw;
-  color: darkblue;
+  #color: darkblue;
+  color: var(--title-color);
   text-decoration-line: underline;
   text-align: center;  
 }
