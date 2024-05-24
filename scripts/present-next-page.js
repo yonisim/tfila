@@ -1367,7 +1367,7 @@ async function loop_pages(){
         if(single_page_item){
             await insert_html('./html/'+ single_page_item + '.html', "main-div");
             var element = document.getElementById(single_page_item);
-            //element.classList.add('background-opac');
+            element.classList.add('background-opac');
             var item_func = item_funcs[single_page_item];
             await item_func(current_date_obj);
         } else{
