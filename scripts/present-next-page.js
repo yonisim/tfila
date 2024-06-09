@@ -197,7 +197,7 @@ function is_pesach_7(date){
 }
 
 function is_shavout(date){
-    return is_between_dates(date, "2023-05-25T11:00", "2023-05-26T18:30:00");
+    return is_between_dates(date, "2024-06-11T19:00", "2024-06-12T20:40:00");
 }
 
 function is_elul(date){
