@@ -491,7 +491,8 @@ function set_sfirat_haomer_regular_days(date, two_lines){
 }
 
 async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_lines){
-    if(is_between_dates(current_date, '2024-04-24', '2024-06-13T19:00')){
+    var omer_numeric = get_omer_numeric(current_date);
+    if(omer_numeric >= 0 && omer_numeric <= 49){
         load_html_into_page_elem_end('omer_fouter.html', into_elem_id, () => {
             set_sfirat_haomer_regular_days(current_date, two_lines);
             show_by_id('omer');
@@ -1052,7 +1053,7 @@ async function present_shavuot_eve_page(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    show_sfirat_haomer_if_needed(current_date, main_page_id, true);
+    show_sfirat_haomer_if_needed(current_date, 'shavuot_eve', false);
     return sleep_seconds(wait_seconds*5);
 }
 
