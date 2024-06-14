@@ -895,7 +895,7 @@ async function present_shabat_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
-    var mincha_ktana = '18:00';
+    var mincha_ktana = '18:30';
 
     await show_shabat_eve_times(current_date, shabat_in, 'first_column');
     
@@ -1053,7 +1053,7 @@ async function present_shavuot_eve_page(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    show_sfirat_haomer_if_needed(current_date, 'shavuot_eve', false);
+    show_sfirat_haomer_if_needed(current_date, bla, false);
     return sleep_seconds(wait_seconds*5);
 }
 
@@ -1388,21 +1388,29 @@ async function loop_pages(){
         present_header_dates(current_date_obj);
         var single_page_item = get_specific_single_page(current_date_obj)
         if(single_page_item){
-            await insert_html('./html/'+ single_page_item + '.html', "main-div");
-            var element = document.getElementById(single_page_item);
-            element.classList.add('background-opac');
-            var item_func = item_funcs[single_page_item];
-            await item_func(current_date_obj);
+            try{
+                await insert_html('./html/'+ single_page_item + '.html', "main-div");
+                var element = document.getElementById(single_page_item);
+                element.classList.add('background-opac');
+                var item_func = item_funcs[single_page_item];
+                await item_func(current_date_obj);
+            } catch (ex){
+                console.log("An error occured while activating page " + single_page_item);
+            }
         } else{
             for (var item of get_slide_show_items_ids()){
-                if (item == 'advertisement'){
-                    await present_advertisement(current_date_obj);
-                }else{
-                    await insert_html('./html/'+ item + '.html', "main-div");
-                    var item_func = item_funcs[item];
-                    activate_element(item);
-                    await item_func(current_date_obj);
-                    await deactivate_element(item);
+                try{
+                    if (item == 'advertisement'){
+                        await present_advertisement(current_date_obj);
+                    }else{
+                        await insert_html('./html/'+ item + '.html', "main-div");
+                        var item_func = item_funcs[item];
+                        activate_element(item);
+                        var page_activatino_result = await item_func(current_date_obj);
+                        await deactivate_element(item);
+                    }
+                } catch (ex){
+                    console.log("An error occured while activating page" + item);
                 }
             }
         }
