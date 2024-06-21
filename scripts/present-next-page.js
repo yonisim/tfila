@@ -130,12 +130,16 @@ function is_war(date){
     return is_between_dates(date, '2023-10-07', '2023-12-15');
 }
 
+function is_big_vacation(date){
+    return is_between_dates(date, '2024-06-20', '2024-08-31');
+}
+
 function is_shacharit_8_30(date){
     if(is_between_dates(date, '2024-04-14', '2024-04-30') | is_between_dates(
         date, '2023-09-24', '2023-10-08')){
         return true;
     }
-    if(is_war(date)){
+    if(is_war(date) | is_big_vacation(date)){
         return true;
     }
     return false;
@@ -514,6 +518,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
 
     if(is_between_dates(current_date, '2023-10-21T18:30', '2023-10-26T22:00')){
         message = 'ותן טל ומטר לברכה';
+        show_footer = true;
+    }
+
+    if(is_between_dates(current_date, '2024-06-21T10:30', '2024-06-22T22:00')){
+        message = 'מזל טוב למשפחת טראו לרגל בר המצווה של דרור';
         show_footer = true;
     }
 
