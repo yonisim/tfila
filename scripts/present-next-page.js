@@ -526,6 +526,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2024-06-29T04:30', '2024-06-29T12:00')){
+        message = 'ר"ח תמוז יהיה ביום שבת ולמחרתו ביום ראשון הבעל"ט';
+        show_footer = true;
+    }
+
     if(show_footer){
         load_html_into_page_elem_end('custom_fouter.html', into_elem_id, () => {
             set_element_data('footer-custom-message', message);
