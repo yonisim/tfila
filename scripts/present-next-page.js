@@ -66,9 +66,13 @@ function get_today_times(current_date){
     return day_times[current_date];
 }
 
-function present_hebrew_date_in_header(current_date){
+function get_today_hebrew_date(current_date){
     var today_times = get_today_times_according_to_sunset(current_date);
-    var hebrew_date_text = today_times['hebrew_date'];
+    return today_times['hebrew_date'];
+}
+
+function present_hebrew_date_in_header(current_date){
+    var hebrew_date_text = get_today_hebrew_date(current_date);
     if (is_night(current_date)){
         hebrew_date_text = "אור ל" + hebrew_date_text;
     }
@@ -182,6 +186,12 @@ function is_present_memorial_day(date){
 
 function is_present_atzmaut(date){
     return is_between_dates(date, "2024-05-13T01:00", "2024-05-14T20:00");
+}
+
+function is_rosh_chodesh(date){
+    var hebrew_date = get_today_hebrew_date(date)
+    var day_of_month = hebrew_date.split(' ')[0].replace("'", "")
+    return day_of_month == 'א' || day_of_month == 'ל'
 }
 
 function is_taanit(date){
@@ -529,6 +539,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     if(is_between_dates(current_date, '2024-06-29T04:30', '2024-06-29T12:00')){
         message = 'ר"ח תמוז יהיה ביום שבת ולמחרתו ביום ראשון הבעל"ט';
         show_footer = true;
+    }
+
+    if(is_rosh_chodesh(current_date)){
+        message = 'יעלה ויבוא'
+        show_footer = true
     }
 
     if(show_footer){
