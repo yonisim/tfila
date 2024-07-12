@@ -531,8 +531,8 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-06-21T10:30', '2024-06-22T22:00')){
-        message = 'מזל טוב למשפחת טראו לרגל בר המצווה של דרור';
+    if(is_between_dates(current_date, '2024-07-12T10:30', '2024-07-13T22:00')){
+        message = 'מזל טוב לטליה מאירפלד ואורה בחכמה לרגל בת המצווה';
         show_footer = true;
     }
 
