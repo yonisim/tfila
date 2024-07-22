@@ -195,7 +195,7 @@ function is_rosh_chodesh(date){
 }
 
 function is_taanit(date){
-    return is_between_dates(date, "2023-07-25T23:00", "2023-07-27T23:00");
+    return is_between_dates(date, "2024-07-24T01:00", "2024-07-24T23:00");
 }
 
 function is_pesach_eve(date){
@@ -554,6 +554,14 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     }
 }
 
+function create_table_row_html(key, value){
+    var entry = `
+        <div class="grid-box-right grid-body-box">${key}</div>
+        <div class="grid-box-right grid-body-box">${value}</div>
+        `;
+    return entry;
+}
+
 async function present_prayer_times_single_page(current_date){
     var this_week_times;
     if ([5,6].includes(current_date.getDay())){
@@ -598,7 +606,15 @@ async function present_purim_times(current_date){
 }
 
 async function present_taanit_times(current_date){
-    load_html_into_page_elem_start('tisha_beav.html', 'taanit_times');
+    var entry = create_table_row_html('04:02', 'כניסת הצום');
+    insert_html_at_start_of_element('taanit_times', entry);
+    await load_html_into_page_elem_end('shacharit.html', 'taanit_times', () => {
+        if(is_shacharit_8_30(current_date)){
+            show_shacharit_8_30();
+        }
+        show_slichot(current_date);
+    });
+    load_html_into_page_elem_end('yz_btamuz.html', 'taanit_times');
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
