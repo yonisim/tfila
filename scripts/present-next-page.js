@@ -195,7 +195,7 @@ function is_rosh_chodesh(date){
 }
 
 function is_taanit(date){
-    return is_between_dates(date, "2024-07-24T01:00", "2024-07-24T23:00");
+    return is_between_dates(date, "2024-07-23T01:00", "2024-07-23T23:00");
 }
 
 function is_pesach_eve(date){
