@@ -149,6 +149,10 @@ function is_shacharit_8_30(date){
     return false;
 }
 
+function is_mincha_13_30(date){
+    return is_big_vacation(date);
+}
+
 function is_weekend(date){
     return is_in_weekdays(date, [5]) | (is_in_weekdays(date, [6]) && is_before_time(date, '16:00'));
 }
@@ -577,6 +581,11 @@ async function present_prayer_times_single_page(current_date){
         }
         show_slichot(current_date);
     });
+
+    if(is_mincha_13_30(current_date)){
+        var mincha_13_30 = create_table_row_html('13:30', 'מנחה גדולה');
+        insert_html_at_start_of_element('prayer_times', mincha_13_30);
+    }
 
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
         set_element_html('mincha-regulr-days', mincha_time);
