@@ -540,8 +540,18 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-06-29T04:30', '2024-06-29T12:00')){
-        message = 'ר"ח תמוז יהיה ביום שבת ולמחרתו ביום ראשון הבעל"ט';
+    if(is_between_dates(current_date, '2024-07-12T10:30', '2024-07-13T22:00')){
+        message = 'מזל טוב לטליה מאירפלד ואורה בחכמה לרגל בת המצווה';
+        show_footer = true;
+    }
+
+    if(is_between_dates(current_date, '2024-08-02T17:30', '2024-08-02T23:00')){
+        message = 'שלום זכר ב 22:00 אצל משפחת לוין רחוב הגיתית 10 דירה 5';
+        show_footer = true;
+    }
+
+    if(is_between_dates(current_date, '2024-08-03T05:30', '2024-08-03T11:00')){
+        message = 'ר"ח מנחם אב יהיה ביום שני הבעל"ט';
         show_footer = true;
     }
 
