@@ -27,6 +27,10 @@
     font-weight: bold;
 }
 
+.inner-table {
+    margin-top: 1%;
+}
+
 .tfilot-weekdays-grid{
     grid-template-columns: repeat(3, 1fr);
 }

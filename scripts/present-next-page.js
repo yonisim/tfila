@@ -258,6 +258,14 @@ function is_kipur(date){
     return is_between_dates(date, "2023-09-23T19:00", "2023-09-25T18:30");
 }
 
+function is_tisha_beav_eve(date){
+    return is_between_dates(date, "2024-08-11T12:00", "2024-08-12T12:01");
+}
+
+function is_tisha_beav(date){
+    return is_between_dates(date, "2024-08-12T12:00", "2024-08-13T20:30");
+}
+
 function get_specific_single_page(current_date){
     var item = null
     if(is_pesach_first_chag(current_date_obj)){
@@ -284,6 +292,8 @@ function get_specific_single_page(current_date){
         item = 'gedalia'
     } else if(is_shabat_time(current_date_obj) && !is_between_dates(current_date_obj, "2024-03-21T15:00", "2024-03-23T21:00")){
         item = 'shabat_single_page'
+    } else if(is_tisha_beav(current_date_obj)){
+        item = 'taanit'
     }
     return item
 }
@@ -302,7 +312,7 @@ function get_slide_show_items_ids(){
     } else if(is_shabat_time(date)){
         slide_show_items.push('shabat_single_page')
     }
-    if(is_taanit(date)){
+    if(is_taanit(date) | is_tisha_beav_eve(date)){
         slide_show_items.push('taanit');
     }
     if (is_in_weekdays(date, [4,5]) & !is_shabat_time(current_date_obj) & !is_show_rosh_hashana_eve(date)){
@@ -576,6 +586,10 @@ function create_table_row_html(key, value){
     return entry;
 }
 
+function create_empty_line(){
+    return create_table_row_html('', '')
+}
+
 async function present_prayer_times_single_page(current_date){
     var this_week_times;
     if ([5,6].includes(current_date.getDay())){
@@ -625,15 +639,14 @@ async function present_purim_times(current_date){
 }
 
 async function present_taanit_times(current_date){
-    var entry = create_table_row_html('04:02', 'כניסת הצום');
-    insert_html_at_start_of_element('taanit_times', entry);
-    await load_html_into_page_elem_end('shacharit.html', 'taanit_times', () => {
-        if(is_shacharit_8_30(current_date)){
-            show_shacharit_8_30();
-        }
-        show_slichot(current_date);
-    });
-    load_html_into_page_elem_end('yz_btamuz.html', 'taanit_times');
+    var mincha_gedola = create_table_row_html('13:30', 'מנחה גדולה');
+    var mincha_ktana = create_table_row_html('17:00', 'מנחה קטנה');
+    var start_of_fest = create_table_row_html('19:26', 'כניסת הצום');
+    var arvit = create_table_row_html('19:50', 'ערבית ומגילת איכה');
+    var empty_line = create_empty_line()
+    insert_html_at_start_of_element('taanit_times', mincha_gedola + mincha_ktana
+         + start_of_fest + arvit + empty_line + empty_line);
+    load_html_into_page_elem_end('tisha_beav.html', 'taanit_times');
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
