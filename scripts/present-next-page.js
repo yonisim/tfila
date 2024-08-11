@@ -259,11 +259,11 @@ function is_kipur(date){
 }
 
 function is_tisha_beav_eve(date){
-    return is_between_dates(date, "2024-08-11T12:00", "2024-08-12T12:01");
+    return is_between_dates(date, "2024-08-11T12:00", "2024-08-11T22:00");
 }
 
 function is_tisha_beav(date){
-    return is_between_dates(date, "2024-08-12T12:00", "2024-08-13T20:30");
+    return is_between_dates(date, "2024-08-11T22:00", "2024-08-13T20:30");
 }
 
 function get_specific_single_page(current_date){
