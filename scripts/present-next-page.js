@@ -560,8 +560,14 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-08-03T05:30', '2024-08-03T11:00')){
-        message = 'ר"ח מנחם אב יהיה ביום שני הבעל"ט';
+    if(is_between_dates(current_date, '2024-08-31T05:30', '2024-08-31T10:00')){
+        message = 'ר"ח אלול יהיה ביום שלישי ולמחרתו ביום רביעי הבעל"ט';
+        show_footer = true;
+    }
+
+    if(is_between_dates(current_date, '2024-08-30T05:30', '2024-08-31T05:00') || 
+       is_between_dates(current_date, '2024-08-31T10:00', '2024-08-31T11:00')){
+        message = 'הציבור מוזמן לקידושא רבא לאחר תפילת שחרית של 8:30';
         show_footer = true;
     }
 
