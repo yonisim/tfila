@@ -1190,12 +1190,17 @@ function show_minyan_plag(current_date) {
         for (var element of elements){
             element.classList.add('show-element');
     }
-    var plag = get_today_plag(current_date);
+    var day = current_date;
     if(is_in_weekdays(current_date, [4])){
-        plag = get_today_plag(addDays(current_date, 1));
+        day = addDays(current_date, 1);
     }
-    var rounded = round_to_five(plag);
-    var kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
+    var plag = get_today_plag(day);
+    var kabalat_shabat_early_mincha = get_today_kabalat_shabat_early_mincha(day);
+    if(!kabalat_shabat_early_mincha){
+        var rounded = round_to_five(plag);
+        var kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
+    }
+
     load_html_into_page_elem_end('kabalat_shabat_early.html', 'plag', () => {
         set_element_html('kabalat-shabat-early-mincha', format_hour_and_minutes(kabalat_shabat_early_mincha));
         set_element_html('kabalat-shabat-early', format_hour_and_minutes(plag));
@@ -1536,6 +1541,10 @@ function get_today_mincha_gedola(date){
 
 function get_today_plag(date){
     return get_today_property(date, 'plag');
+}
+
+function get_today_kabalat_shabat_early_mincha(date){
+    return get_today_property(date, 'kabalat_shabat_early_mincha');
 }
 
 function get_today_sunset(date){
