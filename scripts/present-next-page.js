@@ -319,7 +319,7 @@ function get_slide_show_items_ids(){
         if(is_minyan_plag_active(date)){
             slide_show_items.push('friday_single_page_plag')
         } else {
-            slide_show_items.push('tfilot_single_page');
+            slide_show_items.push('friday_single_page');
         }
     }
     if (is_show_rosh_hashana_eve(date)){
