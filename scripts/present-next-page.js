@@ -531,8 +531,8 @@ async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_line
 async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     var message = '';
     var show_footer = false;
-    if(is_between_dates(current_date, '2023-09-07', '2023-09-10T03:00')){
-        message = 'סליחות במוצאי שבת בשעה 00:35';
+    if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
+        message = 'במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30';
         show_footer = true;
     }
     if(is_between_dates(current_date, '2023-10-07T10:00', '2023-10-12T09:00')){
