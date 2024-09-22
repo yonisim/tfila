@@ -455,7 +455,7 @@ function round_to_five(some_date, round_down=false, reverse_round_offset=1){
 }
 
 function show_slichot(date){
-    if(is_between_dates(date, '2023-09-09', '2023-09-22T18:00')){
+    if(is_between_dates(date, '2024-09-29T10:00', '2024-10-12T18:00')){
         set_element_data('shacharit_a', '05:50');
         set_element_data('shacharit_b', '06:55');
         var elements = document.getElementsByClassName('slichot');
