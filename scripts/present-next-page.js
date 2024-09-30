@@ -235,15 +235,15 @@ function is_show_rosh_hashana_eve(date){
 }
 
 function is_rosh_hashana_eve(date){
-    return is_between_dates(date, "2024-10-02T05:01", "2024-10-02T18:00");
+    return is_between_dates(date, "2024-10-02T05:01", "2024-10-03T02:00");
 }
 
 function is_rosh_hashana(date){
-    return is_between_dates(date, "2024-10-02T18:00", "2024-10-03T23:59");
+    return is_between_dates(date, "2024-10-03T02:01", "2024-10-04T02:00");
 }
 
 function is_rosh_hashana_b(date){
-    return is_between_dates(date, "2024-10-03T00:00", "2024-10-03T19:00");
+    return is_between_dates(date, "2024-10-04T02:01", "2024-10-04T19:00");
 }
 
 function is_gedalia(date){
@@ -918,6 +918,7 @@ async function present_rosh_hashana_eve_prayer_times(current_date){
 async function present_rosh_hashana_a_prayer_times(current_date){
     load_html_into_page_elem_end('rosh_hashana_a.html', 'first_column');
     load_html_into_page_elem_end('rosh_hashana_b.html', 'rosh_hashana_day');
+    load_html_into_page_elem_end('shabat_shuva_eve.html', 'rosh_hashana_day');
     
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
