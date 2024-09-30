@@ -239,11 +239,11 @@ function is_rosh_hashana_eve(date){
 }
 
 function is_rosh_hashana(date){
-    return is_between_dates(date, "2023-09-15T18:00", "2023-09-16T23:59");
+    return is_between_dates(date, "2024-10-02T18:00", "2024-10-03T23:59");
 }
 
 function is_rosh_hashana_b(date){
-    return is_between_dates(date, "2023-09-17T00:00", "2023-09-17T19:00");
+    return is_between_dates(date, "2024-10-03T00:00", "2024-10-03T19:00");
 }
 
 function is_gedalia(date){
@@ -910,7 +910,7 @@ async function present_rosh_hashana_eve_prayer_times(current_date){
     load_html_into_page_elem_end('rosh_hashana_a.html', 'rosh_hashana_day');
     
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(new Date('2023-09-15'));
+        present_day_times(current_date);
     });
     return sleep_seconds(10*60);
 }
