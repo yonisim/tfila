@@ -279,7 +279,7 @@ function get_specific_single_page(current_date){
     } else if(is_rosh_hashana(current_date_obj)){
         item = 'rosh_hashana_a_single_page'
     } else if(is_rosh_hashana_b(current_date_obj)){
-        item = 'rosh_hashana_b_single_page'
+        item = 'rosh_hashana_b_shabat_shuva_eve'
     } else if(is_gedalia(current_date_obj)){
         item = 'gedalia'
     } else if (is_between_dates(current_date_obj, "2023-09-24T21:30", "2023-09-25T19:00")){
@@ -951,6 +951,17 @@ async function present_rosh_hashana_b_prayer_times(current_date){
     return sleep_seconds(10*60);
 }
 
+async function present_rosh_hashana_b_shabat_shuva_eve_prayer_times(current_date){
+    load_html_into_page_elem_end('rosh_hashana_b.html', 'first_column');
+    load_html_into_page_elem_end('shabat_shuva_eve.html', 'shabat');
+
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date);
+    });
+    return sleep_seconds(wait_seconds*10);
+}
+
+
 async function present_gedalia_times(current_date){
     var this_week_times = get_week_times(current_date);
     
@@ -1328,7 +1339,7 @@ function set_main_area_background(date){
     if (date.getDay() == 6){
         //background = 'shabat_2';
     }
-    if(is_between_dates(date, '2023-09-12T00:00', '2023-09-27T00:00')){
+    if(is_between_dates(date, '2024-10-02T02:00', '2024-10-05T23:00')){
         background = 'shofar.jpg';
     }
     if(is_between_dates(date, '2024-05-13T01:00', '2024-05-27T00:00')){
@@ -1449,6 +1460,7 @@ let item_funcs = {
     'rosh_hashana_eve_single_page': present_rosh_hashana_eve_prayer_times,
     'rosh_hashana_a_single_page': present_rosh_hashana_a_prayer_times,
     'rosh_hashana_b_single_page': present_rosh_hashana_b_prayer_times,
+    'rosh_hashana_b_shabat_shuva_eve': present_rosh_hashana_b_shabat_shuva_eve_prayer_times,
     'gedalia': present_gedalia_times,
     'kipur_eve_single_page': present_kipur_eve_times,
     'kipur_single_page': present_kipur_times,
