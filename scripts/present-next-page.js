@@ -231,11 +231,11 @@ function is_minyan_plag_active(date){
 }
 
 function is_show_rosh_hashana_eve(date){
-    return is_between_dates(date, "2023-09-14", "2023-09-15T18:00");
+    return is_between_dates(date, "2024-10-01", "2024-10-02T18:00");
 }
 
 function is_rosh_hashana_eve(date){
-    return is_between_dates(date, "2023-09-14T21:01", "2023-09-15T18:00");
+    return is_between_dates(date, "2024-10-02T05:01", "2024-10-02T18:00");
 }
 
 function is_rosh_hashana(date){
@@ -905,7 +905,7 @@ async function present_shavuot_prayer_times(current_date){
 }
 
 async function present_rosh_hashana_eve_prayer_times(current_date){
-    load_html_into_page_elem_end('rosh_hashana_eve_1.html', 'first_column');
+    load_html_into_page_elem_start('rosh_hashana_eve_1.html', 'first_column');
     load_html_into_page_elem_end('rosh_hashana_eve_2.html', 'first_column');
     load_html_into_page_elem_end('rosh_hashana_a.html', 'rosh_hashana_day');
     
