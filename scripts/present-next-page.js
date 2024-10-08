@@ -1361,6 +1361,9 @@ function set_main_area_background(date){
     if(is_between_dates(date, '2024-10-02T02:00', '2024-10-05T23:00')){
         background = 'shofar.jpg';
     }
+    if(is_between_dates(date, '2024-10-08T02:00', '2024-10-12T23:00')){
+        background = 'beit-hamikdash-1.jpeg';
+    }
     if(is_between_dates(date, '2024-05-13T01:00', '2024-05-27T00:00')){
         background = 'degel.jpg';
     }
