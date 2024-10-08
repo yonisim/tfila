@@ -640,7 +640,7 @@ async function present_prayer_times_single_page(current_date){
     });
     show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);
     show_footer_custom_message_if_needed(current_date, 'tfilot_single_page');
-    return sleep_seconds(3); //wait_seconds*10
+    return sleep_seconds(wait_seconds*10);
 }
 
 async function  present_megila_times(){
