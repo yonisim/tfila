@@ -138,12 +138,16 @@ function is_big_vacation(date){
     return is_between_dates(date, '2024-06-20', '2024-08-31');
 }
 
+function is_sukot_vacation(date){
+    return is_between_dates(date, '2024-10-12', '2024-10-27');
+}
+
 function is_shacharit_8_30(date){
     if(is_between_dates(date, '2024-04-14', '2024-04-30') | is_between_dates(
         date, '2023-09-24', '2023-10-08')){
         return true;
     }
-    if(is_war(date) | is_big_vacation(date)){
+    if(is_war(date) | is_big_vacation(date) | is_sukot_vacation(date)){
         return true;
     }
     return false;
@@ -1085,7 +1089,9 @@ async function present_kipur_times(current_date){
     var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
     var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
 
-    load_html_into_page_elem_start('shacharit.html', 'prayer_times');
+    load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
+        show_shacharit_8_30();
+    });
 
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
         set_element_html('mincha-regulr-days', mincha_time);
