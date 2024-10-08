@@ -548,6 +548,12 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         message = 'במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30';
         show_footer = true;
     }
+    
+    if(is_between_dates(current_date, '2024-10-05T10:00', '2024-10-11T14:00')){
+        message = 'המלך הקדוש   |   המלך המשפט';
+        show_footer = true;
+    }
+    
     if(is_between_dates(current_date, '2023-10-07T10:00', '2023-10-12T09:00')){
         message = 'משיב הרוח ומוריד הגשם';
         show_footer = true;
@@ -1071,6 +1077,8 @@ async function present_kipur_eve_times(current_date){
     });
     load_html_into_page_elem_start('kipur.html', 'kipur_day');
     load_html_into_page_elem_end('kipur_a.html', 'kipur_day');
+
+    show_footer_custom_message_if_needed(current_date, 'kipur_eve_single_page');
     
     return sleep_seconds(60*3);
 }
