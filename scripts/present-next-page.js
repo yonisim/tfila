@@ -1045,7 +1045,7 @@ async function present_shabat_prayer_times(current_date){
         set_element_html('lesson-halacha', add_minutes_to_time(mincha_ktana, -60));
         set_element_html('mincha-ktana', mincha_ktana);
         set_element_html('tehilim', add_minutes_to_time(mincha_ktana, 15));
-        set_element_html('shiur-pirkei-avot', add_minutes_to_time(mincha_ktana, 20));
+        //set_element_html('shiur-pirkei-avot', add_minutes_to_time(mincha_ktana, 20));
 
         set_element_html('arvit-shabat', arvit_shabat);
         set_element_html('arvit-shabat-2', add_minutes_to_time(arvit_shabat, 15));
