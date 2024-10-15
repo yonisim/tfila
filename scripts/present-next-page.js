@@ -266,6 +266,14 @@ function is_kipur(date){
     return is_between_dates(date, "2024-10-11T18:00", "2024-10-12T19:00");
 }
 
+function is_sukot_eve(date){
+    return is_between_dates(date, "2024-10-15T19:00", "2024-10-16T14:00");
+}
+
+function is_sukot(date){
+    return is_between_dates(date, "2024-10-16T14:01", "2024-10-17T19:00");
+}
+
 function is_10_tevet_friday(date){
     return is_between_dates(date, "2023-12-21T11:00", "2023-12-23T19:00");
 }
@@ -298,7 +306,9 @@ function get_specific_single_page(current_date){
         item = 'kipur_eve_single_page';
     } else if (is_kipur(current_date_obj)){
         item = 'kipur_single_page';
-    } else if (is_between_dates(current_date_obj, "2023-10-06T17:30", "2023-10-07T21:00")){
+    } else if (is_sukot_eve(current_date_obj)){
+        item = 'chag_eve';
+    } else if (is_sukot(current_date_obj)){
         item = 'sukot_single_page';
     } else if (is_between_dates(current_date_obj, "2024-06-11T01:00", "2024-06-11T19:00")){
         item = 'shavuot_eve';
@@ -437,6 +447,10 @@ function get_next_week_times(current_date){
 function get_shabat_times(current_date){
     var shabat_date = get_this_shabat_date(current_date);
     return shabat_times[get_date_from_Date(shabat_date)];
+}
+
+function get_chag_times(current_date){
+    return {'in': '17:43', 'out': '18:44'};
 }
 
 function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
@@ -1109,8 +1123,25 @@ async function present_kipur_times(current_date){
     return sleep_seconds(60*3);
 }
 
-async function present_sukot_eve_times(current_date){
-    return sleep_seconds(wait_seconds);
+async function present_chag_eve_times(current_date){
+    var chag_name = 'ערב חג סוכות';
+    var chag_times = get_chag_times(current_date);
+    var chag_in = chag_times["in"];
+    document.getElementById("prayer-times-title-parasha").innerText = chag_name;
+    
+    load_html_into_page_elem_start('shacharit.html', 'chag_eve_prayers', () => {
+        var elements = document.getElementsByClassName('friday-shacharit');
+        for (var element of elements){
+            element.classList.add('show-element');
+        }
+    });
+    
+    show_chag_eve_times(current_date, chag_in, 'chag_eve_prayers');
+
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date, true);
+    });
+    return sleep_seconds(wait_seconds*10);
 }
 
 async function insert_blank_table_row(elem_id, num_rows){
@@ -1221,6 +1252,14 @@ async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
         if (!is_10_tevet_friday(current_date)) {
             set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
         }
+    });
+}
+
+async function show_chag_eve_times(current_date, chag_in, parent_element) {
+    var friday_times_html = 'chag_eve_times.html';
+    return load_html_into_page_elem_end(friday_times_html, parent_element, () => {
+        set_element_html('hadlakat-nerot', chag_in);
+        set_element_html('mincha_shabat_eve', add_minutes_to_time(chag_in, 10));
     });
 }
 
@@ -1372,6 +1411,9 @@ function set_main_area_background(date){
     if(is_between_dates(date, '2024-10-08T02:00', '2024-10-12T23:00')){
         background = 'beit-hamikdash-1.jpeg';
     }
+    if(is_between_dates(date, '2024-10-15T02:00', '2024-10-22T23:00')){
+        background = 'sukot_3.jpg';
+    }
     if(is_between_dates(date, '2024-05-13T01:00', '2024-05-27T00:00')){
         background = 'degel.jpg';
     }
@@ -1494,7 +1536,7 @@ let item_funcs = {
     'gedalia': present_gedalia_times,
     'kipur_eve_single_page': present_kipur_eve_times,
     'kipur_single_page': present_kipur_times,
-    'sukot_eve': present_sukot_eve_times,
+    'chag_eve': present_chag_eve_times,
     'sukot_single_page': present_sukot_times,
     'hoshana_raba': present_hoshana_raba_times,
     'simchat_tora_eve': present_simchat_tora_eve_times,
@@ -1527,6 +1569,8 @@ async function loop_pages(){
                 await item_func(current_date_obj);
             } catch (ex){
                 console.log("An error occured while activating page " + single_page_item);
+                console.error(ex.stack);
+                await sleep_seconds(30);
             }
         } else{
             for (var item of get_slide_show_items_ids()){
