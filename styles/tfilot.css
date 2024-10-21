@@ -44,6 +44,12 @@
     grid-template-columns: max-content 1fr;
 }
 
+.table-main-center{
+    margin-right: 25%;
+    width: 50%;
+    line-height: 100%;
+}
+
 .two-column-grid-equal{
     display: grid;
     direction: rtl;

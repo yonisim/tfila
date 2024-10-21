@@ -286,6 +286,10 @@ function is_simchat_tora(date){
     return is_between_dates(date, "2024-10-24T00:01", "2024-10-24T19:00");
 }
 
+function is_present_hakafot_single_page(date){
+    return is_between_dates(date, "2024-10-24T00:01", "2024-10-24T13:15");
+}
+
 function is_10_tevet_friday(date){
     return is_between_dates(date, "2023-12-21T11:00", "2023-12-23T19:00");
 }
@@ -322,10 +326,6 @@ function get_specific_single_page(current_date){
         item = 'chag_eve';
     } else if (is_sukot(current_date_obj)){
         item = 'chag_single_page';
-    } else if (is_simchat_tora_eve(current_date_obj)){
-        item = 'simchat_tora_eve_single_page';
-    } else if (is_simchat_tora(current_date_obj)){
-        item = 'chag_single_page';
     } else if (is_between_dates(current_date_obj, "2024-06-11T01:00", "2024-06-11T19:00")){
         item = 'shavuot_eve';
     } else if(is_gedalia(current_date_obj)){
@@ -347,7 +347,8 @@ function get_slide_show_items_ids(){
     var slide_show_items = [];
     if(!is_in_weekdays(date, [5]) & !is_shabat_time(date) & 
         !is_pesach_eve(date) & !is_taanit(date) & !is_kipur(date) & 
-        !is_present_memorial_day(date) & !is_present_atzmaut(date)){
+        !is_present_memorial_day(date) & !is_present_atzmaut(date) &
+        !is_simchat_tora_eve(date) & !is_simchat_tora(date)){
         slide_show_items.push('tfilot_single_page');
     } else if(is_shabat_time(date) & !is_kipur(date) & !is_kipur_eve(date)){
         slide_show_items.push('shabat_single_page')
@@ -355,7 +356,9 @@ function get_slide_show_items_ids(){
     if(is_taanit(date) | is_tisha_beav_eve(date)){
         slide_show_items.push('taanit');
     }
-    if (is_in_weekdays(date, [4,5]) & !is_shabat_time(current_date_obj) & !is_show_rosh_hashana_eve(date) & !is_show_kipur_eve(date)){
+    if (is_in_weekdays(date, [4,5]) & !is_shabat_time(current_date_obj) & 
+        !is_show_rosh_hashana_eve(date) & !is_show_kipur_eve(date) & 
+        !is_simchat_tora_eve(date) & !is_simchat_tora(date)){
         if(is_minyan_plag_active(date)){
             slide_show_items.push('friday_single_page_plag')
         } else {
@@ -386,9 +389,16 @@ function get_slide_show_items_ids(){
     if (is_between_dates(date, "2022-10-15T17:00", "2022-10-16T13:30")){
         slide_show_items.push('hoshana_raba');
     }
-    if (is_present_simchat_tora_eve(date)){
+    if (is_present_simchat_tora_eve(date) | is_simchat_tora_eve(date)){
         slide_show_items.push('simchat_tora_eve_single_page');
     }
+    if (is_simchat_tora_eve(date) | is_simchat_tora(date)){
+        slide_show_items.push('simchat_tora_single_page');
+    }
+    if (is_present_hakafot_single_page(date)){
+        slide_show_items.push('hakafot_single_page');
+    }
+
     if (is_purim(date)){
         slide_show_items.push('purim');
         slide_show_items.push('megila');
@@ -1243,6 +1253,28 @@ async function present_simchat_tora_eve_full(current_date){
     return sleep_seconds(wait_seconds*10);
 }
 
+async function present_simchat_tora_full(current_date){
+    var chag_out = '18:34';
+    load_html_into_page_elem_start('simchat_tora.html', 'first_column');
+    await load_html_into_page_elem_end('simchat_tora_a.html', 'first_column');
+    load_html_into_page_elem_end('simchat_tora_b.html', 'second_column', () => {
+        set_element_html('arvit-shabat', chag_out);
+        set_element_html('arvit-shabat-2', add_minutes_to_time(chag_out, 15));
+    });
+
+    load_html_into_page_elem_end('day_times_inner_1.html', 'day_times_first_column', () => {
+        load_html_into_page_elem_end('day_times_inner_2.html', 'day_times_second_column', () => {
+            present_day_times(current_date, true);
+        });
+    });
+    return sleep_seconds(wait_seconds*10);
+}
+
+async function present_hakafot(current_date){
+    load_html_into_page('hakafot.html', 'main_column');
+    return sleep_seconds(wait_seconds*3);
+}
+
 async function present_simchat_tora_times_full(current_date){
     if(is_simchat_tora_eve(current_date)){
         load_html_into_page_elem_start('simchat_tora_eve.html', 'first_column');
@@ -1636,7 +1668,8 @@ let item_funcs = {
     'chag_single_page': present_chag_times,
     'hoshana_raba': present_hoshana_raba_times,
     'simchat_tora_eve_single_page': present_simchat_tora_eve_full,
-    'simchat_tora': present_simchat_tora_times,
+    'simchat_tora_single_page': present_simchat_tora_full,
+    'hakafot_single_page': present_hakafot,
     'megila': present_megila_times,
     'purim': present_purim_times,
     'pesach_eve': present_pesach_eve,
