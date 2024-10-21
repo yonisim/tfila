@@ -1247,7 +1247,7 @@ async function present_simchat_tora_eve_full(current_date){
 
     load_html_into_page_elem_end('day_times_inner_1.html', 'day_times_first_column', () => {
         load_html_into_page_elem_end('day_times_inner_2.html', 'day_times_second_column', () => {
-            present_day_times(current_date, true);
+            present_day_times('2024-10-23', true);
         });
     });
     return sleep_seconds(wait_seconds*10);
@@ -1264,7 +1264,7 @@ async function present_simchat_tora_full(current_date){
 
     load_html_into_page_elem_end('day_times_inner_1.html', 'day_times_first_column', () => {
         load_html_into_page_elem_end('day_times_inner_2.html', 'day_times_second_column', () => {
-            present_day_times(current_date, true);
+            present_day_times('2024-10-24', true);
         });
     });
     return sleep_seconds(wait_seconds*10);
