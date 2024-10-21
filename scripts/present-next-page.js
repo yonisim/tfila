@@ -274,6 +274,18 @@ function is_sukot(date){
     return is_between_dates(date, "2024-10-16T14:01", "2024-10-17T19:00");
 }
 
+function is_present_simchat_tora_eve(date){
+    return is_between_dates(date, "2024-10-22T17:00", "2024-10-22T23:59");
+}
+
+function is_simchat_tora_eve(date){
+    return is_between_dates(date, "2024-10-23T00:01", "2024-10-23T23:59");
+}
+
+function is_simchat_tora(date){
+    return is_between_dates(date, "2024-10-24T00:01", "2024-10-24T19:00");
+}
+
 function is_10_tevet_friday(date){
     return is_between_dates(date, "2023-12-21T11:00", "2023-12-23T19:00");
 }
@@ -309,6 +321,10 @@ function get_specific_single_page(current_date){
     } else if (is_sukot_eve(current_date_obj)){
         item = 'chag_eve';
     } else if (is_sukot(current_date_obj)){
+        item = 'chag_single_page';
+    } else if (is_simchat_tora_eve(current_date_obj)){
+        item = 'simchat_tora_eve_single_page';
+    } else if (is_simchat_tora(current_date_obj)){
         item = 'chag_single_page';
     } else if (is_between_dates(current_date_obj, "2024-06-11T01:00", "2024-06-11T19:00")){
         item = 'shavuot_eve';
@@ -370,9 +386,8 @@ function get_slide_show_items_ids(){
     if (is_between_dates(date, "2022-10-15T17:00", "2022-10-16T13:30")){
         slide_show_items.push('hoshana_raba');
     }
-    if (is_between_dates(date, "2022-10-15T17:00", "2022-10-17T18:50")){
-        slide_show_items.push('simchat_tora_eve');
-        slide_show_items.push('simchat_tora');
+    if (is_present_simchat_tora_eve(date)){
+        slide_show_items.push('simchat_tora_eve_single_page');
     }
     if (is_purim(date)){
         slide_show_items.push('purim');
@@ -1205,8 +1220,31 @@ async function present_chag_times(current_date){
     return sleep_seconds(wait_seconds*10);
 }
 
-async function present_sukot_times(current_date){
-    if(is_present_sukot_eve(current_date)){
+async function present_shachcarit_with_8_30(parent_elem){
+    load_html_into_page_elem_start('shacharit.html', parent_elem, () => {
+        var elements = document.getElementsByClassName('friday-shacharit');
+        for (var element of elements){
+            element.classList.add('show-element');
+        }
+    });
+}
+
+async function present_simchat_tora_eve_full(current_date){
+    await present_shachcarit_with_8_30('first_column');
+    insert_html_at_end_of_element('first_column', create_table_row_html('13:15', 'מנחה גדולה'));
+    show_chag_eve_times(current_date, '17:36', 'first_column');
+    load_html_into_page_elem_end('hakafot.html', 'second_column');
+
+    load_html_into_page_elem_end('day_times_inner_1.html', 'day_times_first_column', () => {
+        load_html_into_page_elem_end('day_times_inner_2.html', 'day_times_second_column', () => {
+            present_day_times(current_date, true);
+        });
+    });
+    return sleep_seconds(wait_seconds*10);
+}
+
+async function present_simchat_tora_times_full(current_date){
+    if(is_simchat_tora_eve(current_date)){
         load_html_into_page_elem_start('simchat_tora_eve.html', 'first_column');
         insert_blank_table_row('first_column', 3);
         load_html_into_page_elem_end('simchat_tora.html', 'first_column');
@@ -1312,7 +1350,7 @@ async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
 
 async function show_chag_eve_times(current_date, chag_in, parent_element) {
     var friday_times_html = 'chag_eve_times.html';
-    return load_html_into_page_elem_start(friday_times_html, parent_element, () => {
+    return load_html_into_page_elem_end(friday_times_html, parent_element, () => {
         set_element_html('hadlakat-nerot', chag_in);
         set_element_html('mincha_shabat_eve', add_minutes_to_time(chag_in, 10));
     });
@@ -1472,6 +1510,9 @@ function set_main_area_background(date){
     if(is_between_dates(date, '2024-05-13T01:00', '2024-05-27T00:00')){
         background = 'degel.jpg';
     }
+    if(is_simchat_tora_eve(date) | is_simchat_tora(date)){
+        background = 'simchat_tora_israel.png';
+    }
     var background_file_path = `${images_dir}/${background}`
     var body_elem = document.getElementsByTagName('body')[0];
     set_element_background_image(body_elem, background_file_path);
@@ -1594,7 +1635,7 @@ let item_funcs = {
     'chag_eve': present_chag_eve_times,
     'chag_single_page': present_chag_times,
     'hoshana_raba': present_hoshana_raba_times,
-    'simchat_tora_eve': present_simchat_tora_eve_times,
+    'simchat_tora_eve_single_page': present_simchat_tora_eve_full,
     'simchat_tora': present_simchat_tora_times,
     'megila': present_megila_times,
     'purim': present_purim_times,
