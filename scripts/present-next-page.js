@@ -590,62 +590,58 @@ async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_line
 }
 
 async function show_footer_custom_message_if_needed(current_date, into_elem_id){
-    var message = '';
+    var messages = [];
     var show_footer = false;
     if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
-        message = 'במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30';
+        messages.push('במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30');
         show_footer = true;
     }
     
     if(is_between_dates(current_date, '2024-10-05T10:00', '2024-10-11T14:00')){
-        message = 'המלך הקדוש   |   המלך המשפט';
+        messages = 'המלך הקדוש   |   המלך המשפט';
         show_footer = true;
     }
     
     if(is_between_dates(current_date, '2024-10-24T10:00', '2024-10-31T09:00')){
-        message = 'משיב הרוח ומוריד הגשם';
+        messages = 'משיב הרוח ומוריד הגשם';
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2023-10-21T18:30', '2023-10-26T22:00')){
-        message = 'ותן טל ומטר לברכה';
+    if(is_between_dates(current_date, '2024-11-07T17:10', '2024-11-24T22:00') & !is_shabat_time(current_date)){
+        messages = 'ותן טל ומטר לברכה';
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-07-12T10:30', '2024-07-13T22:00')){
-        message = 'מזל טוב לטליה מאירפלד ואורה בחכמה לרגל בת המצווה';
-        show_footer = true;
-    }
-
-    if(is_between_dates(current_date, '2024-07-12T10:30', '2024-07-13T22:00')){
-        message = 'מזל טוב לטליה מאירפלד ואורה בחכמה לרגל בת המצווה';
+    if(is_between_dates(current_date, '2024-11-01T16:30', '2024-11-02T11:00')){
+        messages.push('מזל טוב למשפחת ינובסקי לרגל בר המצווה של אריה זאב');
         show_footer = true;
     }
 
     if(is_between_dates(current_date, '2024-08-02T17:30', '2024-08-02T23:00')){
-        message = 'שלום זכר ב 22:00 אצל משפחת לוין רחוב הגיתית 10 דירה 5';
+        messages = 'שלום זכר ב 22:00 אצל משפחת לוין רחוב הגיתית 10 דירה 5';
         show_footer = true;
     }
 
     if(is_between_dates(current_date, '2024-08-31T05:30', '2024-08-31T10:00')){
-        message = 'ר"ח אלול יהיה ביום שלישי ולמחרתו ביום רביעי הבעל"ט';
+        messages = 'ר"ח אלול יהיה ביום שלישי ולמחרתו ביום רביעי הבעל"ט';
         show_footer = true;
     }
 
     if(is_between_dates(current_date, '2024-08-30T05:30', '2024-08-31T05:00') || 
        is_between_dates(current_date, '2024-08-31T10:00', '2024-08-31T11:00')){
-        message = 'הציבור מוזמן לקידושא רבא לאחר תפילת שחרית של 8:30';
+        messages = 'הציבור מוזמן לקידושא רבא לאחר תפילת שחרית של 8:30';
         show_footer = true;
     }
 
     if(is_rosh_chodesh(current_date)){
-        message = 'יעלה ויבוא'
+        messages.push('יעלה ויבוא');
         show_footer = true
     }
 
     if(show_footer){
+        var messages_html = messages.join('<br>');
         load_html_into_page_elem_end('custom_fouter.html', into_elem_id, () => {
-            set_element_data('footer-custom-message', message);
+            set_element_html('footer-custom-message', messages_html);
             show_by_id('custom-footer');
         });
     }
@@ -1057,7 +1053,7 @@ async function present_shabat_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
-    var mincha_ktana = '17:30';
+    var mincha_ktana = '16:00';
 
     await show_shabat_eve_times(current_date, shabat_in, 'first_column');
     
