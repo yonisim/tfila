@@ -598,17 +598,17 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     }
     
     if(is_between_dates(current_date, '2024-10-05T10:00', '2024-10-11T14:00')){
-        messages = 'המלך הקדוש   |   המלך המשפט';
+        messages.push('המלך הקדוש   |   המלך המשפט');
         show_footer = true;
     }
     
     if(is_between_dates(current_date, '2024-10-24T10:00', '2024-10-31T09:00')){
-        messages = 'משיב הרוח ומוריד הגשם';
+        messages.push('משיב הרוח ומוריד הגשם');
         show_footer = true;
     }
 
     if(is_between_dates(current_date, '2024-11-07T17:10', '2024-11-24T22:00') & !is_shabat_time(current_date)){
-        messages = 'ותן טל ומטר לברכה';
+        messages.push('ותן טל ומטר לברכה');
         show_footer = true;
     }
 
@@ -618,18 +618,18 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     }
 
     if(is_between_dates(current_date, '2024-08-02T17:30', '2024-08-02T23:00')){
-        messages = 'שלום זכר ב 22:00 אצל משפחת לוין רחוב הגיתית 10 דירה 5';
+        messages.push('שלום זכר ב 22:00 אצל משפחת לוין רחוב הגיתית 10 דירה 5');
         show_footer = true;
     }
 
     if(is_between_dates(current_date, '2024-08-31T05:30', '2024-08-31T10:00')){
-        messages = 'ר"ח אלול יהיה ביום שלישי ולמחרתו ביום רביעי הבעל"ט';
+        messages.push('ר"ח אלול יהיה ביום שלישי ולמחרתו ביום רביעי הבעל"ט');
         show_footer = true;
     }
 
     if(is_between_dates(current_date, '2024-08-30T05:30', '2024-08-31T05:00') || 
        is_between_dates(current_date, '2024-08-31T10:00', '2024-08-31T11:00')){
-        messages = 'הציבור מוזמן לקידושא רבא לאחר תפילת שחרית של 8:30';
+        messages.push('הציבור מוזמן לקידושא רבא לאחר תפילת שחרית של 8:30');
         show_footer = true;
     }
 
