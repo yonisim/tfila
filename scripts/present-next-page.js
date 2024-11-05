@@ -161,20 +161,22 @@ function is_weekend(date){
     return is_in_weekdays(date, [5]) | (is_in_weekdays(date, [6]) && is_before_time(date, '16:00'));
 }
 
-function is_shabat_time(date){
+function is_shabat_time(date, buffer_minutes=30){
     var is_shabat_time = false;
     var this_shabat_times = get_shabat_times(date);
     if (is_in_weekdays(date, [5])){
         var shabat_in = this_shabat_times["in"];
-        var shabat_in_minus_half_hour = add_minutes_to_time(shabat_in, -30);
+        var shabat_in_minus_half_hour = add_minutes_to_time(shabat_in, -buffer_minutes);
         is_shabat_time = is_after_time(date, shabat_in_minus_half_hour)
     } else if (is_in_weekdays(date, [6])){
         var shabat_out = this_shabat_times["out"];
-        var shabat_out_plus_half_hour = add_minutes_to_time(shabat_out, 30);
+        var shabat_out_plus_half_hour = add_minutes_to_time(shabat_out, buffer_minutes);
         is_shabat_time = is_before_time(date, shabat_out_plus_half_hour);
     }
     return is_shabat_time;
 }
+
+
 
 function is_present_sukot_eve(date){
     return is_between_dates(date, '2023-10-06T10:00', '2023-10-06T20:00');
@@ -607,7 +609,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-11-07T17:10', '2024-11-24T22:00') & !is_shabat_time(current_date)){
+    if(is_between_dates(current_date, '2024-11-07T17:10', '2024-11-24T22:00') & !is_shabat_time(current_date, -25)){
         messages.push('ותן טל ומטר לברכה');
         show_footer = true;
     }
