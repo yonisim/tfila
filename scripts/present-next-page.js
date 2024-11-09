@@ -11,10 +11,13 @@ import { clockFunc } from "./clock-time.js";
 
 const chokidar = require('chokidar');
 async function watch_files(){
-    chokidar.watch(data_dir).on('all', (event, path) => {
+    var cwd = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+    cwd = 'C:/Users/Yonatan.Simkins/git/tfila';
+    console.log(cwd);
+    chokidar.watch([data_dir, cwd], {ignored: /\.venv|node_modules|\.git|\.vscode/}).on('all', (event, path) => {
         console.log(event, path);
-        if(event == 'change'){
-            read_initial_data()
+        if(['change'].includes(event)){
+            location.replace(window.location.href);
             var main_div_elem_id = "main-div";
             load_html_into_page_elem_end("data_updated_notification.html", main_div_elem_id);
             setTimeout(function(){
@@ -23,6 +26,7 @@ async function watch_files(){
                 wait_for_scroll(notification_elem).then(() => {notification_elem.remove()});
             }, 10000);
         }
+
       });
 }
 

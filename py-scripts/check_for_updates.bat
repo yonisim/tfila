@@ -32,8 +32,8 @@ git reset --hard
 git pull %TFILA_REPO% | find "up to date"
 echo %ERRORLEVEL%
 IF %ERRORLEVEL% EQU 1 (
-    goto :kill_the_process
-    :continue_update
+    REM goto :kill_the_process
+    REM :continue_update
     goto :finally
 ) ELSE (
     echo up to date
