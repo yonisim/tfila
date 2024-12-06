@@ -111,7 +111,7 @@ body, article {
 
 .main-bg {
   background: url(../../tfila-data/tfila-data/images/mishkan-tkiya.JPG) no-repeat center center fixed;
-  background-size: cover;
+  background-size: 100% 100%;
 }
 
 .advertisement {

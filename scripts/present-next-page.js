@@ -308,6 +308,10 @@ function is_tisha_beav(date){
     return is_between_dates(date, "2024-08-11T22:00", "2024-08-13T20:30");
 }
 
+function is_shabat_irgun(date){
+    return is_between_dates(date, "2024-12-06T12:00", "2024-12-07T20:30");
+}
+
 function get_specific_single_page(current_date){
     var item = null
     if(is_pesach_first_chag(current_date_obj)){
@@ -1547,6 +1551,10 @@ function set_main_area_background(date){
     if(is_simchat_tora_eve(date) | is_simchat_tora(date)){
         background = 'simchat_tora_israel.png';
     }
+    if(is_shabat_irgun(date)){
+        background = 'bnei-akiva.png';
+    }
+    
     var background_file_path = `${images_dir}/${background}`
     var body_elem = document.getElementsByTagName('body')[0];
     set_element_background_image(body_elem, background_file_path);
