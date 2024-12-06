@@ -637,6 +637,12 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2024-12-06T16:00', '2024-12-07T18:30')){
+        messages.push('מזל טוב למשפחת אפרתי (זאב) לרגל הולדת הבת שחר חיה');
+        messages.push('מסיבת חנוכה קהילתית במוצאי שבת חנוכה - הזדרזו להירשם');
+        show_footer = true;
+    }
+
     if(is_between_dates(current_date, '2024-08-30T05:30', '2024-08-31T05:00') || 
        is_between_dates(current_date, '2024-08-31T10:00', '2024-08-31T11:00')){
         messages.push('הציבור מוזמן לקידושא רבא לאחר תפילת שחרית של 8:30');
