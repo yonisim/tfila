@@ -637,9 +637,10 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-12-06T16:00', '2024-12-07T18:30')){
-        messages.push('מזל טוב למשפחת אפרתי (זאב) לרגל הולדת הבת שחר חיה');
-        messages.push('מסיבת חנוכה קהילתית במוצאי שבת חנוכה - הזדרזו להירשם');
+    if(is_between_dates(current_date, '2024-12-20T16:00', '2024-12-21T17:30')){
+        messages.push('מזל טוב למשפחת מאירפלד להולדת הבת');
+        messages.push('משתתפים בצערו של ראובן עוז על פטירת אביו');
+        //messages.push('מסיבת חנוכה קהילתית במוצאי שבת חנוכה - הזדרזו להירשם');
         show_footer = true;
     }
 
