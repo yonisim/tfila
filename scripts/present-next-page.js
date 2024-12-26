@@ -228,6 +228,10 @@ function is_shavout(date){
     return is_between_dates(date, "2024-06-11T19:00", "2024-06-12T20:40:00");
 }
 
+function is_hanuka(date){
+    return is_between_dates(date, "2024-12-25T17:00", "2025-01-02T17:00:00");
+}
+
 function is_elul(date){
     return is_between_dates(date, "2023-08-17T00:00", "2023-09-18T23:00");
 }
@@ -617,6 +621,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
+    if(is_hanuka(current_date)){
+        messages.push('על הניסים');
+        show_footer = true;
+    }
+
     if(is_between_dates(current_date, '2024-11-07T17:10', '2024-11-14T22:00') & !is_between_dates(current_date, '2024-11-12T21:00', '2024-11-12T22:00') & !is_shabat_time(current_date, -25)){
         messages.push('ותן טל ומטר לברכה');
         show_footer = true;
@@ -632,8 +641,8 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-08-31T05:30', '2024-08-31T10:00')){
-        messages.push('ר"ח אלול יהיה ביום שלישי ולמחרתו ביום רביעי הבעל"ט');
+    if(is_between_dates(current_date, '2024-12-28T05:30', '2024-12-28T10:00')){
+        messages.push('ר"ח טבת יהיה ביום שלישי ולמחרתו ביום רביעי הבעל"ט');
         show_footer = true;
     }
 
