@@ -151,7 +151,7 @@ function is_shacharit_8_30(date){
         date, '2023-09-24', '2023-10-08')){
         return true;
     }
-    if(is_war(date) | is_big_vacation(date) | is_sukot_vacation(date)){
+    if(is_war(date) | is_big_vacation(date) | is_sukot_vacation(date) | is_hanuka(date)){
         return true;
     }
     return false;
