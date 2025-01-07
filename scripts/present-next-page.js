@@ -301,7 +301,7 @@ function is_present_hakafot_single_page(date){
 }
 
 function is_10_tevet_friday(date){
-    return is_between_dates(date, "2023-12-21T11:00", "2023-12-23T19:00");
+    return is_between_dates(date, "2025-01-09T11:00", "2025-01-10T19:00");
 }
 
 function is_tisha_beav_eve(date){
@@ -464,6 +464,12 @@ function get_next_week_start_date(current_date){
 function get_this_shabat_date(current_date){
     var shabat_date = new Date(current_date);
     shabat_date.setDate(current_date.getDate() + 6 - current_date.getDay());
+    return shabat_date;
+}
+
+function get_this_friday_date(current_date){
+    var shabat_date = new Date(current_date);
+    shabat_date.setDate(current_date.getDate() + 5 - current_date.getDay());
     return shabat_date;
 }
 
@@ -1363,12 +1369,15 @@ async function present_friday_single_page(current_date){
     var shabat_in = this_shabat_times["in"];
     var main_page_id = 'friday_single_page';
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
-    if (is_10_tevet_friday(current_date_obj)){
+    if (is_10_tevet_friday(current_date)){
         document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'] + ' (עשרה בטבת)';
     }
     
     load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
         show_slichot(current_date);
+        if (is_10_tevet_friday(current_date)) {
+            insert_html_at_start_of_element('friday_prayers', create_table_row_html('05:06', 'כניסת הצום'));
+        }
         var elements = document.getElementsByClassName('friday-shacharit');
         for (var element of elements){
             element.classList.add('show-element');
@@ -1382,7 +1391,7 @@ async function present_friday_single_page(current_date){
     show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date, true);
+        present_day_times(get_this_friday_date(current_date), true);
     });
     show_sfirat_haomer_if_needed(current_date, main_page_id, true);
     show_footer_custom_message_if_needed(current_date, main_page_id)
