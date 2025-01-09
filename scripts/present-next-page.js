@@ -642,7 +642,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2025-01-09T17:00', '2025-01-10T18:00')){
+    if(is_between_dates(current_date, '2025-01-10T16:00', '2025-01-11T18:00')){
         messages.push('מזל טוב למשפחת לסר (אורן ואורית) להולדת הבן');
         show_footer = true;
     }
