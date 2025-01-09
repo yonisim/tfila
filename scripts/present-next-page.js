@@ -642,6 +642,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2025-01-09T17:00', '2025-01-10T18:00')){
+        messages.push('מזל טוב למשפחת לסר (אורן ואורית) להולדת הבן');
+        show_footer = true;
+    }
+
     if(is_between_dates(current_date, '2024-08-02T17:30', '2024-08-02T23:00')){
         messages.push('שלום זכר ב 22:00 אצל משפחת לוין רחוב הגיתית 10 דירה 5');
         show_footer = true;
