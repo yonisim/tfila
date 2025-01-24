@@ -652,8 +652,8 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-12-28T05:30', '2024-12-28T10:00')){
-        messages.push('ר"ח טבת יהיה ביום שלישי ולמחרתו ביום רביעי הבעל"ט');
+    if(is_between_dates(current_date, '2025-01-25T05:30', '2025-01-25T10:10')){
+        messages.push('ר"ח שבט יהיה ביום חמישי הבעל"ט');
         show_footer = true;
     }
 
