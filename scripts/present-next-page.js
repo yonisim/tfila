@@ -98,7 +98,7 @@ function present_header_dates(date){
             present_hebrew_date_in_header(date);
         });
         waitForElm('#gregorian_date').then((greg_date_elm) => {
-            //set_element_data("gregorian_date", get_date_from_Date_for_header(date));
+            set_element_data("gregorian_date", get_date_from_Date_for_header(date));
         });
     });
 }
