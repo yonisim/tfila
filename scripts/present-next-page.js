@@ -636,7 +636,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2025-01-21T16:30', '2025-02-01T18:00')){
+    if(is_between_dates(current_date, '2025-01-31T16:30', '2025-02-01T18:00')){
         messages.push('מזל טוב למשפחת זיסויין לרגל בר המצווה של דביר');
         show_footer = true;
     }
