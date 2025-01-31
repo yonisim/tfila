@@ -12,7 +12,6 @@ import { clockFunc } from "./clock-time.js";
 const chokidar = require('chokidar');
 async function watch_files(){
     var cwd = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-    cwd = 'C:/Users/Yonatan.Simkins/git/tfila';
     console.log(cwd);
     chokidar.watch([data_dir, cwd], {ignored: /\.venv|node_modules|\.git|\.vscode/}).on('all', (event, path) => {
         console.log(event, path);
@@ -637,8 +636,8 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-11-01T16:30', '2024-11-02T11:00')){
-        messages.push('מזל טוב למשפחת ינובסקי לרגל בר המצווה של אריה זאב');
+    if(is_between_dates(current_date, '2025-01-21T16:30', '2025-02-01T18:00')){
+        messages.push('מזל טוב למשפחת זיסויין לרגל בר המצווה של דביר');
         show_footer = true;
     }
 
