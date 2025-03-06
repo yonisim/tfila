@@ -656,6 +656,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2025-03-07T12:30', '2025-03-08T17:00')){
+        messages.push('קריאות זכור: 09:30, 10:15, 16:45');
+        show_footer = true;
+    }
+
     if(is_between_dates(current_date, '2024-12-20T16:00', '2024-12-21T17:30')){
         messages.push('מזל טוב למשפחת מאירפלד להולדת הבת');
         messages.push('משתתפים בצערו של ראובן עוז על פטירת אביו');
