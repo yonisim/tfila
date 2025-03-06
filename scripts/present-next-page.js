@@ -12,7 +12,7 @@ import { clockFunc } from "./clock-time.js";
 const chokidar = require('chokidar');
 async function watch_files(){
     var cwd = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-    console.log(cwd);
+    console.log('cwd: ' + cwd);
     chokidar.watch([data_dir, cwd], {ignored: /\.venv|node_modules|\.git|\.vscode/}).on('all', (event, path) => {
         console.log(event, path);
         if(['change'].includes(event)){
