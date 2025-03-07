@@ -186,7 +186,7 @@ function is_present_sukot_eve(date){
 }
 
 function is_purim(date){
-    return is_between_dates(date, "2023-03-06T13:00", "2023-03-07T18:00");
+    return is_between_dates(date, "2025-03-13T13:00", "2025-03-14T18:00");
 }
 
 function is_present_pesach_eve(date){
@@ -315,6 +315,13 @@ function is_shabat_irgun(date){
     return is_between_dates(date, "2024-12-06T12:00", "2024-12-07T20:30");
 }
 
+function is_special_day(date){
+    return is_shabat_time(date) |
+        is_pesach_eve(date) | is_taanit(date) | is_kipur(date) | 
+        is_present_memorial_day(date) | is_present_atzmaut(date) |
+        is_simchat_tora_eve(date) | is_simchat_tora(date) | is_purim(date)
+}
+
 function get_specific_single_page(current_date){
     var item = null
     if(is_pesach_first_chag(current_date_obj)){
@@ -358,10 +365,7 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
-    if(!is_in_weekdays(date, [5]) & !is_shabat_time(date) & 
-        !is_pesach_eve(date) & !is_taanit(date) & !is_kipur(date) & 
-        !is_present_memorial_day(date) & !is_present_atzmaut(date) &
-        !is_simchat_tora_eve(date) & !is_simchat_tora(date)){
+    if(!is_in_weekdays(date, [5]) & !is_special_day(date)){
         slide_show_items.push('tfilot_single_page');
     } else if(is_shabat_time(date) & !is_kipur(date) & !is_kipur_eve(date)){
         slide_show_items.push('shabat_single_page')
@@ -369,9 +373,7 @@ function get_slide_show_items_ids(){
     if(is_taanit(date) | is_tisha_beav_eve(date)){
         slide_show_items.push('taanit');
     }
-    if (is_in_weekdays(date, [4,5]) & !is_shabat_time(current_date_obj) & 
-        !is_show_rosh_hashana_eve(date) & !is_show_kipur_eve(date) & 
-        !is_simchat_tora_eve(date) & !is_simchat_tora(date)){
+    if (is_in_weekdays(date, [4,5]) & !is_special_day(date)){
         if(is_minyan_plag_active(date)){
             slide_show_items.push('friday_single_page_plag')
         } else {
@@ -558,6 +560,13 @@ function show_shacharit_8_30(){
     var elements = document.getElementsByClassName('friday-shacharit');
     for (var element of elements){
         element.classList.add('show-element');
+    }
+}
+
+function hide_element(elem_class){
+    var elements = document.getElementsByClassName(elem_class);
+    for (var element of elements){
+        element.classList.add('hidden-element');
     }
 }
 
@@ -1417,6 +1426,10 @@ async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
     }
     return load_html_into_page_elem_end(friday_times_html, parent_element, () => {
         set_element_html('hadlakat-nerot', shabat_in);
+        if(is_purim(current_date)){
+            hide_element('mincha_shabat_eve')
+            set_element_data('kabalat_shabat', add_minutes_to_time(shabat_in, 20))
+        }
         if (!is_10_tevet_friday(current_date)) {
             set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
         }
