@@ -199,7 +199,11 @@ function is_present_sukot_eve(date){
 }
 
 function is_purim(date){
-    return is_between_dates(date, "2025-03-13T13:00", "2025-03-14T18:00");
+    return is_between_dates(date, "2025-03-13T13:00", "2025-03-14T20:00");
+}
+
+function is_show_megila(date){
+    return is_between_dates(date, "2025-03-13T13:00", "2025-03-14T12:00");
 }
 
 function is_present_pesach_eve(date){
@@ -433,6 +437,9 @@ function get_slide_show_items_ids(){
 
     if (is_purim(date)){
         slide_show_items.push('purim');
+    }
+
+    if (is_show_megila(date)){
         slide_show_items.push('megila');
     }
 
