@@ -107,7 +107,20 @@ function present_next_main_div(item){
 }
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    let timeoutId;
+    return new Promise((resolve) => {
+        timeoutId = setTimeout(resolve, ms);
+        
+        function handleKeyDown(event) {
+            if (event.key === "ArrowRight") {
+                clearTimeout(timeoutId);
+                resolve(); // Resolve immediately when arrow right is pressed
+                document.removeEventListener("keydown", handleKeyDown);
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown);
+    });
 }
 
 function sleep_seconds(seconds){
