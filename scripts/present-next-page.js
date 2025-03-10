@@ -220,6 +220,10 @@ function is_rosh_chodesh(date){
     return day_of_month == 'א' || day_of_month == 'ל'
 }
 
+function is_show_taanit(date){
+    return is_between_dates(date, "2025-03-12T17:00", "2025-03-13T18:00");
+}
+
 function is_taanit(date){
     return is_between_dates(date, "2025-03-12T20:00", "2025-03-13T18:00");
 }
@@ -383,7 +387,7 @@ function get_slide_show_items_ids(){
     } else if(is_shabat_time(date) & !is_kipur(date) & !is_kipur_eve(date)){
         slide_show_items.push('shabat_single_page')
     }
-    if(is_taanit(date) | is_tisha_beav_eve(date)){
+    if(is_taanit(date) | is_show_taanit(date) | is_tisha_beav_eve(date)){
         slide_show_items.push('taanit');
     }
     if (is_in_weekdays(date, [4,5]) & !is_special_day(date)){
@@ -683,6 +687,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2025-03-13T12:30', '2025-03-13T18:05')){
+        messages.push('זכר למחצית השקל');
+        show_footer = true;
+    }
+
     if(is_between_dates(current_date, '2024-12-20T16:00', '2024-12-21T17:30')){
         messages.push('מזל טוב למשפחת מאירפלד להולדת הבת');
         messages.push('משתתפים בצערו של ראובן עוז על פטירת אביו');
@@ -786,6 +795,7 @@ async function present_taanit_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
+    show_footer_custom_message_if_needed(current_date, "taanit")
     return sleep_seconds(wait_seconds*5);
 }
 
@@ -1783,7 +1793,7 @@ async function loop_pages(){
                         await insert_html('./html/'+ item + '.html', "main-div");
                         var item_func = item_funcs[item];
                         activate_element(item);
-                        var page_activatino_result = await item_func(current_date_obj);
+                        await item_func(current_date_obj);
                         await deactivate_element(item);
                     }
                 } catch (ex){
