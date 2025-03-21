@@ -641,7 +641,7 @@ async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_line
     }
 }
 
-async function show_footer_custom_message_if_needed(current_date, into_elem_id){
+async function show_footer_custom_message_if_needed(current_date, into_elem_id, caller_slee_seconds=60){
     var messages = [];
     var show_footer = false;
     if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
@@ -669,8 +669,13 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2025-01-31T16:30', '2025-02-01T18:00')){
-        messages.push('מזל טוב למשפחת זיסויין לרגל בר המצווה של דביר');
+    if(is_between_dates(current_date, '2025-03-21T16:30', '2025-03-22T18:00')){
+        messages.push('מזל טוב למשפחת טראו לרגל אירוסי נאור');
+        show_footer = true;
+    }
+
+    if(is_between_dates(current_date, '2025-03-21T16:30', '2025-03-22T18:00')){
+        messages.push('מזל טוב למשפחת עופר לרגל בר המצווה של יהודה');
         show_footer = true;
     }
 
@@ -718,11 +723,21 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     }
 
     if(show_footer){
-        var messages_html = messages.join('<br>');
+        var messages_html = messages; //.join('<br>');
+        if (messages.length > 1){
+            var delay_between_message = caller_slee_seconds / messages.length;
+        }
         load_html_into_page_elem_end('custom_fouter.html', into_elem_id, () => {
-            set_element_html('footer-custom-message', messages_html);
             show_by_id('custom-footer');
+            show_messages(messages, delay_between_message);
         });
+    }
+}
+
+async function show_messages(messages, delay_between_message_seconds){
+    for(const message of messages){
+        set_element_html('footer-custom-message', message)
+        await new Promise(resolve => setTimeout(resolve, delay_between_message_seconds*1000));
     }
 }
 
@@ -1166,7 +1181,7 @@ async function present_shabat_prayer_times(current_date){
     set_element_html('arvit-regulr-days', arvit_time);
 
     show_sfirat_haomer_if_needed(current_date, 'shabat_single_page', false);
-    show_footer_custom_message_if_needed(current_date, 'shabat_single_page');
+    show_footer_custom_message_if_needed(current_date, 'shabat_single_page', wait_seconds*10);
     return sleep_seconds(wait_seconds*10);
 }
 
