@@ -163,7 +163,7 @@ function is_shacharit_8_30(date){
         date, '2023-09-24', '2023-10-08')){
         return true;
     }
-    if(is_war(date) | is_big_vacation(date) | is_sukot_vacation(date) | is_hanuka(date)){
+    if(is_war(date) | is_big_vacation(date) | is_sukot_vacation(date) | is_hanuka(date) | is_pesach_vacation(date)){
         return true;
     }
     return false;
@@ -250,6 +250,9 @@ function is_shavout(date){
 
 function is_hanuka(date){
     return is_between_dates(date, "2024-12-25T17:00", "2025-01-02T17:00:00");
+}
+function is_pesach_vacation(date){
+    return is_between_dates(date, "2025-04-05T23:00", "2025-04-20T23:00");
 }
 
 function is_elul(date){
@@ -703,7 +706,10 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         messages.push('זכר למחצית השקל');
         show_footer = true;
     }
-
+    if(is_between_dates(current_date, '2025-04-04T18:00', '2025-04-05T19:00')){
+        messages.push('דרשת שבת הגדול מפי הרב נחום 18:20');
+        show_footer = true;
+    }
     if(is_between_dates(current_date, '2024-12-20T16:00', '2024-12-21T17:30')){
         messages.push('מזל טוב למשפחת מאירפלד להולדת הבת');
         messages.push('משתתפים בצערו של ראובן עוז על פטירת אביו');
