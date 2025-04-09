@@ -710,6 +710,16 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         messages.push('דרשת שבת הגדול מפי הרב נחום 18:20');
         show_footer = true;
     }
+
+    if(is_between_dates(current_date, '2025-04-09T10:00', '2025-04-10T12:00')){
+        var msg = "תענית בכורות - סיום מסכת לאחר כל מניין";
+        if(is_in_weekdays(current_date, [3])){
+            msg = "ביום חמישי " + msg;
+        }
+        messages.push(msg);
+        show_footer = true;
+    }
+    
     if(is_between_dates(current_date, '2024-12-20T16:00', '2024-12-21T17:30')){
         messages.push('מזל טוב למשפחת מאירפלד להולדת הבת');
         messages.push('משתתפים בצערו של ראובן עוז על פטירת אביו');
