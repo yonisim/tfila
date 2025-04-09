@@ -719,6 +719,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         messages.push(msg);
         show_footer = true;
     }
+
+    if(is_between_dates(current_date, '2025-04-10T19:00', '2025-04-10T22:00')){
+        messages.push('בדיקת חמץ');
+        show_footer = true;
+    }
     
     if(is_between_dates(current_date, '2024-12-20T16:00', '2024-12-21T17:30')){
         messages.push('מזל טוב למשפחת מאירפלד להולדת הבת');
