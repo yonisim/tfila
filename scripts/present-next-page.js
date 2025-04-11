@@ -232,12 +232,16 @@ function is_taanit(date){
     return is_between_dates(date, "2025-03-12T20:00", "2025-03-13T18:00");
 }
 
+function is_shabat_hagadol_tashpa(date){
+    return is_between_dates(date, "2025-04-11T17:00", "2025-04-12T17:00");
+}
+
 function is_pesach_eve(date){
     return is_between_dates(date, "2024-04-22T00:00", "2024-04-22T17:00");
 }
 
 function is_pesach_first_chag(date){
-    return is_between_dates(date, "2024-04-22T17:00", "2024-04-23T20:00:00");
+    return is_between_dates(date, "2025-04-12T17:00", "2025-04-13T20:00:00");
 }
 
 function is_pesach_7(date){
@@ -374,10 +378,12 @@ function get_specific_single_page(current_date){
         item = 'shavuot_eve';
     } else if(is_gedalia(current_date_obj)){
         item = 'gedalia'
-    } else if(is_shabat_time(current_date_obj) && !is_between_dates(current_date_obj, "2024-03-21T15:00", "2024-03-23T21:00")){
+    } else if(is_shabat_time(current_date_obj) && !is_between_dates(current_date_obj, "2024-03-21T15:00", "2024-03-23T21:00") && !is_shabat_hagadol_tashpa(current_date_obj)){
         item = 'shabat_single_page'
     } else if(is_tisha_beav(current_date_obj)){
         item = 'taanit'
+    } else if(is_shabat_hagadol_tashpa(current_date_obj)){
+        item = 'shabat_hagadol_tashpa'
     }
     return item
 }
@@ -1010,11 +1016,20 @@ async function load_html_into_page_elem_end(html_file_name, parent_element, call
 }
 
 function get_pesach_times(){
-    return ["18:52", "19:53"];
+    return ["19:44", "19:45"];
 }
 
 function get_pesach_7_times(){
     return ["18:56", "19:58"];
+}
+
+async function present_shabat_hagadol_tashpa(current_date){
+    load_html_into_page_elem_start('shabat_hagadol_first_column.html', 'first_column');
+    load_html_into_page_elem_start('shabat_hagadol_second_column.html', 'second_column');
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date, true);
+    });
+    return sleep_seconds(wait_seconds*5);
 }
 
 async function present_pesach_eve(current_date){
@@ -1045,7 +1060,6 @@ async function present_pesach_times(current_date){
     var pesach_out = pesach_times[1];
     load_html_into_page_elem_start('pesach_eve_times.html', 'first_column', () => {
         set_element_html('hadlakat-nerot', pesach_in);
-        set_element_html('kabalat-shabat', add_minutes_to_time(pesach_in, 10));
     });
     
     set_element_html('arvit-shabat', pesach_out);
@@ -1799,6 +1813,7 @@ let item_funcs = {
     'megila': present_megila_times,
     'purim': present_purim_times,
     'pesach_eve': present_pesach_eve,
+    'shabat_hagadol_tashpa': present_shabat_hagadol_tashpa,
     'pesach_single_page': present_pesach_times,
     'pesach_7': present_pesach_7_times,
     'memorial_day': present_memorial_day_times,
