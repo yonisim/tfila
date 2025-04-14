@@ -4,7 +4,7 @@ import { insert_html, append_html, activate_element, deactivate_element,
 import {current_date, get_date_from_Date, get_date_from_Date_for_header, read_json} from "./read_data.js";
 import {set_element_data, set_element_html, set_element_background, insert_html_at_start_of_element,
     insert_html_at_end_of_element,
-    get_element_background, set_element_background_image} from "./main-div-setter.js";
+    get_element_background, set_element_background_image, add_class_to_element_style} from "./main-div-setter.js";
 import {get_hebrew_date, parse_sfirat_haomer, omer_days_count_to_hebrew, omer_days_count_to_hebrew_weeks} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
@@ -142,6 +142,17 @@ function is_between_dates(date, start_date, end_date){
     return is_between_dates;
 }
 
+function is_between_hours(date, start_date, end_date){
+    var is_between_dates = true;
+    if (start_date){
+        is_between_dates = date >= new Date(start_date);
+    }
+    if (end_date){
+        is_between_dates = is_between_dates && date <= new Date(end_date);
+    }
+    return is_between_dates;
+}
+
 function is_in_weekdays(date, weekdays){
     return weekdays.includes(date.getDay());
 }
@@ -170,7 +181,7 @@ function is_shacharit_8_30(date){
 }
 
 function is_mincha_13_30(date){
-    return is_big_vacation(date);
+    return is_big_vacation(date) || is_pesach_vacation(date);
 }
 
 function is_weekend(date){
@@ -256,7 +267,7 @@ function is_hanuka(date){
     return is_between_dates(date, "2024-12-25T17:00", "2025-01-02T17:00:00");
 }
 function is_pesach_vacation(date){
-    return is_between_dates(date, "2025-04-05T23:00", "2025-04-20T23:00");
+    return is_between_dates(date, "2025-04-05T23:00", "2025-04-20T12:00");
 }
 
 function is_elul(date){
@@ -611,7 +622,7 @@ function show_mincha_gedola(){
 }
 
 function get_omer_numeric(date){
-    var omer_start_date = new Date('2024-04-24');
+    var omer_start_date = new Date('2025-04-14');
     var omer_time_diff = date - omer_start_date;
     var omer_days = Math.ceil(omer_time_diff / (1000 * 3600 * 24));
     if(is_after_sunset(date)){
@@ -642,7 +653,7 @@ function set_sfirat_haomer_regular_days(date, two_lines){
 
 async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_lines){
     var omer_numeric = get_omer_numeric(current_date);
-    if(omer_numeric >= 0 && omer_numeric <= 49){
+    if(omer_numeric >= 0 && omer_numeric <= 49 && is_after_sunset(current_date)){
         load_html_into_page_elem_end('omer_fouter.html', into_elem_id, () => {
             set_sfirat_haomer_regular_days(current_date, two_lines);
             show_by_id('omer');
@@ -789,6 +800,9 @@ async function present_prayer_times_single_page(current_date){
     }
     var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
     var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    if (is_shacharit_8_30(current_date) && is_mincha_13_30(current_date)){
+        add_class_to_element_style('prayer_times', 'table-line-height-less')
+    }
     load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
         if(is_shacharit_8_30(current_date)){
             show_shacharit_8_30();
@@ -797,7 +811,7 @@ async function present_prayer_times_single_page(current_date){
     });
 
     if(is_mincha_13_30(current_date)){
-        var mincha_13_30 = create_table_row_html('13:30', 'מנחה גדולה');
+        var mincha_13_30 = create_table_row_html('13:15', 'מנחה גדולה');
         insert_html_at_start_of_element('prayer_times', mincha_13_30);
     }
 

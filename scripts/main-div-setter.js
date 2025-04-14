@@ -135,3 +135,10 @@ export function show_by_id(elem_id){
     var element = document.getElementById(elem_id);
     element.classList.add('show-element');
 }
+
+
+export function add_class_to_element_style(elem_id, class_name){
+    var element = document.getElementById(elem_id);
+    element.classList.add(class_name);
+}
+
