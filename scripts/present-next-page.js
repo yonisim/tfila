@@ -818,6 +818,13 @@ async function present_prayer_times_single_page(current_date){
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
         set_element_html('mincha-regulr-days', mincha_time);
         set_element_html('arvit-regulr-days', arvit_time);
+        var arvit_date = new Date(current_date);
+        arvit_date.setHours(arvit_time.split(":")[0]);
+        arvit_date.setMinutes(arvit_time.split(":")[1]);
+        if(is_after_time(arvit_date, "19:35")){
+            hide_element("arvit-8");
+            set_element_data("arvit-9", "ערבית ב")
+        }
     });
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
