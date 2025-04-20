@@ -279,7 +279,7 @@ function is_slihot_days(date){
 }
 
 function is_minyan_plag_active(date){
-    return is_between_dates(date, "2024-03-28T00:00", "2024-09-10T23:00");
+    return is_between_dates(date, "2025-04-20T00:00", "2025-09-10T23:00");
 }
 
 function is_show_rosh_hashana_eve(date){
@@ -631,11 +631,19 @@ function get_omer_numeric(date){
     return omer_days;
 }
 
-function set_sfirat_haomer_regular_days(date, two_lines){
+function get_omer_days_and_weeks(current_date){
     var laomer = 'לעומר';
-    var omer_numeric = get_omer_numeric(date);
+    var omer_numeric = get_omer_numeric(current_date);
     var omer_days = omer_days_count_to_hebrew(omer_numeric);
     var omer_weeks = omer_days_count_to_hebrew_weeks(omer_numeric);
+    return [omer_days, omer_weeks];
+}
+
+function set_sfirat_haomer_regular_days(date, two_lines){
+    var laomer = 'לעומר';
+    var omer_days_and_weeks = get_omer_days_and_weeks(date);
+    var omer_days = omer_days_and_weeks[0];
+    var omer_weeks = omer_days_and_weeks[1];
     if(omer_weeks){
         omer_weeks = [omer_weeks, laomer].join(' ');
         show_by_id('omer-text-weeks');
@@ -725,6 +733,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     }
     if(is_between_dates(current_date, '2025-04-04T18:00', '2025-04-05T19:00')){
         messages.push('דרשת שבת הגדול מפי הרב נחום 18:20');
+        show_footer = true;
+    }
+
+    if(is_between_dates(current_date, '2025-04-18T18:00', '2025-04-19T22:00')){
+        messages.push('מהשבוע לא תתקיים תפילת ערבית בשעה 20:00');
         show_footer = true;
     }
 
