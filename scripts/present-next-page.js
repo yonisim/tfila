@@ -222,11 +222,11 @@ function is_present_pesach_eve(date){
 }
 
 function is_present_memorial_day(date){
-    return is_between_dates(date, "2024-05-13T01:00", "2024-05-13T23:00");
+    return is_between_dates(date, "2025-04-30T01:00", "2025-04-30T22:00");
 }
 
 function is_present_atzmaut(date){
-    return is_between_dates(date, "2024-05-13T01:00", "2024-05-14T20:00");
+    return is_between_dates(date, "2025-04-30T01:00", "2025-05-01T20:00");
 }
 
 function is_rosh_chodesh(date){
@@ -839,13 +839,7 @@ async function present_prayer_times_single_page(current_date){
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
         set_element_html('mincha-regulr-days', mincha_time);
         set_element_html('arvit-regulr-days', arvit_time);
-        var arvit_date = new Date(current_date);
-        arvit_date.setHours(arvit_time.split(":")[0]);
-        arvit_date.setMinutes(arvit_time.split(":")[1]);
-        if(is_after_time(arvit_date, "19:35")){
-            hide_element("arvit-8");
-            set_element_data("arvit-9", "ערבית ב")
-        }
+        set_arvit_times(current_date, arvit_time);
     });
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
@@ -854,6 +848,16 @@ async function present_prayer_times_single_page(current_date){
     show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);
     show_footer_custom_message_if_needed(current_date, 'tfilot_single_page');
     return sleep_seconds(wait_seconds*10);
+}
+
+function set_arvit_times(current_date, arvit_time){
+    var arvit_date = new Date(current_date);
+    arvit_date.setHours(arvit_time.split(":")[0]);
+    arvit_date.setMinutes(arvit_time.split(":")[1]);
+    if(is_after_time(arvit_date, "19:35")){
+        hide_element("arvit-8");
+        set_element_data("arvit-9", "ערבית ב")
+    }
 }
 
 async function  present_megila_times(){
@@ -892,8 +896,8 @@ async function present_taanit_times(current_date){
 
 async function present_memorial_day_times(current_date){
     var this_week_times = get_week_times(current_date);
-    var mincha_time = '18:45';
-    var arvit_time = '19:30';
+    var mincha_time = '19:05';
+    var arvit_time = '19:45';
     load_html_into_page_elem_start('shacharit.html', 'prayer_times');
 
     load_html_into_page_elem_end('mincha_arvit_atzmaut.html', 'atzmaut_eve', () => {
@@ -904,7 +908,7 @@ async function present_memorial_day_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    show_sfirat_haomer_if_needed(current_date, 'memorial_day', true);
+    show_footer_custom_message_if_needed(current_date, 'memorial_day');
     return sleep_seconds(wait_seconds*10);
 }
 
@@ -920,12 +924,13 @@ async function present_atzmaut_times(current_date){
         show_mincha_gedola();
         set_element_html('mincha-regulr-days', mincha_time);
         set_element_html('arvit-regulr-days', arvit_time);
+        set_arvit_times(current_date, arvit_time);
     });
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    show_sfirat_haomer_if_needed(current_date, 'atzmaut', false);
+    show_footer_custom_message_if_needed(current_date, 'atzmaut');
     return sleep_seconds(wait_seconds*10);
 }
 
@@ -1240,7 +1245,7 @@ async function present_shabat_prayer_times(current_date){
     load_html_into_page_elem_start('shabat_3.html', 'second_column', () => {
         set_element_html('lesson-halacha', add_minutes_to_time(mincha_ktana, -60));
         set_element_html('mincha-ktana', mincha_ktana);
-        set_element_html('tehilim', add_minutes_to_time(mincha_ktana, 15));
+        set_element_html('tehilim', add_minutes_to_time(mincha_ktana, 20));
         set_element_html('shiur-pirkei-avot', add_minutes_to_time(mincha_ktana, 20));
 
         set_element_html('arvit-shabat', arvit_shabat);
