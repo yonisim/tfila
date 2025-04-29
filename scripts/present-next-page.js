@@ -1722,7 +1722,7 @@ function set_main_area_background(date){
     if(is_between_dates(date, '2024-10-15T02:00', '2024-10-22T23:00')){
         background = 'sukot_3.jpg';
     }
-    if(is_between_dates(date, '2024-05-13T01:00', '2024-05-27T00:00')){
+    if(is_present_memorial_day(date) || is_present_atzmaut(date)){
         background = 'degel.jpg';
     }
     if(is_simchat_tora_eve(date) | is_simchat_tora(date)){
