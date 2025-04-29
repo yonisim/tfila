@@ -660,6 +660,7 @@ function set_sfirat_haomer_regular_days(date, two_lines){
 }
 
 async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_lines){
+    return;
     var omer_numeric = get_omer_numeric(current_date);
     if(omer_numeric >= 0 && omer_numeric <= 49 && is_after_sunset(current_date)){
         load_html_into_page_elem_end('omer_fouter.html', into_elem_id, () => {
@@ -773,7 +774,14 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true
     }
 
-    if(show_footer){
+    var omer_numeric = get_omer_numeric(current_date);
+    if(omer_numeric >= 0 && omer_numeric <= 49){
+        var laomer = 'לעומר';
+        var omer_days_and_weeks = get_omer_days_and_weeks(current_date);
+        messages.push([omer_days_and_weeks[0], omer_days_and_weeks[1], laomer].join(' '));
+    }
+
+    if(messages.length > 0){
         var messages_html = messages; //.join('<br>');
         if (messages.length > 1){
             var delay_between_message = caller_slee_seconds / messages.length;
