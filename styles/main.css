@@ -85,6 +85,10 @@ body, article {
   font-size: 7vh;
 }
 
+.my-text-footer-small {
+  font-size: 6.5vh;
+}
+
 .text-single-page-shabat {
   font-size: 6vh;
 }

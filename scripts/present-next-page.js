@@ -560,8 +560,8 @@ function round_to_five(some_date, round_down=false, reverse_round_offset=1){
     var hour_and_minutes = some_date.split(':');
     var minutes = parseInt(hour_and_minutes[1]);
     var modulu_five = minutes % 5;
-    var prefer_floor = true;
-    if (modulu_five == 4){
+    var prefer_floor = round_down;
+    if (modulu_five == 4 && !prefer_floor){
         prefer_floor = false;
     }
     var rounded = roundToNearest(minutes, 5, prefer_floor=prefer_floor);
@@ -795,6 +795,9 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
 
 async function show_messages(messages, delay_between_message_seconds){
     for(const message of messages){
+        if(message.length > 50){
+            add_class_to_element_style('footer-custom-message', 'my-text-footer-small');
+        };
         set_element_html('footer-custom-message', message)
         await new Promise(resolve => setTimeout(resolve, delay_between_message_seconds*1000));
     }
@@ -1583,7 +1586,7 @@ function show_minyan_plag(current_date) {
     var plag = get_today_plag(day);
     var kabalat_shabat_early_mincha = get_today_kabalat_shabat_early_mincha(day);
     if(!kabalat_shabat_early_mincha){
-        var rounded = round_to_five(plag);
+        var rounded = round_to_five(plag, true);
         var kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
     }
 
