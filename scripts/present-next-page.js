@@ -260,7 +260,7 @@ function is_pesach_7(date){
 }
 
 function is_shavout(date){
-    return is_between_dates(date, "2024-06-11T19:00", "2024-06-12T20:40:00");
+    return is_between_dates(date, "2025-06-01T19:00", "2025-06-02T20:40:00");
 }
 
 function is_hanuka(date){
@@ -385,7 +385,7 @@ function get_specific_single_page(current_date){
         item = 'chag_eve';
     } else if (is_sukot(current_date_obj)){
         item = 'chag_single_page';
-    } else if (is_between_dates(current_date_obj, "2024-06-11T01:00", "2024-06-11T19:00")){
+    } else if (is_between_dates(current_date_obj, "2025-06-01T01:00", "2025-06-01T19:00")){
         item = 'shavuot_eve';
     } else if(is_gedalia(current_date_obj)){
         item = 'gedalia'
@@ -1496,7 +1496,7 @@ async function present_simchat_tora_times(current_date){
 }
 
 async function present_shavuot_eve_page(current_date){
-    var shabat_in = "19:24";
+    var shabat_in = "19:19";
     
     load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
         var elements = document.getElementsByClassName('friday-shacharit');
@@ -1506,6 +1506,7 @@ async function present_shavuot_eve_page(current_date){
     });
     await show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
     set_element_html("kabalat-shabat-name", "ערבית של חג");
+    set_element_html("kabalat_shabat", "20:06");
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
