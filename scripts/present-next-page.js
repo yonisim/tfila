@@ -90,6 +90,7 @@ function present_first_page(){
         clockFunc();
         watch_files();
     });
+    present_last_commit();
     loop_pages();
 }
 
@@ -2067,6 +2068,12 @@ function getLastCommitHash() {
 // Event listener for keydown
 document.addEventListener('keydown', function(event) {
     if (event.key === "ArrowUp") {
+        present_last_commit();
+    }
+});
+
+function present_last_commit(){
+
         const commitHash = getLastCommitHash();
         let commitHashElement = document.getElementById('commit-hash-display');
 
@@ -2092,5 +2099,4 @@ document.addEventListener('keydown', function(event) {
                 commitHashElement.style.display = 'none';
             }
         }, 5000);
-    }
-});
+}
