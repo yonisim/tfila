@@ -13,7 +13,7 @@ const chokidar = require('chokidar');
 const { execSync } = require('child_process');
 
 async function watch_files(){
-    var cwd = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+    var cwd = process.cwd()
     console.log('cwd: ' + cwd);
     chokidar.watch([data_dir, cwd], {ignored: /\.venv|node_modules|\.git|\.vscode/}).on('all', (event, path) => {
         console.log(event, path);
