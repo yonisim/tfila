@@ -10,6 +10,8 @@ import {load_file} from "./scroll.js";
 import { clockFunc } from "./clock-time.js";
 
 const chokidar = require('chokidar');
+const { execSync } = require('child_process');
+
 async function watch_files(){
     var cwd = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
     console.log('cwd: ' + cwd);
@@ -2048,3 +2050,46 @@ function animationsTest (callback) {
         }
     }, 25);
 };
+
+function getLastCommitHash() {
+    try {
+        // Executes the git command and returns the output as a string [[2]](https://medium.com/@masnun/node-js-getting-current-git-commit-information-on-an-app-753a1835c57c)
+        var res = execSync('git log -1 --pretty=%B\n');
+        var hash = res.toString().trim();
+        return hash;
+    } catch (error) {
+        console.error("Error getting last commit hash:", error);
+        return "N/A";
+    }
+}
+
+// Event listener for keydown
+document.addEventListener('keydown', function(event) {
+    if (event.key === "ArrowUp") {
+        const commitHash = getLastCommitHash();
+        let commitHashElement = document.getElementById('commit-hash-display');
+
+        if (!commitHashElement) {
+            commitHashElement = document.createElement('div');
+            commitHashElement.id = 'commit-hash-display';
+            commitHashElement.style.position = 'fixed';
+            commitHashElement.style.top = '10px';
+            commitHashElement.style.left = '10px';
+            commitHashElement.style.padding = '10px';
+            commitHashElement.style.backgroundColor = 'lightgray';
+            commitHashElement.style.border = '1px solid black';
+            commitHashElement.style.zIndex = '10000'; // Ensure it's on top
+            document.body.appendChild(commitHashElement);
+        }
+
+        commitHashElement.textContent = `Last Commit: ${commitHash}`;
+        commitHashElement.style.display = 'block';
+
+        // Hide the element after 5 seconds
+        setTimeout(() => {
+            if (commitHashElement) {
+                commitHashElement.style.display = 'none';
+            }
+        }, 5000);
+    }
+});
