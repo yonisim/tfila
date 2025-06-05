@@ -843,7 +843,7 @@ async function present_prayer_times_single_page(current_date){
 
     load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
         set_element_html('mincha-regulr-days', mincha_time);
-        set_element_html('arvit-regulr-days', arvit_time);
+        set_element_html('arvit-regulr-days', '21:05');
         set_arvit_times(current_date, arvit_time);
     });
 
