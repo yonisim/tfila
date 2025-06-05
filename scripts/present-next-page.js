@@ -1895,6 +1895,7 @@ async function loop_pages(){
                 await item_func(current_date_obj);
             } catch (ex){
                 console.log("An error occured while activating page " + single_page_item);
+                console.log('test');
                 console.error(ex.stack);
                 await sleep_seconds(30);
             }
