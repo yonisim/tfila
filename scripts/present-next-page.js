@@ -1236,13 +1236,16 @@ async function present_shabat_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
-    var mincha_ktana = '18:00';
+    var shacharit_main = '08:30';
+    var mincha_ktana = '18:30';
 
     await show_shabat_eve_times(current_date, shabat_in, 'first_column');
     
     load_html_into_page_elem_end('shabat_first_column.html', 'first_column', () => {
         show_siftei_renanot(current_date);
         show_parents_and_children(current_date);
+        set_element_data('shacharit_main', shacharit_main);
+        set_element_data('kidush', add_minutes_to_time(shacharit_main, 120));
     });
 
     load_html_into_page_elem_start('shabat_3.html', 'second_column', () => {
