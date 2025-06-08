@@ -38,8 +38,8 @@ def round_stars_to_closest_five(some_time):
 
 def generate_mincha_maariv_times(input_file_path, output_file_path):
     mincha_maariv_result = dict()
-    with open(input_file_path, 'r') as f:
-        times = json.loads(*f.readlines())
+    with open(input_file_path, 'r', encoding="utf-8") as f:
+        times = json.loads(f.read())
         #print(times)
         for k,v in times.items():
             as_date = datetime.fromisoformat(k)
@@ -59,4 +59,4 @@ def generate_mincha_maariv_times(input_file_path, output_file_path):
     with open(output_file_path, 'w+') as f:
         f.write(json.dumps(mincha_maariv_result, indent=4))
 
-generate_mincha_maariv_times('../tfila-data/data/parsed_dates_2023_2025.json', '../tfila-data/data/mincha_maariv_2023_2025.json')
+generate_mincha_maariv_times('../tfila-data/data/parsed_dates_tashpah.json', '../tfila-data/data/mincha_maariv_tashpah.json')

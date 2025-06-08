@@ -5,7 +5,7 @@ import os
 import pandas as pd
 
 mapper = {
-    'hebrew_date': 'תאריך מלא',
+    'hebrew_date': 'יום בחודש',
     'dawn': 'עלות השחר',
     'tfilin': 'זמן טלית ותפילין',
     'sunrise': 'הנץ החמה',
@@ -38,7 +38,41 @@ def xls_to_json(xls_file_path, output_file_path):
         f.write(json_for_print)
 
 
-xls_to_json("C:/Users/Yonatan.Simkins/Downloads/calander_times_2023_2025.xlsx", "../tfila-data/data/parsed_dates_2023_2025.json")
+def csv_to_json(csv_file_path, month_name):
+    sheet: pd.DataFrame = pd.read_csv(csv_file_path)
+    records_as_json = json.loads(sheet.to_json(orient='records'))
+    formatted_json = {}
+    for json_record in records_as_json:
+        formatted_record = {}
+        for k, v in mapper.items():
+            formatted_record[k] = json_record.get(v)
+        formatted_record['hebrew_date'] = ' '.join([formatted_record['hebrew_date'], month_name])
+        greg_timestamp_val = json_record.get('תאריך לועזי')
+        print(greg_timestamp_val)
+        greg_date_str = datetime.strptime(greg_timestamp_val, '%d/%m/%Y').strftime('%Y-%m-%d')
+        formatted_json[greg_date_str] = formatted_record
+    return formatted_json
+
+
+def dump_to_file(formatted_json, output_file_path):
+    json_for_print = json.dumps(formatted_json, ensure_ascii=False, indent=4, sort_keys=True
+) # Added indent and ensure_ascii for readability
+    print(json_for_print)
+    # The following print might be redundant if you just printed json_for_print
+    # print(json.loads(json_for_print))
+    print(os.getcwd())
+    # It's good practice to specify encoding when working with files, especially with non-ASCII characters
+    with open(output_file_path, 'w+', encoding='utf-8') as f:
+        f.write(json_for_print)
+
+parent_dir = "C:\\Users\\Yonatan Simkins\\Downloads\\day_times"
+all_dates = {}
+for filename in os.listdir(parent_dir):
+    month_name = os.path.splitext(filename)[0]
+    print(month_name)
+    month_json = csv_to_json(os.path.join(parent_dir, filename), month_name)
+    all_dates.update(month_json)
+dump_to_file(all_dates, "../tfila-data/data/parsed_dates_tashpah.json",)
 
 def sort_shagririm():
     print(os.getcwd())

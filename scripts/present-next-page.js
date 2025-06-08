@@ -40,10 +40,10 @@ var images_dir = `${base_data_folder}/images`;
 console.log(data_dir);
 
 async function read_initial_data(){
-    return read_json(`${data_dir}/parsed_dates_2023_2025.json`).then(times => {
+    return read_json(`${data_dir}/parsed_dates_tashpah.json`).then(times => {
         day_times = times;
     }).then(() => {
-        return read_json(`${data_dir}/mincha_maariv_2023_2025.json`).then(prayer_times => {
+        return read_json(`${data_dir}/mincha_maariv_tashpah.json`).then(prayer_times => {
             week_times = prayer_times;
         });
     }).then(() => {
