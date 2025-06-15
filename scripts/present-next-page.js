@@ -165,7 +165,8 @@ function is_war(date){
 }
 
 function is_big_vacation(date){
-    return is_between_dates(date, '2024-06-20', '2024-08-31');
+    var month = date.getMonth();
+    return month === 6 || month === 7;
 }
 
 function is_sukot_vacation(date){
