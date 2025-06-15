@@ -1,6 +1,6 @@
 #header {
     height: 10vh;
-    background-color: rgba(62, 115, 228, 0.724);
+    background-color: #3674B5;
   }
 
 #header-content {
@@ -17,7 +17,7 @@
 }
 
 .clock-text {
-    color: black;
+    color: #0B1D51;
     font-size: 10vh;
     font-weight: bold;
     text-align: center;
