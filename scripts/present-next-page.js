@@ -161,7 +161,7 @@ function is_in_weekdays(date, weekdays){
 }
 
 function is_war(date){
-    return is_between_dates(date, '2023-10-07', '2023-12-15');
+    return is_between_dates(date, '2025-06-12', '2025-06-30');
 }
 
 function is_big_vacation(date){
@@ -174,10 +174,6 @@ function is_sukot_vacation(date){
 }
 
 function is_shacharit_8_30(date){
-    if(is_between_dates(date, '2024-04-14', '2024-04-30') | is_between_dates(
-        date, '2023-09-24', '2023-10-08')){
-        return true;
-    }
     if(is_war(date) | is_big_vacation(date) | is_sukot_vacation(date) | is_hanuka(date) | is_pesach_vacation(date)){
         return true;
     }
@@ -185,7 +181,7 @@ function is_shacharit_8_30(date){
 }
 
 function is_mincha_13_30(date){
-    return is_big_vacation(date) || is_pesach_vacation(date);
+    return is_big_vacation(date) || is_pesach_vacation(date) || is_war(date);
 }
 
 function is_weekend(date){
