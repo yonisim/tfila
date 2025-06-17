@@ -1716,7 +1716,7 @@ async function present_messages(date){
 }
 
 function set_main_area_background(date){
-    var background = 'mishkan-tkiya.JPG';
+    var background = 'beit_midrash_new_2.JPG';
     if (date.getDay() == 6){
         //background = 'shabat_2';
     }
