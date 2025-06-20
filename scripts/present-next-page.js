@@ -719,7 +719,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     }
 
     if(is_between_dates(current_date, '2025-06-21T05:30', '2025-06-21T10:10')){
-        messages.push('ר"ח תמוז יהיה ביום חמישיולמחרתו ביום שישי הבעל"ט');
+        messages.push('ר"ח תמוז יהיה ביום חמישי ולמחרתו ביום שישי הבעל"ט');
         show_footer = true;
     }
 
