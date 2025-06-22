@@ -600,6 +600,13 @@ function show_parents_and_children(date){
     }
 }
 
+function show_shacharit_7_30(){
+    var elements = document.getElementsByClassName('shacharit-730');
+    for (var element of elements){
+        element.classList.add('show-element');
+    }
+}
+
 function show_shacharit_8_30(){
     var elements = document.getElementsByClassName('friday-shacharit');
     for (var element of elements){
@@ -828,6 +835,11 @@ async function present_prayer_times_single_page(current_date){
         add_class_to_element_style('prayer_times', 'table-line-height-less')
     }
     load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
+        if(is_war(current_date)){
+            show_shacharit_7_30();
+            set_element_data("shacharit-730-name", "שחרית ג");
+            set_element_data("shacharit-830-name", "שחרית ד");
+        }
         if(is_shacharit_8_30(current_date)){
             show_shacharit_8_30();
         }
