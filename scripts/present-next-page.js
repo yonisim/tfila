@@ -847,7 +847,15 @@ async function present_prayer_times_single_page(current_date){
     });
 
     if(is_mincha_13_30(current_date)){
-        var mincha_13_30 = create_table_row_html('13:15', 'מנחה גדולה');
+        var mincha_gedola_time_min = get_today_mincha_gedola(current_date);
+        var mincha_date = new Date(current_date);
+        mincha_date.setHours(mincha_gedola_time_min.split(":")[0]);
+        mincha_date.setMinutes(mincha_gedola_time_min.split(":")[1]);
+        var mincha_gedola_time = '13:15';
+        if (is_after_time(mincha_date, '13:17')){
+            mincha_gedola_time = '13:20';
+        }
+        var mincha_13_30 = create_table_row_html(mincha_gedola_time, 'מנחה גדולה');
         insert_html_at_start_of_element('prayer_times', mincha_13_30);
     }
 
