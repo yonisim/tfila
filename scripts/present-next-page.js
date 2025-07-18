@@ -109,13 +109,13 @@ function present_next_main_div(item){
     insert_html('./html/'+ item + '.html', "main-div");
 }
 
-function sleep(ms) {
+function sleep(ms, abort_key='ArrowRight') {
     let timeoutId;
     return new Promise((resolve) => {
         timeoutId = setTimeout(resolve, ms);
         
         function handleKeyDown(event) {
-            if (event.key === "ArrowRight") {
+            if (event.key === abort_key) {
                 clearTimeout(timeoutId);
                 resolve(); // Resolve immediately when arrow right is pressed
                 document.removeEventListener("keydown", handleKeyDown);
@@ -710,8 +710,8 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2025-03-21T16:30', '2025-03-22T18:00')){
-        messages.push('מזל טוב למשפחת טראו לרגל אירוסי נאור');
+    if(is_between_dates(current_date, '2025-07-18T16:30', '2025-07-19T20:00')){
+        messages.push('מזל טוב למשפחת הופמן לרגל אירוסי יצחק');
         show_footer = true;
     }
 
@@ -730,8 +730,8 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2025-06-21T05:30', '2025-06-21T10:10')){
-        messages.push('ר"ח תמוז יהיה ביום חמישי ולמחרתו ביום שישי הבעל"ט');
+    if(is_between_dates(current_date, '2025-07-19T05:30', '2025-07-19T10:10')){
+        messages.push('ר"ח מנחם אב יהיה ביום שבת הבעל"ט');
         show_footer = true;
     }
 
@@ -765,6 +765,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
 
     if(is_between_dates(current_date, '2025-04-10T19:00', '2025-04-10T22:00')){
         messages.push('בדיקת חמץ');
+        show_footer = true;
+    }
+
+    if(is_between_dates(current_date, '2025-07-18T16:00', '2025-07-19T21:00')){
+        messages.push('הציבור מוזמן לסיום ש"ס וסיום ספר משלי במוצ"ש בשעה 21:30');
         show_footer = true;
     }
     
@@ -809,9 +814,12 @@ async function show_messages(messages, delay_between_message_seconds){
     for(const message of messages){
         if(message.length > 50){
             add_class_to_element_style('footer-custom-message', 'my-text-footer-small');
+        }
+        else if(message.length > 54){
+            add_class_to_element_style('footer-custom-message', 'text-single-page-shaba');
         };
         set_element_html('footer-custom-message', message)
-        await new Promise(resolve => setTimeout(resolve, delay_between_message_seconds*1000));
+        await sleep(delay_between_message_seconds*1000, "ArrowLeft");
     }
 }
 
