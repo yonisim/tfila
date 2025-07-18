@@ -548,6 +548,11 @@ function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
     return prayer_times;
 }
 
+function roundToNearest5(numToRound, numToRoundTo) {
+  const rem = numToRound % numToRoundTo;
+  return rem < 3 ? numToRound - rem : numToRound + (5 - rem);
+}
+
 function roundToNearest(numToRound, numToRoundTo, prefer_floor=true) {
     var round_func = Math.round;
     if(prefer_floor){
@@ -564,7 +569,7 @@ function round_to_five(some_date, round_down=false, reverse_round_offset=1){
     if (modulu_five == 4 && !prefer_floor){
         prefer_floor = false;
     }
-    var rounded = roundToNearest(minutes, 5, prefer_floor=prefer_floor);
+    var rounded = roundToNearest5(minutes, 5);
     if(rounded < 10){
         rounded = '0' + rounded;
     }
