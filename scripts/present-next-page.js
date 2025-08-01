@@ -350,6 +350,14 @@ function is_tisha_beav(date){
     return is_between_dates(date, "2024-08-11T22:00", "2024-08-13T20:30");
 }
 
+function is_shabat_chazon(date){
+    return is_between_dates(date, "2025-08-01T19:00", "2025-08-02T20:00");
+}
+
+function is_tisha_beav_shabat(date){
+    return is_between_dates(date, "2025-08-02T20:00", "2025-08-03T20:30");
+}
+
 function is_shabat_irgun(date){
     return is_between_dates(date, "2024-12-06T12:00", "2024-12-07T20:30");
 }
@@ -626,6 +634,13 @@ function hide_element(elem_class){
     }
 }
 
+function add_class_to_elements_by_class_name(class_identifier, class_name_to_add){
+    var elements = document.getElementsByClassName(class_identifier);
+    for (var element of elements){
+        element.classList.add(class_name_to_add);
+    }
+}
+
 function show_mincha_gedola(){
     var elements = document.getElementsByClassName('mincha-gedola');
     for (var element of elements){
@@ -789,6 +804,10 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     if(is_rosh_chodesh(current_date)){
         messages.push('יעלה ויבוא');
         show_footer = true
+    }
+
+    if(is_shabat_chazon(current_date) && is_after_time(current_date, '17:00')){
+        messages.push('כניסת הצום בשעה 19:35');
     }
 
     var omer_numeric = get_omer_numeric(current_date);
@@ -1263,6 +1282,15 @@ async function present_gedalia_times(current_date){
     return sleep_seconds(wait_seconds*10);
 }
 
+function shabat_chazon_adaptions(){
+    add_class_to_elements_by_class_name('tehilim','strikethrough');
+    add_class_to_elements_by_class_name('shiur-pirkei-avot','strikethrough');
+    hide_element('arvit-shabat');
+    hide_element('arvit-shabat-2');
+    insert_html_at_end_of_element('second_column', create_table_row_html('20:16', 'צאת השבת'));
+    insert_html_at_end_of_element('second_column', create_table_row_html('20:30', 'ערבית ומגילת איכה'));
+}
+
 async function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
     var this_shabat_times = get_shabat_times(current_date);
@@ -1289,6 +1317,10 @@ async function present_shabat_prayer_times(current_date){
 
         set_element_html('arvit-shabat', arvit_shabat);
         set_element_html('arvit-shabat-2', add_minutes_to_time(arvit_shabat, 15));
+
+        if (is_shabat_chazon(current_date)){
+            shabat_chazon_adaptions();
+        }
     });
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
@@ -1301,7 +1333,6 @@ async function present_shabat_prayer_times(current_date){
     set_element_html('mincha-regulr-days', mincha_time);
     set_element_html('arvit-regulr-days', arvit_time);
 
-    show_sfirat_haomer_if_needed(current_date, 'shabat_single_page', false);
     show_footer_custom_message_if_needed(current_date, 'shabat_single_page', wait_seconds*10);
     return sleep_seconds(wait_seconds*10);
 }
