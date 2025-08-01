@@ -347,7 +347,7 @@ function is_tisha_beav_eve(date){
 }
 
 function is_tisha_beav(date){
-    return is_between_dates(date, "2024-08-11T22:00", "2024-08-13T20:30");
+    return is_between_dates(date, "2025-08-02T20:00", "2025-08-03T20:30");
 }
 
 function is_shabat_chazon(date){
@@ -375,6 +375,8 @@ function get_specific_single_page(current_date){
         item = 'pesach_single_page'
     } else if(is_pesach_7(current_date_obj)){
         item = 'pesach_7'
+    } else if(is_tisha_beav(current_date_obj)){
+        item = 'tisha_beav'
     } else if(is_shavout(current_date_obj)){
         item = 'shavuot_single_page'
     } else if(is_rosh_hashana_eve(current_date_obj)){
@@ -810,6 +812,10 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         messages.push('כניסת הצום בשעה 19:35');
     }
 
+    if(is_tisha_beav(current_date)){
+        messages.push("כי ניחם ה' ציון ניחם כל חרבותיה וישם מדברה כעדן וערבתה כגן ה'");
+    }
+
     var omer_numeric = get_omer_numeric(current_date);
     if(omer_numeric >= 0 && omer_numeric <= 49){
         var laomer = 'לעומר';
@@ -926,6 +932,22 @@ async function present_purim_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
+    return sleep_seconds(wait_seconds*5);
+}
+
+async function present_tisha_beav_times(current_date){
+    insert_html_at_end_of_element('taanit_times', create_table_row_html('19:35', 'כניסת הצום'));
+    insert_html_at_end_of_element('taanit_times', create_table_row_html('20:30', 'ערבית ומגילת איכה'));
+    insert_html_at_end_of_element('taanit_times', create_table_row_html('06:50', 'שחרית א'));
+    insert_html_at_end_of_element('taanit_times', create_table_row_html('08:30', 'שחרית ב'));
+    insert_html_at_end_of_element('taanit_times', create_table_row_html('13:20', 'מנחה גדולה'));
+    insert_html_at_end_of_element('taanit_times', create_table_row_html('19:00', 'מנחה קטנה'));
+    insert_html_at_end_of_element('taanit_times', create_table_row_html('20:02', 'ערבית וצאת הצום'));
+
+    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+        present_day_times(current_date, true);
+    });
+    show_footer_custom_message_if_needed(current_date, "tisha_beav")
     return sleep_seconds(wait_seconds*5);
 }
 
@@ -1939,6 +1961,7 @@ let item_funcs = {
     'shavuot_eve': present_shavuot_eve_page,
     'shavuot_single_page': present_shavuot_prayer_times,
     'taanit': present_taanit_times,
+    'tisha_beav': present_tisha_beav_times,
     'day_times': present_day_times_page
 };
 
