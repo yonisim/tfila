@@ -732,8 +732,8 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2025-03-21T16:30', '2025-03-22T18:00')){
-        messages.push('מזל טוב למשפחת עופר לרגל בר המצווה של יהודה');
+    if(is_between_dates(current_date, '2025-08-15T16:30', '2025-08-16T18:00')){
+        messages.push('מזל טוב למשפחת אפרתי לרגל בר המצווה של שחר יאיר');
         show_footer = true;
     }
 
