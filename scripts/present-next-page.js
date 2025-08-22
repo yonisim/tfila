@@ -2165,10 +2165,10 @@ function animationsTest (callback) {
     }, 25);
 };
 
-function getLastCommitHash() {
+function getLastCommitMessage(dir = ".") {
     try {
         // Executes the git command and returns the output as a string [[2]](https://medium.com/@masnun/node-js-getting-current-git-commit-information-on-an-app-753a1835c57c)
-        var res = execSync('git log -1 --pretty=%B\n');
+        var res = execSync(`git -C ${dir} log -1 --pretty=%B\n`);
         var hash = res.toString().trim();
         return hash;
     } catch (error) {
@@ -2186,7 +2186,8 @@ document.addEventListener('keydown', function(event) {
 
 function present_last_commit(){
 
-        const commitHash = getLastCommitHash();
+        const commit_message = getLastCommitMessage();
+        const data_dir_commit_message = getLastCommitMessage(data_dir);
         let commitHashElement = document.getElementById('commit-hash-display');
 
         if (!commitHashElement) {
@@ -2202,7 +2203,7 @@ function present_last_commit(){
             document.body.appendChild(commitHashElement);
         }
 
-        commitHashElement.textContent = `Last Commit: ${commitHash}`;
+        commitHashElement.textContent = `Last Commit: ${commit_message},   ${data_dir_commit_message}`;
         commitHashElement.style.display = 'block';
 
         // Hide the element after 5 seconds
