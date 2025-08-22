@@ -723,6 +723,13 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         }
     }
 
+    if(is_shabat_time(current_date)){
+        var shabat_times = get_shabat_times(current_date);
+        if(shabat_times.messages){
+            messages.push(...shabat_times.messages);
+        }
+    }
+
     if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
         messages.push('במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30');
         show_footer = true;
