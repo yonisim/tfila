@@ -688,6 +688,18 @@ function set_sfirat_haomer_regular_days(date, two_lines){
     
 }
 
+function format_rosh_hodesh_message(hodesh_name, days) {
+      // days can be a string (one day) or an array of two days
+    let message = `ראש חודש ${hodesh_name} יהיה ביום `;
+    if (Array.isArray(days) && days.length === 2) {
+        message += `${days[0]} ולמחרתו ביום ${days[1]}`;
+    } else {
+        message += days;
+    }
+    message += ' הבעל"ט';
+    return message;
+}
+
 async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_lines){
     return;
     var omer_numeric = get_omer_numeric(current_date);
@@ -702,6 +714,15 @@ async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_line
 async function show_footer_custom_message_if_needed(current_date, into_elem_id, caller_slee_seconds=60){
     var messages = [];
     var show_footer = false;
+
+    if(is_shabat_time(current_date) && is_after_time(current_date, '05:00') && is_before_time(current_date, '10:30')    ){
+        var shabat_times = get_shabat_times(current_date);
+        if(shabat_times.mevarchim){
+            let mevarchim_message = format_rosh_hodesh_message(shabat_times.mevarchim.hodesh_name, shabat_times.mevarchim.days);
+            messages.push(mevarchim_message);
+        }
+    }
+
     if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
         messages.push('במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30');
         show_footer = true;
