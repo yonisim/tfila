@@ -275,7 +275,7 @@ function is_elul(date){
 }
 
 function is_slihot_days(date){
-    return is_between_dates(date, "2024-09-01T00:00", "2024-09-30T23:00");
+    return is_between_dates(date, "2025-08-26T00:00", "2025-09-30T23:00");
 }
 
 function is_minyan_plag_active(date){
