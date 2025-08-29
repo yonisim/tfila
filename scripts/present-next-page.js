@@ -943,7 +943,7 @@ function set_arvit_times(current_date, arvit_time){
     var arvit_date = new Date(current_date);
     arvit_date.setHours(arvit_time.split(":")[0]);
     arvit_date.setMinutes(arvit_time.split(":")[1]);
-    if(is_after_time(arvit_date, "19:35")){
+    if(is_after_time(arvit_date, "19:29")){
         hide_element("arvit-8");
         set_element_data("arvit-9", "ערבית ב")
     }
