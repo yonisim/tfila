@@ -1178,6 +1178,17 @@ async function load_html_into_page_elem_end(html_file_name, parent_element, call
     });
 }
 
+async function insert_html_before_element(target_element_id, html_data) {
+    const targetElement = document.getElementById(target_element_id);
+    targetElement.insertAdjacentHTML('beforebegin', html_data);
+}
+
+async function insert_html_after_element(target_element_id, html_data) {
+    const targetElement = document.getElementById(target_element_id);
+    targetElement.insertAdjacentHTML('afterend', html_data);
+}
+
+
 function get_pesach_times(){
     return ["19:44", "19:45"];
 }
@@ -1351,7 +1362,7 @@ async function present_shabat_prayer_times(current_date){
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
     var shacharit_main = '08:30';
-    var mincha_ktana = '18:00';
+    var mincha_ktana = '17:30';
 
     await show_shabat_eve_times(current_date, shabat_in, 'first_column');
 
@@ -1363,10 +1374,16 @@ async function present_shabat_prayer_times(current_date){
     });
 
     load_html_into_page_elem_start('shabat_3.html', 'second_column', () => {
-        set_element_html('lesson-halacha', add_minutes_to_time(mincha_ktana, -60));
+        var shiur_halacha_mincha_margin = -60;
+        if(is_between_dates(current_date, '2025-09-26T17:00', '2025-09-27T20:00')){
+            insert_html_before_element('mincha-ktana', create_table_row_html('16:45', 'דרשת שבת שובה'))
+            shiur_halacha_mincha_margin = -90;
+        }
+        set_element_html('lesson-halacha', add_minutes_to_time(mincha_ktana, shiur_halacha_mincha_margin));
         set_element_html('mincha-ktana', mincha_ktana);
         set_element_html('tehilim', add_minutes_to_time(mincha_ktana, 20));
         set_element_html('shiur-pirkei-avot', add_minutes_to_time(mincha_ktana, 20));
+        hide_element('shiur-pirkei-avot')
 
         set_element_html('arvit-shabat', arvit_shabat);
         set_element_html('arvit-shabat-2', add_minutes_to_time(arvit_shabat, 15));
