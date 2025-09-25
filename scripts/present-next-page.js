@@ -283,7 +283,7 @@ function is_minyan_plag_active(date){
 }
 
 function is_show_rosh_hashana_eve(date){
-    return is_between_dates(date, "2025-09-21", "2025-09-21T00:00");
+    return is_between_dates(date, "2025-09-21T00:01", "2025-09-21T23:00");
 }
 
 function is_rosh_hashana_eve(date){
