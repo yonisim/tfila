@@ -1324,18 +1324,10 @@ async function present_rosh_hashana_b_shabat_shuva_eve_prayer_times(current_date
 async function present_gedalia_times(current_date){
     var this_week_times = get_week_times(current_date);
 
-    var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
-    var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
-    load_html_into_page_elem_start('shacharit.html', 'prayer_times');
-
-    var gedalia_date = new Date('2023-09-18');
-    var mincha_gedalia = add_minutes_to_time(get_today_sunset(gedalia_date), -30);
-    var arvit_gedalia = get_today_stars(gedalia_date);
-
-    load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
-        set_element_html('mincha-regulr-days', format_hour_and_minutes(mincha_gedalia));
-        set_element_html('arvit-regulr-days', format_hour_and_minutes(arvit_gedalia));
-    });
+    var mincha_gedalia = '18:00'; //add_minutes_to_time(get_today_sunset(gedalia_date), -30);
+    var arvit_gedalia = '18:52'; //get_today_stars(gedalia_date);
+    set_element_html('mincha_gedalia', format_hour_and_minutes(mincha_gedalia));
+    set_element_html('arvit_gedalia', format_hour_and_minutes(arvit_gedalia));
 
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
