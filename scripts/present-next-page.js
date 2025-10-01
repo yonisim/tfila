@@ -170,7 +170,7 @@ function is_big_vacation(date){
 }
 
 function is_sukot_vacation(date){
-    return is_between_dates(date, '2024-10-12', '2024-10-27');
+    return is_between_dates(date, '2025-10-04', '2025-10-15');
 }
 
 function is_shacharit_8_30(date){
@@ -1458,18 +1458,23 @@ async function present_kipur_times(current_date){
         });
     });
 
-    var this_week_times = get_week_times(current_date);
-    var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
-    var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    if(is_in_weekdays(current_date, [4,5])){
+        load_html_into_page_elem_start('friday_times_embedded_with_title.html', 'second_column', () => {
+           populate_friday_prayer_times(current_date);
+        });
+    } else {
+        var this_week_times = get_week_times(current_date);
+        var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+        var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
 
-    load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
-        show_shacharit_8_30();
-    });
-
-    load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
-        set_element_html('mincha-regulr-days', mincha_time);
-        set_element_html('arvit-regulr-days', arvit_time);
-    });
+        load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
+            show_shacharit_8_30();
+        });
+        load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
+            set_element_html('mincha-regulr-days', mincha_time);
+            set_element_html('arvit-regulr-days', arvit_time);
+        });
+    }
 
     return sleep_seconds(60*3);
 }
@@ -1697,6 +1702,7 @@ async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
     if (is_10_tevet_friday(current_date)) {
         friday_times_html = 'friday_times_10_tevet.html';
     }
+    insert_html_at_end_of_element(parent_element, create_table_row_html('13:15', 'מנחה גדולה'))
     return load_html_into_page_elem_end(friday_times_html, parent_element, () => {
         set_element_html('hadlakat-nerot', shabat_in);
         if(is_purim(current_date)){
