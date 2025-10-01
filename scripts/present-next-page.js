@@ -303,7 +303,7 @@ function is_gedalia(date){
 }
 
 function is_show_kipur_eve(date){
-    return is_between_dates(date, "2025-09-30T02:00", "2025-09-30T22:00");
+    return is_between_dates(date, "2025-09-30T02:00", "2025-10-01T10:00");
 }
 
 function is_kipur_eve(date){
