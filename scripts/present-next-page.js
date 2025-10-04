@@ -315,11 +315,11 @@ function is_kipur(date){
 }
 
 function is_sukot_eve(date){
-    return is_between_dates(date, "2024-10-15T19:00", "2024-10-16T14:00");
+    return is_between_dates(date, "2025-10-05T19:00", "2025-10-06T14:00");
 }
 
 function is_sukot(date){
-    return is_between_dates(date, "2024-10-16T14:01", "2024-10-17T19:00");
+    return is_between_dates(date, "2025-10-06T14:01", "2025-10-07T19:00");
 }
 
 function is_present_simchat_tora_eve(date){
@@ -561,7 +561,7 @@ function get_shabat_times(current_date){
 }
 
 function get_chag_times(current_date){
-    return {'in': '17:43', 'out': '18:41'};
+    return {'in': '17:56', 'out': '18:53'};
 }
 
 function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
@@ -1535,16 +1535,18 @@ async function present_chag_times(current_date){
     var mincha_ktana = '17:30';
     document.getElementById("prayer-times-title-parasha").innerText = chag_name;
 
-    show_chag_eve_times(current_date, chag_in, 'first_column');
+    await show_chag_eve_times(current_date, chag_in, 'first_column');
+    insert_blank_table_row('first_column', 2);
 
-    load_html_into_page_elem_end('chag_first_column.html', 'first_column');
+    await load_html_into_page_elem_end('chag_first_column.html', 'first_column');
 
-    load_html_into_page_elem_start('chag_afternoon.html', 'second_column', () => {
+    await load_html_into_page_elem_start('chag_afternoon.html', 'second_column', () => {
         set_element_html('mincha-ktana', mincha_ktana);
         set_element_html('arvit-shabat', chag_out);
+        set_element_html('arvit-shabat-2', add_minutes_to_time(chag_out, 15));
     });
 
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+    await load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
     });
 
