@@ -40,10 +40,10 @@ var images_dir = `${base_data_folder}/images`;
 console.log(data_dir);
 
 async function read_initial_data(){
-    return read_json(`${data_dir}/parsed_dates_tashpah.json`).then(times => {
+    return read_json(`${data_dir}/parsed_dates_tashpav.json`).then(times => {
         day_times = times;
     }).then(() => {
-        return read_json(`${data_dir}/mincha_maariv_tashpah.json`).then(prayer_times => {
+        return read_json(`${data_dir}/mincha_maariv_tashpav.json`).then(prayer_times => {
             week_times = prayer_times;
         });
     }).then(() => {
@@ -319,23 +319,23 @@ function is_sukot_eve(date){
 }
 
 function is_sukot(date){
-    return is_between_dates(date, "2025-10-06T14:01", "2025-10-07T19:00");
+    return is_between_dates(date, "2025-10-06T14:01", "2025-10-07T19:20");
 }
 
 function is_present_simchat_tora_eve(date){
-    return is_between_dates(date, "2024-10-22T17:00", "2024-10-22T23:59");
+    return is_between_dates(date, "2025-10-12T10:00", "2025-10-12T23:59");
 }
 
 function is_simchat_tora_eve(date){
-    return is_between_dates(date, "2024-10-23T00:01", "2024-10-23T23:59");
+    return is_between_dates(date, "2025-10-13T00:01", "2025-10-13T23:59");
 }
 
 function is_simchat_tora(date){
-    return is_between_dates(date, "2024-10-24T00:01", "2024-10-24T19:00");
+    return is_between_dates(date, "2025-10-14T00:01", "2025-10-14T19:00");
 }
 
 function is_present_hakafot_single_page(date){
-    return is_between_dates(date, "2024-10-24T00:01", "2024-10-24T13:15");
+    return is_between_dates(date, "2025-10-14T00:01", "2025-10-14T13:15");
 }
 
 function is_10_tevet_friday(date){
@@ -1355,6 +1355,24 @@ function shabat_chazon_adaptions(){
     insert_html_at_end_of_element('second_column', create_table_row_html('20:30', 'ערבית ומגילת איכה'));
 }
 
+async function embed_day_times(current_date, parent_elem_id, plus_days=0) {
+    load_html_into_page_elem_end('day_times_embedded_with_title.html', parent_elem_id, () => {
+        load_html_into_page_elem_start('day_times_inner.html', 'day_times_inner', () => {
+            present_day_times(get_date_plus_days(current_date, plus_days));
+        });
+    });
+}
+
+async function embed_next_week_prayer_times(current_date, parent_elem_id, plus_days=0) {
+    load_html_into_page_elem_end('next_week_prayer_times_embedded_with_title.html', parent_elem_id, () => {
+        var this_week_times = get_next_week_times(current_date);
+        var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+        var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+        set_element_html('mincha-regulr-days', mincha_time);
+        set_element_html('arvit-regulr-days', arvit_time);
+    });
+}
+
 async function present_shabat_prayer_times(current_date){
     var this_week_times = get_week_times(current_date);
     var this_shabat_times = get_shabat_times(current_date);
@@ -1546,8 +1564,9 @@ async function present_chag_times(current_date){
         set_element_html('arvit-shabat-2', add_minutes_to_time(chag_out, 15));
     });
 
-    await load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date);
+    load_html_into_page_elem_end('two_tables_embedded.html', 'left-side', () => {
+       embed_day_times(current_date, 'inner_table_1');
+       embed_next_week_prayer_times(current_date, 'inner_table_2');
     });
 
     return sleep_seconds(wait_seconds*10);
@@ -1565,19 +1584,19 @@ async function present_shachcarit_with_8_30(parent_elem){
 async function present_simchat_tora_eve_full(current_date){
     await present_shachcarit_with_8_30('first_column');
     insert_html_at_end_of_element('first_column', create_table_row_html('13:15', 'מנחה גדולה'));
-    show_chag_eve_times(current_date, '17:36', 'first_column');
+    show_chag_eve_times(current_date, '17:47', 'first_column');
     load_html_into_page_elem_end('hakafot.html', 'second_column');
 
     load_html_into_page_elem_end('day_times_inner_1.html', 'day_times_first_column', () => {
         load_html_into_page_elem_end('day_times_inner_2.html', 'day_times_second_column', () => {
-            present_day_times('2024-10-23', true);
+            present_day_times('2025-10-13', true);
         });
     });
     return sleep_seconds(wait_seconds*10);
 }
 
 async function present_simchat_tora_full(current_date){
-    var chag_out = '18:34';
+    var chag_out = '18:45';
     load_html_into_page_elem_start('simchat_tora.html', 'first_column');
     await load_html_into_page_elem_end('simchat_tora_a.html', 'first_column');
     load_html_into_page_elem_end('simchat_tora_b.html', 'second_column', () => {
@@ -1587,7 +1606,7 @@ async function present_simchat_tora_full(current_date){
 
     load_html_into_page_elem_end('day_times_inner_1.html', 'day_times_first_column', () => {
         load_html_into_page_elem_end('day_times_inner_2.html', 'day_times_second_column', () => {
-            present_day_times('2024-10-24', true);
+            present_day_times('2025-10-14');
         });
     });
     return sleep_seconds(wait_seconds*10);
@@ -1873,13 +1892,13 @@ function set_main_area_background(date){
     if(is_between_dates(date, '2024-10-08T02:00', '2024-10-12T23:00')){
         background = 'beit-hamikdash-1.jpeg';
     }
-    if(is_between_dates(date, '2024-10-15T02:00', '2024-10-22T23:00')){
+    if(is_sukot_vacation(date)){
         background = 'sukot_3.jpg';
     }
     if(is_present_memorial_day(date) || is_present_atzmaut(date)){
         background = 'degel.jpg';
     }
-    if(is_simchat_tora_eve(date) | is_simchat_tora(date)){
+    if(is_present_simchat_tora_eve(date) || is_simchat_tora_eve(date) | is_simchat_tora(date)){
         background = 'simchat_tora_israel.png';
     }
     if(is_shabat_irgun(date)){
