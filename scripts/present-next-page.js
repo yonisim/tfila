@@ -751,7 +751,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-10-24T10:00', '2024-10-31T09:00')){
+    if(is_between_dates(current_date, '2025-10-14T10:00', '2025-10-21T09:00')){
         messages.push('משיב הרוח ומוריד הגשם');
         show_footer = true;
     }
@@ -843,7 +843,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     }
 
     if(is_rosh_chodesh(current_date)){
-        messages.push('יעלה ויבוא');
+        messages.push('ראש חודש   |   יעלה ויבוא');
         show_footer = true
     }
 
