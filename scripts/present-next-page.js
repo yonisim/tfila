@@ -264,7 +264,7 @@ function is_shavout(date){
 }
 
 function is_hanuka(date){
-    return is_between_dates(date, "2024-12-25T17:00", "2025-01-02T17:00:00");
+    return is_between_dates(date, "2025-12-14T16:55", "2025-12-22T16:40");
 }
 function is_pesach_vacation(date){
     return is_between_dates(date, "2025-04-05T23:00", "2025-04-20T12:00");
@@ -757,7 +757,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     }
 
     if(is_hanuka(current_date)){
-        messages.push('על הניסים');
+        messages.push('חנוכה    |    על הניסים');
         show_footer = true;
     }
 
