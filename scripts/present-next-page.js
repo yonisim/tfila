@@ -761,6 +761,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2025-12-30T05:00', '2025-12-30T17:20')){
+        messages.push('צום עשרה בטבת | מנחה: 16:15 | ערבית וצאת הצום: 17:05');
+        show_footer = true;
+    }
+
     if(is_between_dates(current_date, '2025-10-28T17:10', '2025-11-05T22:00') & !is_between_dates(current_date, '2024-11-12T21:00', '2024-11-12T22:00') & !is_shabat_time(current_date, -25)){
         messages.push('ותן טל ומטר לברכה');
         show_footer = true;
