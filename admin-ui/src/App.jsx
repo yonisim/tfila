@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import { loginWithGitHub, exchangeCodeForToken } from './auth'
+import { getOctokit, getUser, checkBranch, getFileTree } from './github'
 
-function App() {
-  const [count, setCount] = useState(0)
+const OWNER = 'yonisim'
+const REPO = 'tfila'
+
+export default function App() {
+  const [status, setStatus] = useState('init')
+  const [files, setFiles] = useState([])
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const code = params.get('code')
+    if (!code) return
+
+    ;(async () => {
+      setStatus('authenticating')
+      const token = await exchangeCodeForToken(code)
+      const octokit = getOctokit(token)
+
+      const user = await getUser(octokit)
+      const branch = user.login   // 👈 branch == username
+
+      try {
+        await checkBranch(octokit, OWNER, REPO, branch)
+      } catch {
+        setStatus('denied')
+        return
+      }
+
+      const tree = await getFileTree(octokit, OWNER, REPO, branch)
+      setFiles(tree)
+      setStatus('ready')
+    })()
+  }, [])
+
+  if (status === 'init')
+    return <button onClick={loginWithGitHub}>Login with GitHub</button>
+
+  if (status === 'authenticating')
+    return <p>Logging in…</p>
+
+  if (status === 'denied')
+    return <p>Access denied (branch not found or no permission)</p>
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <h2>Repository Files</h2>
+      <ul>
+        {files.map(f => (
+          <li key={f.path}>{f.path}</li>
+        ))}
+      </ul>
+    </div>
   )
 }
-
-export default App
