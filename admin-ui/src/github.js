@@ -1,4 +1,4 @@
-import { Octokit } from '@octokit/rest'
+import { Octokit } from 'octokit'
 
 export function getOctokit(token) {
   return new Octokit({ auth: token })
