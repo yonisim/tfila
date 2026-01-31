@@ -1,4 +1,4 @@
-const clientId = 'YOUR_GITHUB_CLIENT_ID'
+const clientId = 'Ov23liIfEwayEZsF860Y'
 const redirectUri = 'https://yonisim.github.io/tfila/'
 
 export function loginWithGitHub() {

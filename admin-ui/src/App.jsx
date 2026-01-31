@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { loginWithGitHub, exchangeCodeForToken } from './auth'
-import { getOctokit, getUser, checkBranch, getFileTree } from './github'
+import { Octokit } from 'octokit'
 
 const OWNER = 'yonisim'
 const REPO = 'tfila'
@@ -8,6 +8,7 @@ const REPO = 'tfila'
 export default function App() {
   const [status, setStatus] = useState('init')
   const [files, setFiles] = useState([])
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -15,38 +16,62 @@ export default function App() {
     if (!code) return
 
     ;(async () => {
-      setStatus('authenticating')
-      const token = await exchangeCodeForToken(code)
-      const octokit = getOctokit(token)
-
-      const user = await getUser(octokit)
-      const branch = user.login   // 👈 branch == username
-
       try {
-        await checkBranch(octokit, OWNER, REPO, branch)
-      } catch {
-        setStatus('denied')
-        return
-      }
+        setStatus('authenticating')
 
-      const tree = await getFileTree(octokit, OWNER, REPO, branch)
-      setFiles(tree)
-      setStatus('ready')
+        const token = await exchangeCodeForToken(code)
+        const octokit = new Octokit({ auth: token })
+
+        const { data: me } = await octokit.rest.users.getAuthenticated()
+        setUser(me)
+
+        const branch = me.login
+
+        // branch must exist and user must have access
+        await octokit.rest.repos.getBranch({
+          owner: OWNER,
+          repo: REPO,
+          branch
+        })
+
+        const ref = await octokit.rest.git.getRef({
+          owner: OWNER,
+          repo: REPO,
+          ref: `heads/${branch}`
+        })
+
+        const tree = await octokit.rest.git.getTree({
+          owner: OWNER,
+          repo: REPO,
+          tree_sha: ref.data.object.sha,
+          recursive: 'true'
+        })
+
+        setFiles(tree.data.tree)
+        setStatus('ready')
+      } catch (e) {
+        console.error(e)
+        setStatus('denied')
+      }
     })()
   }, [])
 
-  if (status === 'init')
+  if (status === 'init') {
     return <button onClick={loginWithGitHub}>Login with GitHub</button>
+  }
 
-  if (status === 'authenticating')
+  if (status === 'authenticating') {
     return <p>Logging in…</p>
+  }
 
-  if (status === 'denied')
-    return <p>Access denied (branch not found or no permission)</p>
+  if (status === 'denied') {
+    return <p>Access denied (no matching branch)</p>
+  }
 
   return (
     <div>
-      <h2>Repository Files</h2>
+      <h2>Welcome {user.login}</h2>
+      <h3>Branch: {user.login}</h3>
       <ul>
         {files.map(f => (
           <li key={f.path}>{f.path}</li>
