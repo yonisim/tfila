@@ -26,6 +26,7 @@ export default function App() {
         setUser(me)
 
         const branch = me.login
+        console.log(branch)
 
         // branch must exist and user must have access
         await octokit.rest.repos.getBranch({
