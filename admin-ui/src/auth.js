@@ -1,31 +1,24 @@
-const clientId = 'Ov23liIfEwayEZsF860Y'
-const redirectUri = 'https://yonisim.github.io/tfila/'
+import { Octokit } from 'octokit'
 
-export function loginWithGitHub() {
-  const state = crypto.randomUUID()
-  sessionStorage.setItem('oauth_state', state)
+const CLIENT_ID = 'Ov23liIfEwayEZsF860Y'
 
-  const url =
-    `https://github.com/login/oauth/authorize` +
-    `?client_id=${clientId}` +
-    `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-    `&scope=repo` +
-    `&state=${state}`
-
-  window.location.href = url
-}
-
-export async function exchangeCodeForToken(code) {
-  // ⚠️ This uses GitHub's public token endpoint via CORS-friendly proxy
-  const res = await fetch('https://cors.isomorphic-git.org/https://github.com/login/oauth/access_token', {
-    method: 'POST',
-    headers: { 'Accept': 'application/json' },
-    body: new URLSearchParams({
-      client_id: clientId,
-      code
-    })
+export async function loginWithGitHubDevice(onCode) {
+  const octokit = new Octokit({
+    authStrategy: Octokit.authStrategy.device,
+    auth: {
+      clientId: CLIENT_ID,
+      scopes: ['repo'],
+      onVerification(verification) {
+        onCode({
+          userCode: verification.user_code,
+          verificationUri: verification.verification_uri
+        })
+      }
+    }
   })
 
-  const data = await res.json()
-  return data.access_token
+  // this will block (poll) until approved
+  await octokit.auth()
+
+  return octokit
 }

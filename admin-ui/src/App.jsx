@@ -1,72 +1,76 @@
-import { useEffect, useState } from 'react'
-import { loginWithGitHub, exchangeCodeForToken } from './auth'
-import { Octokit } from 'octokit'
+import { useState } from 'react'
+import { loginWithGitHubDevice } from './auth'
 
 const OWNER = 'yonisim'
 const REPO = 'tfila'
 
 export default function App() {
-  const [status, setStatus] = useState('init')
+  const [status, setStatus] = useState('idle')
+  const [code, setCode] = useState(null)
   const [files, setFiles] = useState([])
   const [user, setUser] = useState(null)
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const code = params.get('code')
-    if (!code) return
+  const login = async () => {
+    try {
+      setStatus('auth')
 
-    ;(async () => {
-      try {
-        setStatus('authenticating')
+      const octokit = await loginWithGitHubDevice(setCode)
 
-        const token = await exchangeCodeForToken(code)
-        const octokit = new Octokit({ auth: token })
+      const { data: me } = await octokit.rest.users.getAuthenticated()
+      setUser(me)
 
-        const { data: me } = await octokit.rest.users.getAuthenticated()
-        setUser(me)
+      const branch = me.login   // ✅ branch = username
 
-        const branch = me.login
-        console.log(branch)
+      // hard permission check
+      await octokit.rest.repos.getBranch({
+        owner: OWNER,
+        repo: REPO,
+        branch
+      })
 
-        // branch must exist and user must have access
-        await octokit.rest.repos.getBranch({
-          owner: OWNER,
-          repo: REPO,
-          branch
-        })
+      const ref = await octokit.rest.git.getRef({
+        owner: OWNER,
+        repo: REPO,
+        ref: `heads/${branch}`
+      })
 
-        const ref = await octokit.rest.git.getRef({
-          owner: OWNER,
-          repo: REPO,
-          ref: `heads/${branch}`
-        })
+      const tree = await octokit.rest.git.getTree({
+        owner: OWNER,
+        repo: REPO,
+        tree_sha: ref.data.object.sha,
+        recursive: 'true'
+      })
 
-        const tree = await octokit.rest.git.getTree({
-          owner: OWNER,
-          repo: REPO,
-          tree_sha: ref.data.object.sha,
-          recursive: 'true'
-        })
-
-        setFiles(tree.data.tree)
-        setStatus('ready')
-      } catch (e) {
-        console.error(e)
-        setStatus('denied')
-      }
-    })()
-  }, [])
-
-  if (status === 'init') {
-    return <button onClick={loginWithGitHub}>Login with GitHub</button>
+      setFiles(tree.data.tree)
+      setStatus('ready')
+    } catch (e) {
+      console.error(e)
+      setStatus('denied')
+    }
   }
 
-  if (status === 'authenticating') {
-    return <p>Logging in…</p>
+  if (status === 'idle') {
+    return <button onClick={login}>Login with GitHub</button>
+  }
+
+  if (status === 'auth' && code) {
+    return (
+      <div>
+        <p>Authorize this app:</p>
+        <p>
+          Go to{' '}
+          <a href={code.verificationUri} target="_blank">
+            {code.verificationUri}
+          </a>
+        </p>
+        <h2>{code.userCode}</h2>
+        <p>Waiting for approval…</p>
+      </div>
+    )
   }
 
   if (status === 'denied') {
-    return <p>Access denied (no matching branch)</p>
+    return <p>Access denied (branch missing or no permission)</p>
   }
 
   return (
