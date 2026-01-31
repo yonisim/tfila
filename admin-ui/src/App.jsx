@@ -19,7 +19,9 @@ export default function App() {
       const { data: me } = await octokit.rest.users.getAuthenticated()
       setUser(me)
 
+      const { data: me } = await octokit.request('GET /user')
       const branch = me.login   // ✅ branch = username
+      console.log(branch)
 
       // hard permission check
       await octokit.rest.repos.getBranch({
