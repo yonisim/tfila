@@ -1,24 +1,33 @@
-import { Octokit } from 'octokit'
+// admin-ui/src/auth.js
 
-const CLIENT_ID = 'Ov23liIfEwayEZsF860Y'
+const API = "https://tfila-admin.vercel.app";
 
 export async function loginWithGitHubDevice(onCode) {
-  const octokit = new Octokit({
-    authStrategy: Octokit.authStrategy.device,
-    auth: {
-      clientId: CLIENT_ID,
-      scopes: ['repo'],
-      onVerification(verification) {
-        onCode({
-          userCode: verification.user_code,
-          verificationUri: verification.verification_uri
-        })
-      }
+  // 1. start device flow
+  const start = await fetch(`${API}/api/auth/start`).then(r => r.json());
+
+  onCode({
+    userCode: start.user_code,
+    verificationUri: start.verification_uri
+  });
+
+  // 2. poll backend until approved
+  while (true) {
+    await new Promise(r => setTimeout(r, start.interval * 1000));
+
+    const res = await fetch(`${API}/api/auth/poll`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ device_code: start.device_code })
+    }).then(r => r.json());
+
+    if (res.ok) {
+      localStorage.token = res.token;
+      return res; // { login, token }
     }
-  })
 
-  // this will block (poll) until approved
-  await octokit.auth()
-
-  return octokit
+    if (res.error && res.error !== "authorization_pending") {
+      throw new Error(res.error);
+    }
+  }
 }
