@@ -1,11 +1,11 @@
 // admin-ui/src/auth.js
 
-const API = "https://tfila-admin.vercel.app";
+const MY_API = "https://tfila-admin.vercel.app";
 
 export async function loginWithGitHubDevice(onCode) {
   // 1. start device flow
-  console.log("API=" + `${API}/api/auth/start`);
-  const start = await fetch(`${API}/api/auth/start`).then(r => r.json());
+  console.log("API=" + `${MY_API}/api/auth/start`);
+  const start = await fetch(`${MY_API}/api/auth/start`).then(r => r.json());
 
   onCode({
     userCode: start.user_code,
