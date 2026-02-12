@@ -4,8 +4,8 @@ export const MY_API = "https://tfila-admin.vercel.app";
 export async function loginWithGitHubDevice(onCode) {
   
   // 1. start device flow
-  console.log("API=" + `${MY_API}/api/start`);
-  const start = await fetch(`${MY_API}/api/start`).then(r => r.json());
+  console.log("API=" + `https://tfila-admin.vercel.app/api/start`);
+  const start = await fetch(`https://tfila-admin.vercel.app/api/start`).then(r => r.json());
 
   onCode({
     userCode: start.user_code,
