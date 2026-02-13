@@ -1,8 +1,15 @@
 // admin-ui/src/auth.js
 
 // export const MY_API = "https://tfila-admin." + "vercel.app";
+
+async function getApiConfig() {
+  const res = await fetch(process.env.PUBLIC_URL + "/config.json");
+  if (!res.ok) throw new Error("Failed to load config.json");
+  return res.json();
+}
+
 export async function loginWithGitHubDevice(onCode) {
-  const config = await fetch("/config.json").then(r => r.json());
+  const config = await getApiConfig();
   const MY_API = config.MY_API;
   
   // 1. start device flow
