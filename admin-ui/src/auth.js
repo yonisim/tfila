@@ -20,12 +20,13 @@ export async function loginWithGitHubDevice(onCode) {
     userCode: start.user_code,
     verificationUri: start.verification_uri
   });
-  console.log("After start")
+  console.log("After start");
+  console.log("DC:" + start.device_code);
   // 2. poll backend until approved
   while (true) {
     await new Promise(r => setTimeout(r, start.interval * 1000));
     console.log("Sending poll api request to vercel");
-    const res = await fetch(`https://tfila-admin.vercel.app/api//poll`, {
+    const res = await fetch(`${MY_API}/api/poll`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ device_code: start.device_code })
