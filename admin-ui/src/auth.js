@@ -3,7 +3,7 @@
 // export const MY_API = "https://tfila-admin." + "vercel.app";
 
 async function getApiConfig() {
-  const res = await fetch(process.env.PUBLIC_URL + "/config.json");
+  const res = await fetch("config.json");
   if (!res.ok) throw new Error("Failed to load config.json");
   return res.json();
 }
