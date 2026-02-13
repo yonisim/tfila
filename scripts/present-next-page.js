@@ -1385,7 +1385,7 @@ async function present_shabat_prayer_times(current_date){
     var shabat_in = this_shabat_times["in"];
     var arvit_shabat = this_shabat_times["out"];
     var shacharit_main = '08:15';
-    var mincha_ktana = '16:00';
+    var mincha_ktana = '16:30';
 
     await show_shabat_eve_times(current_date, shabat_in, 'first_column');
 
