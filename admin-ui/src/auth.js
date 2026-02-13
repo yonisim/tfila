@@ -1,7 +1,9 @@
 // admin-ui/src/auth.js
 
-export const MY_API = "https://tfila-admin." + "vercel.app";
+// export const MY_API = "https://tfila-admin." + "vercel.app";
 export async function loginWithGitHubDevice(onCode) {
+  const config = await fetch("/config.json").then(r => r.json());
+  const MY_API = config.MY_API;
   
   // 1. start device flow
   console.log("API=" + `${MY_API}/api/start`);
