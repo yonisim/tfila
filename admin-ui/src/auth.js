@@ -8,6 +8,19 @@ async function getApiConfig() {
   return res.json();
 }
 
+export async function loginWithGitHub() {
+  const config = await fetch("config.json").then(r => r.json());
+
+  const params = new URLSearchParams({
+    client_id: config.GITHUB_CLIENT_ID,
+    redirect_uri: "https://yonisim.github.io/callback.html",
+    scope: "repo",
+  });
+
+  window.location.href =
+    `https://github.com/login/oauth/authorize?${params}`;
+}
+
 export async function loginWithGitHubDevice(onCode) {
   const config = await getApiConfig();
   const MY_API = config.MY_API;
