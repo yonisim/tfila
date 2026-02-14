@@ -1,0 +1,26 @@
+<script>
+(async function () {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+
+  if (!code) {
+    document.body.innerText = "Missing code";
+    return;
+  }
+
+  const config = await fetch("config.json").then(r => r.json());
+
+  const res = await fetch(`${config.MY_API}/api/callback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code })
+  }).then(r => r.json());
+
+  if (res.ok) {
+    localStorage.token = res.token;
+    window.location.href = "/";
+  } else {
+    document.body.innerText = "Login failed";
+  }
+})();
+</script>
