@@ -13,7 +13,7 @@ export async function loginWithGitHub() {
 
   const params = new URLSearchParams({
     client_id: config.GITHUB_CLIENT_ID,
-    redirect_uri: "https://yonisim.github.io/callback.html",
+    redirect_uri: "https://yonisim.github.io/tfila/callback.html",
     scope: "repo",
   });
 
