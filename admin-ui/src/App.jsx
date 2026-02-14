@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { loginWithGitHubDevice } from './auth'
+import { loginWithGitHub } from './auth'
 
 export default function App() {
   const [status, setStatus] = useState('idle')
@@ -11,7 +11,7 @@ export default function App() {
       setStatus('auth')
 
       // returns { login, token }
-      const res = await loginWithGitHubDevice(setCode)
+      const res = await loginWithGitHub(setCode)
 
       setUser({ login: res.login })
       setStatus('ready')
