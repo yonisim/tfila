@@ -1,6 +1,6 @@
 let idToken = null;
 
-const BACKEND_URL = "https://YOUR-VERCEL-PROJECT.vercel.app";
+const BACKEND_URL = "https://tfila-admin.vercel.app";
 
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
