@@ -1,5 +1,7 @@
 let idToken = null;
 
+const BACKEND_URL = "https://YOUR-VERCEL-PROJECT.vercel.app";
+
 function parseJwt(token) {
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -12,17 +14,32 @@ function parseJwt(token) {
   return JSON.parse(jsonPayload);
 }
 
-window.handleCredentialResponse = function (response) {
-  idToken = response.credential;
+window.handleCredentialResponse = async function (response) {
+  try {
+    idToken = response.credential;
 
-  const payload = parseJwt(idToken);
-  const email = payload.email;
+    const verifyRes = await fetch(`${BACKEND_URL}/api/verify`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${idToken}`
+      }
+    });
 
-  document.getElementById("user-email").textContent = email;
-  document.getElementById("login-container").style.display = "none";
-  document.getElementById("user").style.display = "block";
+    if (!verifyRes.ok) {
+      throw new Error("Unauthorized");
+    }
 
-  console.log("ID Token:", idToken);
+    const data = await verifyRes.json();
+
+    document.getElementById("user-email").textContent = data.email;
+    document.getElementById("login-container").style.display = "none";
+    document.getElementById("user").style.display = "block";
+
+  } catch (err) {
+    console.error(err);
+    alert("Access denied");
+    logout();
+  }
 };
 
 function logout() {
