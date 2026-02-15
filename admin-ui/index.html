@@ -1,13 +1,36 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>admin-ui</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Portal</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script defer src="auth.js"></script>
+  <style>
+    body { font-family: Arial; padding: 40px; }
+    #user { margin-top: 20px; }
+    button { padding: 8px 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <h2>Admin Portal</h2>
+
+  <div id="login-container">
+    <div id="g_id_onload"
+         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+         data-callback="handleCredentialResponse">
+    </div>
+
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large">
+    </div>
+  </div>
+
+  <div id="user" style="display:none;">
+    <p>Email: <span id="user-email"></span></p>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+</body>
 </html>
