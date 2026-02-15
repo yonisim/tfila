@@ -1,5 +1,10 @@
 let idToken = null;
 
+async function getApiConfig() {
+  const res = await fetch("config.json");
+  if (!res.ok) throw new Error("Failed to load config.json");
+  return res.json();
+}
 const BACKEND_URL = "https://tfila-admin.vercel.app";
 
 function parseJwt(token) {
@@ -17,8 +22,9 @@ function parseJwt(token) {
 window.handleCredentialResponse = async function (response) {
   try {
     idToken = response.credential;
-
-    const verifyRes = await fetch(`${BACKEND_URL}/api/verify`, {
+    const config = await getApiConfig();
+    const MY_API = config.MY_API;
+    const verifyRes = await fetch(`${MY_API}/api/verify`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${idToken}`
