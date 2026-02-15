@@ -22,6 +22,9 @@ function parseJwt(token) {
 window.handleCredentialResponse = async function (response) {
   try {
     idToken = response.credential;
+    console.log("Token: " + idToken);
+    const payload = parseJwt(idToken);
+    const email = payload.email;
     const config = await getApiConfig();
     const MY_API = config.MY_API;
     const verifyRes = await fetch(`${MY_API}/api/verify`, {
