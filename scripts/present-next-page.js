@@ -210,11 +210,11 @@ function is_present_sukot_eve(date){
 }
 
 function is_purim(date){
-    return is_between_dates(date, "2025-03-13T13:00", "2025-03-14T20:00");
+    return is_between_dates(date, "2026-03-02T13:00", "2026-03-03T20:00");
 }
 
 function is_show_megila(date){
-    return is_between_dates(date, "2025-03-13T13:00", "2025-03-14T12:00");
+    return is_between_dates(date, "2026-03-02T13:00", "2026-03-03T12:00");
 }
 
 function is_present_pesach_eve(date){
