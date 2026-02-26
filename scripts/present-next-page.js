@@ -236,11 +236,11 @@ function is_rosh_chodesh(date){
 }
 
 function is_show_taanit(date){
-    return is_between_dates(date, "2025-03-12T17:00", "2025-03-13T18:00");
+    return is_between_dates(date, "2026-03-01T17:00", "2026-03-02T18:00");
 }
 
 function is_taanit(date){
-    return is_between_dates(date, "2025-03-12T20:00", "2025-03-13T18:00");
+    return is_between_dates(date, "2026-03-01T20:00", "2026-03-02T18:00");
 }
 
 function is_shabat_hagadol_tashpa(date){
@@ -1009,7 +1009,7 @@ async function present_taanit_times(current_date){
     var start_of_fest = create_table_row_html('04:37', 'כניסת הצום');
     var mincha_gedola = create_table_row_html('13:15', 'מנחה גדולה');
     var mincha_ktana = create_table_row_html('17:00', 'מנחה קטנה');
-    var arvit = create_table_row_html('18:05', 'ערבית וקריאת מגילה');
+    var arvit = create_table_row_html('18:00', 'ערבית וקריאת מגילה');
     var megila_2 = create_table_row_html('19:45', 'קריאת מגילה לנשים');
     var empty_line = create_empty_line()
 
