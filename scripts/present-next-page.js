@@ -834,6 +834,16 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2026-02-26T16:00', '2026-02-27T23:59')){
+        messages.push('עונג שבת קהילתי לכבוד שבת זכור | ליל שבת ב 21:00');
+        show_footer = true;
+    }
+
+    if(is_between_dates(current_date, '2026-02-26T16:00', '2026-02-28T11:00')){
+        messages.push('הציבור מוזמן לקידוש קהילתי לאחר המניין המרכזי');
+        show_footer = true;
+    }
+
     if(is_between_dates(current_date, '2024-12-20T16:00', '2024-12-21T17:30')){
         messages.push('מזל טוב למשפחת מאירפלד להולדת הבת');
         messages.push('משתתפים בצערו של ראובן עוז על פטירת אביו');
