@@ -1006,7 +1006,7 @@ async function present_tisha_beav_times(current_date){
 }
 
 async function present_taanit_times(current_date){
-    var start_of_fest = create_table_row_html('04:37', 'כניסת הצום');
+    var start_of_fest = create_table_row_html('04:54', 'כניסת הצום');
     var mincha_gedola = create_table_row_html('13:15', 'מנחה גדולה');
     var mincha_ktana = create_table_row_html('17:00', 'מנחה קטנה');
     var arvit = create_table_row_html('18:00', 'ערבית וקריאת מגילה');
