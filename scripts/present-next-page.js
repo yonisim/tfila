@@ -161,7 +161,7 @@ function is_in_weekdays(date, weekdays){
 }
 
 function is_war(date){
-    return is_between_dates(date, '2025-06-12', '2025-06-30');
+    return is_between_dates(date, '2026-03-01', '2026-03-30');
 }
 
 function is_big_vacation(date){
