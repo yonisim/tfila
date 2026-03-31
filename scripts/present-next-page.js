@@ -218,7 +218,7 @@ function is_show_megila(date){
 }
 
 function is_present_pesach_eve(date){
-    return is_between_dates(date, "2024-04-21T01:00", "2024-04-22T17:00");
+    return is_between_dates(date, "2026-03-30T01:00", "2026-03-31T22:00");
 }
 
 function is_present_memorial_day(date){
@@ -248,15 +248,15 @@ function is_shabat_hagadol_tashpa(date){
 }
 
 function is_pesach_eve(date){
-    return is_between_dates(date, "2024-04-22T00:00", "2024-04-22T17:00");
+    return is_between_dates(date, "2026-04-01T00:00", "2026-04-01T17:00");
 }
 
 function is_pesach_first_chag(date){
-    return is_between_dates(date, "2025-04-12T17:00", "2025-04-13T20:00:00");
+    return is_between_dates(date, "2026-04-01T17:00", "2026-04-02T20:00:00");
 }
 
 function is_pesach_7(date){
-    return is_between_dates(date, "2024-04-28T12:00", "2024-04-29T20:00:00");
+    return is_between_dates(date, "2026-04-07T12:00", "2026-04-08T20:00:00");
 }
 
 function is_shavout(date){
@@ -835,9 +835,14 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2025-04-10T19:00', '2025-04-10T22:00')){
+    if(is_between_dates(current_date, '2026-03-31T19:00', '2026-03-31T22:00')){
         messages.push('בדיקת חמץ');
         show_footer = true;
+    }
+
+    if(is_present_pesach_eve(current_date)){
+        messages.push('סוף זמן אכילת חמץ - מג"א: 10:07, גר"א: 10:38')
+        messages.push('סוף זמן ביעור חמץ: 11:25')
     }
 
     if(is_between_dates(current_date, '2025-07-18T16:00', '2025-07-19T21:00')){
@@ -1216,7 +1221,7 @@ async function insert_html_after_element(target_element_id, html_data) {
 
 
 function get_pesach_times(){
-    return ["19:44", "19:45"];
+    return ["18:37", "19:36"];
 }
 
 function get_pesach_7_times(){
@@ -1250,6 +1255,7 @@ async function present_pesach_eve(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
+    await show_footer_custom_message_if_needed(current_date, 'pesach_eve', wait_seconds*5);
     return sleep_seconds(wait_seconds*5);
 }
 
