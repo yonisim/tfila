@@ -248,7 +248,7 @@ function is_shabat_hagadol_tashpa(date){
 }
 
 function is_pesach_eve(date){
-    return is_between_dates(date, "2026-04-01T00:00", "2026-04-01T17:00");
+    return is_between_dates(date, "2026-04-01T01:00", "2026-04-01T17:00");
 }
 
 function is_pesach_first_chag(date){
@@ -482,7 +482,7 @@ function get_slide_show_items_ids(){
         slide_show_items.push('megila');
     }
 
-    if(is_present_pesach_eve(date)){
+    if(is_present_pesach_eve(date) || is_pesach_eve(date)){
         slide_show_items.push('pesach_eve')
     }
 
@@ -673,7 +673,7 @@ function show_mincha_gedola(){
 }
 
 function get_omer_numeric(date){
-    var omer_start_date = new Date('2025-04-14');
+    var omer_start_date = new Date('2026-04-02');
     var omer_time_diff = date - omer_start_date;
     var omer_days = Math.ceil(omer_time_diff / (1000 * 3600 * 24));
     if(is_after_sunset(date)){
@@ -840,7 +840,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
-    if(is_present_pesach_eve(current_date)){
+    if(is_present_pesach_eve(current_date) || is_pesach_eve(current_date)){
         messages.push('סוף זמן אכילת חמץ - מג"א: 10:07, גר"א: 10:38')
         messages.push('סוף זמן ביעור חמץ: 11:25')
     }
