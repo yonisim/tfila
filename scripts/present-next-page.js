@@ -673,7 +673,7 @@ function show_mincha_gedola(){
 }
 
 function get_omer_numeric(date){
-    var omer_start_date = new Date('2026-04-02');
+    var omer_start_date = new Date('2026-04-03');
     var omer_time_diff = date - omer_start_date;
     var omer_days = Math.ceil(omer_time_diff / (1000 * 3600 * 24));
     if(is_after_sunset(date)){
@@ -1273,6 +1273,8 @@ async function present_pesach_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
     });
+    await show_footer_custom_message_if_needed(current_date, 'pesach_single_page', 10*60);
+
     return sleep_seconds(10*60);
 }
 
