@@ -255,8 +255,12 @@ function is_pesach_first_chag(date){
     return is_between_dates(date, "2026-04-01T17:00", "2026-04-02T20:00:00");
 }
 
+function is_pesach_7_eve(date){
+    return is_between_dates(date, "2026-04-06T21:00", "2026-04-07T17:00:00");
+}
+
 function is_pesach_7(date){
-    return is_between_dates(date, "2026-04-07T12:00", "2026-04-08T20:00:00");
+    return is_between_dates(date, "2026-04-07T17:00", "2026-04-08T20:00:00");
 }
 
 function is_shavout(date){
@@ -377,6 +381,8 @@ function get_specific_single_page(current_date){
     var item = null
     if(is_pesach_first_chag(current_date_obj)){
         item = 'pesach_single_page'
+    } else if(is_pesach_7_eve(current_date_obj)){
+        item = 'chag_eve'
     } else if(is_pesach_7(current_date_obj)){
         item = 'pesach_7'
     } else if(is_tisha_beav(current_date_obj)){
@@ -565,7 +571,7 @@ function get_shabat_times(current_date){
 }
 
 function get_chag_times(current_date){
-    return {'in': '17:56', 'out': '18:53'};
+    return {'in': '18:41', 'out': '19:41'};
 }
 
 function get_single_prayer_times_from_date_obj(date_obj, prayer_name){
@@ -1225,7 +1231,7 @@ function get_pesach_times(){
 }
 
 function get_pesach_7_times(){
-    return ["18:56", "19:58"];
+    return ["18:41", "19:41"];
 }
 
 async function present_shabat_hagadol_tashpa(current_date){
@@ -1282,9 +1288,10 @@ async function present_pesach_7_times(current_date){
     var pesach_times = get_pesach_7_times();
     var pesach_in = pesach_times[0];
     var pesach_out = pesach_times[1];
-    load_html_into_page_elem_start('pesach_eve_times.html', 'first_column', () => {
+    load_html_into_page_elem_start('chag_eve_times.html', 'first_column', () => {
         set_element_html('hadlakat-nerot', pesach_in);
-        set_element_html('kabalat-shabat', add_minutes_to_time(pesach_in, 10));
+        set_element_html('mincha-shabat-eve', add_minutes_to_time(pesach_in, 10));
+        set_element_html('arvit', format_hour_and_minutes(get_today_stars(current_date)))
     });
 
     set_element_html('arvit-shabat', pesach_out);
@@ -1293,6 +1300,7 @@ async function present_pesach_7_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
     });
+    await show_footer_custom_message_if_needed(current_date, 'pesach_7', 10*60)
     show_sfirat_haomer_if_needed(current_date, 'pesach_7', true);
     return sleep_seconds(10*60);
 }
@@ -1537,7 +1545,7 @@ async function present_kipur_times(current_date){
 }
 
 async function present_chag_eve_times(current_date){
-    var chag_name = 'ערב חג סוכות';
+    var chag_name = 'ערב שביעי של פסח';
     var chag_times = get_chag_times(current_date);
     var chag_in = chag_times["in"];
     document.getElementById("prayer-times-title-parasha").innerText = chag_name;
@@ -1554,6 +1562,7 @@ async function present_chag_eve_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
+    await show_footer_custom_message_if_needed(current_date, 'chag_eve', wait_seconds*10);
     return sleep_seconds(wait_seconds*10);
 }
 
@@ -1780,6 +1789,7 @@ async function show_chag_eve_times(current_date, chag_in, parent_element) {
     return load_html_into_page_elem_end(friday_times_html, parent_element, () => {
         set_element_html('hadlakat-nerot', chag_in);
         set_element_html('mincha_shabat_eve', add_minutes_to_time(chag_in, 10));
+        set_element_data('arvit', format_hour_and_minutes(get_today_stars(current_date)))
     });
 }
 
