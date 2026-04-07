@@ -1788,7 +1788,7 @@ async function show_chag_eve_times(current_date, chag_in, parent_element) {
     var friday_times_html = 'chag_eve_times.html';
     return load_html_into_page_elem_end(friday_times_html, parent_element, () => {
         set_element_html('hadlakat-nerot', chag_in);
-        set_element_html('mincha_shabat_eve', add_minutes_to_time(chag_in, 10));
+        set_element_html('mincha-shabat-eve', add_minutes_to_time(chag_in, 10));
         set_element_data('arvit', format_hour_and_minutes(get_today_stars(current_date)))
     });
 }
