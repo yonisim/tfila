@@ -283,7 +283,7 @@ function is_slihot_days(date){
 }
 
 function is_minyan_plag_active(date){
-    return is_between_dates(date, "2025-04-20T00:00", "2025-09-10T23:00");
+    return is_between_dates(date, "2026-04-10T00:00", "2026-09-10T23:00");
 }
 
 function is_show_rosh_hashana_eve(date){
