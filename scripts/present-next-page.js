@@ -954,7 +954,7 @@ async function present_prayer_times_single_page(current_date){
             //set_element_data("shacharit-730-name", "שחרית ג");
             //set_element_data("shacharit-830-name", "שחרית ד");
         }
-        if(is_shacharit_8_30(current_date)){
+        if(is_shacharit_8_30(current_date) || true){
             show_shacharit_8_30();
         }
         show_slichot(current_date);
