@@ -222,11 +222,11 @@ function is_present_pesach_eve(date){
 }
 
 function is_present_memorial_day(date){
-    return is_between_dates(date, "2025-04-30T01:00", "2025-04-30T22:00");
+    return is_between_dates(date, "2026-04-21T01:00", "2026-04-21T22:00");
 }
 
 function is_present_atzmaut(date){
-    return is_between_dates(date, "2025-04-30T01:00", "2025-05-01T20:00");
+    return is_between_dates(date, "2026-04-21T01:00", "2026-04-22T20:00");
 }
 
 function is_rosh_chodesh(date){
@@ -1049,12 +1049,17 @@ async function present_taanit_times(current_date){
 
 async function present_memorial_day_times(current_date){
     var this_week_times = get_week_times(current_date);
-    var mincha_time = '19:05';
-    var arvit_time = '19:45';
-    load_html_into_page_elem_start('shacharit.html', 'prayer_times');
+    var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
+    var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
+        if(is_shacharit_8_30(current_date)){
+            show_shacharit_8_30();
+        }
+    });
 
     load_html_into_page_elem_end('mincha_arvit_atzmaut.html', 'atzmaut_eve', () => {
         set_element_html('mincha-regulr-days', mincha_time);
+        set_element_html('shiur', add_minutes_to_time(mincha_time, 15));
         set_element_html('arvit-regulr-days', arvit_time);
     });
 
