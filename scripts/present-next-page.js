@@ -174,10 +174,8 @@ function is_sukot_vacation(date){
 }
 
 function is_shacharit_8_30(date){
-    if(is_war(date) | is_big_vacation(date) | is_sukot_vacation(date) | is_hanuka(date) | is_pesach_vacation(date)){
-        return true;
-    }
-    return false;
+    return is_war(date) | is_big_vacation(date) | is_sukot_vacation(date) | is_hanuka(date) | is_pesach_vacation(date) | true ;
+
 }
 
 function is_mincha_13_30(date){
