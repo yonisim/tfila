@@ -1,29 +1,42 @@
-export function clockFunc() {
-    // GETTING THE TIME 
-    let time = new Date();
-    let hour = time.getHours();
-    let sec = time.getSeconds();
-    let min = time.getMinutes();
-    // STYLING THE HOURS AND MINUTES
-    hour = (hour > 12) ? hour : hour;
-    hour = (hour < 10) ? '0' + hour : hour;
-    min = (min < 10) ? '0' + min : min;
-    sec = (sec < 10) ? '0' + sec : sec;
-    // UPDATEING THE CIRCLE LOADER VALUE WITH SECONDS
-    document.documentElement.style.setProperty('--loadingSize', sec);
-    // SELECTING THE HOUR, MINUTE AND COLON
-    const hourTxt = document.querySelector('.hour');
-    const minTxt = document.querySelector('.min');
-    const secTxt = document.querySelector('.second');
-    var colon = document.querySelector('.colon');
-    // UPDATING THEM WITH HOUR AND MINUTE VALUE
-    hourTxt.innerHTML = hour;
-    minTxt.innerHTML = min;
-    secTxt.innerHTML = sec;
-    // ADDING SIMPLE SECOND EFFECT TO THE COLON
-    if (!colon.classList.contains('sec')) {
-      colon.classList.add('sec')
-    }
-    // CALLING THIS FUNCTION TO UP TO DATE THE TIME
-    setTimeout(clockFunc, 1000);
+function getActiveClockRoot() {
+  var tf = document.getElementById('tfilot_single_page');
+  if (tf && tf.querySelector('.clock .hour')) {
+    return tf;
   }
+  var header = document.querySelector('header');
+  if (header && header.querySelector('.clock .hour')) {
+    return header;
+  }
+  return document;
+}
+
+export function clockFunc() {
+  let time = new Date();
+  let hour = time.getHours();
+  let sec = time.getSeconds();
+  let min = time.getMinutes();
+  hour = hour < 10 ? '0' + hour : '' + hour;
+  min = min < 10 ? '0' + min : '' + min;
+  sec = sec < 10 ? '0' + sec : '' + sec;
+  document.documentElement.style.setProperty('--loadingSize', sec);
+
+  var root = getActiveClockRoot();
+  var hourTxt = root.querySelector('.clock .hour');
+  var minTxt = root.querySelector('.clock .min');
+  var secTxt = root.querySelector('.clock .second');
+  if (!hourTxt || !minTxt || !secTxt) {
+    setTimeout(clockFunc, 400);
+    return;
+  }
+  hourTxt.textContent = hour;
+  minTxt.textContent = min;
+  secTxt.textContent = sec;
+
+  var colons = root.querySelectorAll('.clock .clock-text.colon');
+  for (var i = 0; i < colons.length; i++) {
+    if (!colons[i].classList.contains('sec')) {
+      colons[i].classList.add('sec');
+    }
+  }
+  setTimeout(clockFunc, 1000);
+}

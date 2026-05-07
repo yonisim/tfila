@@ -25,11 +25,23 @@ body, article {
   height: 85vh;
 }
 
-.container {
+.container-1 {
     height: 100%;
     position: relative;
     justify-items: center;
 }
+
+ .container {
+            background-color: var(--default-text-background-color);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            padding: 2px;
+            max-width: 900px;
+            width: 100%;
+            animation: slideUp 0.8s ease-out;
+        }
+
 
 .text-item {
     padding: 10px;
@@ -53,7 +65,7 @@ body, article {
   color: var(--title-color);
   text-decoration-line: underline;
   text-align: center;  
-  -webkit-text-stroke-color: black;
+  -webkit-text-stroke-color: var(--title-color);
   -webkit-text-stroke-width: 1px;
 }
 
@@ -71,7 +83,7 @@ body, article {
 }
 
 .my-text {
-    color: black;
+    color: #578FCA;
     font-size: 10vh;
     font-weight: bold;
 
@@ -218,4 +230,8 @@ body, article {
 
 div.table-line-height-more{
   line-height: 90%;
+}
+
+.strikethrough {
+  text-decoration: line-through;
 }

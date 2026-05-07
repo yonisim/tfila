@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <link href="./styles/header.css" rel="stylesheet">
     <div id="header-content">
-      <div id="hebrew_date" class="header-text right-position"></div>
+      <div class="header-hebrew-panel right-position">
+        <div id="hebrew_date" class="header-text"></div>
+      </div>
+      <div class="header-clock-circle">
         <div class="clock">
-                <span class="clock-text second">
-                  12
+                <span class="clock-text hour">
+                  00
                 </span>
                 <b class="clock-text colon">:</b>
                 <span class="clock-text min">
                   00
                 </span>
                 <b class="clock-text colon">:</b>
-                <span class="clock-text hour">
+                <span class="clock-text second">
                   00
                 </span>
             </div>
-        <div id="gregorian_date" class="left-position header-text"></div>
+      </div>
+        <div id="gregorian_date" class="header-text header-text--gregorian left-position"></div>
     </div>
