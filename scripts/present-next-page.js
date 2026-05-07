@@ -7,7 +7,12 @@ import {set_element_data, set_element_html, set_element_background, insert_html_
     get_element_background, set_element_background_image, add_class_to_element_style} from "./main-div-setter.js";
 import {get_hebrew_date, parse_sfirat_haomer, omer_days_count_to_hebrew, omer_days_count_to_hebrew_weeks} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
-import { clockFunc } from "./clock-time.js";
+import {
+  clockFunc,
+  fitTfilotHeroClock,
+  attachTfilotHeroClockResizeObserver,
+  syncTfilotHeroClockDiskSize,
+} from "./clock-time.js";
 
 const chokidar = require('chokidar');
 const { execSync } = require('child_process');
@@ -1157,6 +1162,13 @@ async function present_prayer_times_single_page(current_date){
     });
     show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);
     show_footer_custom_message_if_needed(current_date, 'tfilot_single_page');
+    attachTfilotHeroClockResizeObserver();
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        syncTfilotHeroClockDiskSize();
+        fitTfilotHeroClock();
+      });
+    });
     return await sleep_seconds(wait_seconds*10);
 }
 

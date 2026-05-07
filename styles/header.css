@@ -113,7 +113,8 @@
   line-height: 1;
 }
 
-.clock-text {
+/* Scoped to #header so tfilot in-page hero clock can size digits from .clock / --clock-fit-fs */
+#header .clock-text {
   font-family: 'DS-DIGI', 'Cascadia Mono', ui-monospace, monospace;
   font-weight: 700;
   font-size: calc(var(--clock-size) * 0.22);
@@ -126,7 +127,7 @@
     0 2px 4px rgba(0, 0, 0, 0.55);
 }
 
-.clock-text.colon {
+#header .clock-text.colon {
   font-size: calc(var(--clock-size) * 0.14);
   color: rgba(243, 225, 188, 0.72);
   padding: 0 0.02em;

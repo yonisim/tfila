@@ -38,9 +38,18 @@
     left: clamp(0.2rem, 1.2vw, 0.85rem);
     z-index: 25;
     margin: 0;
-    --clock-size: min(20vmin, 15vh, 10.5rem);
+    /* Fallback before JS; syncTfilotHeroClockDiskSize() sets inline --clock-size from the section headers */
+    --clock-size: clamp(3.25rem, 14vmin, 6.5rem);
+    /*
+     * Never use % padding here: % is vs. containing block width (often full viewport), which can
+     * exceed the disk and collapse the content box to 0×0. Tie pad to --clock-size instead.
+     */
+    padding: calc(var(--clock-size) * 0.06);
+    /* Inner content side: border-box − pad − vertical borders (2px ×2) */
+    --clock-inner: calc(var(--clock-size) - 2 * (var(--clock-size) * 0.06) - 4px);
+    /* First paint only; `clock-time.js` sets --clock-fit-fs from real measurements */
+    --clock-time-em: calc(var(--clock-inner) * 0.96 / 3.12);
     max-height: none;
-    padding: 10%;
     border: 2px solid rgba(243, 225, 188, 0.55);
     outline: 1px solid rgba(255, 253, 248, 0.35);
     outline-offset: 3px;
@@ -53,8 +62,35 @@
       0 10px 32px rgba(0, 0, 0, 0.22);
   }
 
+  /* One em grid; pixel font-size set by fitTfilotHeroClock() as --clock-fit-fs */
   #tfilot_single_page .tfilot-clock-corner .clock {
-    padding-inline: 0.12em;
+    font-size: var(--clock-fit-fs, var(--clock-time-em));
+    padding-inline: 0;
+    gap: 0.04em;
+  }
+
+  /* Digits/colons scale from .clock (see clock-time.js --clock-fit-fs); header .clock-text is #header-only */
+  #tfilot_single_page .tfilot-clock-corner .clock-text:not(.colon) {
+    font-family: 'DS-DIGI', 'Cascadia Mono', ui-monospace, monospace;
+    font-weight: 700;
+    font-size: 1em;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #f8edd4;
+    text-align: center;
+    text-shadow:
+      0 0 8px rgba(243, 225, 188, 0.32),
+      0 2px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  #tfilot_single_page .tfilot-clock-corner .clock-text.colon {
+    font-family: 'DS-DIGI', 'Cascadia Mono', ui-monospace, monospace;
+    font-weight: 700;
+    font-size: 0.6363636364em; /* 0.14 / 0.22 vs header digits */
+    line-height: 1;
+    color: rgba(243, 225, 188, 0.72);
+    padding: 0 0.02em;
+    text-shadow: none;
   }
 
   #tfilot_single_page .tfilot-dates-strip .header-text {
