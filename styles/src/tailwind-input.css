@@ -1,0 +1,275 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Work Sans';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../../assets/fonts/WorkSans-VariableFont_wght.woff2') format('woff2');
+  }
+}
+
+@layer components {
+  /* Tfilot slide: full viewport (global header hidden for this slide via body.tfilot-full-bleed) */
+  #main-div:has(#tfilot_single_page) {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: calc(100vh - 10vh);
+    max-height: calc(100vh - 10vh);
+  }
+
+  body.tfilot-full-bleed #header {
+    display: none !important;
+  }
+
+  body.tfilot-full-bleed #main-div:has(#tfilot_single_page) {
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  /* Tfilot: clock pinned physical top-left; soft outer ring + gentle border */
+  #tfilot_single_page .tfilot-clock-corner.header-clock-circle.tfilot-hero-clock {
+    position: absolute;
+    top: clamp(0.2rem, 1vh, 0.65rem);
+    left: clamp(0.2rem, 1.2vw, 0.85rem);
+    z-index: 25;
+    margin: 0;
+    --clock-size: min(20vmin, 15vh, 10.5rem);
+    max-height: none;
+    padding: 10%;
+    border: 2px solid rgba(243, 225, 188, 0.55);
+    outline: 1px solid rgba(255, 253, 248, 0.35);
+    outline-offset: 3px;
+    box-shadow:
+      0 0 0 1px rgba(106, 93, 65, 0.22),
+      0 0 0 6px rgba(243, 225, 188, 0.08),
+      0 0 28px rgba(243, 225, 188, 0.18),
+      inset 0 2px 14px rgba(0, 0, 0, 0.42),
+      inset 0 -2px 10px rgba(255, 255, 255, 0.06),
+      0 10px 32px rgba(0, 0, 0, 0.22);
+  }
+
+  #tfilot_single_page .tfilot-clock-corner .clock {
+    padding-inline: 0.12em;
+  }
+
+  #tfilot_single_page .tfilot-dates-strip .header-text {
+    font-size: clamp(0.88rem, 2.8vmin, 1.45rem);
+  }
+
+  /* Nudge main content slightly below the top edge (under floating clock / date) */
+  #tfilot_single_page main.tfilot-main-offset {
+    padding-top: clamp(0.65rem, 2.2vh, 1.35rem);
+  }
+
+  #main-div:has(#tfilot_single_page) > #tfilot_single_page {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #tfilot_single_page .tz-glass-card {
+    @apply rounded-xl border-r-8 border-primary p-6 shadow-glass;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+  }
+
+  #tfilot_single_page .tz-page-bg {
+    background-image: linear-gradient(rgba(16, 27, 48, 0.6), rgba(16, 27, 48, 0.6)),
+      url('../../assets/images/jerusalem-stone-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  #tfilot_single_page .tz-time-glow {
+    text-shadow: 0 0 40px rgba(106, 93, 65, 0.5);
+  }
+
+  /* Section header row: title + rule (זמני תפילות / זמני היום) */
+  #tfilot_single_page .tz-section-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: clamp(0.85rem, 2.2vw, 1.35rem);
+    flex-shrink: 0;
+    min-width: 0;
+    padding-block: 0.5rem 0.55rem;
+    padding-inline: clamp(0.85rem, 2.1vw, 1.15rem) clamp(0.75rem, 2vw, 1.1rem);
+    border-radius: 0.625rem;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 253, 248, 0.12) 0%,
+      rgba(106, 93, 65, 0.16) 38%,
+      rgba(18, 24, 34, 0.42) 100%
+    );
+    border: 1px solid rgba(243, 225, 188, 0.3);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+      0 4px 22px rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  #tfilot_single_page .tz-section-header::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: clamp(0.45rem, 1.2vw, 0.65rem);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 58%;
+    max-height: 1.95rem;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, #fdf6e4 0%, #d6c5a2 40%, #6a5d41 100%);
+    box-shadow: 0 0 12px rgba(243, 225, 188, 0.4);
+    pointer-events: none;
+  }
+
+  /* Page section titles */
+  #tfilot_single_page .tz-section-title {
+    font-family: 'Work Sans', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2.15vw, 1.72rem);
+    line-height: 1.2;
+    letter-spacing: 0.055em;
+    color: #fdfbf7;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.12),
+      0 2px 4px rgba(0, 0, 0, 0.45),
+      0 0 28px rgba(214, 197, 162, 0.22);
+    white-space: nowrap;
+    margin: 0;
+    padding-inline-start: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  #tfilot_single_page .tz-section-rule {
+    flex: 1 1 0%;
+    min-width: 1.25rem;
+    height: 1px;
+    border-radius: 9999px;
+    background: linear-gradient(
+      90deg,
+      rgba(243, 225, 188, 0.55) 0%,
+      rgba(201, 184, 150, 0.35) 35%,
+      rgba(106, 93, 65, 0.18) 72%,
+      rgba(27, 28, 26, 0.08) 100%
+    );
+    box-shadow:
+      0 0 10px rgba(243, 225, 188, 0.2),
+      0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* In-card prayer row labels (שחרית: / מנחה: / ערבית:) — small title chip */
+  #tfilot_single_page .tz-inline-prayer-label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0.32em 0.72em 0.38em 0.85em;
+    border-radius: 0.45em;
+    font-family: 'Work Sans', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.02rem, 1.9vw, 1.48rem);
+    line-height: 1.15;
+    letter-spacing: 0.06em;
+    color: #3a3220;
+    background: linear-gradient(
+      165deg,
+      rgba(255, 253, 248, 0.88) 0%,
+      rgba(230, 218, 195, 0.55) 48%,
+      rgba(201, 184, 150, 0.38) 100%
+    );
+    border: 1px solid rgba(106, 93, 65, 0.28);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.65),
+      inset 0 -1px 0 rgba(106, 93, 65, 0.12),
+      0 2px 8px rgba(27, 28, 26, 0.08);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+  }
+
+  #tfilot_single_page .tz-inline-prayer-label::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 0.85em;
+    margin-inline-end: 0.55em;
+    border-radius: 9999px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #6a5d41 0%, #c9b896 55%, #f3e1bc 100%);
+    box-shadow: 0 0 8px rgba(106, 93, 65, 0.35);
+  }
+
+  @media (min-width: 640px) {
+    #tfilot_single_page .tz-inline-prayer-label {
+      margin-bottom: 0.06em;
+    }
+  }
+
+  /* Announcement bar: in flow at bottom; theme-aligned glass strip */
+  #tfilot_single_page .fouter {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    max-width: 100%;
+    flex-shrink: 0;
+    margin-top: auto;
+    box-sizing: border-box;
+    min-height: clamp(2.75rem, 6vh, 4.25rem);
+    padding: 0.65rem clamp(1rem, 4vw, 2.25rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+      105deg,
+      rgba(36, 38, 35, 0.94) 0%,
+      rgba(106, 93, 65, 0.9) 44%,
+      rgba(72, 62, 42, 0.96) 100%
+    );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #faf9f5;
+    border-top: 3px solid rgba(243, 225, 188, 0.55);
+    box-shadow:
+      0 -12px 40px rgba(0, 0, 0, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    line-height: 1.45;
+  }
+
+  #tfilot_single_page .fouter #footer-custom-message {
+    font-family: 'Work Sans', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: clamp(0.95rem, 2.2vw, 1.35rem) !important;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    max-width: min(96vw, 72rem);
+    color: inherit;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+
+  #tfilot_single_page .fouter #footer-custom-message.my-text-footer-small,
+  #tfilot_single_page .fouter #footer-custom-message.text-single-page-shaba {
+    font-size: clamp(0.82rem, 1.95vw, 1.15rem) !important;
+  }
+
+  /* Legacy .show-element is display:block — inner prayer rows use flex when revealed */
+  #tfilot_single_page .hidden-element.slichot.show-element,
+  #tfilot_single_page .hidden-element.shacharit-730.show-element,
+  #tfilot_single_page .hidden-element.friday-shacharit.show-element,
+  #tfilot_single_page .hidden-element.mincha-gedola.show-element,
+  #tfilot_single_page .hidden-element.talit_tfilin.show-element {
+    display: flex !important;
+  }
+}
