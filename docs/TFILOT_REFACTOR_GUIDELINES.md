@@ -2,10 +2,19 @@
 
 Use this document when changing the **זמני תפילות חול** slide (`#tfilot_single_page`) or its build pipeline so refactors stay consistent.
 
+This workstream also established conventions for the **Friday single-page** slides:
+
+- `#friday_single_page`
+- `#friday_single_page_plag`
+
 ## Stack and build
 
 - **Tailwind is build-time only**: compiled CSS (`styles/tailwind-tfilot-single-page.css`) plus **local** fonts and images. **No CDN** assets for this flow.
-- **`tailwind.config.js`**: `important: '#tfilot_single_page'` so Tailwind utilities **win over legacy CSS** when both apply inside the slide.
+- **`tailwind.config.js` important scoping**:
+  - Use a **single selector**.
+  - For multiple slide roots, wrap them in `:is(...)` (NOT a comma-separated list).
+    - Good: `important: ':is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)'`
+    - Bad: `important: '#tfilot_single_page, #friday_single_page, ...'` (breaks utilities like `.hidden` by generating selectors that apply `display:none` directly to the root ids).
 - **`content` paths** must include every file that contributes class names: HTML fragments, **`scripts/present-next-page.js`** (and any other JS that emits class strings), and `styles/src/**/*.css`.
 - After **HTML or class-string changes**, run:
 
@@ -17,7 +26,12 @@ Use this document when changing the **זמני תפילות חול** slide (`#tf
 
 ## Scope
 
-- Prefer **`#tfilot_single_page`** (and **`#main-div:has(#tfilot_single_page)`**) for layout, spacing, footer, and tfilot-only UI. Avoid changing **global** slide markup or shared styles unless the task explicitly requires it.
+- Prefer scoping layout/styling to the slide root:
+  - `#tfilot_single_page`
+  - `#friday_single_page`
+  - `#friday_single_page_plag`
+  - Or a shared selector wrapper: `:is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)`
+- Avoid changing **global** slide markup or shared styles unless the task explicitly requires it.
 - The **global `<header>`** is hidden for this slide via **`body.tfilot-full-bleed`**; the slide uses its **own HUD** (Hebrew date + clock). **`loop_pages`** clears `tfilot-full-bleed` at the start of each iteration so the header returns before the next load.
 
 ## Data and behavior (do not break contracts)
@@ -35,15 +49,37 @@ Use this document when changing the **זמני תפילות חול** slide (`#tf
 
 - **Two-column grid** (תפילות | זמני היום): use a **2×2 CSS grid** (header row + body row) so both section titles and both scroll areas **align** across columns.
 - **Day-times column**: may be **wider** and use **larger type** than the prayer column ratio from older layouts; tune via grid fractions and `day_times_inner_single_page.html` utilities.
-- **Viewport**: `#main-div:has(#tfilot_single_page)` should track **header visibility** (`calc(100vh - 10vh)` when the global header is shown; **`100vh`** with **`body.tfilot-full-bleed`** when the header is hidden).
+- **Viewport**: `#main-div:has(#tfilot_single_page)` (and the Friday equivalents) should track **header visibility** (`calc(100vh - 10vh)` when the global header is shown; **`100vh`** with **`body.tfilot-full-bleed`** when the header is hidden).
 - **Main content** may sit **slightly below** the top (`padding-top` on `main.tfilot-main-offset`) and **overlap** the floating clock where useful; clock stays **`position: absolute`** (physical **top-left**) with a **higher z-index** than `main`.
 - **Footer**: in-flow at bottom of the slide; **theme styles** live under **`#tfilot_single_page`** in `styles/src/tailwind-input.css`. Footer text may need **`font-size: … !important`** to beat legacy **`my-text-*`** classes from JS.
 
 ## Clock and HUD
 
-- **`clock-time.js`**: resolve the active clock via **`#tfilot_single_page`** first (if it contains `.clock`), else **`header`**, else `document`. Guard missing nodes during transitions.
+- **`clock-time.js`**: resolve the active clock via the active slide root (tfilot + Friday single-page roots) first, else **`header`**, else `document`. Guard missing nodes during transitions.
 - **DOM order** inside `.clock`: **`hour` → `:` → `min` → `:` → `second`** with **`direction: ltr`** on `.clock` so **HH:MM:SS** reads left-to-right.
-- **Hebrew date** in tfilot: **`#tfilot_hebrew_date`**; keep **`present_hebrew_date_in_header`** in sync when that node exists.
+- **Hebrew date** in tfilot HUD: **`#tfilot_hebrew_date`**.
+- **Hebrew date** in Friday HUD: **`#friday_hebrew_date`**.
+- Keep **`present_hebrew_date_in_header`** in sync when these nodes exist.
+
+## Friday single-page prayer cards (conclusions)
+
+Friday uses the same “glass card” vocabulary as weekdays, but with a dedicated shell and a horizontal “logical row” pattern.
+
+- **Shell HTML**: `html/prayer_times_friday_single_page.html`
+  - `#friday-prayer-card-shacharit` (weekday grouped shacharit row UI)
+  - `#friday-prayer-row-erev-shabbat`: horizontal row of equal-width cards
+    - `#friday-prayer-card-mincha-gedola` (static 13:15)
+    - `#friday-prayer-card-hadlakat` (`#hadlakat-nerot`)
+    - `#friday-prayer-card-mincha-kabalat` (`#mincha_shabat_eve` with caption “מנחה וקבלת שבת”)
+- **Equal-width horizontal cards**:
+  - In HTML: use `flex` row + each card `flex-1 basis-0 min-w-0`.
+  - Keep card contents centered (`items-center justify-center text-center`).
+  - Prefer no-wrap captions (`whitespace-nowrap max-w-none`) so Hebrew captions stay on one line when possible.
+- **Centered strips**:
+  - Default grouped strip (`TZ_TF_STRIP`) is start/space-between oriented for multi-slot prayer rows.
+  - For single-slot “horizontal cards”, use a centered strip helper (the inline-flex centered variant) so content actually centers (don’t rely only on `text-center`).
+- **Async ordering**:
+  - When the Friday shell is loaded via `fetch(...)`, `present_friday_single_page` should `await` it before calling `show_minyan_plag(...)` or other logic that assumes the DOM nodes exist.
 
 ## Styling conventions
 
@@ -57,6 +93,7 @@ Use this document when changing the **זמני תפילות חול** slide (`#tf
 |------|----------------|
 | Slide shell | `html/tfilot_single_page.html` |
 | Grouped prayer cards shell | `html/prayer_times_grouped_single_page.html` |
+| Friday prayer cards shell | `html/prayer_times_friday_single_page.html` |
 | Day-time rows | `html/day_times_inner_single_page.html` |
 | Logic + composable HTML | `scripts/present-next-page.js` |
 | Tailwind source | `styles/src/tailwind-input.css` → built `styles/tailwind-tfilot-single-page.css` |
@@ -66,7 +103,7 @@ Use this document when changing the **זמני תפילות חול** slide (`#tf
 
 ## Checklist before merging a UI change
 
-1. Scoped under **`#tfilot_single_page`** (or documented exception).
+1. Scoped under the relevant slide root (tfilot / Friday), or the shared `:is(...)` wrapper.
 2. **`npm run build:css`** run if HTML/classes/JS class strings / `tailwind-input.css` changed.
 3. **Ids and JS hooks** unchanged unless the task includes a coordinated script change.
 4. **CSP / offline**: no new external URLs without an approved pattern.
