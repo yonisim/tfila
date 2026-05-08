@@ -14,7 +14,7 @@
 
 @layer components {
   /* Tfilot + Friday single pages: full viewport (header hidden via body.tfilot-full-bleed) */
-  #main-div:has(:is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)) {
+  #main-div:has(:is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)) {
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -27,13 +27,13 @@
   }
 
   body.tfilot-full-bleed
-    #main-div:has(:is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)) {
+    #main-div:has(:is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)) {
     height: 100vh;
     max-height: 100vh;
   }
 
   /* Hero clock: pinned physical top-left; soft outer ring + gentle border */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .tfilot-clock-corner.header-clock-circle.tfilot-hero-clock {
     position: absolute;
     top: clamp(0.2rem, 1vh, 0.65rem);
@@ -65,14 +65,14 @@
   }
 
   /* One em grid; pixel font-size set by fitTfilotHeroClock() as --clock-fit-fs */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tfilot-clock-corner .clock {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tfilot-clock-corner .clock {
     font-size: var(--clock-fit-fs, var(--clock-time-em));
     padding-inline: 0;
     gap: 0.04em;
   }
 
   /* Digits/colons scale from .clock (see clock-time.js --clock-fit-fs); header .clock-text is #header-only */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .tfilot-clock-corner
     .clock-text:not(.colon) {
     font-family: 'DS-DIGI', 'Cascadia Mono', ui-monospace, monospace;
@@ -87,7 +87,7 @@
       0 2px 3px rgba(0, 0, 0, 0.5);
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .tfilot-clock-corner
     .clock-text.colon {
     font-family: 'DS-DIGI', 'Cascadia Mono', ui-monospace, monospace;
@@ -99,12 +99,12 @@
     text-shadow: none;
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tfilot-dates-strip .header-text {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tfilot-dates-strip .header-text {
     font-size: clamp(0.88rem, 2.8vmin, 1.45rem);
   }
 
   /* Nudge main content slightly below the top edge (under floating clock / date) */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) main.tfilot-main-offset {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) main.tfilot-main-offset {
     padding-top: clamp(0.65rem, 2.2vh, 1.35rem);
   }
 
@@ -120,21 +120,22 @@
 
   #main-div:has(#tfilot_single_page) > #tfilot_single_page,
   #main-div:has(#friday_single_page) > #friday_single_page,
-  #main-div:has(#friday_single_page_plag) > #friday_single_page_plag {
+  #main-div:has(#friday_single_page_plag) > #friday_single_page_plag,
+  #main-div:has(#shabat_single_page) > #shabat_single_page {
     flex: 1 1 0;
     min-height: 0;
     display: flex;
     flex-direction: column;
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-glass-card {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-glass-card {
     @apply rounded-xl border-r-8 border-primary p-6 shadow-glass;
     background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-page-bg {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-page-bg {
     background-image: linear-gradient(rgba(16, 27, 48, 0.6), rgba(16, 27, 48, 0.6)),
       url('../../assets/images/jerusalem-stone-bg.jpg');
     background-size: cover;
@@ -142,12 +143,12 @@
     background-attachment: fixed;
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-time-glow {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-time-glow {
     text-shadow: 0 0 40px rgba(106, 93, 65, 0.5);
   }
 
   /* Section header row: title + rule (זמני תפילות / זמני היום) */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-section-header {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-header {
     position: relative;
     display: flex;
     align-items: center;
@@ -172,7 +173,7 @@
     -webkit-backdrop-filter: blur(10px);
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-section-header::before {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-header::before {
     content: '';
     position: absolute;
     inset-inline-start: clamp(0.45rem, 1.2vw, 0.65rem);
@@ -188,7 +189,7 @@
   }
 
   /* Page section titles */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-section-title {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-title {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-weight: 600;
     font-size: clamp(1.05rem, 2.15vw, 1.72rem);
@@ -205,7 +206,7 @@
     flex-shrink: 0;
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-section-rule {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-rule {
     flex: 1 1 0%;
     min-width: 1.25rem;
     height: 1px;
@@ -223,7 +224,7 @@
   }
 
   /* In-card prayer row labels (שחרית: / מנחה: / ערבית:) — small title chip */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-inline-prayer-label {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-inline-prayer-label {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -251,7 +252,7 @@
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-inline-prayer-label::before {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-inline-prayer-label::before {
     content: '';
     display: block;
     width: 3px;
@@ -264,13 +265,13 @@
   }
 
   @media (min-width: 640px) {
-    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-inline-prayer-label {
+    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-inline-prayer-label {
       margin-bottom: 0.06em;
     }
   }
 
   /* Announcement bar: in flow at bottom; theme-aligned glass strip */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .fouter {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter {
     position: relative;
     bottom: auto;
     left: auto;
@@ -301,7 +302,7 @@
     line-height: 1.45;
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .fouter #footer-custom-message {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter #footer-custom-message {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-weight: 500;
     font-size: clamp(0.95rem, 2.2vw, 1.35rem) !important;
@@ -313,26 +314,117 @@
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   }
 
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .fouter
     #footer-custom-message.my-text-footer-small,
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .fouter
     #footer-custom-message.text-single-page-shaba {
     font-size: clamp(0.82rem, 1.95vw, 1.15rem) !important;
   }
 
   /* Legacy .show-element is display:block — inner prayer rows use flex when revealed */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .hidden-element.slichot.show-element,
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .hidden-element.shacharit-730.show-element,
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .hidden-element.friday-shacharit.show-element,
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .hidden-element.mincha-gedola.show-element,
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .hidden-element.talit_tfilin.show-element {
     display: flex !important;
+  }
+
+  /* Shabbat single-page: tighter spacing + smaller type so the full schedule fits on screen */
+  #shabat_single_page.shabat-single-page-compact .tz-section-header {
+    padding-block: 0.18rem 0.22rem;
+    gap: clamp(0.35rem, 1vw, 0.75rem);
+  }
+
+  #shabat_single_page.shabat-single-page-compact .tz-section-title {
+    font-size: clamp(0.86rem, 1.5vw, 1.38rem) !important;
+    letter-spacing: 0.038em;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .tz-section-parasha {
+    font-size: clamp(0.7rem, 1.25vw, 0.92rem) !important;
+    line-height: 1.25 !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .tz-inline-prayer-label {
+    font-size: clamp(0.78rem, 1.35vw, 1.05rem) !important;
+    padding: 0.18em 0.5em 0.22em 0.58em !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .tz-glass-card {
+    padding: 0.65rem 0.7rem !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .shabat-grid {
+    line-height: 1.22 !important;
+    margin-right: 0 !important;
+    column-gap: 0.45rem !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .grid-body-box,
+  #shabat_single_page.shabat-single-page-compact .grid-box-right {
+    padding: 2px 3px !important;
+    font-size: clamp(0.72rem, 1.2vmin, 0.88rem) !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .font-display-time {
+    font-size: clamp(0.92rem, 2.05vmin, 1.22rem) !important;
+    line-height: 1.05 !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .shabat-compact-tf .font-display-time {
+    font-size: clamp(0.88rem, 1.95vmin, 1.12rem) !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .flex.gap-x-4 {
+    gap: 0.5rem !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .flex.gap-x-6 {
+    gap: 0.65rem !important;
+  }
+
+  @media (min-width: 640px) {
+    #shabat_single_page.shabat-single-page-compact .font-display-time {
+      font-size: clamp(1rem, 2.2vmin, 1.32rem) !important;
+    }
+
+    #shabat_single_page.shabat-single-page-compact .shabat-compact-tf .font-display-time {
+      font-size: clamp(0.95rem, 2.05vmin, 1.2rem) !important;
+    }
+  }
+
+  #shabat_single_page.shabat-single-page-compact #day_times .tz-glass-card,
+  #shabat_single_page.shabat-single-page-compact #shabat-week-footer .tz-glass-card {
+    padding: 0.5rem 0.65rem !important;
+    gap: 0.4rem !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #day_times span.font-display-time,
+  #shabat_single_page.shabat-single-page-compact #shabat-week-footer span.font-display-time {
+    font-size: clamp(1.05rem, 2.25vmin, 1.42rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #day_times .font-headline-md,
+  #shabat_single_page.shabat-single-page-compact #day_times .text-sm,
+  #shabat_single_page.shabat-single-page-compact #shabat-week-footer .font-headline-md,
+  #shabat_single_page.shabat-single-page-compact #shabat-week-footer .text-sm {
+    font-size: clamp(0.88rem, 1.85vmin, 1.08rem) !important;
+    line-height: 1.25 !important;
+  }
+
+  @media (min-width: 640px) {
+    #shabat_single_page.shabat-single-page-compact #day_times span.font-display-time,
+    #shabat_single_page.shabat-single-page-compact #shabat-week-footer span.font-display-time {
+      font-size: clamp(1.15rem, 2.55vmin, 1.62rem) !important;
+    }
   }
 }

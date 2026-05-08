@@ -1,4 +1,4 @@
-var TZ_HERO_CLOCK_PAGE_IDS = ['tfilot_single_page', 'friday_single_page', 'friday_single_page_plag'];
+var TZ_HERO_CLOCK_PAGE_IDS = ['tfilot_single_page', 'friday_single_page', 'friday_single_page_plag', 'shabat_single_page'];
 
 /** Slide roots that host the top-left hero clock + HUD (same layout as tfilot). */
 function getTzHeroClockSlideRoot() {

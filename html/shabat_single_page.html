@@ -1,42 +1,130 @@
-<div id="shabat_single_page">
-  <div class="page-title half-page-title"><span>שבת</span> - <span id="prayer-times-title-parasha"></span></div>
-  <div class="text-single-page-shabat two-column-grid-right-side table-line" id="shabat_times">
-    <div class="shabat-grid tfilot-shabat-grid-horizontal" id="first_column">
+<div
+  id="shabat_single_page"
+  class="shabat-single-page-compact tz-page-bg relative flex h-full min-h-0 w-full max-w-full min-w-0 flex-col overflow-hidden text-on-surface fade-in"
+  dir="rtl"
+>
+  <div
+    class="tfilot-dates-strip pointer-events-none absolute right-0 top-0 z-10 flex max-w-[min(100%,22rem)] flex-wrap items-start justify-end px-container-padding pb-1 pt-3 sm:pt-4"
+    dir="rtl"
+  >
+    <div class="header-hebrew-panel pointer-events-auto min-w-0 shrink-0">
+      <div id="tfilot_hebrew_date" class="header-text"></div>
     </div>
+  </div>
+  <div class="header-clock-circle tfilot-hero-clock tfilot-clock-corner pointer-events-none">
+    <div class="clock pointer-events-auto" dir="ltr">
+      <span class="clock-text hour">00</span>
+      <b class="clock-text colon">:</b>
+      <span class="clock-text min">00</span>
+      <b class="clock-text colon">:</b>
+      <span class="clock-text second">00</span>
+    </div>
+  </div>
+  <main
+    class="tfilot-main-offset relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-3 pb-1 pt-1 font-body-md sm:px-4 sm:pb-2"
+  >
+    <div class="flex min-h-0 flex-1 flex-col justify-center overflow-x-hidden overflow-y-auto overscroll-contain">
+      <div
+        class="grid min-h-0 w-full max-w-full shrink-0 grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] gap-x-2 gap-y-1.5 overflow-hidden sm:gap-x-4 sm:gap-y-2 md:gap-x-5 md:gap-y-2"
+      >
+        <div class="tz-section-header flex min-h-[2.35rem] min-w-0 shrink-0 items-center self-stretch py-1 sm:min-h-[2.55rem]">
+          <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+            <h2 class="tz-section-title">זמני תפילות שבת</h2>
+            <p
+              class="tz-section-parasha m-0 max-w-full text-pretty ps-0.5 font-body-md text-sm font-medium leading-snug text-[#fdfbf7]/[0.92] sm:text-base"
+              id="prayer-times-title-parasha"
+            ></p>
+          </div>
+          <div class="tz-section-rule" aria-hidden="true"></div>
+        </div>
 
-    <div style="display: block;">
-      <div class="shabat-grid tfilot-shabat-grid-horizontal" style="width: 100%;" id="second_column">
-      </div>
-      <div class="two-column-grid-right-side-shabat-day-times" >
-        <div style="display: block;" class="column-of-grid">
-          <div class="grid-body-box title grid-title-margin">זמני היום בהלכה</div>
-          <div class="shabat-grid tfilot-shabat-grid-horizontal" id="day_times" style="width: 100%;">    
+        <div class="tz-section-header flex min-h-[2.35rem] min-w-0 shrink-0 items-center self-stretch py-1 sm:min-h-[2.55rem]">
+          <h2 class="tz-section-title">זמני היום בהלכה</h2>
+          <div class="tz-section-rule" aria-hidden="true"></div>
+        </div>
+
+        <div class="min-h-0 min-w-0 max-w-full overflow-y-auto overflow-x-hidden overscroll-contain pr-0.5">
+          <div class="flex min-w-0 max-w-full flex-col gap-1.5 sm:gap-2">
+            <section class="tz-glass-card flex min-w-0 flex-col gap-1.5 p-3 sm:p-4">
+              <div class="flex min-w-0 max-w-full flex-col gap-2">
+                <!-- RTL timeline: right = earliest — הדלקה → מנחה וקבלת שבת → צאת השבת -->
+                <div
+                  id="friday-prayer-row-erev-shabbat"
+                  class="flex min-w-0 flex-wrap items-stretch gap-2 sm:gap-3"
+                  aria-label="ערב שבת"
+                >
+                  <div
+                    id="friday-prayer-card-hadlakat"
+                    class="tz-glass-card flex min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-2 rounded-xl border-r-8 border-primary p-3 text-center shadow-glass sm:gap-2.5 sm:p-4"
+                  ></div>
+                  <div
+                    id="friday-prayer-card-mincha-kabalat"
+                    class="tz-glass-card flex min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-2 rounded-xl border-r-8 border-primary p-3 text-center shadow-glass sm:gap-2.5 sm:p-4"
+                  ></div>
+                  <div
+                    id="friday-prayer-card-mincha-gedola"
+                    class="tz-glass-card flex min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-2 rounded-xl border-r-8 border-primary p-3 text-center shadow-glass sm:gap-2.5 sm:p-4"
+                  ></div>
+                </div>
+                <!-- Legacy fallback container: present-next-page.js will use it only if the Friday row isn't present -->
+                <div id="first_column" class="shabat-grid tfilot-shabat-grid-horizontal"></div>
+              </div>
+            </section>
+
+            <section class="tz-glass-card flex min-w-0 flex-col gap-1.5 p-3 sm:p-4">
+              <div id="second_column" class="flex min-w-0 max-w-full flex-col gap-2 sm:gap-2.5"></div>
+            </section>
           </div>
         </div>
 
-        <div style="display: block;" class="column-of-grid">
-          <div class="title grid-body-box grid-title-margin">זמני השבוע</div>
-          <div class="shabat-grid tfilot-shabat-grid-horizontal" id="mincha_arvit" style="width: 100%;">    
-            <div class="grid-box-right grid-body-box" id="mincha-regulr-days"></div>
-            <div class="grid-box-right grid-body-box">מנחה</div>
-            <div class="grid-box-right grid-body-box" id="arvit-regulr-days"></div>
-            <div class="grid-box-right grid-body-box">ערבית</div>
-          </div>
+        <div
+          class="flex min-h-0 min-w-0 max-w-full flex-col gap-2 overflow-hidden pr-1"
+        >
+          <div
+            id="day_times"
+            class="flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden overscroll-contain"
+          ></div>
 
-          <div class="hidden-element" id="shabat-zachor">
-            <div class="title grid-body-box grid-title-margin">קריאת זכור</div>
-            <div class="shabat-grid tfilot-shabat-grid-horizontal" id="mincha_arvit" style="width: 100%;">
-              <div class="grid-box-right grid-body-box">09:30</div>
-              <div class="grid-box-right grid-body-box">10:30</div>
-              <div class="grid-box-right grid-body-box">16:45</div>
-              <div class="grid-box-right grid-body-box"></div>
+          <section
+            id="shabat-week-footer"
+            class="flex min-w-0 shrink-0 flex-col gap-2"
+          >
+            <div class="tz-inline-prayer-label self-start whitespace-nowrap">זמני השבוע</div>
+            <div
+              class="tz-glass-card flex w-full min-w-0 max-w-full items-center justify-between gap-2 overflow-hidden rounded-lg border-r-4 border-primary px-3 py-2.5 shadow-glass sm:gap-2.5 sm:px-3.5 sm:py-3"
+            >
+              <span
+                class="min-w-0 flex-1 break-words text-sm font-headline-md leading-snug text-on-surface sm:text-base md:text-lg"
+                >מנחה</span>
+              <span
+                class="shrink-0 whitespace-nowrap font-display-time text-lg tabular-nums text-primary tz-time-glow sm:text-xl md:text-2xl"
+                id="mincha-regulr-days-footer"
+              ></span>
             </div>
-          </div>
+            <div
+              class="tz-glass-card flex w-full min-w-0 max-w-full items-center justify-between gap-2 overflow-hidden rounded-lg border-r-4 border-primary px-3 py-2.5 shadow-glass sm:gap-2.5 sm:px-3.5 sm:py-3"
+            >
+              <span
+                class="min-w-0 flex-1 break-words text-sm font-headline-md leading-snug text-on-surface sm:text-base md:text-lg"
+                >ערבית</span>
+              <span
+                class="shrink-0 whitespace-nowrap font-display-time text-lg tabular-nums text-primary tz-time-glow sm:text-xl md:text-2xl"
+                id="arvit-regulr-days-footer"
+              ></span>
+            </div>
+
+            <div class="hidden-element" id="shabat-zachor">
+              <div class="tz-inline-prayer-label self-start whitespace-nowrap">קריאת זכור</div>
+              <div class="shabat-grid tfilot-shabat-grid-horizontal w-full" id="mincha_arvit_zachor">
+                <div class="grid-box-right grid-body-box">09:30</div>
+                <div class="grid-box-right grid-body-box">10:30</div>
+                <div class="grid-box-right grid-body-box">16:45</div>
+                <div class="grid-box-right grid-body-box"></div>
+              </div>
+            </div>
+          </section>
         </div>
-
-  </div>
-
+      </div>
     </div>
-    
-  </div>
+  </main>
 </div>
