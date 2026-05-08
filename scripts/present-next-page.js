@@ -91,6 +91,10 @@ function present_hebrew_date_in_header(current_date){
     if (tfilotHebrew){
         tfilotHebrew.textContent = hebrew_date_text;
     }
+    var fridayHebrew = document.getElementById('friday_hebrew_date');
+    if (fridayHebrew){
+        fridayHebrew.textContent = hebrew_date_text;
+    }
 }
 
 function sync_tfilot_top_hud_dates(current_date){
@@ -956,9 +960,12 @@ var TZ_TF_CAP_MD =
     'max-w-[6rem] text-center text-xs leading-tight text-on-surface-variant sm:text-sm';
 var TZ_TF_CAP_TIGHT =
     'max-w-[5rem] text-center text-xs leading-tight text-on-surface-variant sm:text-sm';
-var TZ_TF_COL_DEFAULT = 'flex min-w-0 flex-col items-center gap-0.5';
+/* Default time column: equal-width slots across the strip (desktop), still wraps on tight widths. */
+var TZ_TF_COL_DEFAULT = 'flex min-w-0 flex-1 basis-0 flex-col items-center gap-0.5';
 var TZ_TF_STRIP =
-    'flex min-w-0 flex-1 flex-wrap items-end justify-start gap-x-4 gap-y-2 sm:gap-x-6';
+    'flex min-w-0 w-full flex-1 flex-wrap items-end justify-end gap-x-4 gap-y-2 sm:flex-nowrap sm:justify-between sm:gap-x-0';
+var TZ_TF_STRIP_CENTER =
+    'inline-flex min-w-0 flex-wrap items-end justify-center gap-x-4 gap-y-2 sm:gap-x-6';
 
 function tz_tfilot_time_span_html(timeText, timeId){
     var idAttr = timeId ? ' id="' + timeId + '"' : '';
@@ -985,6 +992,11 @@ function tz_tfilot_grouped_time_column_html(options){
 /** Horizontal strip of columns (time slots). */
 function tz_tfilot_grouped_time_strip_html(columnsHtml){
     return '<div class="' + TZ_TF_STRIP + '">' + columnsHtml + '</div>';
+}
+
+/** Same as tz_tfilot_grouped_time_strip_html but centers contents and doesn't expand to full width. */
+function tz_tfilot_grouped_time_strip_center_html(columnsHtml){
+    return '<div class="' + TZ_TF_STRIP_CENTER + '">' + columnsHtml + '</div>';
 }
 
 /** Row: inline prayer title (שחרית: / מנחה:) + strip. */
@@ -1025,7 +1037,8 @@ function get_tfilot_shacharit_grouped_card_inner_html(current_date){
     if (is_between_dates(current_date, '2025-09-14T10:00', '2025-10-01T18:00')){
         slots.push(
             tz_tfilot_grouped_time_column_html({
-                wrapperClass: 'hidden-element slichot flex min-w-0 flex-col items-center gap-0.5',
+                wrapperClass:
+                    'hidden-element slichot flex min-w-0 flex-1 basis-0 flex-col items-center gap-0.5',
                 timeText: '06:30',
                 timeId: 'slichot',
                 captionText: 'סליחות (משוער)',
@@ -1040,7 +1053,8 @@ function get_tfilot_shacharit_grouped_card_inner_html(current_date){
             captionText: 'שחרית ב',
         }),
         tz_tfilot_grouped_time_column_html({
-            wrapperClass: 'hidden-element friday-shacharit flex min-w-0 flex-col items-center gap-0.5',
+            wrapperClass:
+                'hidden-element friday-shacharit flex min-w-0 flex-1 basis-0 flex-col items-center gap-0.5',
             timeText: '08:30',
             captionText: 'שחרית ג',
             captionId: 'shacharit-830-name',
@@ -1053,7 +1067,8 @@ function get_tfilot_mincha_grouped_card_inner_html(){
     var slots = [
         tz_tfilot_mincha_dynamic_prepend_container_html(),
         tz_tfilot_grouped_time_column_html({
-            wrapperClass: 'hidden-element mincha-gedola flex min-w-0 flex-col items-center gap-0.5',
+            wrapperClass:
+                'hidden-element mincha-gedola flex min-w-0 flex-1 basis-0 flex-col items-center gap-0.5',
             timeText: '13:15',
             captionText: 'מנחה גדולה',
             captionMaxClass: TZ_TF_CAP_MD,
@@ -1092,7 +1107,7 @@ function get_tfilot_arvit_grouped_card_inner_html(current_date, arvit_time){
     if (show_arvit_20){
         slots.push(
             tz_tfilot_grouped_time_column_html({
-                wrapperClass: 'arvit-8 flex min-w-0 flex-col items-center gap-0.5',
+                wrapperClass: 'arvit-8 flex min-w-0 flex-1 basis-0 flex-col items-center gap-0.5',
                 timeText: '20:00',
                 captionText: 'ערבית ב',
             })
@@ -1112,6 +1127,154 @@ function fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time){
     set_element_html('tfilot-prayer-card-shacharit', get_tfilot_shacharit_grouped_card_inner_html(current_date));
     set_element_html('tfilot-prayer-card-mincha', get_tfilot_mincha_grouped_card_inner_html());
     set_element_html('tfilot-prayer-card-arvit', get_tfilot_arvit_grouped_card_inner_html(current_date, arvit_time));
+}
+
+/** Friday single-page: helper for an equal-width horizontal cards row. */
+function tz_equal_width_cards_row_html(cardIds){
+    var cards = [];
+    for (var i = 0; i < cardIds.length; i++){
+        cards.push(
+            '<div class="tz-glass-card flex min-w-0 flex-1 basis-0 flex-col gap-3 rounded-xl border-r-8 border-primary p-5 shadow-glass" id="' +
+                cardIds[i] +
+                '"></div>'
+        );
+    }
+    return '<div class="flex min-w-0 flex-wrap gap-3">' + cards.join('') + '</div>';
+}
+
+/* Friday: captions inside horizontal cards should stay on one line when possible. */
+var TZ_TF_CAP_NOWRAP =
+    'max-w-none whitespace-nowrap text-center text-xs leading-tight text-on-surface-variant sm:text-sm';
+
+/** Friday single-page: הדלקת נרות card body. */
+function get_friday_hadlakat_card_inner_html(){
+    return (
+        '<div class="flex w-full justify-center">' +
+        tz_tfilot_grouped_time_strip_center_html(
+            tz_tfilot_grouped_time_column_html({
+                timeText: '',
+                timeId: 'hadlakat-nerot',
+                captionText: 'הדלקת נרות',
+                captionMaxClass: TZ_TF_CAP_NOWRAP,
+            })
+        ) +
+        '</div>'
+    );
+}
+
+/** Friday single-page: קבלת שבת card body. */
+function get_friday_kabalat_card_inner_html(){
+    return (
+        '<div class="flex w-full justify-center">' +
+        tz_tfilot_grouped_time_strip_center_html(
+            tz_tfilot_grouped_time_column_html({
+                timeText: '',
+                timeId: 'kabalat_shabat',
+                captionText: 'קבלת שבת',
+                captionId: 'kabalat-shabat-name',
+                captionMaxClass: TZ_TF_CAP_NOWRAP,
+            })
+        ) +
+        '</div>'
+    );
+}
+
+/** Friday single-page: מנחה גדולה card body. */
+function get_friday_mincha_gedola_card_inner_html(){
+    return (
+        '<div class="flex w-full justify-center">' +
+        tz_tfilot_grouped_time_strip_center_html(
+            tz_tfilot_grouped_time_column_html({
+                timeText: '13:15',
+                captionText: 'מנחה גדולה',
+                captionMaxClass: TZ_TF_CAP_NOWRAP,
+            })
+        ) +
+        '</div>'
+    );
+}
+
+/** Friday single-page: מנחה וקבלת שבת combined card (time is the mincha time). */
+function get_friday_mincha_kabalat_card_inner_html(){
+    return (
+        '<div class="flex w-full justify-center">' +
+        tz_tfilot_grouped_time_strip_center_html(
+            tz_tfilot_grouped_time_column_html({
+                wrapperClass: 'mincha_shabat_eve flex min-w-0 flex-col items-center gap-0.5',
+                timeText: '',
+                timeId: 'mincha_shabat_eve',
+                captionText: 'מנחה וקבלת שבת',
+                captionMaxClass: TZ_TF_CAP_NOWRAP,
+            })
+        ) +
+        '</div>'
+    );
+}
+
+function get_friday_shacharit_card_inner_html(current_date){
+    var inner = '';
+    if (is_10_tevet_friday(current_date)){
+        inner +=
+            '<div class="mb-3 border-b border-primary/30 pb-3">' +
+            tz_tfilot_grouped_time_strip_html(
+                tz_tfilot_grouped_time_column_html({
+                    timeText: '05:06',
+                    captionText: 'כניסת הצום',
+                    captionMaxClass: TZ_TF_CAP_MD,
+                })
+            ) +
+            '</div>';
+    }
+    inner += get_tfilot_shacharit_grouped_card_inner_html(current_date);
+    return inner;
+}
+
+function fill_friday_prayer_grouped_cards(current_date){
+    /* Optional: if we ever want to render the “erev shabbat” row dynamically, keep this helper around:
+       tz_equal_width_cards_row_html(['friday-prayer-card-mincha-gedola','friday-prayer-card-hadlakat','friday-prayer-card-mincha-kabalat']) */
+    set_element_html('friday-prayer-card-shacharit', get_friday_shacharit_card_inner_html(current_date));
+    set_element_html('friday-prayer-card-mincha-gedola', get_friday_mincha_gedola_card_inner_html());
+    set_element_html('friday-prayer-card-hadlakat', get_friday_hadlakat_card_inner_html());
+    set_element_html('friday-prayer-card-mincha-kabalat', get_friday_mincha_kabalat_card_inner_html());
+}
+
+/** מנין פלג — same typography as prayer cards (no legacy grid). */
+function get_friday_plag_minyan_card_inner_html(){
+    return (
+        '<div class="flex min-w-0 flex-wrap gap-3">' +
+        '<div class="tz-glass-card flex min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-3 rounded-xl border-r-8 border-primary p-5 shadow-glass">' +
+        tz_tfilot_grouped_time_strip_center_html(
+            tz_tfilot_grouped_time_column_html({
+                timeText: '',
+                timeId: 'kabalat-shabat-early-mincha',
+                captionText: 'מנחה וקבלת שבת מוקדמת',
+                captionMaxClass: TZ_TF_CAP_NOWRAP,
+            })
+        ) +
+        '</div>' +
+        '<div class="tz-glass-card flex min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-3 rounded-xl border-r-8 border-primary p-5 shadow-glass">' +
+        tz_tfilot_grouped_time_strip_center_html(
+            tz_tfilot_grouped_time_column_html({
+                timeText: '',
+                timeId: 'kabalat-shabat-early',
+                captionText: 'פלג המנחה',
+                captionMaxClass: TZ_TF_CAP_NOWRAP,
+            })
+        ) +
+        '</div>' +
+        '</div>'
+    );
+}
+
+function apply_friday_shabat_eve_card_times(current_date, shabat_in){
+    set_element_html('hadlakat-nerot', shabat_in);
+    if (is_purim(current_date)){
+        hide_element('mincha_shabat_eve');
+        set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 20));
+    }
+    if (!is_10_tevet_friday(current_date)){
+        set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
+    }
 }
 
 async function present_prayer_times_single_page(current_date){
@@ -1925,38 +2088,53 @@ function populate_friday_prayer_times(current_date){
         document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'] + ' (עשרה בטבת)';
     }
 
-    load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
-        show_slichot(current_date);
-        if (is_10_tevet_friday(current_date)) {
-            insert_html_at_start_of_element('friday_prayers', create_table_row_html('05:06', 'כניסת הצום'));
-        }
-        var elements = document.getElementsByClassName('friday-shacharit');
-        for (var element of elements){
-            element.classList.add('show-element');
-        }
-    });
-
-    show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
+    return fetch('./html/prayer_times_friday_single_page.html')
+        .then(function (res){
+            return res.text();
+        })
+        .then(function (html){
+            set_element_html('friday_prayers', html);
+            fill_friday_prayer_grouped_cards(current_date);
+            show_slichot(current_date);
+            var elements = document.getElementsByClassName('friday-shacharit');
+            for (var i = 0; i < elements.length; i++){
+                elements[i].classList.add('show-element');
+            }
+            return show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
+        });
 }
 
 async function present_friday_single_page(current_date){
+    document.body.classList.add('tfilot-full-bleed');
+    sync_tfilot_top_hud_dates(current_date);
     var main_page_id = 'friday_single_page';
-    populate_friday_prayer_times(current_date)
+    await populate_friday_prayer_times(current_date);
 
     if(is_minyan_plag_active(current_date)){
         show_minyan_plag(current_date);
-        main_page_id += '_plag'
+        main_page_id += '_plag';
     }
 
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
+    load_html_into_page_elem_end('day_times_inner_single_page.html', 'day_times', () => {
         present_day_times(get_this_friday_date(current_date), true);
     });
     show_sfirat_haomer_if_needed(current_date, main_page_id, true);
-    show_footer_custom_message_if_needed(current_date, main_page_id)
+    show_footer_custom_message_if_needed(current_date, main_page_id);
+    attachTfilotHeroClockResizeObserver();
+    requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+            syncTfilotHeroClockDiskSize();
+            fitTfilotHeroClock();
+        });
+    });
     return sleep_seconds(wait_seconds*5);
 }
 
 async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
+    if (document.getElementById('friday-prayer-row-erev-shabbat')){
+        apply_friday_shabat_eve_card_times(current_date, shabat_in);
+        return;
+    }
     var friday_times_html = 'friday_times.html';
     if (is_10_tevet_friday(current_date)) {
         friday_times_html = 'friday_times_10_tevet.html';
@@ -1985,9 +2163,14 @@ async function show_chag_eve_times(current_date, chag_in, parent_element) {
 
 function show_minyan_plag(current_date) {
     var elements = document.getElementsByClassName('plag-block');
-        for (var element of elements){
-            element.classList.add('show-element');
+    for (var element of elements){
+        element.classList.add('show-element');
     }
+    var plagRoot = document.getElementById('plag');
+    if (!plagRoot){
+        return;
+    }
+    plagRoot.innerHTML = get_friday_plag_minyan_card_inner_html();
     var day = current_date;
     if(is_in_weekdays(current_date, [4])){
         day = addDays(current_date, 1);
@@ -1996,13 +2179,11 @@ function show_minyan_plag(current_date) {
     var kabalat_shabat_early_mincha = get_today_kabalat_shabat_early_mincha(day);
     if(!kabalat_shabat_early_mincha){
         var rounded = round_to_five(plag, true);
-        var kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
+        kabalat_shabat_early_mincha = add_minutes_to_time(rounded, -20);
     }
 
-    load_html_into_page_elem_end('kabalat_shabat_early.html', 'plag', () => {
-        set_element_html('kabalat-shabat-early-mincha', format_hour_and_minutes(kabalat_shabat_early_mincha));
-        set_element_html('kabalat-shabat-early', format_hour_and_minutes(plag));
-    });
+    set_element_html('kabalat-shabat-early-mincha', format_hour_and_minutes(kabalat_shabat_early_mincha));
+    set_element_html('kabalat-shabat-early', format_hour_and_minutes(plag));
 }
 
 async function present_friday_prayer_times(current_date){

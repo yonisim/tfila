@@ -1,7 +1,21 @@
+var TZ_HERO_CLOCK_PAGE_IDS = ['tfilot_single_page', 'friday_single_page', 'friday_single_page_plag'];
+
+/** Slide roots that host the top-left hero clock + HUD (same layout as tfilot). */
+function getTzHeroClockSlideRoot() {
+  var i;
+  for (i = 0; i < TZ_HERO_CLOCK_PAGE_IDS.length; i++) {
+    var el = document.getElementById(TZ_HERO_CLOCK_PAGE_IDS[i]);
+    if (el && el.querySelector('.clock .hour')) {
+      return el;
+    }
+  }
+  return null;
+}
+
 function getActiveClockRoot() {
-  var tf = document.getElementById('tfilot_single_page');
-  if (tf && tf.querySelector('.clock .hour')) {
-    return tf;
+  var tz = getTzHeroClockSlideRoot();
+  if (tz) {
+    return tz;
   }
   var header = document.querySelector('header');
   if (header && header.querySelector('.clock .hour')) {
@@ -72,7 +86,7 @@ function setTfilotFitDebug(payload) {
  * vertically centered; fixed vmin clamp cannot track the title bar.
  */
 export function syncTfilotHeroClockDiskSize() {
-  var tfPage = document.getElementById('tfilot_single_page');
+  var tfPage = getTzHeroClockSlideRoot();
   if (!tfPage) {
     return;
   }
@@ -96,6 +110,12 @@ export function syncTfilotHeroClockDiskSize() {
   var minPx = 72;
   var maxPx = 340;
   diameterPx = Math.max(minPx, Math.min(maxPx, Math.round(diameterPx)));
+  /* Friday slides: subtitle row can sit high vs clock — avoid tiny disk if geometry is tight */
+  if (tfPage.id === 'friday_single_page' || tfPage.id === 'friday_single_page_plag') {
+    var floorPx = Math.min(200, Math.max(120, Math.round(window.innerHeight * 0.15)));
+    diameterPx = Math.max(diameterPx, floorPx);
+    diameterPx = Math.min(maxPx, diameterPx);
+  }
   disk.style.setProperty('--clock-size', diameterPx + 'px');
 }
 
@@ -104,7 +124,7 @@ export function syncTfilotHeroClockDiskSize() {
  * Refit when the disk gets a real size (ResizeObserver) — fixes empty transform when first runs at 0×0.
  */
 export function fitTfilotHeroClock() {
-  var tfPage = document.getElementById('tfilot_single_page');
+  var tfPage = getTzHeroClockSlideRoot();
   /* Slide not in DOM (other slide / loop) — skip; do not overwrite __tfilotClockFitDebug */
   if (!tfPage) {
     return;
@@ -116,7 +136,7 @@ export function fitTfilotHeroClock() {
     setTfilotFitDebug({
       ok: false,
       reason: 'hero_missing',
-      note: '#tfilot_single_page is mounted but .tfilot-hero-clock or inner .clock is missing',
+      note: 'tz hero slide is mounted but .tfilot-hero-clock or inner .clock is missing',
     });
     return;
   }
@@ -190,7 +210,7 @@ export function attachTfilotHeroClockResizeObserver() {
   if (typeof ResizeObserver === 'undefined') {
     return;
   }
-  var tfPage = document.getElementById('tfilot_single_page');
+  var tfPage = getTzHeroClockSlideRoot();
   var disk = tfPage && tfPage.querySelector('.tfilot-hero-clock');
   if (!disk) {
     return;
@@ -258,7 +278,7 @@ export function clockFunc() {
       colons[i].classList.add('sec');
     }
   }
-  if (root.id === 'tfilot_single_page') {
+  if (TZ_HERO_CLOCK_PAGE_IDS.indexOf(root.id) !== -1) {
     scheduleTfilotClockFit();
   }
   setTimeout(clockFunc, 1000);
@@ -309,12 +329,13 @@ if (typeof window !== 'undefined') {
   window.addEventListener('resize', function () {
     clearTimeout(tfilotResizeTimer);
     tfilotResizeTimer = setTimeout(function () {
-      if (!document.getElementById('tfilot_single_page')) {
+      var page = getTzHeroClockSlideRoot();
+      if (!page) {
         return;
       }
       tfilotInnerRetries = 0;
       tfilotScrollRetries = 0;
-      var d = document.querySelector('#tfilot_single_page .tfilot-hero-clock');
+      var d = page.querySelector('.tfilot-hero-clock');
       var c = d && d.querySelector('.clock');
       clearTfilotHeroClockFit(c, d);
       fitTfilotHeroClock();
@@ -322,12 +343,13 @@ if (typeof window !== 'undefined') {
   });
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
-      if (!document.getElementById('tfilot_single_page')) {
+      var page = getTzHeroClockSlideRoot();
+      if (!page) {
         return;
       }
       tfilotInnerRetries = 0;
       tfilotScrollRetries = 0;
-      var d = document.querySelector('#tfilot_single_page .tfilot-hero-clock');
+      var d = page.querySelector('.tfilot-hero-clock');
       var c = d && d.querySelector('.clock');
       clearTfilotHeroClockFit(c, d);
       fitTfilotHeroClock();

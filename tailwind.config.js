@@ -1,9 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  important: '#tfilot_single_page',
+  /* Comma-separated IDs break utilities (e.g. .hidden → display:none on each id). Use :is(). */
+  important:
+    ':is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)',
   content: [
     './html/tfilot_single_page.html',
+    './html/friday_single_page.html',
+    './html/friday_single_page_plag.html',
     './html/prayer_times_grouped_single_page.html',
+    './html/prayer_times_friday_single_page.html',
     './html/day_times_inner_single_page.html',
     './scripts/present-next-page.js',
     './styles/src/**/*.css',
