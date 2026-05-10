@@ -115,11 +115,28 @@
 
   /* Friday: room under hero clock + parasha strip */
   :is(#friday_single_page, #friday_single_page_plag) main.tfilot-main-offset {
-    padding-top: clamp(3.35rem, 9vh, 6.75rem);
+    padding-top: clamp(4.05rem, 11vh, 7.95rem);
   }
 
   :is(#friday_single_page, #friday_single_page_plag) .friday-tz-scroll-host {
     padding-top: clamp(0.5rem, 1.5vh, 1.1rem);
+  }
+
+  /* Friday + Plag: compact stacking — keep cards tight at the top of each
+     column with small gaps. Empty space at the bottom is acceptable; we do
+     NOT distribute cards across the full column height. */
+  #friday_single_page_plag #friday_prayers {
+    flex: 0 0 auto !important;
+  }
+
+  #friday_single_page_plag #friday_prayers > div,
+  #friday_single_page_plag #day_times > div {
+    gap: clamp(0.35rem, 0.9vh, 0.65rem);
+  }
+
+  /* Drop the empty kabalat slot to avoid an extra gap below the plag card. */
+  #friday_single_page_plag #kabalat-shabat-parent:empty {
+    display: none;
   }
 
   #main-div:has(#tfilot_single_page) > #tfilot_single_page,
@@ -309,6 +326,13 @@
     :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-inline-prayer-label {
       margin-bottom: 0.06em;
     }
+  }
+
+  /* Weekday tfilot only: equalize prayer label chips (שחרית: / מנחה: / ערבית:)
+     so the time strips that follow them start at the same horizontal position. */
+  #tfilot_single_page .tz-inline-prayer-label {
+    min-width: 6.5em;
+    justify-content: flex-start;
   }
 
   /* Announcement bar: in flow at bottom; theme-aligned glass strip */
