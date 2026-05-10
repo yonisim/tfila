@@ -328,16 +328,14 @@
     }
   }
 
-  /* Weekday tfilot only: equalize prayer label chips (שחרית: / מנחה: / ערבית:)
-     so the time strips that follow them start at the same horizontal position.
-     Tighter horizontal padding and no decorative bar — chip hugs the text. */
-  #tfilot_single_page .tz-inline-prayer-label {
+  /* Prayer row label chips: equal width for time-strip alignment, tight padding, no decorative bar */
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-inline-prayer-label {
     min-width: 5em;
     justify-content: flex-start;
     padding-inline: 0.55em 0.55em;
   }
 
-  #tfilot_single_page .tz-inline-prayer-label::before {
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-inline-prayer-label::before {
     display: none;
   }
 
@@ -449,7 +447,7 @@
 
   #shabat_single_page.shabat-single-page-compact .tz-inline-prayer-label {
     font-size: clamp(0.95rem, 1.75vw, 1.28rem) !important;
-    padding: 0.26em 0.62em 0.3em 0.72em !important;
+    padding: 0.26em 0.55em 0.3em 0.55em !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .tz-glass-card {
