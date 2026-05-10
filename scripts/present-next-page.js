@@ -1033,6 +1033,143 @@ var TZ_TF_STRIP =
 var TZ_TF_STRIP_CENTER =
     'inline-flex min-w-0 flex-wrap items-end justify-center gap-x-4 gap-y-2 sm:gap-x-6';
 
+/** Master switch: false hides all tfilot / Shabbat card and row icons (SVG helpers and call sites stay). */
+var TZ_TFICONS_ENABLED = false;
+
+/* Small inline SVGs (currentColor) for tfilot / Shabbat single-page cards */
+var TZ_ICON_SVG_CLASS =
+    'block h-[1.05em] w-[1.05em] shrink-0 text-primary/95 sm:h-[1.15em] sm:w-[1.15em]';
+
+function tz_icon_sun_svg(){
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" class="' +
+        TZ_ICON_SVG_CLASS +
+        '" aria-hidden="true">' +
+        '<circle cx="12" cy="12" r="4"/>' +
+        '<path d="M12 2.25v2.5M12 19.25v2.5M4.22 4.22l1.77 1.77M18.01 18.01l1.77 1.77M2.25 12h2.5M19.25 12h2.5M4.22 19.78l1.77-1.77M18.01 5.99l1.77-1.77"/>' +
+        '</svg>'
+    );
+}
+
+function tz_icon_moon_svg(){
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="' +
+        TZ_ICON_SVG_CLASS +
+        '" aria-hidden="true">' +
+        '<path fill="currentColor" fill-opacity="0.88" d="M21 12.5A8.5 8.5 0 1110.9 3.05 6.4 6.4 0 0021 12.5z"/>' +
+        '</svg>'
+    );
+}
+
+function tz_icon_shabbat_candles_svg(){
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="' +
+        TZ_ICON_SVG_CLASS +
+        ' h-[1.15em] w-[1.15em] sm:h-[1.25em] sm:w-[1.25em]" aria-hidden="true">' +
+        '<rect x="6.8" y="11.35" width="4.35" height="9.15" rx="0.9" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>' +
+        '<rect x="14.5" y="11.5" width="4.35" height="9" rx="0.9" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>' +
+        '<path fill="currentColor" fill-opacity="0.92" stroke="currentColor" stroke-width="0.28" stroke-linejoin="round" d="M9 2.05L5.55 11.05Q9 13.6 12.45 11.05L9 2.05z"/>' +
+        '<path fill="currentColor" fill-opacity="0.92" stroke="currentColor" stroke-width="0.28" stroke-linejoin="round" d="M16.75 2.35L13.25 11.35Q16.75 13.75 20.25 11.35L16.75 2.35z"/>' +
+        '</svg>'
+    );
+}
+
+/** Stemmed goblet (קידוש) — bowl, stem, foot. */
+function tz_icon_kiddush_cup_svg(){
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" class="' +
+        TZ_ICON_SVG_CLASS +
+        '" aria-hidden="true">' +
+        '<path d="M8.5 5.75L9.38 14.25Q12 16.35 14.62 14.25L15.5 5.75H8.5z"/>' +
+        '<path d="M12 16.55v3.85"/>' +
+        '<path d="M9.15 21.65h5.7"/>' +
+        '</svg>'
+    );
+}
+
+function tz_icon_child_svg(){
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" class="' +
+        TZ_ICON_SVG_CLASS +
+        '" aria-hidden="true">' +
+        '<circle cx="12" cy="8" r="2.75"/>' +
+        '<path d="M6.5 20.5c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6"/>' +
+        '</svg>'
+    );
+}
+
+function tz_icon_book_open_svg(){
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" class="' +
+        TZ_ICON_SVG_CLASS +
+        '" aria-hidden="true">' +
+        '<path d="M4 5.5A2.5 2.5 0 016.5 3H12v18H6.5A2.5 2.5 0 014 18.5v-13zM20 5.5A2.5 2.5 0 0017.5 3H12v18h5.5a2.5 2.5 0 002.5-2.5v-13z"/>' +
+        '</svg>'
+    );
+}
+
+function tz_icon_scroll_svg(){
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" class="' +
+        TZ_ICON_SVG_CLASS +
+        '" aria-hidden="true">' +
+        '<path d="M8 4h9a2 2 0 012 2v14a2 2 0 01-2 2H8V4zM8 4H7a2 2 0 00-2 2v14a2 2 0 002 2h1"/>' +
+        '</svg>'
+    );
+}
+
+function tz_icon_people_svg(){
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" class="' +
+        TZ_ICON_SVG_CLASS +
+        '" aria-hidden="true">' +
+        '<circle cx="9" cy="7" r="2.25"/>' +
+        '<circle cx="16" cy="8" r="2"/>' +
+        '<path d="M4 20c0-3 2.5-5 5-5s5 2 5 5M13 20c0-2.5 1.8-4.3 4-4.8"/>' +
+        '</svg>'
+    );
+}
+
+/** Small icon aligned to the big time digits (grouped prayer rows only). */
+function tz_icon_beside_time_span(iconSvg){
+    if (!TZ_TFICONS_ENABLED || iconSvg == null || iconSvg === ''){
+        return '';
+    }
+    return (
+        '<span class="tz-beside-time-icon inline-flex shrink-0 translate-y-[0.2em] items-end gap-1 text-primary opacity-95 me-2 sm:me-3 [&>svg]:h-7 [&>svg]:w-7 sm:[&>svg]:h-8 sm:[&>svg]:w-8">' +
+        iconSvg +
+        '</span>'
+    );
+}
+
+/** Optional card icon: physical top-left of the card body (glass cards). */
+function tz_icon_card_corner_span(iconSvg){
+    if (!TZ_TFICONS_ENABLED || iconSvg == null || iconSvg === ''){
+        return '';
+    }
+    return (
+        '<span class="tz-card-corner-icon pointer-events-none absolute left-2.5 top-2.5 z-[1] inline-flex text-primary opacity-95 sm:left-3.5 sm:top-3.5 [&>svg]:h-7 [&>svg]:w-7 sm:[&>svg]:h-8 sm:[&>svg]:w-8">' +
+        iconSvg +
+        '</span>'
+    );
+}
+
+/** Centered time column(s); optional icon in the card’s top-left corner (not beside the time). */
+function tz_tfilot_grouped_time_strip_center_html_beside_icon(columnsHtml, besideTimeIconSvg){
+    var strip = tz_tfilot_grouped_time_strip_center_html(columnsHtml);
+    var centered = '<div class="flex w-full justify-center">' + strip + '</div>';
+    var iconHtml = TZ_TFICONS_ENABLED ? besideTimeIconSvg : '';
+    if (iconHtml == null || iconHtml === ''){
+        return centered;
+    }
+    return (
+        '<div class="tz-tf-card-with-corner-icon relative flex min-h-0 w-full flex-1 flex-col items-center justify-center self-stretch">' +
+        tz_icon_card_corner_span(iconHtml) +
+        centered +
+        '</div>'
+    );
+}
+
 function tz_tfilot_time_span_html(timeText, timeId){
     var idAttr = timeId ? ' id="' + timeId + '"' : '';
     return '<span class="' + TZ_TF_TIME + '"' + idAttr + '>' + timeText + '</span>';
@@ -1065,14 +1202,23 @@ function tz_tfilot_grouped_time_strip_center_html(columnsHtml){
     return '<div class="' + TZ_TF_STRIP_CENTER + '">' + columnsHtml + '</div>';
 }
 
-/** Row: inline prayer title (שחרית: / מנחה:) + strip. */
-function tz_tfilot_grouped_prayer_row_html(prayerTitle, columnsHtml){
+/** Row: inline prayer title (שחרית: / מנחה:) + strip; optional SVG beside the time columns (RTL: toward the label). */
+function tz_tfilot_grouped_prayer_row_html(prayerTitle, columnsHtml, titleIconSvg){
+    var strip = tz_tfilot_grouped_time_strip_html(columnsHtml);
+    var effIcon = TZ_TFICONS_ENABLED ? titleIconSvg : '';
+    var timeArea =
+        effIcon != null && effIcon !== ''
+            ? '<div class="flex min-w-0 w-full flex-1 flex-wrap items-end justify-end gap-x-3 gap-y-2 sm:flex-nowrap sm:items-end sm:gap-x-5">' +
+              tz_icon_beside_time_span(effIcon) +
+              strip +
+              '</div>'
+            : strip;
     return (
-        '<div class="flex min-w-0 flex-col gap-2 border-b border-primary/30 pb-3 sm:flex-row sm:items-end sm:gap-4">' +
+        '<div class="flex min-w-0 flex-col gap-2 border-b border-primary/30 pb-3 sm:flex-row sm:items-end sm:gap-5">' +
         '<span class="tz-inline-prayer-label shrink-0">' +
         prayerTitle +
         '</span>' +
-        tz_tfilot_grouped_time_strip_html(columnsHtml) +
+        timeArea +
         '</div>'
     );
 }
@@ -1127,7 +1273,7 @@ function get_tfilot_shacharit_grouped_card_inner_html(current_date){
             captionId: 'shacharit-830-name',
         })
     );
-    return tz_tfilot_grouped_prayer_row_html('שחרית:', slots.join(''));
+    return tz_tfilot_grouped_prayer_row_html('שחרית:', slots.join(''), tz_icon_sun_svg());
 }
 
 function get_tfilot_mincha_grouped_card_inner_html(){
@@ -1143,7 +1289,7 @@ function get_tfilot_mincha_grouped_card_inner_html(){
         tz_tfilot_grouped_time_column_html({
             timeText: '',
             timeId: 'mincha-regulr-days',
-            captionText: 'מנחה',
+            captionText: 'מנחה קטנה',
             captionMaxClass: TZ_TF_CAP_TIGHT,
         }),
     ];
@@ -1212,7 +1358,7 @@ function get_tfilot_arvit_grouped_card_inner_html(current_date, arvit_time){
             captionId: 'arvit-9',
         })
     );
-    return tz_tfilot_grouped_prayer_row_html('ערבית:', slots.join(''));
+    return tz_tfilot_grouped_prayer_row_html('ערבית:', slots.join(''), tz_icon_moon_svg());
 }
 
 function fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time){
@@ -1240,100 +1386,82 @@ var TZ_TF_CAP_NOWRAP =
 
 /** Friday single-page: הדלקת נרות card body. */
 function get_friday_hadlakat_card_inner_html(){
-    return (
-        '<div class="flex w-full justify-center">' +
-        tz_tfilot_grouped_time_strip_center_html(
-            tz_tfilot_grouped_time_column_html({
-                timeText: '',
-                timeId: 'hadlakat-nerot',
-                captionText: 'הדלקת נרות',
-                captionMaxClass: TZ_TF_CAP_NOWRAP,
-            })
-        ) +
-        '</div>'
+    return tz_tfilot_grouped_time_strip_center_html_beside_icon(
+        tz_tfilot_grouped_time_column_html({
+            timeText: '',
+            timeId: 'hadlakat-nerot',
+            captionText: 'הדלקת נרות',
+            captionMaxClass: TZ_TF_CAP_NOWRAP,
+        }),
+        tz_icon_shabbat_candles_svg()
     );
 }
 
 /** Friday single-page: קבלת שבת card body. */
 function get_friday_kabalat_card_inner_html(){
-    return (
-        '<div class="flex w-full justify-center">' +
-        tz_tfilot_grouped_time_strip_center_html(
-            tz_tfilot_grouped_time_column_html({
-                timeText: '',
-                timeId: 'kabalat_shabat',
-                captionText: 'קבלת שבת',
-                captionId: 'kabalat-shabat-name',
-                captionMaxClass: TZ_TF_CAP_NOWRAP,
-            })
-        ) +
-        '</div>'
+    return tz_tfilot_grouped_time_strip_center_html_beside_icon(
+        tz_tfilot_grouped_time_column_html({
+            timeText: '',
+            timeId: 'kabalat_shabat',
+            captionText: 'קבלת שבת',
+            captionId: 'kabalat-shabat-name',
+            captionMaxClass: TZ_TF_CAP_NOWRAP,
+        }),
+        ''
     );
 }
 
 /** Friday single-page: מנחה גדולה card body. */
 function get_friday_mincha_gedola_card_inner_html(){
-    return (
-        '<div class="flex w-full justify-center">' +
-        tz_tfilot_grouped_time_strip_center_html(
-            tz_tfilot_grouped_time_column_html({
-                timeText: '13:15',
-                captionText: 'מנחה גדולה',
-                captionMaxClass: TZ_TF_CAP_NOWRAP,
-            })
-        ) +
-        '</div>'
+    return tz_tfilot_grouped_time_strip_center_html_beside_icon(
+        tz_tfilot_grouped_time_column_html({
+            timeText: '13:15',
+            captionText: 'מנחה גדולה',
+            captionMaxClass: TZ_TF_CAP_NOWRAP,
+        }),
+        ''
     );
 }
 
 /** Friday single-page: מנחה וקבלת שבת combined card (time is the mincha time). */
 function get_friday_mincha_kabalat_card_inner_html(){
-    return (
-        '<div class="flex w-full justify-center">' +
-        tz_tfilot_grouped_time_strip_center_html(
-            tz_tfilot_grouped_time_column_html({
-                wrapperClass: 'mincha_shabat_eve flex min-w-0 flex-col items-center gap-0.5',
-                timeText: '',
-                timeId: 'mincha_shabat_eve',
-                captionText: 'מנחה וקבלת שבת',
-                captionMaxClass: TZ_TF_CAP_NOWRAP,
-            })
-        ) +
-        '</div>'
+    return tz_tfilot_grouped_time_strip_center_html_beside_icon(
+        tz_tfilot_grouped_time_column_html({
+            wrapperClass: 'mincha_shabat_eve flex min-w-0 flex-col items-center gap-0.5',
+            timeText: '',
+            timeId: 'mincha_shabat_eve',
+            captionText: 'מנחה וקבלת שבת',
+            captionMaxClass: TZ_TF_CAP_NOWRAP,
+        }),
+        ''
     );
 }
 
 /** Shabbat single-page: first Erev-Shabbat card — צאת השבת (motzei preview time). */
 function get_shabat_motzei_card_inner_html(){
-    return (
-        '<div class="flex w-full justify-center">' +
-        tz_tfilot_grouped_time_strip_center_html(
-            tz_tfilot_grouped_time_column_html({
-                timeText: '',
-                timeId: 'shabat-motzei-time',
-                captionText: 'צאת השבת',
-                captionMaxClass: TZ_TF_CAP_NOWRAP,
-            })
-        ) +
-        '</div>'
+    return tz_tfilot_grouped_time_strip_center_html_beside_icon(
+        tz_tfilot_grouped_time_column_html({
+            timeText: '',
+            timeId: 'shabat-motzei-time',
+            captionText: 'צאת השבת',
+            captionMaxClass: TZ_TF_CAP_NOWRAP,
+        }),
+        tz_icon_moon_svg()
     );
 }
 
-/** Single centered card column (Friday-style glass card body). */
-function tz_shabat_centered_card_body_html(timeId, captionText, wrapperClass){
+/** Single centered card column (Friday-style glass card body); optional icon in the card top-left. */
+function tz_shabat_centered_card_body_html(timeId, captionText, wrapperClass, besideTimeIconSvg){
     var wrap = wrapperClass || 'flex min-w-0 flex-col items-center gap-0.5';
-    return (
-        '<div class="flex w-full justify-center">' +
-        tz_tfilot_grouped_time_strip_center_html(
-            tz_tfilot_grouped_time_column_html({
-                wrapperClass: wrap,
-                timeText: '',
-                timeId: timeId,
-                captionText: captionText,
-                captionMaxClass: TZ_TF_CAP_NOWRAP,
-            })
-        ) +
-        '</div>'
+    return tz_tfilot_grouped_time_strip_center_html_beside_icon(
+        tz_tfilot_grouped_time_column_html({
+            wrapperClass: wrap,
+            timeText: '',
+            timeId: timeId,
+            captionText: captionText,
+            captionMaxClass: TZ_TF_CAP_NOWRAP,
+        }),
+        besideTimeIconSvg
     );
 }
 
@@ -1347,33 +1475,33 @@ function get_shabat_after_shacharit_timeline_cards_row_html(){
         '<div id="shabat-card-kidush-shiur" class="' +
         SHABAT_DAY_CARD_SHELL +
         '">' +
-        tz_shabat_centered_card_body_html('kidush', 'קידוש ושיעור') +
+        tz_shabat_centered_card_body_html('kidush', 'קידוש ושיעור', undefined, tz_icon_kiddush_cup_svg()) +
         '</div>' +
         '<div id="shabat-card-tfilat-yeladim" class="' +
         SHABAT_DAY_CARD_SHELL +
         '">' +
-        tz_shabat_centered_card_body_html('shabat-tfilat-yeladim-time', 'תפילת ילדים') +
+        tz_shabat_centered_card_body_html('shabat-tfilat-yeladim-time', 'תפילת ילדים', undefined, tz_icon_child_svg()) +
         '</div>' +
         '<div id="shabat-card-parents" class="' +
         SHABAT_DAY_CARD_SHELL +
         '">' +
-        '<div class="flex w-full justify-center">' +
-        tz_tfilot_grouped_time_strip_center_html(
+        '<div class="parents-and-children hidden-element flex w-full min-h-0 flex-1 flex-col self-stretch">' +
+        tz_tfilot_grouped_time_strip_center_html_beside_icon(
             tz_tfilot_grouped_time_column_html({
-                wrapperClass:
-                    'parents-and-children hidden-element flex min-w-0 flex-col items-center gap-0.5',
+                wrapperClass: 'flex min-w-0 flex-col items-center gap-0.5',
                 timeText: '',
                 timeId: 'shabat-parents-time',
                 captionText: 'הורים וילדים',
                 captionMaxClass: TZ_TF_CAP_NOWRAP,
-            })
+            }),
+            tz_icon_people_svg()
         ) +
         '</div>' +
         '</div>' +
         '<div id="shabat-card-maayan" class="' +
         SHABAT_DAY_CARD_SHELL +
         '">' +
-        tz_shabat_centered_card_body_html('lesson-halacha', 'מעיינים בחבורה') +
+        tz_shabat_centered_card_body_html('lesson-halacha', 'מעיינים בחבורה', undefined, tz_icon_book_open_svg()) +
         '</div>' +
         '</div>'
     );
@@ -1388,17 +1516,17 @@ function get_shabat_afternoon_horizontal_cards_html(){
         '<div id="shabat-card-afternoon-tehilim" class="' +
         SHABAT_DAY_CARD_SHELL +
         '">' +
-        tz_shabat_centered_card_body_html('tehilim', 'תהלים לילדים בגן השמחה', 'tehilim ' + col) +
+        tz_shabat_centered_card_body_html('tehilim', 'תהלים לילדים בגן השמחה', 'tehilim ' + col, tz_icon_scroll_svg()) +
         '</div>' +
         '<div id="shabat-card-afternoon-shiur" class="' +
         SHABAT_DAY_CARD_SHELL +
         '">' +
-        tz_shabat_centered_card_body_html('shiur-pirkei-avot', 'שיעור בפרקי אבות', 'shiur-pirkei-avot ' + col) +
+        tz_shabat_centered_card_body_html('shiur-pirkei-avot', 'שיעור בפרקי אבות', 'shiur-pirkei-avot ' + col, tz_icon_book_open_svg()) +
         '</div>' +
         '<div id="shabat-card-afternoon-arvit" class="' +
         SHABAT_DAY_CARD_SHELL +
         ' arvit-shabat">' +
-        tz_shabat_centered_card_body_html('arvit-shabat', 'צאת השבת וערבית', 'arvit-shabat ' + col) +
+        tz_shabat_centered_card_body_html('arvit-shabat', 'צאת השבת וערבית', 'arvit-shabat ' + col, tz_icon_moon_svg()) +
         '</div>' +
         '<div id="shabat-card-afternoon-arvit-2" class="' +
         SHABAT_DAY_CARD_SHELL +
@@ -1518,7 +1646,7 @@ async function present_prayer_times_single_page(current_date){
     set_element_html('arvit-regulr-days', arvit_time);
     set_arvit_times(current_date, arvit_time);
 
-    load_html_into_page_elem_end('day_times_inner_single_page.html', 'day_times', () => {
+    load_html_into_page_elem_end('day_times_inner_tfilot_weekday.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
     show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);

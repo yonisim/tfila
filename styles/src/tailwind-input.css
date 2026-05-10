@@ -32,69 +32,74 @@
     max-height: 100vh;
   }
 
-  /* Hero clock: pinned physical top-left; soft outer ring + gentle border */
+  /* Hero clock: same frosted panel vocabulary as `.header-hebrew-panel` / Hebrew date strip */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .tfilot-clock-corner.header-clock-circle.tfilot-hero-clock {
     position: absolute;
-    top: clamp(0.2rem, 1vh, 0.65rem);
-    left: clamp(0.2rem, 1.2vw, 0.85rem);
+    top: 0.65rem;
+    left: clamp(0.35rem, 1.2vw, 0.85rem);
     z-index: 25;
     margin: 0;
-    /* Fallback before JS; syncTfilotHeroClockDiskSize() sets inline --clock-size from the section headers */
-    --clock-size: clamp(3.25rem, 14vmin, 6.5rem);
-    /*
-     * Never use % padding here: % is vs. containing block width (often full viewport), which can
-     * exceed the disk and collapse the content box to 0×0. Tie pad to --clock-size instead.
-     */
-    padding: calc(var(--clock-size) * 0.06);
-    /* Inner content side: border-box − pad − vertical borders (2px ×2) */
-    --clock-inner: calc(var(--clock-size) - 2 * (var(--clock-size) * 0.06) - 4px);
-    /* First paint only; `clock-time.js` sets --clock-fit-fs from real measurements */
-    --clock-time-em: calc(var(--clock-inner) * 0.96 / 3.12);
-    max-height: none;
-    border: 2px solid rgba(243, 225, 188, 0.55);
-    outline: 1px solid rgba(255, 253, 248, 0.35);
-    outline-offset: 3px;
+    box-sizing: border-box;
+    width: auto !important;
+    height: auto !important;
+    max-width: min(40rem, 98vw);
+    min-width: 0;
+    flex-shrink: 0;
+    border-radius: 0.55rem;
+    overflow: visible;
+    padding: 0.65rem 1.35rem 0.72rem;
+    background: linear-gradient(
+      165deg,
+      rgba(255, 253, 248, 0.94) 0%,
+      rgba(245, 238, 224, 0.9) 45%,
+      rgba(230, 218, 195, 0.82) 100%
+    );
+    border: 1px solid rgba(106, 93, 65, 0.32);
     box-shadow:
-      0 0 0 1px rgba(106, 93, 65, 0.22),
-      0 0 0 6px rgba(243, 225, 188, 0.08),
-      0 0 28px rgba(243, 225, 188, 0.18),
-      inset 0 2px 14px rgba(0, 0, 0, 0.42),
-      inset 0 -2px 10px rgba(255, 255, 255, 0.06),
-      0 10px 32px rgba(0, 0, 0, 0.22);
+      0 4px 18px rgba(0, 0, 0, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
-  /* One em grid; pixel font-size set by fitTfilotHeroClock() as --clock-fit-fs */
+  @media (min-width: 640px) {
+    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
+      .tfilot-clock-corner.header-clock-circle.tfilot-hero-clock {
+      top: 0.85rem;
+    }
+  }
+
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tfilot-clock-corner .clock {
-    font-size: var(--clock-fit-fs, var(--clock-time-em));
+    font-size: clamp(1.76rem, 5.6vmin, 2.9rem);
     padding-inline: 0;
     gap: 0.04em;
+    width: auto;
+    max-width: none;
   }
 
-  /* Digits/colons scale from .clock (see clock-time.js --clock-fit-fs); header .clock-text is #header-only */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .tfilot-clock-corner
     .clock-text:not(.colon) {
-    font-family: 'DS-DIGI', 'Cascadia Mono', ui-monospace, monospace;
-    font-weight: 700;
+    font-family: 'Work Sans', system-ui, sans-serif;
+    font-weight: 600;
     font-size: 1em;
-    line-height: 1;
-    letter-spacing: 0;
-    color: #f8edd4;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+    color: #2c2618;
     text-align: center;
-    text-shadow:
-      0 0 8px rgba(243, 225, 188, 0.32),
-      0 2px 3px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
   }
 
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .tfilot-clock-corner
     .clock-text.colon {
-    font-family: 'DS-DIGI', 'Cascadia Mono', ui-monospace, monospace;
-    font-weight: 700;
-    font-size: 0.6363636364em; /* 0.14 / 0.22 vs header digits */
+    font-family: 'Work Sans', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 0.62em;
     line-height: 1;
-    color: rgba(243, 225, 188, 0.72);
+    color: rgba(44, 38, 24, 0.5);
     padding: 0 0.02em;
     text-shadow: none;
   }
@@ -105,17 +110,16 @@
 
   /* Nudge main content slightly below the top edge (under floating clock / date) */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) main.tfilot-main-offset {
-    padding-top: clamp(0.65rem, 2.2vh, 1.35rem);
+    padding-top: clamp(1rem, 3.2vh, 2.2rem);
   }
 
-  /* Friday: taller section title + parasha — sit main lower so the hero clock can size to the title row */
+  /* Friday: room under hero clock + parasha strip */
   :is(#friday_single_page, #friday_single_page_plag) main.tfilot-main-offset {
-    padding-top: clamp(3.15rem, 9.75vh, 6.75rem);
+    padding-top: clamp(3.35rem, 9vh, 6.75rem);
   }
 
   :is(#friday_single_page, #friday_single_page_plag) .friday-tz-scroll-host {
-    justify-content: flex-start;
-    padding-top: clamp(0.85rem, 2.35vh, 1.55rem);
+    padding-top: clamp(0.5rem, 1.5vh, 1.1rem);
   }
 
   #main-div:has(#tfilot_single_page) > #tfilot_single_page,
@@ -126,6 +130,26 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
+  }
+
+  /* Two-column body row: stretch cells; stable gutter so scrollbars do not skew column widths */
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-two-col-grid {
+    align-items: stretch;
+    justify-items: stretch;
+  }
+
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-tf-col-cell {
+    box-sizing: border-box;
+    min-height: 0;
+  }
+
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
+    .tz-tf-col-cell.overflow-y-auto,
+  :is(#shabat_single_page) #day_times.overflow-y-auto,
+  #shabat_single_page .tz-tf-col-cell--stack > section:first-of-type > div.overflow-y-auto,
+  :is(#friday_single_page_plag) #friday_prayers.overflow-y-auto,
+  :is(#friday_single_page_plag) #plag.overflow-y-auto {
+    scrollbar-gutter: stable;
   }
 
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-glass-card {
@@ -171,6 +195,11 @@
       0 4px 22px rgba(0, 0, 0, 0.24);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Weekday tfilot: slimmer header band so the centered main area can shrink */
+  #tfilot_single_page .tz-section-header {
+    padding-block: 0.3rem 0.32rem;
   }
 
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-header::before {
@@ -264,6 +293,18 @@
     box-shadow: 0 0 8px rgba(106, 93, 65, 0.35);
   }
 
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-beside-time-icon svg,
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-card-corner-icon svg {
+    pointer-events: none;
+  }
+
+  /* Corner SVG is position:absolute; reserve physical top-left so centered time/caption never overlap it */
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-tf-card-with-corner-icon {
+    box-sizing: border-box;
+    padding-left: clamp(2.4rem, 6.2vw, 3.15rem);
+    padding-top: clamp(2rem, 5.2vw, 2.75rem);
+  }
+
   @media (min-width: 640px) {
     :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-inline-prayer-label {
       margin-bottom: 0.06em;
@@ -281,8 +322,8 @@
     flex-shrink: 0;
     margin-top: auto;
     box-sizing: border-box;
-    min-height: clamp(2.75rem, 6vh, 4.25rem);
-    padding: 0.65rem clamp(1rem, 4vw, 2.25rem);
+    min-height: clamp(3.75rem, 8.5vh, 6.5rem);
+    padding: 0.85rem clamp(1rem, 4vw, 2.25rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -305,7 +346,7 @@
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter #footer-custom-message {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-weight: 500;
-    font-size: clamp(0.95rem, 2.2vw, 1.35rem) !important;
+    font-size: clamp(1.68rem, 4.125vw, 2.58rem) !important;
     letter-spacing: 0.03em;
     line-height: 1.5;
     max-width: min(96vw, 72rem);
@@ -320,7 +361,15 @@
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .fouter
     #footer-custom-message.text-single-page-shaba {
-    font-size: clamp(0.82rem, 1.95vw, 1.15rem) !important;
+    font-size: clamp(1.47rem, 3.525vw, 2.13rem) !important;
+  }
+
+  /* Omer / announcement spans (not #footer-custom-message) */
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter #omer-text,
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter #omer-text-weeks {
+    font-size: clamp(1.68rem, 4.125vw, 2.58rem) !important;
+    line-height: 1.5;
+    font-weight: 500;
   }
 
   /* Legacy .show-element is display:block — inner prayer rows use flex when revealed */
@@ -337,94 +386,122 @@
     display: flex !important;
   }
 
-  /* Shabbat single-page: tighter spacing + smaller type so the full schedule fits on screen */
+  /* Shabbat single-page: larger type + breathing room to use screen area well */
+  #shabat_single_page.shabat-single-page-compact main.tfilot-main-offset {
+    /* Sit content lower under the hero clock + Hebrew strip (between weekday and Friday offsets) */
+    padding-top: clamp(1.85rem, 6vh, 4.5rem) !important;
+    padding-left: clamp(0.85rem, 2.2vw, 1.35rem) !important;
+    padding-right: clamp(0.85rem, 2.2vw, 1.35rem) !important;
+    padding-bottom: clamp(0.5rem, 1.5vh, 1rem) !important;
+  }
+
   #shabat_single_page.shabat-single-page-compact .tz-section-header {
-    padding-block: 0.18rem 0.22rem;
-    gap: clamp(0.35rem, 1vw, 0.75rem);
+    padding-block: 0.35rem 0.42rem;
+    gap: clamp(0.5rem, 1.35vw, 0.95rem);
+    min-height: 2.65rem !important;
+  }
+
+  @media (min-width: 640px) {
+    #shabat_single_page.shabat-single-page-compact .tz-section-header {
+      min-height: 2.85rem !important;
+    }
   }
 
   #shabat_single_page.shabat-single-page-compact .tz-section-title {
-    font-size: clamp(0.86rem, 1.5vw, 1.38rem) !important;
-    letter-spacing: 0.038em;
+    font-size: clamp(1.02rem, 2.05vw, 1.72rem) !important;
+    letter-spacing: 0.04em;
   }
 
   #shabat_single_page.shabat-single-page-compact .tz-section-parasha {
-    font-size: clamp(0.7rem, 1.25vw, 0.92rem) !important;
-    line-height: 1.25 !important;
+    font-size: clamp(0.88rem, 1.65vw, 1.15rem) !important;
+    line-height: 1.3 !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .tz-inline-prayer-label {
-    font-size: clamp(0.78rem, 1.35vw, 1.05rem) !important;
-    padding: 0.18em 0.5em 0.22em 0.58em !important;
+    font-size: clamp(0.95rem, 1.75vw, 1.28rem) !important;
+    padding: 0.26em 0.62em 0.3em 0.72em !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .tz-glass-card {
-    padding: 0.65rem 0.7rem !important;
+    padding: clamp(0.85rem, 1.8vmin, 1.15rem) clamp(0.9rem, 2vw, 1.2rem) !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .shabat-grid {
-    line-height: 1.22 !important;
+    line-height: 1.35 !important;
     margin-right: 0 !important;
-    column-gap: 0.45rem !important;
+    column-gap: clamp(0.5rem, 1.2vw, 0.85rem) !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .grid-body-box,
   #shabat_single_page.shabat-single-page-compact .grid-box-right {
-    padding: 2px 3px !important;
-    font-size: clamp(0.72rem, 1.2vmin, 0.88rem) !important;
+    padding: 4px 6px !important;
+    font-size: clamp(0.86rem, 1.55vmin, 1.05rem) !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .font-display-time {
-    font-size: clamp(0.92rem, 2.05vmin, 1.22rem) !important;
-    line-height: 1.05 !important;
+    font-size: clamp(1.08rem, 2.45vmin, 1.48rem) !important;
+    line-height: 1.08 !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .shabat-compact-tf .font-display-time {
-    font-size: clamp(0.88rem, 1.95vmin, 1.12rem) !important;
+    font-size: clamp(1.02rem, 2.35vmin, 1.38rem) !important;
+  }
+
+  /* Grouped mincha/shacharit caption chips (text-xs in Tailwind) */
+  #shabat_single_page.shabat-single-page-compact .shabat-compact-tf .text-xs {
+    font-size: clamp(0.78rem, 1.45vmin, 0.95rem) !important;
+    line-height: 1.2 !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .flex.gap-x-4 {
-    gap: 0.5rem !important;
+    gap: 0.65rem !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .flex.gap-x-6 {
-    gap: 0.65rem !important;
+    gap: 0.85rem !important;
+  }
+
+  /* Erev + post-shacharit / afternoon horizontal glass cards (not the full grouped mincha card shell) */
+  #shabat_single_page.shabat-single-page-compact #friday-prayer-row-erev-shabbat > .tz-glass-card,
+  #shabat_single_page.shabat-single-page-compact #second_column > .flex.flex-wrap > .tz-glass-card {
+    padding: clamp(0.85rem, 1.9vmin, 1.2rem) clamp(0.75rem, 1.8vw, 1.05rem) !important;
+    gap: 0.55rem !important;
   }
 
   @media (min-width: 640px) {
     #shabat_single_page.shabat-single-page-compact .font-display-time {
-      font-size: clamp(1rem, 2.2vmin, 1.32rem) !important;
+      font-size: clamp(1.18rem, 2.65vmin, 1.62rem) !important;
     }
 
     #shabat_single_page.shabat-single-page-compact .shabat-compact-tf .font-display-time {
-      font-size: clamp(0.95rem, 2.05vmin, 1.2rem) !important;
+      font-size: clamp(1.1rem, 2.5vmin, 1.52rem) !important;
     }
   }
 
   #shabat_single_page.shabat-single-page-compact #day_times .tz-glass-card,
   #shabat_single_page.shabat-single-page-compact #shabat-week-footer .tz-glass-card {
-    padding: 0.5rem 0.65rem !important;
-    gap: 0.4rem !important;
+    padding: clamp(0.62rem, 1.6vmin, 0.95rem) clamp(0.75rem, 1.9vw, 1.1rem) !important;
+    gap: 0.55rem !important;
   }
 
   #shabat_single_page.shabat-single-page-compact #day_times span.font-display-time,
   #shabat_single_page.shabat-single-page-compact #shabat-week-footer span.font-display-time {
-    font-size: clamp(1.05rem, 2.25vmin, 1.42rem) !important;
-    line-height: 1.1 !important;
+    font-size: clamp(1.12rem, 2.55vmin, 1.58rem) !important;
+    line-height: 1.12 !important;
   }
 
   #shabat_single_page.shabat-single-page-compact #day_times .font-headline-md,
   #shabat_single_page.shabat-single-page-compact #day_times .text-sm,
   #shabat_single_page.shabat-single-page-compact #shabat-week-footer .font-headline-md,
   #shabat_single_page.shabat-single-page-compact #shabat-week-footer .text-sm {
-    font-size: clamp(0.88rem, 1.85vmin, 1.08rem) !important;
-    line-height: 1.25 !important;
+    font-size: clamp(0.98rem, 2.05vmin, 1.22rem) !important;
+    line-height: 1.3 !important;
   }
 
   @media (min-width: 640px) {
     #shabat_single_page.shabat-single-page-compact #day_times span.font-display-time,
     #shabat_single_page.shabat-single-page-compact #shabat-week-footer span.font-display-time {
-      font-size: clamp(1.15rem, 2.55vmin, 1.62rem) !important;
+      font-size: clamp(1.28rem, 2.85vmin, 1.82rem) !important;
     }
   }
 }

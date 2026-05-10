@@ -81,9 +81,8 @@ function setTfilotFitDebug(payload) {
 }
 
 /**
- * Set disk diameter from layout: bottom of circle reaches slightly into the section-title row
- * (זמני היום בהלכה — same band as both .tz-section-header cells). Needed because the grid is
- * vertically centered; fixed vmin clamp cannot track the title bar.
+ * Legacy hook: tfilot hero clock is a Hebrew-date-style panel (not a circle); size comes from CSS.
+ * Clears any old inline --clock-size from the circular-disk era.
  */
 export function syncTfilotHeroClockDiskSize() {
   var tfPage = getTzHeroClockSlideRoot();
@@ -91,37 +90,13 @@ export function syncTfilotHeroClockDiskSize() {
     return;
   }
   var disk = tfPage.querySelector('.tfilot-hero-clock');
-  var headers = tfPage.querySelectorAll('.tz-section-header');
-  var dayTitleHeader = headers[1] || headers[0];
-  if (!disk || !dayTitleHeader) {
-    return;
+  if (disk) {
+    disk.style.removeProperty('--clock-size');
   }
-
-  var clockRect = disk.getBoundingClientRect();
-  var headerRect = dayTitleHeader.getBoundingClientRect();
-  if (headerRect.height < 4) {
-    return;
-  }
-
-  /* Disk bottom ≈ header top + overlap (visual bite into the glass title strip) */
-  var overlapIntoHeader = Math.max(12, Math.min(40, 0.45 * headerRect.height));
-  var diameterPx = headerRect.top - clockRect.top + overlapIntoHeader;
-
-  var minPx = 72;
-  var maxPx = 340;
-  diameterPx = Math.max(minPx, Math.min(maxPx, Math.round(diameterPx)));
-  /* Friday slides: subtitle row can sit high vs clock — avoid tiny disk if geometry is tight */
-  if (tfPage.id === 'friday_single_page' || tfPage.id === 'friday_single_page_plag') {
-    var floorPx = Math.min(200, Math.max(120, Math.round(window.innerHeight * 0.15)));
-    diameterPx = Math.max(diameterPx, floorPx);
-    diameterPx = Math.min(maxPx, diameterPx);
-  }
-  disk.style.setProperty('--clock-size', diameterPx + 'px');
 }
 
 /**
- * Scale the whole .clock row into the inner disk. Uses transform (not font-size fight).
- * Refit when the disk gets a real size (ResizeObserver) — fixes empty transform when first runs at 0×0.
+ * Tfilot / Friday / Shabbat hero clock: frosted panel matching `.header-hebrew-panel` (no circular fit).
  */
 export function fitTfilotHeroClock() {
   var tfPage = getTzHeroClockSlideRoot();
@@ -141,67 +116,14 @@ export function fitTfilotHeroClock() {
     return;
   }
 
-  var inner = tfilotHeroClockInnerPx(disk);
-  var pad = 2;
-  var aw = Math.max(0, inner.w - pad * 2);
-  var ah = Math.max(0, inner.h - pad * 2);
-
-  if (aw < 4 || ah < 4) {
-    if (tfilotInnerRetries < TFILOT_FIT_MAX_RETRIES) {
-      tfilotInnerRetries += 1;
-      requestAnimationFrame(function () {
-        fitTfilotHeroClock();
-      });
-    } else {
-      setTfilotFitDebug({
-        ok: false,
-        reason: 'inner_too_small',
-        inner: inner,
-        diskClient: { w: disk.clientWidth, h: disk.clientHeight },
-        retries: tfilotInnerRetries,
-      });
-    }
-    return;
-  }
-  tfilotInnerRetries = 0;
-
   clearTfilotHeroClockFit(clock, disk);
   void clock.offsetWidth;
-
-  var sw = clock.scrollWidth;
-  var sh = clock.scrollHeight;
-  if (sw < 2 || sh < 2) {
-    if (tfilotScrollRetries < TFILOT_FIT_MAX_RETRIES) {
-      tfilotScrollRetries += 1;
-      requestAnimationFrame(function () {
-        fitTfilotHeroClock();
-      });
-    } else {
-      setTfilotFitDebug({
-        ok: false,
-        reason: 'scroll_too_small',
-        inner: inner,
-        scroll: { w: sw, h: sh },
-      });
-    }
-    return;
-  }
+  tfilotInnerRetries = 0;
   tfilotScrollRetries = 0;
-
-  var s = Math.min(aw / sw, ah / sh) * 0.98;
-  /* Direct assignment: some Chromium builds ignore setProperty(..., 'important') for transform */
-  clock.style.transform = 'scale(' + s + ')';
-  clock.style.transformOrigin = 'center center';
-
   setTfilotFitDebug({
     ok: true,
-    scale: s,
-    diskSizePx: parseFloat(getComputedStyle(disk).width) || disk.clientWidth,
-    inner: inner,
-    available: { w: aw, h: ah },
-    scroll: { w: sw, h: sh },
-    transformInline: clock.style.transform,
-    transformComputed: getComputedStyle(clock).transform,
+    mode: 'tfilot_hero_date_panel',
+    diskWidthPx: disk.clientWidth,
   });
 }
 
