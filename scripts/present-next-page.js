@@ -733,15 +733,17 @@ function show_shacharit_8_30(){
 
 function hide_element(elem_class){
     var elements = document.getElementsByClassName(elem_class);
-    for (var element of elements){
-        element.classList.add('hidden-element');
+    for (var i = 0; i < elements.length; i++){
+        elements[i].classList.remove('show-element');
+        elements[i].classList.add('hidden-element');
     }
 }
 
 function show_element(elem_class){
     var elements = document.getElementsByClassName(elem_class);
-    for (var element of elements){
-        element.classList.add('show-element');
+    for (var i = 0; i < elements.length; i++){
+        elements[i].classList.add('hidden-element');
+        elements[i].classList.add('show-element');
     }
 }
 
@@ -1806,6 +1808,8 @@ function present_day_times(current_date, show_talit_tfilin){
         for (var element of elements){
             element.classList.add('show-element');
         }
+    } else {
+        hide_element('talit_tfilin');
     }
     set_element_data('talit_tfilin', format_hour_and_minutes(get_today_talit_and_tfilin(current_date)));
     set_element_data('sunrise', format_hour_and_minutes(get_today_sunrise(current_date)));
@@ -2164,7 +2168,7 @@ async function present_shabat_prayer_times(current_date){
 
     /* Day-times: reuse the same single-page component used by weekday + Friday. */
     load_html_into_page_elem_end('day_times_inner_single_page.html', 'day_times', () => {
-        present_day_times(current_date);
+        present_day_times(current_date, false);
     });
 
     var footerTimes = get_next_week_mincha_maariv_for_footer(current_date);
