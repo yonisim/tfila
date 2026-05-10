@@ -117,11 +117,15 @@ body, article {
 
 .hidden_element{
 }
-.hidden-element{
-  display: none;
+
+/* Conditional visibility: default hidden with .hidden-element; add .show-element to reveal.
+   :not(.show-element) uses !important so it wins over Tailwind utilities on tfilot pages. */
+.hidden-element:not(.show-element) {
+  display: none !important;
 }
 
-.show-element{
+/* Shown by removing .hidden-element (e.g. main-div-setter toggle_element_show) */
+.show-element:not(.hidden-element) {
   display: block;
 }
 

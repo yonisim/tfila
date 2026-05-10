@@ -32,6 +32,12 @@
     max-height: 100vh;
   }
 
+  /* Beat Tailwind `important` display utilities (.flex, .grid, …) so .hidden-element actually hides */
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
+    .hidden-element:not(.show-element) {
+    display: none !important;
+  }
+
   /* Hero clock: same frosted panel vocabulary as `.header-hebrew-panel` / Hebrew date strip */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .tfilot-clock-corner.header-clock-circle.tfilot-hero-clock {
