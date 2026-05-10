@@ -1273,7 +1273,7 @@ function get_tfilot_shacharit_grouped_card_inner_html(current_date){
             captionId: 'shacharit-830-name',
         })
     );
-    return tz_tfilot_grouped_prayer_row_html('שחרית:', slots.join(''), tz_icon_sun_svg());
+    return tz_tfilot_grouped_prayer_row_html('שחרית', slots.join(''), tz_icon_sun_svg());
 }
 
 function get_tfilot_mincha_grouped_card_inner_html(){
@@ -1293,7 +1293,7 @@ function get_tfilot_mincha_grouped_card_inner_html(){
             captionMaxClass: TZ_TF_CAP_TIGHT,
         }),
     ];
-    return tz_tfilot_grouped_prayer_row_html('מנחה:', slots.join(''));
+    return tz_tfilot_grouped_prayer_row_html('מנחה', slots.join(''));
 }
 
 /** שבת single-page: מנחה א/ב/מנחה קטנה — times from mincha_shabat (קטנה = slot [2]). */
@@ -1358,7 +1358,7 @@ function get_tfilot_arvit_grouped_card_inner_html(current_date, arvit_time){
             captionId: 'arvit-9',
         })
     );
-    return tz_tfilot_grouped_prayer_row_html('ערבית:', slots.join(''), tz_icon_moon_svg());
+    return tz_tfilot_grouped_prayer_row_html('ערבית', slots.join(''), tz_icon_moon_svg());
 }
 
 function fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time){
