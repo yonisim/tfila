@@ -329,10 +329,16 @@
   }
 
   /* Weekday tfilot only: equalize prayer label chips (שחרית: / מנחה: / ערבית:)
-     so the time strips that follow them start at the same horizontal position. */
+     so the time strips that follow them start at the same horizontal position.
+     Tighter horizontal padding and no decorative bar — chip hugs the text. */
   #tfilot_single_page .tz-inline-prayer-label {
-    min-width: 6.5em;
+    min-width: 5em;
     justify-content: flex-start;
+    padding-inline: 0.55em 0.55em;
+  }
+
+  #tfilot_single_page .tz-inline-prayer-label::before {
+    display: none;
   }
 
   /* Announcement bar: in flow at bottom; theme-aligned glass strip */
