@@ -2475,7 +2475,7 @@ async function present_friday_single_page(current_date){
         main_page_id += '_plag';
     }
 
-    load_html_into_page_elem_end('day_times_inner_single_page.html', 'day_times', () => {
+    load_html_into_page_elem_end('day_times_inner_tfilot_weekday.html', 'day_times', () => {
         present_day_times(get_this_friday_date(current_date), true);
     });
     show_sfirat_haomer_if_needed(current_date, main_page_id, true);
