@@ -4,16 +4,16 @@
 
 html{
   --default-text-background-color:  rgba(245, 245, 245, 0.5);
-  #--title-color: rgb(44, 90, 160);
+  /*--title-color: rgb(44, 90, 160);*/
   --title-color: #3674B5;
   }
 
 body, article {
-  #background: var(--bgColor);  
+  /*background: var(--bgColor);  */
   font-family: 'DS-DIGI', sans-serif;
   height: 100vh;
   overflow: hidden;
-  direction: rtl; 
+  direction: rtl;
   margin: 0;
 }
 
@@ -29,6 +29,9 @@ body, article {
     height: 100%;
     position: relative;
     justify-items: center;
+    background-color: #2f2a1d !important;
+    color: #ffffff;
+    border: 2px solid #f8c137ec;
 }
 
  .container {
@@ -44,16 +47,19 @@ body, article {
 
 
 .text-item {
-    padding: 10px;
-    height: fit-content;
-    width: 85%;
-    margin-right: 7.5%;
-    text-align: center;
-    background-color: var(--default-text-background-color);
+  background: linear-gradient(180deg, #3b3322 0%, #2a2418 100%) !important;
+  color: #fff4d2 !important;
+  border: 2px solid #c8a95b !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  padding: 10px;
+  height: fit-content;
+  width: 85%;
+  margin-right: 7.5%;
+  text-align: center;
 }
 
 .title{
-  #color: darkblue;
+ /* #color: darkblue;*/
   color: var(--title-color);
   text-decoration-line: underline;
   text-align: center;  
@@ -61,7 +67,7 @@ body, article {
 
 .page-title {
   font-size: 7vw;
-  #color: darkblue;
+ /* #color: darkblue;*/
   color: var(--title-color);
   text-decoration-line: underline;
   text-align: center;  
@@ -238,4 +244,21 @@ div.table-line-height-more{
 
 .strikethrough {
   text-decoration: line-through;
+}
+.tz-glass-card {
+  background: linear-gradient(180deg, #4a402c 0%, #2f2a1d 100%) !important;
+  color: #fff4d2 !important;
+  border: 2px solid #c8a95b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+}
+
+.tz-glass-card * {
+  color: #fff4d2 !important;
+}
+
+.tz-glass-card button {
+  background: #c8a95b !important;
+  color: #2f2a1d !important;
+  border: 1px solid #fff4d2 !important;
+  font-weight: 900 !important;
 }
