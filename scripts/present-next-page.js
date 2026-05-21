@@ -361,6 +361,10 @@ function is_10_tevet_friday(date){
     return is_between_dates(date, "2025-01-09T11:00", "2025-01-10T19:00");
 }
 
+function is_shabat_eve_chag(date){
+    return is_between_dates(date, "2026-05-22T19:00", "2026-05-23T21:00");
+}
+
 function is_tisha_beav_eve(date){
     return is_between_dates(date, "2024-08-11T12:00", "2024-08-11T22:00");
 }
@@ -2795,6 +2799,9 @@ async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
         }
         if (!is_10_tevet_friday(current_date)) {
             set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
+        }
+        if (is_shabat_eve_chag(current_date)) {
+            set_element_html('mincha_shabat_eve', '19:30');
         }
     });
 }
