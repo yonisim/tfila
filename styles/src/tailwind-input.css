@@ -550,7 +550,15 @@
     justify-content: flex-start !important;
   }
 
-  #shavuot_single_page.shavuot-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card {
+  #shavuot_single_page.shavuot-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:first-of-type {
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+  }
+
+  #shavuot_single_page.shavuot-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:last-of-type {
     flex: 1 1 auto !important;
     min-height: 0 !important;
     display: flex !important;
@@ -916,14 +924,19 @@
     max-width: none !important;
   }
 
-  /* Shavuot: kabbalat yeladim — exactly 2 caption lines; card wider than neighbors */
-  #shavuot_single_page.shavuot-single-page-compact #shavuot-card-kabbalat-yeladim {
+  /* Shavuot afternoon: two-line captions use full standalone cap size; room for text */
+  #shavuot_single_page.shavuot-single-page-compact #shavuot-card-kabbalat-yeladim,
+  #shavuot_single_page.shavuot-single-page-compact #shavuot-card-shiur-rut {
     flex: 1 1 auto !important;
-    flex-grow: 1.5 !important;
-    min-width: clamp(11rem, 30vw, 15rem) !important;
+    min-width: clamp(9.5rem, 26vw, 13rem) !important;
     max-width: none !important;
     padding-inline: clamp(0.45rem, 1vw, 0.75rem) !important;
     overflow: visible !important;
+  }
+
+  #shavuot_single_page.shavuot-single-page-compact #shavuot-card-kabbalat-yeladim {
+    flex-grow: 1.5 !important;
+    min-width: clamp(11rem, 30vw, 15rem) !important;
   }
 
   #shavuot_single_page.shavuot-single-page-compact .tz-standalone-cap--two-lines {
@@ -934,7 +947,15 @@
   }
 
   #shavuot_single_page.shavuot-single-page-compact .tz-standalone-cap--two-lines > span {
-    font-size: clamp(0.78rem, 1.45vmin, 0.95rem) !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+  }
+
+  #shavuot_single_page.shavuot-single-page-compact #shavuot-mincha-eve-caption,
+  #shavuot_single_page.shavuot-single-page-compact #shavuot-eve-row .tz-standalone-cap--one-line {
+    white-space: nowrap !important;
+    max-width: none !important;
   }
 
   @media (min-width: 640px) {

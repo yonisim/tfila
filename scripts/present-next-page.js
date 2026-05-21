@@ -1393,7 +1393,7 @@ var TZ_TF_CAP_STANDALONE_BASE =
 /** Captions that must never break across lines (even when >2 words). */
 function tz_tf_cap_standalone_force_one_line(captionText){
     var t = String(captionText || '').trim();
-    return t === 'מנחה וקבלת שבת' || t === 'ערבית של חג';
+    return t === 'מנחה וקבלת שבת' || t === 'ערבית של חג' || t === 'מנחה ודבר תורה';
 }
 
 function tz_tf_cap_standalone_class(captionText){
@@ -2051,7 +2051,12 @@ function get_shavuot_eve_cards_html(){
     var cards = [
         { timeId: 'shavuot-mincha-gedola-eve', caption: 'מנחה גדולה', icon: '' },
         { timeId: 'shavuot-chag-in', caption: 'כניסת החג', icon: '' },
-        { timeId: 'shavuot-mincha-eve', caption: 'מנחה', icon: '' },
+        {
+            timeId: 'shavuot-mincha-eve',
+            caption: 'מנחה ודבר תורה',
+            captionId: 'shavuot-mincha-eve-caption',
+            icon: '',
+        },
         {
             timeId: 'shavuot-maariv-chag',
             caption: 'ערבית של חג',
@@ -2072,7 +2077,7 @@ function get_shavuot_eve_cards_html(){
                 ' class="' +
                 shell +
                 '">' +
-                tz_shabat_centered_card_body_html(c.timeId, c.caption, undefined, c.icon) +
+                tz_shabat_centered_card_body_html(c.timeId, c.caption, undefined, c.icon, c.captionId) +
                 '</div>'
         );
     }
@@ -2251,9 +2256,9 @@ async function present_shavuot_prayer_times(current_date){
 
     set_element_html('shavuot-eve-row', get_shavuot_eve_cards_html());
     set_element_html('shavuot-mincha-gedola-eve', '13:15');
-    set_element_html('shavuot-chag-in', '19:19');
-    set_element_html('shavuot-mincha-eve', '19:29');
-    set_element_html('shavuot-maariv-chag', '20:06');
+    set_element_html('shavuot-chag-in', '19:12');
+    set_element_html('shavuot-mincha-eve', '19:22');
+    set_element_html('shavuot-maariv-chag', '20:00');
 
     set_element_html(
         'second_column',
