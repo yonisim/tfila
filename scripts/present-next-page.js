@@ -279,7 +279,7 @@ function is_pesach_7(date){
 }
 
 function is_shavout(date){
-    return is_between_dates(date, "2025-06-01T19:00", "2025-06-02T20:40:00");
+    return is_between_dates(date, "2026-05-21T19:00", "2026-05-22T20:40:00");
 }
 
 function is_hanuka(date){
@@ -425,7 +425,7 @@ function get_specific_single_page(current_date){
         item = 'chag_eve';
     } else if (is_sukot(current_date_obj)){
         item = 'chag_single_page';
-    } else if (is_between_dates(current_date_obj, "2025-06-01T01:00", "2025-06-01T19:00")){
+    } else if (is_between_dates(current_date_obj, "2026-05-21T01:00", "2026-05-21T19:00")){
         item = 'shavuot_eve';
     } else if(is_gedalia(current_date_obj)){
         item = 'gedalia'
@@ -1393,7 +1393,7 @@ var TZ_TF_CAP_STANDALONE_BASE =
 /** Captions that must never break across lines (even when >2 words). */
 function tz_tf_cap_standalone_force_one_line(captionText){
     var t = String(captionText || '').trim();
-    return t === 'מנחה וקבלת שבת';
+    return t === 'מנחה וקבלת שבת' || t === 'ערבית של חג';
 }
 
 function tz_tf_cap_standalone_class(captionText){
@@ -1420,6 +1420,37 @@ function tz_tf_cap_standalone_html(captionText, captionId){
         lines.push(words.slice(i, i + 2).join(' '));
     }
     return '<span class="' + cls + '"' + idAttr + '>' + lines.join('<br>') + '</span>';
+}
+
+/** Long captions: exactly two lines; each line stays intact (no extra wrap inside the line). */
+function tz_tf_cap_standalone_two_lines_html(captionText, captionId, line1Text, line2Text){
+    var cls = TZ_TF_CAP_STANDALONE_BASE + ' tz-standalone-cap--two-lines';
+    var idAttr = captionId ? ' id="' + captionId + '"' : '';
+    var l1;
+    var l2;
+    if (line1Text != null && line2Text != null){
+        l1 = line1Text;
+        l2 = line2Text;
+    } else {
+        var words = String(captionText || '').trim().split(/\s+/).filter(Boolean);
+        if (words.length <= 2){
+            return '<span class="' + cls + '"' + idAttr + '>' + words.join(' ') + '</span>';
+        }
+        var mid = Math.ceil(words.length / 2);
+        l1 = words.slice(0, mid).join(' ');
+        l2 = words.slice(mid).join(' ');
+    }
+    return (
+        '<span class="' +
+        cls +
+        '"' +
+        idAttr +
+        '><span class="block whitespace-nowrap">' +
+        l1 +
+        '</span><span class="block whitespace-nowrap">' +
+        l2 +
+        '</span></span>'
+    );
 }
 
 /** Friday single-page: הדלקת נרות card body. */
@@ -1474,14 +1505,18 @@ function get_friday_mincha_kabalat_card_inner_html(){
 }
 
 /** Single centered card column (Friday-style glass card body); optional icon in the card top-left. */
-function tz_shabat_centered_card_body_html(timeId, captionText, wrapperClass, besideTimeIconSvg, captionId){
+function tz_shabat_centered_card_body_html(timeId, captionText, wrapperClass, besideTimeIconSvg, captionId, captionHtmlOverride){
     var wrap = wrapperClass || 'flex min-w-0 flex-col items-center gap-0.5';
+    var capHtml =
+        captionHtmlOverride != null
+            ? captionHtmlOverride
+            : tz_tf_cap_standalone_html(captionText, captionId);
     return tz_tfilot_grouped_time_strip_center_html_beside_icon(
         tz_tfilot_grouped_time_column_html({
             wrapperClass: wrap,
             timeText: '',
             timeId: timeId,
-            captionHtml: tz_tf_cap_standalone_html(captionText, captionId),
+            captionHtml: capHtml,
         }),
         besideTimeIconSvg
     );
@@ -1490,6 +1525,10 @@ function tz_shabat_centered_card_body_html(timeId, captionText, wrapperClass, be
 /** After Shacharit — RTL timeline right→left: קידוש ושיעור → תפילת ילדים → הורים וילדים → מעיינים בחבורה */
 var SHABAT_DAY_CARD_SHELL =
     'tz-glass-card flex min-w-0 flex-1 basis-0 flex-col items-center justify-center gap-2 rounded-xl border-r-8 border-primary p-3 text-center shadow-glass sm:gap-2.5 sm:p-4';
+
+/** Shavuot: kabbalat yeladim — wider card, caption limited to two lines. */
+var SHAVUOT_KABALAT_YELADIM_CARD_SHELL =
+    'tz-glass-card shavuot-card-kabbalat-yeladim flex min-w-0 flex-none flex-col items-center justify-center gap-2 rounded-xl border-r-8 border-primary p-3 text-center shadow-glass sm:gap-2.5 sm:p-4';
 
 function get_shabat_after_shacharit_timeline_cards_row_html(){
     return (
@@ -2007,15 +2046,203 @@ async function present_pesach_7_times(current_date){
     return sleep_seconds(10*60);
 }
 
-async function present_shavuot_prayer_times(current_date){
-    load_html_into_page_elem_end('shavuot_right_column.html', 'first_column');
-    load_html_into_page_elem_end('shavuot_afternoon.html', 'second_column');
-    load_html_into_page_elem_end('shavuot_shiurim.html', 'shiurim');
+/** Shavuot: ערב חג glass cards (direct children of #shavuot-eve-row, like Shabbat erev row). */
+function get_shavuot_eve_cards_html(){
+    var cards = [
+        { timeId: 'shavuot-mincha-gedola-eve', caption: 'מנחה גדולה', icon: '' },
+        { timeId: 'shavuot-chag-in', caption: 'כניסת החג', icon: '' },
+        { timeId: 'shavuot-mincha-eve', caption: 'מנחה', icon: '' },
+        {
+            timeId: 'shavuot-maariv-chag',
+            caption: 'ערבית של חג',
+            icon: tz_icon_moon_svg(),
+            shell:
+                'tz-glass-card shavuot-eve-maariv-card flex min-w-0 flex-none flex-col items-center justify-center gap-2 rounded-xl border-r-8 border-primary p-3 text-center shadow-glass sm:gap-2.5 sm:p-4',
+            cardId: 'shavuot-eve-maariv-card',
+        },
+    ];
+    var html = [];
+    for (var i = 0; i < cards.length; i++){
+        var c = cards[i];
+        var shell = c.shell || SHABAT_DAY_CARD_SHELL;
+        var idAttr = c.cardId ? ' id="' + c.cardId + '"' : '';
+        html.push(
+            '<div' +
+                idAttr +
+                ' class="' +
+                shell +
+                '">' +
+                tz_shabat_centered_card_body_html(c.timeId, c.caption, undefined, c.icon) +
+                '</div>'
+        );
+    }
+    return html.join('');
+}
 
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date);
+var SHAVUOT_COMPACT_TF_CARD_SHELL =
+    'shabat-compact-tf tz-glass-card flex min-w-0 flex-col gap-2 rounded-xl border-r-8 border-primary p-3 shadow-glass sm:gap-2.5 sm:p-4';
+
+function get_shavuot_shacharit_grouped_card_inner_html(){
+    return tz_tfilot_grouped_prayer_row_html(
+        'שחרית',
+        [
+            tz_tfilot_grouped_time_column_html({
+                wrapperClass:
+                    'flex min-w-0 flex-1 basis-0 max-w-[6.5rem] flex-col items-center gap-0.5 sm:max-w-[7.25rem]',
+                timeText: '04:50',
+                captionText: 'ברכות השחר ומגילת רות',
+                captionMaxClass: TZ_TF_CAP_MD,
+            }),
+            tz_tfilot_grouped_time_column_html({
+                timeText: '05:05',
+                captionText: 'שחרית',
+            }),
+            tz_tfilot_grouped_time_column_html({
+                timeText: '08:30',
+                captionText: 'שחרית ב',
+            }),
+        ].join(''),
+        tz_icon_sun_svg()
+    );
+}
+
+function get_shavuot_mincha_grouped_card_inner_html(){
+    return tz_tfilot_grouped_prayer_row_html(
+        'מנחה',
+        [
+            tz_tfilot_grouped_time_column_html({
+                timeText: '13:15',
+                captionText: 'מנחה גדולה',
+                captionMaxClass: TZ_TF_CAP_TIGHT,
+            }),
+            tz_tfilot_grouped_time_column_html({
+                timeText: '14:00',
+                captionText: 'מנחה גדולה',
+                captionMaxClass: TZ_TF_CAP_TIGHT,
+            }),
+        ].join(''),
+        ''
+    );
+}
+
+function get_shavuot_day_prayer_cards_html(){
+    return (
+        '<div class="' +
+        SHAVUOT_COMPACT_TF_CARD_SHELL +
+        '">' +
+        get_shavuot_shacharit_grouped_card_inner_html() +
+        '</div>' +
+        '<div class="' +
+        SHAVUOT_COMPACT_TF_CARD_SHELL +
+        '">' +
+        get_shavuot_mincha_grouped_card_inner_html() +
+        '</div>'
+    );
+}
+
+function get_shavuot_afternoon_horizontal_cards_html(){
+    var kabbalatCaption = tz_tf_cap_standalone_two_lines_html(
+        '',
+        'shavuot-kabbalat-yeladim-caption',
+        'קבלת עול מלכות שמים לילדים',
+        'והצגה בגן השמחה'
+    );
+    return (
+        '<div class="flex min-w-0 flex-wrap items-stretch gap-2 sm:gap-3" aria-label="אחר הצהריים">' +
+        '<div id="shavuot-card-kabbalat-yeladim" class="' +
+        SHAVUOT_KABALAT_YELADIM_CARD_SHELL +
+        '">' +
+        tz_shabat_centered_card_body_html(
+            'shavuot-kabbalat-yeladim',
+            '',
+            undefined,
+            tz_icon_child_svg(),
+            undefined,
+            kabbalatCaption
+        ) +
+        '</div>' +
+        '<div class="' +
+        SHABAT_DAY_CARD_SHELL +
+        '">' +
+        tz_shabat_centered_card_body_html('shavuot-mincha-ktana', 'מנחה קטנה', undefined, '') +
+        '</div>' +
+        '<div class="' +
+        SHABAT_DAY_CARD_SHELL +
+        '">' +
+        tz_shabat_centered_card_body_html('shavuot-chag-out', 'צאת החג וערבית', undefined, tz_icon_moon_svg()) +
+        '</div>' +
+        '</div>'
+    );
+}
+
+/** Footer strip: one scrolling line of shiurim (RTL, right to left). */
+function get_shavuot_shiurim_footer_marquee_html(){
+    var shiurim = [
+        ['22:45', 'הרב נחום דרוקמן'],
+        ['23:40', 'ברוך קורצוויל'],
+        ['00:35', 'יוסף סילאן'],
+        ['01:30', 'יהודה בראז'],
+        ['02:25', 'הרב גבאי'],
+        ['03:20', 'איציק וולף'],
+        ['04:10', 'יונדב גולדברגר'],
+    ];
+    var parts = [];
+    for (var i = 0; i < shiurim.length; i++){
+        parts.push(
+            '<span class="shavuot-shiurim-item">' +
+            '<span class="shavuot-shiurim-time font-display-time tabular-nums">' +
+            shiurim[i][0] +
+            '</span>' +
+            '<span class="shavuot-shiurim-name font-display-time">' +
+            shiurim[i][1] +
+            '</span></span>'
+        );
+    }
+    var line =
+        '<span class="shavuot-shiurim-line" dir="rtl">' + parts.join('') + '</span>';
+    return (
+        '<div class="shavuot-shiurim-marquee-track" dir="rtl">' +
+        line +
+        line.replace('shavuot-shiurim-line', 'shavuot-shiurim-line shavuot-shiurim-line--clone') +
+        '</div>'
+    );
+}
+
+async function present_shavuot_prayer_times(current_date){
+    document.body.classList.add('tfilot-full-bleed');
+    sync_tfilot_top_hud_dates(current_date);
+
+    set_element_html('shavuot-eve-row', get_shavuot_eve_cards_html());
+    set_element_html('shavuot-mincha-gedola-eve', '13:15');
+    set_element_html('shavuot-chag-in', '19:19');
+    set_element_html('shavuot-mincha-eve', '19:29');
+    set_element_html('shavuot-maariv-chag', '20:06');
+
+    set_element_html(
+        'second_column',
+        get_shavuot_day_prayer_cards_html() + get_shavuot_afternoon_horizontal_cards_html()
+    );
+    set_element_html('shavuot-kabbalat-yeladim', '17:30');
+    set_element_html('shavuot-mincha-ktana', '18:30');
+    set_element_html('shavuot-chag-out', '20:24');
+
+    set_element_html('shiurim', get_shavuot_shiurim_footer_marquee_html());
+
+    load_html_into_page_elem_end('day_times_inner_single_page.html', 'day_times', () => {
+        present_day_times(current_date, false);
     });
-    return sleep_seconds(10*60);
+
+    attachTfilotHeroClockResizeObserver();
+    requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+            syncTfilotHeroClockDiskSize();
+            fitTfilotHeroClock();
+        });
+    });
+
+    show_footer_custom_message_if_needed(current_date, 'shavuot_single_page', wait_seconds * 10);
+    show_sfirat_haomer_if_needed(current_date, 'shavuot_single_page', true);
+    return sleep_seconds(wait_seconds * 10);
 }
 
 async function present_rosh_hashana_eve_prayer_times(current_date){

@@ -1,24 +1,76 @@
-<div id="shavuot_single_page">
-  <div class="page-title half-page-title">שבועות</div>
-  <div class="text-single-page-shabat two-column-grid-shavuot-main" id="shabat_times">
-    <div class="shabat-grid tfilot-shabat-grid-horizontal table-line-height-more" id="first_column">
+<div
+  id="shavuot_single_page"
+  class="shavuot-single-page-compact tz-page-bg relative flex h-full min-h-0 w-full max-w-full min-w-0 flex-col overflow-hidden text-on-surface fade-in"
+  dir="rtl"
+>
+  <div
+    class="tfilot-dates-strip pointer-events-none absolute right-0 top-0 z-10 flex max-w-[min(100%,22rem)] flex-wrap items-start justify-end px-container-padding pb-1 pt-3 sm:pt-4"
+    dir="rtl"
+  >
+    <div class="header-hebrew-panel pointer-events-auto min-w-0 shrink-0">
+      <div id="tfilot_hebrew_date" class="header-text"></div>
     </div>
-
-    
-      <div class="two-column-grid-shavuot-left-bottom">
-        <div style="display: block;" class="column-of-grid">
-          <div class="shabat-grid tfilot-shabat-grid-horizontal" style="width: 100%;" id="second_column"></div>        
-          <div class="grid-body-box title grid-title-margin">זמני היום בהלכה</div>
-          <div class="shabat-grid tfilot-shabat-grid-horizontal table-line-height-more" id="day_times" style="width: 100%;"></div>
+  </div>
+  <div class="header-clock-circle tfilot-hero-clock tfilot-clock-corner pointer-events-none">
+    <div class="clock pointer-events-auto" dir="ltr">
+      <span class="clock-text hour">00</span>
+      <b class="clock-text colon">:</b>
+      <span class="clock-text min">00</span>
+      <b class="clock-text colon">:</b>
+      <span class="clock-text second">00</span>
+    </div>
+  </div>
+  <main
+    class="tfilot-main-offset relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-3 pb-1 pt-2 font-body-md sm:px-4 sm:pb-1.5 md:px-5"
+  >
+    <div
+      class="shavuot-main-scroll flex min-h-0 w-full flex-1 flex-col justify-start overflow-x-hidden overflow-y-auto overscroll-contain"
+    >
+      <div
+        class="tz-two-col-grid grid w-full min-w-0 max-w-full shrink-0 grid-cols-[minmax(0,1.5fr)_minmax(0,0.88fr)] grid-rows-[auto_auto] items-start gap-x-2 gap-y-1.5 sm:gap-x-3 sm:gap-y-2"
+      >
+        <div class="tz-section-header flex min-h-0 min-w-0 shrink-0 items-center self-stretch py-0.5">
+          <h2 class="tz-section-title flex min-w-0 flex-1 flex-nowrap items-baseline gap-x-1.5">
+            <span class="shrink-0">זמני תפילות שבועות</span>
+          </h2>
+          <div class="tz-section-rule" aria-hidden="true"></div>
         </div>
 
-      <div style="display: block;" class="column-of-grid">
-        <div class="grid-body-box title grid-title-margin">לימוד ליל שבועות</div>
-        <div class="shabat-grid tfilot-shabat-grid-horizontal table-line-height-more" style="width: 100%;" id="shiurim"></div>
+        <div class="tz-section-header flex min-h-0 min-w-0 shrink-0 items-center self-stretch py-0.5">
+          <h2 class="tz-section-title">זמני היום בהלכה</h2>
+          <div class="tz-section-rule" aria-hidden="true"></div>
+        </div>
+
+        <div
+          class="tz-tf-col-cell tz-tf-col-cell--stack flex min-h-0 min-w-0 max-w-full flex-col gap-1.5 overflow-visible pr-0.5 sm:gap-2"
+        >
+          <div
+            id="shavuot-eve-row"
+            class="flex min-w-0 flex-wrap items-stretch gap-2 sm:gap-2.5"
+            aria-label="ערב חג"
+          ></div>
+          <div id="second_column" class="flex min-w-0 max-w-full flex-col gap-1.5 sm:gap-2"></div>
+        </div>
+
+        <div
+          class="tz-tf-col-cell flex min-h-0 min-w-0 max-w-full flex-col overflow-hidden pr-0.5"
+        >
+          <div id="day_times" class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden"></div>
+        </div>
       </div>
     </div>
+  </main>
 
-    </div>
-    
-  </div>
+  <footer
+    id="shavuot-shiurim-fouter"
+    class="fouter shavuot-shiurim-fouter flex w-full min-w-0 shrink-0 flex-row flex-nowrap items-center gap-2 sm:gap-2.5"
+    aria-label="לימוד ליל שבועות"
+  >
+    <h2 class="shavuot-shiurim-fouter-title tz-section-title m-0 shrink-0 whitespace-nowrap">לימוד ליל שבועות</h2>
+    <div
+      id="shiurim"
+      class="shavuot-shiurim-marquee min-h-0 min-w-0 flex-1 overflow-hidden"
+      aria-live="polite"
+    ></div>
+  </footer>
 </div>
