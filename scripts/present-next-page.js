@@ -2094,12 +2094,12 @@ function get_shavuot_shacharit_grouped_card_inner_html(){
             tz_tfilot_grouped_time_column_html({
                 wrapperClass:
                     'flex min-w-0 flex-1 basis-0 max-w-[6.5rem] flex-col items-center gap-0.5 sm:max-w-[7.25rem]',
-                timeText: '04:50',
+                timeText: '04:55',
                 captionText: 'ברכות השחר ומגילת רות',
                 captionMaxClass: TZ_TF_CAP_MD,
             }),
             tz_tfilot_grouped_time_column_html({
-                timeText: '05:05',
+                timeText: '05:10',
                 captionText: 'שחרית',
             }),
             tz_tfilot_grouped_time_column_html({
@@ -2245,7 +2245,7 @@ function get_shavuot_kabalat_shabat_time(erev_friday_date, shabat_in){
     return add_minutes_to_time(shabat_in, 10);
 }
 
-async function present_shavuot_prayer_times(current_date){
+async function present_shavuot_prayer_times(current_date) {
     document.body.classList.add('tfilot-full-bleed');
     sync_tfilot_top_hud_dates(current_date);
 
@@ -2264,7 +2264,7 @@ async function present_shavuot_prayer_times(current_date){
         'second_column',
         get_shavuot_day_prayer_cards_html() + get_shavuot_afternoon_horizontal_cards_html()
     );
-    set_element_html('shavuot-kabbalat-yeladim', '17:30');
+    set_element_html('shavuot-kabbalat-yeladim', '17:00');
     set_element_html('shavuot-mincha-ktana', '18:30');
     set_element_html('shavuot-shiur-rut', '18:45');
 
