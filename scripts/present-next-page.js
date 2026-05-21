@@ -279,7 +279,7 @@ function is_pesach_7(date){
 }
 
 function is_shavout(date){
-    return is_between_dates(date, "2026-05-21T19:00", "2026-05-22T20:40:00");
+    return is_between_dates(date, "2026-05-21T01:00", "2026-05-22T19:00:00");
 }
 
 function is_hanuka(date){
@@ -814,7 +814,7 @@ function format_rosh_hodesh_message(hodesh_name, days) {
 async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_lines){
     return;
     var omer_numeric = get_omer_numeric(current_date);
-    if(omer_numeric >= 0 && omer_numeric <= 49 && is_after_sunset(current_date)){
+    if((omer_numeric >= 0 && is_after_sunset(current_date)) && (omer_numeric <= 49 && !is_after_sunset(current_date))){
         load_html_into_page_elem_end('omer_fouter.html', into_elem_id, () => {
             set_sfirat_haomer_regular_days(current_date, two_lines);
             show_by_id('omer');
@@ -976,7 +976,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     }
 
     var omer_numeric = get_omer_numeric(current_date);
-    if(omer_numeric >= 0 && omer_numeric <= 49){
+    if(omer_numeric >= 0 && omer_numeric <= 49 && !is_shavout(current_date)){
         var laomer = 'לעומר';
         var omer_days_and_weeks = get_omer_days_and_weeks(current_date);
         messages.push([omer_days_and_weeks[0], omer_days_and_weeks[1], laomer].join(' '));
@@ -2198,12 +2198,12 @@ function get_shavuot_afternoon_horizontal_cards_html(){
 function get_shavuot_shiurim_footer_marquee_html(){
     var shiurim = [
         ['22:45', 'הרב נחום דרוקמן'],
-        ['23:40', 'ברוך קורצוויל'],
-        ['00:35', 'יוסף סילאן'],
-        ['01:30', 'יהודה בראז'],
-        ['02:25', 'הרב גבאי'],
-        ['03:20', 'איציק וולף'],
-        ['04:10', 'יונדב גולדברגר'],
+        ['23:40', 'נחום שור'],
+        ['00:35', 'חנניה דיטשר'],
+        ['01:30', 'ברוך קורצוויל'],
+        ['02:25', 'יניב דר'],
+        ['03:20', 'הרב גבאי'],
+        ['04:10', 'איציק וולף'],
     ];
     var parts = [];
     for (var i = 0; i < shiurim.length; i++){
