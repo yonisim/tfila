@@ -1021,7 +1021,7 @@ function create_empty_line(){
 
 /* --- Tfilot single-page grouped prayer UI (composable HTML; tweak slots arrays to add/remove columns) --- */
 var TZ_TF_TIME =
-    'shrink-0 font-display-time text-2xl text-primary tz-time-glow sm:text-3xl md:text-4xl';
+    'shrink-0 font-display-time text-4xl text-primary tz-time-glow sm:text-3xl md:text-4xl';
 var TZ_TF_CAP_SM =
     'max-w-[5.5rem] text-center text-xs leading-tight text-on-surface-variant sm:text-sm';
 var TZ_TF_CAP_MD =
@@ -1386,14 +1386,43 @@ function tz_equal_width_cards_row_html(cardIds){
 var TZ_TF_CAP_NOWRAP =
     'max-w-none whitespace-nowrap text-center text-xs leading-tight text-on-surface-variant sm:text-sm';
 
+/** Shabbat / Friday standalone glass cards: max 2 lines; exactly 2 words → single line. */
+var TZ_TF_CAP_STANDALONE_BASE =
+    'tz-standalone-cap block max-w-full text-center text-on-surface-variant leading-tight';
+
+function tz_tf_cap_standalone_class(captionText){
+    var words = String(captionText || '').trim().split(/\s+/).filter(Boolean);
+    if (words.length === 2){
+        return TZ_TF_CAP_STANDALONE_BASE + ' tz-standalone-cap--one-line';
+    }
+    if (words.length > 2){
+        return TZ_TF_CAP_STANDALONE_BASE + ' tz-standalone-cap--paired';
+    }
+    return TZ_TF_CAP_STANDALONE_BASE;
+}
+
+/** Standalone card caption: 2 words → one line; more → two words per line (no ellipsis). */
+function tz_tf_cap_standalone_html(captionText, captionId){
+    var words = String(captionText || '').trim().split(/\s+/).filter(Boolean);
+    var cls = tz_tf_cap_standalone_class(captionText);
+    var idAttr = captionId ? ' id="' + captionId + '"' : '';
+    if (words.length <= 2){
+        return '<span class="' + cls + '"' + idAttr + '>' + words.join(' ') + '</span>';
+    }
+    var lines = [];
+    for (var i = 0; i < words.length; i += 2){
+        lines.push(words.slice(i, i + 2).join(' '));
+    }
+    return '<span class="' + cls + '"' + idAttr + '>' + lines.join('<br>') + '</span>';
+}
+
 /** Friday single-page: הדלקת נרות card body. */
 function get_friday_hadlakat_card_inner_html(){
     return tz_tfilot_grouped_time_strip_center_html_beside_icon(
         tz_tfilot_grouped_time_column_html({
             timeText: '',
             timeId: 'hadlakat-nerot',
-            captionText: 'הדלקת נרות',
-            captionMaxClass: TZ_TF_CAP_NOWRAP,
+            captionHtml: tz_tf_cap_standalone_html('הדלקת נרות'),
         }),
         tz_icon_shabbat_candles_svg()
     );
@@ -1432,36 +1461,21 @@ function get_friday_mincha_kabalat_card_inner_html(){
             wrapperClass: 'mincha_shabat_eve flex min-w-0 flex-col items-center gap-0.5',
             timeText: '',
             timeId: 'mincha_shabat_eve',
-            captionText: 'מנחה וקבלת שבת',
-            captionMaxClass: TZ_TF_CAP_NOWRAP,
+            captionHtml: tz_tf_cap_standalone_html('מנחה וקבלת שבת'),
         }),
         ''
     );
 }
 
-/** Shabbat single-page: first Erev-Shabbat card — צאת השבת (motzei preview time). */
-function get_shabat_motzei_card_inner_html(){
-    return tz_tfilot_grouped_time_strip_center_html_beside_icon(
-        tz_tfilot_grouped_time_column_html({
-            timeText: '',
-            timeId: 'shabat-motzei-time',
-            captionText: 'צאת השבת',
-            captionMaxClass: TZ_TF_CAP_NOWRAP,
-        }),
-        tz_icon_moon_svg()
-    );
-}
-
 /** Single centered card column (Friday-style glass card body); optional icon in the card top-left. */
-function tz_shabat_centered_card_body_html(timeId, captionText, wrapperClass, besideTimeIconSvg){
+function tz_shabat_centered_card_body_html(timeId, captionText, wrapperClass, besideTimeIconSvg, captionId){
     var wrap = wrapperClass || 'flex min-w-0 flex-col items-center gap-0.5';
     return tz_tfilot_grouped_time_strip_center_html_beside_icon(
         tz_tfilot_grouped_time_column_html({
             wrapperClass: wrap,
             timeText: '',
             timeId: timeId,
-            captionText: captionText,
-            captionMaxClass: TZ_TF_CAP_NOWRAP,
+            captionHtml: tz_tf_cap_standalone_html(captionText, captionId),
         }),
         besideTimeIconSvg
     );
@@ -1493,8 +1507,7 @@ function get_shabat_after_shacharit_timeline_cards_row_html(){
                 wrapperClass: 'flex min-w-0 flex-col items-center gap-0.5',
                 timeText: '',
                 timeId: 'shabat-parents-time',
-                captionText: 'הורים וילדים',
-                captionMaxClass: TZ_TF_CAP_NOWRAP,
+                captionHtml: tz_tf_cap_standalone_html('הורים וילדים'),
             }),
             tz_icon_people_svg()
         ) +
@@ -2113,17 +2126,12 @@ async function present_shabat_prayer_times(current_date){
     var shacharit_main = '08:30';
 
     /* Ensure Friday-style Erev Shabbat cards contain their inner HTML (ids like #hadlakat-nerot)
-       before show_shabat_eve_times() tries to populate times.
-       First slot: צאת השבת (motzei) instead of מנחה גדולה. */
+       before show_shabat_eve_times() tries to populate times. */
     if (document.getElementById('friday-prayer-row-erev-shabbat')){
-        set_element_html('friday-prayer-card-mincha-gedola', get_shabat_motzei_card_inner_html());
         set_element_html('friday-prayer-card-hadlakat', get_friday_hadlakat_card_inner_html());
         set_element_html('friday-prayer-card-mincha-kabalat', get_friday_mincha_kabalat_card_inner_html());
     }
     await show_shabat_eve_times(current_date, shabat_in, 'first_column');
-    if (document.getElementById('shabat-motzei-time')){
-        set_element_html('shabat-motzei-time', arvit_shabat);
-    }
 
     /* שבת: שחרית → ציר זמן → מנחה (א+ב+מנחה קטנה) → ארבע כרטיסי אחר הצהריים */
     var shiur_halacha_mincha_margin = -60;
