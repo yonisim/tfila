@@ -21,41 +21,76 @@
     </div>
   </div>
   <main
-    class="tfilot-main-offset relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-3 pb-1 pt-2 font-body-md sm:px-4 sm:pb-1.5 md:px-5"
+    class="tfilot-main-offset relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-4 pb-0 pt-2 font-body-md sm:px-5 md:px-6"
   >
-    <div
-      class="shavuot-main-scroll flex min-h-0 w-full flex-1 flex-col justify-start overflow-x-hidden overflow-y-auto overscroll-contain"
-    >
+    <div class="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-contain">
       <div
-        class="tz-two-col-grid grid w-full min-w-0 max-w-full shrink-0 grid-cols-[minmax(0,1.5fr)_minmax(0,0.88fr)] grid-rows-[auto_auto] items-start gap-x-2 gap-y-1.5 sm:gap-x-3 sm:gap-y-2"
+        class="tz-two-col-grid shavuot-main-grid grid h-full min-h-0 w-full min-w-0 max-w-full flex-1 grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] items-stretch gap-x-2.5 gap-y-2 overflow-hidden sm:gap-x-4 sm:gap-y-2 md:gap-x-5 md:gap-y-2.5"
       >
-        <div class="tz-section-header flex min-h-0 min-w-0 shrink-0 items-center self-stretch py-0.5">
+        <div class="tz-section-header flex min-h-[2.55rem] min-w-0 shrink-0 items-center self-stretch py-1 sm:min-h-[2.85rem]">
           <h2 class="tz-section-title flex min-w-0 flex-1 flex-nowrap items-baseline gap-x-1.5">
             <span class="shrink-0">זמני תפילות שבועות</span>
           </h2>
           <div class="tz-section-rule" aria-hidden="true"></div>
         </div>
 
-        <div class="tz-section-header flex min-h-0 min-w-0 shrink-0 items-center self-stretch py-0.5">
+        <div class="tz-section-header flex min-h-[2.55rem] min-w-0 shrink-0 items-center self-stretch py-1 sm:min-h-[2.85rem]">
           <h2 class="tz-section-title">זמני היום בהלכה</h2>
           <div class="tz-section-rule" aria-hidden="true"></div>
         </div>
 
         <div
-          class="tz-tf-col-cell tz-tf-col-cell--stack flex min-h-0 min-w-0 max-w-full flex-col gap-1.5 overflow-visible pr-0.5 sm:gap-2"
+          class="tz-tf-col-cell tz-tf-col-cell--stack flex h-full min-h-0 min-w-0 max-w-full flex-col gap-2 overflow-hidden pr-1 sm:gap-2.5"
         >
-          <div
-            id="shavuot-eve-row"
-            class="flex min-w-0 flex-wrap items-stretch gap-2 sm:gap-2.5"
-            aria-label="ערב חג"
-          ></div>
-          <div id="second_column" class="flex min-w-0 max-w-full flex-col gap-1.5 sm:gap-2"></div>
+          <section class="tz-glass-card flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden p-4 sm:p-5">
+            <div
+              id="shavuot-eve-row"
+              class="flex min-w-0 flex-wrap items-stretch gap-2.5 sm:gap-3.5"
+              aria-label="ערב חג"
+            ></div>
+          </section>
+
+          <section class="tz-glass-card flex min-h-0 flex-1 flex-col gap-2 overflow-hidden p-4 sm:p-5">
+            <div id="second_column" class="flex min-h-0 min-w-0 max-w-full flex-1 flex-col gap-2 sm:gap-3"></div>
+          </section>
         </div>
 
         <div
-          class="tz-tf-col-cell flex min-h-0 min-w-0 max-w-full flex-col overflow-hidden pr-0.5"
+          class="tz-tf-col-cell tz-tf-col-cell--stack flex h-full min-h-0 min-w-0 max-w-full flex-col gap-2 overflow-hidden pr-1 sm:gap-2.5"
         >
           <div id="day_times" class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden"></div>
+
+          <section
+            id="shavuot-kabalat-footer"
+            class="flex min-w-0 shrink-0 flex-col gap-2"
+          >
+            <div class="tz-section-header flex min-h-[2.55rem] min-w-0 w-full shrink-0 items-center self-stretch py-1 sm:min-h-[2.85rem]">
+              <h2 class="tz-section-title">קבלת שבת</h2>
+              <div class="tz-section-rule" aria-hidden="true"></div>
+            </div>
+            <div
+              class="tz-glass-card tz-week-time-row flex w-full min-w-0 max-w-full items-center justify-between gap-1 overflow-hidden rounded-lg border-r-4 border-primary px-3 py-2.5 shadow-glass sm:px-3.5 sm:py-3"
+            >
+              <span
+                class="min-w-0 shrink break-words text-sm font-headline-md leading-snug text-on-surface sm:text-base md:text-lg"
+                >הדלקת נרות</span>
+              <span
+                class="shrink-0 whitespace-nowrap font-display-time text-lg tabular-nums text-primary tz-time-glow sm:text-xl md:text-2xl"
+                id="shavuot-hadlakat-kabalat-time"
+              ></span>
+            </div>
+            <div
+              class="tz-glass-card tz-week-time-row flex w-full min-w-0 max-w-full items-center justify-between gap-1 overflow-hidden rounded-lg border-r-4 border-primary px-3 py-2.5 shadow-glass sm:px-3.5 sm:py-3"
+            >
+              <span
+                class="min-w-0 shrink break-words text-sm font-headline-md leading-snug text-on-surface sm:text-base md:text-lg"
+                >קבלת שבת ודבר תורה</span>
+              <span
+                class="shrink-0 whitespace-nowrap font-display-time text-lg tabular-nums text-primary tz-time-glow sm:text-xl md:text-2xl"
+                id="shavuot-kabalat-divrei-torah-time"
+              >19:30</span>
+            </div>
+          </section>
         </div>
       </div>
     </div>

@@ -2120,6 +2120,12 @@ function get_shavuot_mincha_grouped_card_inner_html(){
                 captionText: 'מנחה גדולה',
                 captionMaxClass: TZ_TF_CAP_TIGHT,
             }),
+            tz_tfilot_grouped_time_column_html({
+                timeText: '',
+                timeId: 'shavuot-mincha-ktana',
+                captionText: 'מנחה קטנה',
+                captionMaxClass: TZ_TF_CAP_TIGHT,
+            }),
         ].join(''),
         ''
     );
@@ -2147,6 +2153,12 @@ function get_shavuot_afternoon_horizontal_cards_html(){
         'קבלת עול מלכות שמים לילדים',
         'והצגה בגן השמחה'
     );
+    var rutShiurCaption = tz_tf_cap_standalone_two_lines_html(
+        '',
+        'shavuot-shiur-rut-caption',
+        'שיעור בנושא',
+        'מגילת רות'
+    );
     return (
         '<div class="flex min-w-0 flex-wrap items-stretch gap-2 sm:gap-3" aria-label="אחר הצהריים">' +
         '<div id="shavuot-card-kabbalat-yeladim" class="' +
@@ -2161,15 +2173,17 @@ function get_shavuot_afternoon_horizontal_cards_html(){
             kabbalatCaption
         ) +
         '</div>' +
-        '<div class="' +
+        '<div id="shavuot-card-shiur-rut" class="' +
         SHABAT_DAY_CARD_SHELL +
         '">' +
-        tz_shabat_centered_card_body_html('shavuot-mincha-ktana', 'מנחה קטנה', undefined, '') +
-        '</div>' +
-        '<div class="' +
-        SHABAT_DAY_CARD_SHELL +
-        '">' +
-        tz_shabat_centered_card_body_html('shavuot-chag-out', 'צאת החג וערבית', undefined, tz_icon_moon_svg()) +
+        tz_shabat_centered_card_body_html(
+            'shavuot-shiur-rut',
+            '',
+            undefined,
+            '',
+            undefined,
+            rutShiurCaption
+        ) +
         '</div>' +
         '</div>'
     );
@@ -2208,9 +2222,32 @@ function get_shavuot_shiurim_footer_marquee_html(){
     );
 }
 
+function get_shavuot_erev_friday_date(current_date){
+    var day = current_date.getDay();
+    if (day >= 5){
+        return get_this_friday_date(current_date);
+    }
+    return get_date_plus_days(current_date, day === 0 ? -2 : -(day + 2));
+}
+
+function get_shavuot_kabalat_shabat_time(erev_friday_date, shabat_in){
+    if (is_purim(erev_friday_date)){
+        return add_minutes_to_time(shabat_in, 20);
+    }
+    if (is_10_tevet_friday(erev_friday_date)){
+        return shabat_in;
+    }
+    return add_minutes_to_time(shabat_in, 10);
+}
+
 async function present_shavuot_prayer_times(current_date){
     document.body.classList.add('tfilot-full-bleed');
     sync_tfilot_top_hud_dates(current_date);
+
+    var erevFriday = get_shavuot_erev_friday_date(current_date);
+    var shabat_in = get_shabat_times(erevFriday)['in'];
+    set_element_html('shavuot-hadlakat-kabalat-time', get_shavuot_kabalat_shabat_time(erevFriday, shabat_in));
+    set_element_html('shavuot-kabalat-divrei-torah-time', '19:30');
 
     set_element_html('shavuot-eve-row', get_shavuot_eve_cards_html());
     set_element_html('shavuot-mincha-gedola-eve', '13:15');
@@ -2224,7 +2261,7 @@ async function present_shavuot_prayer_times(current_date){
     );
     set_element_html('shavuot-kabbalat-yeladim', '17:30');
     set_element_html('shavuot-mincha-ktana', '18:30');
-    set_element_html('shavuot-chag-out', '20:24');
+    set_element_html('shavuot-shiur-rut', '18:45');
 
     set_element_html('shiurim', get_shavuot_shiurim_footer_marquee_html());
 

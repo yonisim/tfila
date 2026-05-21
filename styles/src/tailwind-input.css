@@ -488,20 +488,125 @@
     display: flex !important;
   }
 
-  /* Shabbat single-page: main lower under HUD (mt-auto grid), moderate padding — between “airy” and “tight” */
-  :is(#shabat_single_page.shabat-single-page-compact) main.tfilot-main-offset {
+  /* Shabbat + Shavuot single-page: main fills viewport; grid stretches toward footer */
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) main.tfilot-main-offset {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
     padding-top: clamp(2.35rem, 8.5vh, 5.75rem) !important;
     padding-left: clamp(0.85rem, 2.2vw, 1.35rem) !important;
     padding-right: clamp(0.85rem, 2.2vw, 1.35rem) !important;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact) main.tfilot-main-offset {
     padding-bottom: clamp(0.4rem, 1.1vh, 0.85rem) !important;
   }
 
-  /* Shavuot: tighter HUD offset — more room for prayer grid */
   #shavuot_single_page.shavuot-single-page-compact main.tfilot-main-offset {
-    padding-top: clamp(2rem, 6.5vh, 4.25rem) !important;
-    padding-left: clamp(0.65rem, 1.6vw, 1rem) !important;
-    padding-right: clamp(0.65rem, 1.6vw, 1rem) !important;
-    padding-bottom: clamp(0.2rem, 0.45vh, 0.35rem) !important;
+    padding-bottom: 0 !important;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    main
+    > .flex.min-h-0.flex-1.flex-col {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    :is(.shabat-main-grid, .shavuot-main-grid).tz-two-col-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    max-height: 100%;
+    margin-top: 0 !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    align-content: stretch;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    :is(.shabat-main-grid, .shavuot-main-grid)
+    > .tz-tf-col-cell {
+    min-height: 0;
+    align-self: stretch;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) .tz-tf-col-cell--stack {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:first-of-type {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:first-of-type > div {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+  }
+
+  #shavuot_single_page.shavuot-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #first_column:empty {
+    display: none !important;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #second_column {
+    flex: 1 1 auto;
+    min-height: 0;
+    justify-content: space-between;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #second_column > .shabat-compact-tf {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #second_column > .flex.flex-wrap {
+    flex-shrink: 0;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #day_times {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #day_times > div {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    justify-content: space-between !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #shabat-week-footer,
+  #shavuot_single_page.shavuot-single-page-compact #shavuot-kabalat-footer {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    :is(#shabat-week-footer, #shavuot-kabalat-footer)
+    .tz-week-time-row {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: center;
+  }
+
+  #shavuot_single_page .shavuot-shiurim-fouter.fouter {
+    margin-top: 0 !important;
   }
 
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) .tz-section-header {
@@ -510,43 +615,30 @@
     min-height: 2.55rem !important;
   }
 
-  #shavuot_single_page.shavuot-single-page-compact .tz-two-col-grid > .tz-section-header {
-    min-height: 0 !important;
-    padding-block: 0.2rem 0.28rem !important;
-    gap: clamp(0.35rem, 0.9vw, 0.65rem) !important;
-  }
-
   @media (min-width: 640px) {
-    :is(#shabat_single_page.shabat-single-page-compact) .tz-section-header {
+    :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) .tz-section-header {
       min-height: 2.75rem !important;
     }
   }
 
-  :is(#shabat_single_page.shabat-single-page-compact) .tz-section-title,
-  :is(#shabat_single_page.shabat-single-page-compact) .tz-section-title--with-parasha,
-  :is(#shabat_single_page.shabat-single-page-compact) .tz-section-title--with-parasha .tz-section-parasha {
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) .tz-section-title,
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) .tz-section-title--with-parasha,
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    .tz-section-title--with-parasha
+    .tz-section-parasha {
     font-size: clamp(1.75rem, 3.85vmin, 2.5rem) !important;
     font-weight: 600 !important;
     line-height: 1.06 !important;
     letter-spacing: 0.02em;
   }
 
-  #shavuot_single_page.shavuot-single-page-compact .tz-two-col-grid > .tz-section-header .tz-section-title {
-    font-size: clamp(1.35rem, 2.85vmin, 1.85rem) !important;
-    font-weight: 600 !important;
-    line-height: 1.06 !important;
-    letter-spacing: 0.02em;
-  }
-
   @media (min-width: 640px) {
-    :is(#shabat_single_page.shabat-single-page-compact) .tz-section-title,
-    :is(#shabat_single_page.shabat-single-page-compact) .tz-section-title--with-parasha,
-    :is(#shabat_single_page.shabat-single-page-compact) .tz-section-title--with-parasha .tz-section-parasha {
+    :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) .tz-section-title,
+    :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) .tz-section-title--with-parasha,
+    :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+      .tz-section-title--with-parasha
+      .tz-section-parasha {
       font-size: clamp(1.95rem, 4.35vmin, 2.85rem) !important;
-    }
-
-    #shavuot_single_page.shavuot-single-page-compact .tz-two-col-grid > .tz-section-header .tz-section-title {
-      font-size: clamp(1.45rem, 3vmin, 1.95rem) !important;
     }
   }
 
@@ -676,7 +768,9 @@
   }
 
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #day_times .tz-glass-card,
-  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #shabat-week-footer .tz-glass-card {
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    :is(#shabat-week-footer, #shavuot-kabalat-footer)
+    .tz-glass-card {
     padding: clamp(0.58rem, 1.28vmin, 0.8rem) clamp(0.62rem, 1.5vw, 0.92rem) !important;
     gap: 0.45rem !important;
     min-height: 0;
@@ -684,7 +778,9 @@
   }
 
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #day_times span.font-display-time,
-  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #shabat-week-footer span.font-display-time {
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    :is(#shabat-week-footer, #shavuot-kabalat-footer)
+    span.font-display-time {
     font-size: clamp(1.75rem, 3.85vmin, 2.5rem) !important;
     font-weight: 600 !important;
     line-height: 1.06 !important;
@@ -695,7 +791,7 @@
 
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #day_times :is(.font-headline-md, .text-sm, .text-base, .text-lg),
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
-    #shabat-week-footer
+    :is(#shabat-week-footer, #shavuot-kabalat-footer)
     :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-size: clamp(1.75rem, 3.85vmin, 2.5rem) !important;
@@ -715,14 +811,16 @@
     }
 
     :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #day_times span.font-display-time,
-    :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #shabat-week-footer span.font-display-time,
+    :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+      :is(#shabat-week-footer, #shavuot-kabalat-footer)
+      span.font-display-time,
     :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #shiurim span.font-display-time {
       font-size: clamp(1.95rem, 4.35vmin, 2.85rem) !important;
     }
 
     :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #day_times :is(.font-headline-md, .text-sm, .text-base, .text-lg),
     :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
-      #shabat-week-footer
+      :is(#shabat-week-footer, #shavuot-kabalat-footer)
       :is(.font-headline-md, .text-sm, .text-base, .text-lg),
     :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
       #shiurim
@@ -747,23 +845,6 @@
     padding: 4px 6px !important;
     font-size: clamp(0.86rem, 1.55vmin, 1.05rem) !important;
     font-weight: 600 !important;
-  }
-
-  /* Top prayer stack: size to content — avoid clipping הדלקה / מנחה וקבלת שבת cards */
-  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
-    .tz-tf-col-cell--stack
-    > section.tz-glass-card:first-of-type {
-    flex: 0 0 auto !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-  }
-
-  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
-    .tz-tf-col-cell--stack
-    > section.tz-glass-card:first-of-type
-    > div {
-    flex: 0 0 auto !important;
-    overflow: visible !important;
   }
 
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #friday-prayer-row-erev-shabbat,
@@ -882,55 +963,29 @@
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.88fr) !important;
   }
 
-  #shabat_single_page #shabat-week-footer {
+  :is(#shabat_single_page, #shavuot_single_page) :is(#shabat-week-footer, #shavuot-kabalat-footer) {
     gap: clamp(0.32rem, 0.6vh, 0.5rem) !important;
     flex-shrink: 0;
   }
 
-  #shabat_single_page #shabat-week-footer .tz-section-header {
+  :is(#shabat_single_page, #shavuot_single_page) :is(#shabat-week-footer, #shavuot-kabalat-footer) .tz-section-header {
     width: 100%;
     min-width: 0;
   }
 
-  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #shabat-week-footer .tz-glass-card {
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    :is(#shabat-week-footer, #shavuot-kabalat-footer)
+    .tz-glass-card {
     padding: clamp(0.58rem, 1.28vmin, 0.8rem) clamp(0.62rem, 1.5vw, 0.92rem) !important;
     gap: 0.45rem !important;
     min-height: 0;
     overflow: visible !important;
   }
 
-  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) #shabat-week-footer .tz-week-time-row {
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    :is(#shabat-week-footer, #shavuot-kabalat-footer)
+    .tz-week-time-row {
     gap: 0.35rem !important;
-  }
-
-  #shavuot_single_page.shavuot-single-page-compact #second_column > .shabat-compact-tf {
-    overflow: visible !important;
-    padding: clamp(0.55rem, 1.25vmin, 0.78rem) clamp(0.6rem, 1.4vw, 0.85rem) !important;
-  }
-
-  #shavuot_single_page.shavuot-single-page-compact .shabat-compact-tf .font-display-time {
-    font-size: clamp(1.45rem, 3.35vmin, 2.05rem) !important;
-  }
-
-  #shavuot_single_page.shavuot-single-page-compact .shabat-compact-tf .text-xs,
-  #shavuot_single_page.shavuot-single-page-compact .shabat-compact-tf .tz-inline-prayer-label {
-    font-size: clamp(0.72rem, 1.35vmin, 0.88rem) !important;
-  }
-
-  #shavuot_single_page.shavuot-single-page-compact #day_times .tz-glass-card {
-    padding: clamp(0.45rem, 1vmin, 0.62rem) clamp(0.5rem, 1.2vw, 0.75rem) !important;
-  }
-
-  #shavuot_single_page.shavuot-single-page-compact #day_times span.font-display-time {
-    font-size: clamp(1.35rem, 3vmin, 1.85rem) !important;
-  }
-
-  #shavuot_single_page.shavuot-single-page-compact #day_times :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
-    font-size: clamp(1.35rem, 3vmin, 1.85rem) !important;
-  }
-
-  #shavuot_single_page.shavuot-single-page-compact #shavuot-eve-row > .tz-glass-card .tz-standalone-cap {
-    font-size: clamp(0.82rem, 1.5vmin, 1rem) !important;
   }
 
   /* Shavuot footer: title + shiurim on one row */
