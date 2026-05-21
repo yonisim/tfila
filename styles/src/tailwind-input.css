@@ -174,11 +174,30 @@
     scrollbar-gutter: stable;
   }
 
+  /* Maayan theme: dark gold cards, cream text */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-glass-card {
-    @apply rounded-xl border-r-8 border-primary p-6 shadow-glass;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    @apply rounded-xl p-6;
+    background: linear-gradient(180deg, #4a402c 0%, #2f2a1d 100%) !important;
+    color: #fff4d2;
+    border: 2px solid #c8a95b !important;
+    border-right-width: 2px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-glass-card * {
+    color: #fff4d2 !important;
+  }
+
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
+    .tz-glass-card
+    :is(.border-primary, .border-primary\/30) {
+    border-color: rgba(200, 169, 91, 0.55) !important;
+  }
+
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-glass-card .tz-time-glow {
+    text-shadow:
+      0 0 28px rgba(255, 244, 210, 0.45),
+      0 2px 6px rgba(0, 0, 0, 0.35);
   }
 
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-page-bg {
@@ -193,7 +212,7 @@
     text-shadow: 0 0 40px rgba(106, 93, 65, 0.5);
   }
 
-  /* Section header row: title + rule (זמני תפילות / זמני היום) */
+  /* Section header row: light gold band (inverted vs dark cards) */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-header {
     position: relative;
     display: flex;
@@ -201,22 +220,22 @@
     gap: clamp(0.85rem, 2.2vw, 1.35rem);
     flex-shrink: 0;
     min-width: 0;
-    padding-block: 0.5rem 0.55rem;
+    padding-block: 0.45rem 0.5rem;
     padding-inline: clamp(0.85rem, 2.1vw, 1.15rem) clamp(0.75rem, 2vw, 1.1rem);
-    border-radius: 0.625rem;
+    border-radius: 0.5rem;
     background: linear-gradient(
-      145deg,
-      rgba(255, 253, 248, 0.12) 0%,
-      rgba(106, 93, 65, 0.16) 38%,
-      rgba(18, 24, 34, 0.42) 100%
+      180deg,
+      rgba(243, 225, 188, 0.94) 0%,
+      rgba(201, 184, 150, 0.82) 55%,
+      rgba(200, 169, 91, 0.72) 100%
     );
-    border: 1px solid rgba(243, 225, 188, 0.3);
+    border: 1px solid #c8a95b;
+    border-top: 3px solid #f8c137;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.15),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.12),
-      0 4px 22px rgba(0, 0, 0, 0.24);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+      inset 0 1px 0 rgba(255, 252, 240, 0.65),
+      0 2px 10px rgba(47, 42, 29, 0.18);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 
   /* Weekday tfilot: slimmer header band so the centered main area can shrink */
@@ -230,48 +249,97 @@
     inset-inline-start: clamp(0.45rem, 1.2vw, 0.65rem);
     top: 50%;
     transform: translateY(-50%);
-    width: 3px;
-    height: 58%;
-    max-height: 1.95rem;
+    width: 4px;
+    height: 62%;
+    max-height: 2rem;
     border-radius: 9999px;
-    background: linear-gradient(180deg, #fdf6e4 0%, #d6c5a2 40%, #6a5d41 100%);
-    box-shadow: 0 0 12px rgba(243, 225, 188, 0.4);
+    background: linear-gradient(180deg, #f8c137 0%, #c8a95b 45%, #6a5d41 100%);
+    box-shadow: 0 0 8px rgba(248, 193, 55, 0.45);
     pointer-events: none;
   }
 
-  /* Page section titles */
+  /* Page section titles — match in-card / day-row item size & weight (600) */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-title {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-weight: 600;
-    font-size: clamp(1.05rem, 2.15vw, 1.72rem);
-    line-height: 1.2;
-    letter-spacing: 0.055em;
-    color: #fdfbf7;
-    text-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.12),
-      0 2px 4px rgba(0, 0, 0, 0.45),
-      0 0 28px rgba(214, 197, 162, 0.22);
+    font-size: clamp(2.05rem, 5vmin, 3.15rem);
+    line-height: 1.06;
+    letter-spacing: 0.02em;
+    color: #2f2a1d;
+    text-shadow: 0 1px 0 rgba(255, 252, 240, 0.55);
     white-space: nowrap;
     margin: 0;
-    padding-inline-start: 0.5rem;
+    padding-inline-start: 0.55rem;
     flex-shrink: 0;
+  }
+
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-parasha {
+    color: rgba(47, 42, 29, 0.82) !important;
+    font-weight: 600 !important;
+    font-size: clamp(2.05rem, 5vmin, 3.15rem);
+    line-height: 1.06;
+    letter-spacing: 0.02em;
+  }
+
+  @media (min-width: 640px) {
+    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-section-title,
+    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-section-parasha {
+      font-size: clamp(2.3rem, 5.6vmin, 3.45rem);
+    }
+  }
+
+  /* All prayer/day labels & captions inside cards — semibold like item rows */
+  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
+    .tz-glass-card
+    :is(
+      .text-xs,
+      .text-sm,
+      .text-base,
+      .text-lg,
+      .font-headline-md,
+      .tz-inline-prayer-label,
+      .tz-standalone-cap
+    ) {
+    font-weight: 600 !important;
+  }
+
+  /* Shabbat: one-line title + parasha (full-width header, no ellipsis) */
+  #shabat_single_page .tz-section-header--prayer-span {
+    grid-column: 1 / -1;
+    overflow: visible;
+  }
+
+  #shabat_single_page .tz-section-title--with-parasha {
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: visible;
+    white-space: nowrap;
+  }
+
+  #shabat_single_page .tz-section-title--with-parasha .tz-section-parasha,
+  #shabat_single_page .tz-section-title--with-parasha .tz-section-title-sep {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  #shabat_single_page .tz-section-title-sep {
+    color: rgba(47, 42, 29, 0.65);
+    font-weight: 600;
   }
 
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .tz-section-rule {
     flex: 1 1 0%;
     min-width: 1.25rem;
-    height: 1px;
+    height: 2px;
     border-radius: 9999px;
     background: linear-gradient(
       90deg,
-      rgba(243, 225, 188, 0.55) 0%,
-      rgba(201, 184, 150, 0.35) 35%,
-      rgba(106, 93, 65, 0.18) 72%,
-      rgba(27, 28, 26, 0.08) 100%
+      #6a5d41 0%,
+      #c8a95b 38%,
+      rgba(200, 169, 91, 0.35) 100%
     );
-    box-shadow:
-      0 0 10px rgba(243, 225, 188, 0.2),
-      0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: 0 1px 0 rgba(255, 252, 240, 0.35);
   }
 
   /* In-card prayer row labels (שחרית: / מנחה: / ערבית:) — small title chip */
@@ -284,7 +352,7 @@
     padding: 0.32em 0.72em 0.38em 0.85em;
     border-radius: 0.45em;
     font-family: 'Work Sans', system-ui, sans-serif;
-    font-weight: 600;
+    font-weight: 600 !important;
     font-size: clamp(1.02rem, 1.9vw, 1.48rem);
     line-height: 1.15;
     letter-spacing: 0.06em;
@@ -344,7 +412,7 @@
     display: none;
   }
 
-  /* Announcement bar: in flow at bottom; theme-aligned glass strip */
+  /* Announcement bar: in flow at bottom; keep short so main cards are not clipped */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter {
     position: relative;
     bottom: auto;
@@ -355,8 +423,8 @@
     flex-shrink: 0;
     margin-top: auto;
     box-sizing: border-box;
-    min-height: clamp(3.75rem, 8.5vh, 6.5rem);
-    padding: 0.85rem clamp(1rem, 4vw, 2.25rem);
+    min-height: clamp(2.35rem, 5vh, 3.35rem);
+    padding: 0.42rem clamp(0.75rem, 3vw, 1.35rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -369,19 +437,19 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     color: #faf9f5;
-    border-top: 3px solid rgba(243, 225, 188, 0.55);
+    border-top: 2px solid rgba(243, 225, 188, 0.55);
     box-shadow:
-      0 -12px 40px rgba(0, 0, 0, 0.32),
+      0 -8px 24px rgba(0, 0, 0, 0.26),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    line-height: 1.45;
+    line-height: 1.28;
   }
 
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter #footer-custom-message {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-weight: 500;
-    font-size: clamp(1.68rem, 4.125vw, 2.58rem) !important;
-    letter-spacing: 0.03em;
-    line-height: 1.5;
+    font-size: clamp(1.2rem, 2.85vw, 1.75rem) !important;
+    letter-spacing: 0.02em;
+    line-height: 1.28;
     max-width: min(96vw, 72rem);
     color: inherit;
     text-align: center;
@@ -394,14 +462,14 @@
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .fouter
     #footer-custom-message.text-single-page-shaba {
-    font-size: clamp(1.47rem, 3.525vw, 2.13rem) !important;
+    font-size: clamp(1.08rem, 2.45vw, 1.52rem) !important;
   }
 
   /* Omer / announcement spans (not #footer-custom-message) */
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter #omer-text,
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page) .fouter #omer-text-weeks {
-    font-size: clamp(1.68rem, 4.125vw, 2.58rem) !important;
-    line-height: 1.5;
+    font-size: clamp(1.2rem, 2.85vw, 1.75rem) !important;
+    line-height: 1.28;
     font-weight: 500;
   }
 
@@ -417,18 +485,6 @@
   :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page)
     .hidden-element.talit_tfilin.show-element {
     display: flex !important;
-  }
-
-  #shabat_single_page .tz-section-title--with-parasha {
-    flex-shrink: 1;
-    min-width: 0;
-  }
-
-  #shabat_single_page .tz-section-title--with-parasha .tz-section-parasha {
-    font-size: inherit;
-    line-height: inherit;
-    letter-spacing: inherit;
-    font-weight: 500;
   }
 
   /* Shabbat single-page: main lower under HUD (mt-auto grid), moderate padding — between “airy” and “tight” */
@@ -451,21 +507,21 @@
     }
   }
 
-  #shabat_single_page.shabat-single-page-compact .tz-section-title {
-    font-size: clamp(1.02rem, 2.05vw, 1.72rem) !important;
-    letter-spacing: 0.04em;
-  }
-
-  #shabat_single_page.shabat-single-page-compact .tz-section-title--with-parasha {
-    flex-shrink: 1 !important;
-    min-width: 0 !important;
-  }
-
+  #shabat_single_page.shabat-single-page-compact .tz-section-title,
+  #shabat_single_page.shabat-single-page-compact .tz-section-title--with-parasha,
   #shabat_single_page.shabat-single-page-compact .tz-section-title--with-parasha .tz-section-parasha {
-    font-size: inherit !important;
-    line-height: inherit !important;
-    letter-spacing: inherit;
-    font-weight: 500 !important;
+    font-size: clamp(1.75rem, 3.85vmin, 2.5rem) !important;
+    font-weight: 600 !important;
+    line-height: 1.06 !important;
+    letter-spacing: 0.02em;
+  }
+
+  @media (min-width: 640px) {
+    #shabat_single_page.shabat-single-page-compact .tz-section-title,
+    #shabat_single_page.shabat-single-page-compact .tz-section-title--with-parasha,
+    #shabat_single_page.shabat-single-page-compact .tz-section-title--with-parasha .tz-section-parasha {
+      font-size: clamp(1.95rem, 4.35vmin, 2.85rem) !important;
+    }
   }
 
   /* Weekday (חול): larger type to fill the slide; row/card gaps stay gap-2 (0.5rem) */
@@ -476,6 +532,7 @@
 
   #tfilot_single_page.tfilot-single-page-compact .tz-inline-prayer-label {
     font-size: clamp(1.1rem, 2.05vw, 1.52rem) !important;
+    font-weight: 600 !important;
     padding: 0.3em 0.6em 0.34em 0.6em !important;
   }
 
@@ -495,6 +552,7 @@
 
   #tfilot_single_page.tfilot-single-page-compact #prayer_times .tz-glass-card .text-xs {
     font-size: clamp(0.95rem, 1.85vmin, 1.18rem) !important;
+    font-weight: 600 !important;
     line-height: 1.22 !important;
   }
 
@@ -530,7 +588,7 @@
     font-weight: 600 !important;
     line-height: 1.06 !important;
     letter-spacing: 0.02em;
-    color: #3a3220 !important;
+    color: #fff4d2 !important;
   }
 
   @media (min-width: 640px) {
@@ -540,6 +598,7 @@
 
     #tfilot_single_page.tfilot-single-page-compact #prayer_times .tz-glass-card .text-xs {
       font-size: clamp(1.05rem, 2vmin, 1.28rem) !important;
+      font-weight: 600 !important;
     }
 
     #tfilot_single_page.tfilot-single-page-compact #day_times span.font-display-time,
@@ -553,6 +612,7 @@
   /* Shabbat single-page: compact text/time typography */
   #shabat_single_page.shabat-single-page-compact .tz-inline-prayer-label {
     font-size: clamp(0.95rem, 1.75vw, 1.28rem) !important;
+    font-weight: 600 !important;
     padding: 0.26em 0.55em 0.3em 0.55em !important;
   }
 
@@ -572,6 +632,7 @@
 
   #shabat_single_page.shabat-single-page-compact .shabat-compact-tf .text-xs {
     font-size: clamp(0.78rem, 1.45vmin, 0.95rem) !important;
+    font-weight: 600 !important;
     line-height: 1.2 !important;
   }
 
@@ -615,7 +676,7 @@
     font-weight: 600 !important;
     line-height: 1.06 !important;
     letter-spacing: 0.02em;
-    color: #3a3220 !important;
+    color: #fff4d2 !important;
   }
 
   @media (min-width: 640px) {
@@ -655,6 +716,34 @@
   #shabat_single_page.shabat-single-page-compact .grid-box-right {
     padding: 4px 6px !important;
     font-size: clamp(0.86rem, 1.55vmin, 1.05rem) !important;
+    font-weight: 600 !important;
+  }
+
+  /* Top prayer stack: size to content — avoid clipping הדלקה / מנחה וקבלת שבת cards */
+  #shabat_single_page.shabat-single-page-compact
+    .tz-tf-col-cell--stack
+    > section.tz-glass-card:first-of-type {
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact
+    .tz-tf-col-cell--stack
+    > section.tz-glass-card:first-of-type
+    > div {
+    flex: 0 0 auto !important;
+    overflow: visible !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #friday-prayer-row-erev-shabbat {
+    flex-shrink: 0;
+    overflow: visible !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #friday-prayer-row-erev-shabbat > .tz-glass-card {
+    overflow: visible !important;
+    min-height: min-content;
   }
 
   /* Erev + post-shacharit / afternoon horizontal glass cards (not the full grouped mincha card shell) */
@@ -667,6 +756,7 @@
   /* Standalone cards: caption under the time — larger type. */
   #shabat_single_page.shabat-single-page-compact .tz-standalone-cap {
     font-size: clamp(1.05rem, 2.05vmin, 1.4rem) !important;
+    font-weight: 600 !important;
     line-height: 1.2 !important;
     max-width: 100% !important;
     overflow: visible;
@@ -687,7 +777,6 @@
     text-overflow: unset !important;
   }
 
-  #shabat_single_page.shabat-single-page-compact #friday-prayer-card-mincha-kabalat,
   #shabat_single_page.shabat-single-page-compact
     #second_column
     > .flex.flex-wrap
@@ -696,9 +785,9 @@
     overflow: visible !important;
   }
 
-  #shabat_single_page.shabat-single-page-compact #friday-prayer-card-mincha-kabalat,
-  #shabat_single_page.shabat-single-page-compact #friday-prayer-card-mincha-kabalat * {
-    overflow: visible !important;
+  #shabat_single_page.shabat-single-page-compact #friday-prayer-card-mincha-kabalat .tz-standalone-cap--one-line {
+    white-space: nowrap !important;
+    max-width: none !important;
   }
 
   @media (min-width: 640px) {
@@ -752,6 +841,6 @@
   #shabat_single_page.shabat-single-page-compact #mincha_arvit_zachor .grid-box-right:nth-child(odd) {
     font-size: clamp(1.65rem, 3.75vmin, 2.35rem) !important;
     font-weight: 600 !important;
-    color: var(--color-primary, #6a5d41);
+    color: #fff4d2 !important;
   }
 }

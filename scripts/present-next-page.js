@@ -1390,9 +1390,15 @@ var TZ_TF_CAP_NOWRAP =
 var TZ_TF_CAP_STANDALONE_BASE =
     'tz-standalone-cap block max-w-full text-center text-on-surface-variant leading-tight';
 
+/** Captions that must never break across lines (even when >2 words). */
+function tz_tf_cap_standalone_force_one_line(captionText){
+    var t = String(captionText || '').trim();
+    return t === 'מנחה וקבלת שבת';
+}
+
 function tz_tf_cap_standalone_class(captionText){
     var words = String(captionText || '').trim().split(/\s+/).filter(Boolean);
-    if (words.length === 2){
+    if (tz_tf_cap_standalone_force_one_line(captionText) || words.length === 2){
         return TZ_TF_CAP_STANDALONE_BASE + ' tz-standalone-cap--one-line';
     }
     if (words.length > 2){
@@ -1406,7 +1412,7 @@ function tz_tf_cap_standalone_html(captionText, captionId){
     var words = String(captionText || '').trim().split(/\s+/).filter(Boolean);
     var cls = tz_tf_cap_standalone_class(captionText);
     var idAttr = captionId ? ' id="' + captionId + '"' : '';
-    if (words.length <= 2){
+    if (tz_tf_cap_standalone_force_one_line(captionText) || words.length <= 2){
         return '<span class="' + cls + '"' + idAttr + '>' + words.join(' ') + '</span>';
     }
     var lines = [];
