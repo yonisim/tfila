@@ -1,0 +1,36 @@
+name: Visual Screenshot Test
+
+on:
+  push:
+    branches-ignore: [master]
+  workflow_dispatch:
+
+jobs:
+  screenshot:
+    runs-on: [self-hosted, Windows, X64]
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Take screenshot
+        run: npm run screenshot
+        env:
+          npm_config_data_dir: ${{ secrets.TFILA_DATA_DIR }}
+
+      - name: Upload screenshot to S3
+        run: |
+          $branch = "${{ github.ref_name }}" -replace '[/\\]', '-'
+          aws s3 cp screenshots\app.png "s3://${{ secrets.S3_BUCKET }}/tfila-screenshots/$branch.png"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Report S3 path
+        run: |
+          $branch = "${{ github.ref_name }}" -replace '[/\\]', '-'
+          Write-Host "Screenshot at: s3://${{ secrets.S3_BUCKET }}/tfila-screenshots/$branch.png"

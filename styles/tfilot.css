@@ -1,7 +1,22 @@
+/*
+ * tfilot.css — LEGACY slide styles
+ *
+ * All classes here are LEGACY — used exclusively by the old HTML-fragment
+ * slides (html/*.html that are NOT *_single_page.html).
+ *
+ * DO NOT use these classes in new Tailwind-based single-page slides.
+ * DO NOT remove them unless you are also rewriting the HTML that uses them.
+ *
+ * For new slides, use Tailwind utility classes and the component classes in
+ * styles/src/tailwind-input.css instead.
+ */
+
+/* LEGACY — used by legacy slides; gives a semi-transparent dark background to slide containers */
 .background-opac{
     background-color: var(--default-text-background-color);
 }
 
+/* LEGACY — base RTL grid container used by old tfilot/shabat/chag slides */
 .my-grid{
     display: grid;
     color: #444;
@@ -11,11 +26,13 @@
     column-gap: 1vw;
 }
 
+/* LEGACY — typography layer added on top of .my-grid or .shabat-grid for prayer-time rows */
 .tfilot-grid {
     line-height: 4.5vh;
     font-weight: bold;
 }
 
+/* LEGACY — full grid for Shabbat slide (combines .my-grid + .tfilot-grid in one rule) */
 .shabat-grid {
     display: grid;
     color: #444;
@@ -27,29 +44,34 @@
     font-weight: bold;
 }
 
+/* LEGACY — inner spacing for nested table sections */
 .inner-table {
     margin-top: 1%;
 }
 
+/* LEGACY — 3-column prayer grid used by weekday slide */
 .tfilot-weekdays-grid{
     grid-template-columns: repeat(3, 1fr);
 }
 
+/* LEGACY — 4-column prayer grid used by legacy Shabbat slide */
 .tfilot-shabat-grid{
     grid-template-columns: repeat(4, 1fr);
 }
 
-
+/* LEGACY — 2-column grid: label | value (used in Shabbat erev time rows) */
 .tfilot-shabat-grid-horizontal{
     grid-template-columns: max-content 1fr;
 }
 
+/* LEGACY — centred narrow table (single-column sections) */
 .table-main-center{
     margin-right: 25%;
     width: 50%;
     line-height: 100%;
 }
 
+/* LEGACY — equal two-column grid (both halves equal width) */
 .two-column-grid-equal{
     display: grid;
     direction: rtl;
@@ -58,6 +80,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
+/* LEGACY — Shavuot main two-column grid (narrow right | wide left) */
 .two-column-grid-shavuot-main{
     display: grid;
     direction: rtl;
@@ -66,6 +89,7 @@
     grid-template-columns: minmax(0, 0.45fr) minmax(0, 1fr);
 }
 
+/* LEGACY — Shavuot bottom-left two-column grid (slightly wider right side) */
 .two-column-grid-shavuot-left-bottom{
     display: grid;
     direction: rtl;
@@ -74,6 +98,7 @@
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
 }
 
+/* LEGACY — two-column grid biased toward the left (right col narrower) */
 .two-column-grid-left-side{
     display: grid;
     direction: rtl;
@@ -82,6 +107,7 @@
     grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
 }
 
+/* LEGACY — two-column grid biased toward the right (left col narrower) */
 .two-column-grid-right-side{
     display: grid;
     direction: rtl;
@@ -90,6 +116,7 @@
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.5fr);
 }
 
+/* LEGACY — two-column grid for Shabbat day-times panel (wide right, narrow left) */
 .two-column-grid-right-side-shabat-day-times{
     display: grid;
     direction: rtl;
@@ -98,30 +125,37 @@
     grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
 }
 
+/* LEGACY — placeholder; individual columns inside grid containers (no styling needed) */
 .column-of-grid{
 }
 
+/* LEGACY — inline table header (no additional style) */
 .inline-table-header{
 }
 
+/* LEGACY — blue header cells in old grid-based tables */
 .grid-header-box {
     background-color: rgba(30, 77, 219, 0.815);
     color: white;
 }
 
+/* LEGACY — spacing above grid section titles */
 .grid-title-margin{
     margin-top: 1vh;
 }
 
+/* LEGACY — body cell text color in old grid-based tables */
 .grid-body-box {
     color: #0B1D51;
 }
 
+/* LEGACY — centred cell padding in old grid tables */
 .grid-box {
     padding: 5px;
     text-align: center;
   }
 
+/* LEGACY — right-aligned cell padding in old grid tables */
 .grid-box-right {
     padding: 5px;
     text-align: right;
