@@ -1,1 +1,10 @@
 node_modules
+
+# IDE
+.idea/
+
+# Test artifacts
+screenshots/
+test-results/
+playwright-report/
+tests/app.test.js-snapshots/
