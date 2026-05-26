@@ -57,9 +57,8 @@ This workstream also established conventions for the **Friday single-page** slid
 
 - **`clock-time.js`**: resolve the active clock via the active slide root (tfilot + Friday single-page roots) first, else **`header`**, else `document`. Guard missing nodes during transitions.
 - **DOM order** inside `.clock`: **`hour` → `:` → `min` → `:` → `second`** with **`direction: ltr`** on `.clock` so **HH:MM:SS** reads left-to-right.
-- **Hebrew date** in tfilot HUD: **`#tfilot_hebrew_date`**.
-- **Hebrew date** in Friday HUD: **`#friday_hebrew_date`**.
-- Keep **`present_hebrew_date_in_header`** in sync when these nodes exist.
+- **Hebrew date** (all slides): **`#tz_hebrew_date`** — one shared ID, since only one slide is in the DOM at a time.
+- Keep **`present_hebrew_date_in_header`** in sync when this node exists.
 
 ## Friday single-page prayer cards (conclusions)
 

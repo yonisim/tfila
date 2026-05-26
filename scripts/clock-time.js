@@ -18,17 +18,6 @@ function getTzHeroClockSlideRoot() {
   return null;
 }
 
-function getActiveClockRoot() {
-  var tz = getTzHeroClockSlideRoot();
-  if (tz) {
-    return tz;
-  }
-  var header = document.querySelector('header');
-  if (header && header.querySelector('.clock .hour')) {
-    return header;
-  }
-  return document;
-}
 
 /** Inner content box (px): prefer clientWidth minus padding; fall back to border box from layout. */
 function tfilotHeroClockInnerPx(disk) {
@@ -188,27 +177,32 @@ export function clockFunc() {
   sec = sec < 10 ? '0' + sec : '' + sec;
   document.documentElement.style.setProperty('--loadingSize', sec);
 
-  var root = getActiveClockRoot();
-  var hourTxt = root.querySelector('.clock .hour');
-  var minTxt = root.querySelector('.clock .min');
-  var secTxt = root.querySelector('.clock .second');
-  if (!hourTxt || !minTxt || !secTxt) {
+  /* Update every .clock in the DOM — no slide coupling */
+  var clocks = document.querySelectorAll('.clock');
+  if (!clocks.length) {
     setTimeout(clockFunc, 400);
     return;
   }
-  hourTxt.textContent = hour;
-  minTxt.textContent = min;
-  secTxt.textContent = sec;
-
-  var colons = root.querySelectorAll('.clock .clock-text.colon');
-  for (var i = 0; i < colons.length; i++) {
-    if (!colons[i].classList.contains('sec')) {
-      colons[i].classList.add('sec');
+  for (var i = 0; i < clocks.length; i++) {
+    var c = clocks[i];
+    var hourTxt = c.querySelector('.hour');
+    var minTxt  = c.querySelector('.min');
+    var secTxt  = c.querySelector('.second');
+    if (!hourTxt || !minTxt || !secTxt) continue;
+    hourTxt.textContent = hour;
+    minTxt.textContent  = min;
+    secTxt.textContent  = sec;
+    var colons = c.querySelectorAll('.clock-text.colon');
+    for (var j = 0; j < colons.length; j++) {
+      colons[j].classList.add('sec');
     }
   }
-  if (TZ_HERO_CLOCK_PAGE_IDS.indexOf(root.id) !== -1) {
+
+  /* Hero-clock size fitting is still slide-specific, but triggered independently */
+  if (getTzHeroClockSlideRoot()) {
     scheduleTfilotClockFit();
   }
+
   setTimeout(clockFunc, 1000);
 }
 

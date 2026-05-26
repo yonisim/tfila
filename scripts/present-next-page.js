@@ -1,7 +1,7 @@
 'esversion: 8';
 import { insert_html, append_html, activate_element, deactivate_element,
-    waitForElm, wait_for_scroll, toggle_element_show, show_by_id } from "./main-div-setter.js";
-import {current_date, get_date_from_Date, get_date_from_Date_for_header, read_json} from "./read_data.js";
+    wait_for_scroll, toggle_element_show, show_by_id } from "./main-div-setter.js";
+import {current_date, get_date_from_Date, read_json} from "./read_data.js";
 import {set_element_data, set_element_html, set_element_background, insert_html_at_start_of_element,
     insert_html_at_end_of_element,
     get_element_background, set_element_background_image, add_class_to_element_style} from "./main-div-setter.js";
@@ -114,6 +114,29 @@ read_initial_data().then(() => {
 var wait_seconds = 15;
 var message_wait_seconds = 5;
 var ad_wait_seconds = 10;
+
+/* Slides that own a hero clock + HUD + footer — all cross-cutting setup is
+   handled by loop_pages via setup_hero_slide(), not by the slide functions. */
+var HERO_SLIDE_IDS = new Set([
+    'tfilot_single_page',
+    'friday_single_page',
+    'friday_single_page_plag',
+    'shabat_single_page',
+    'shavuot_single_page',
+]);
+
+function setup_hero_slide(date, page_id) {
+    if (!HERO_SLIDE_IDS.has(page_id)) return;
+    sync_tfilot_top_hud_dates(date);
+    attachTfilotHeroClockResizeObserver();
+    requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+            syncTfilotHeroClockDiskSize();
+            fitTfilotHeroClock();
+        });
+    });
+    show_footer_custom_message_if_needed(date, page_id, wait_seconds * 10);
+}
 var donators_start_point = 0;
 var donators_slice_count = 20;
 
@@ -126,45 +149,19 @@ function get_today_hebrew_date(current_date){
     return today_times['hebrew_date'];
 }
 
-function present_hebrew_date_in_header(current_date){
+function sync_tfilot_top_hud_dates(current_date){
     var hebrew_date_text = get_today_hebrew_date(current_date);
     if (is_night(current_date)){
         hebrew_date_text = "אור ל" + hebrew_date_text;
     }
-    set_element_data("hebrew_date", hebrew_date_text);
-    var tfilotHebrew = document.getElementById('tfilot_hebrew_date');
-    if (tfilotHebrew){
-        tfilotHebrew.textContent = hebrew_date_text;
-    }
-    var fridayHebrew = document.getElementById('friday_hebrew_date');
-    if (fridayHebrew){
-        fridayHebrew.textContent = hebrew_date_text;
-    }
-}
-
-function sync_tfilot_top_hud_dates(current_date){
-    present_hebrew_date_in_header(current_date);
+    set_element_html('tz_hebrew_date', hebrew_date_text)
 }
 
 function present_first_page(){
-    var date = current_date();
-    build_page_structure().then((promise) => {
-        clockFunc();
-        watch_files();
-    });
+    clockFunc();
+    watch_files();
     present_last_commit();
     loop_pages();
-}
-
-function present_header_dates(date){
-    waitForElm('#header').then((elm) => {
-        waitForElm('#hebrew_date').then((hebrew_date_elm) => {
-            present_hebrew_date_in_header(date);
-        });
-        waitForElm('#gregorian_date').then((greg_date_elm) => {
-            set_element_data("gregorian_date", get_date_from_Date_for_header(date));
-        });
-    });
 }
 
 function present_next_main_div(item){
@@ -651,16 +648,6 @@ function format_rosh_hodesh_message(hodesh_name, days) {
     return message;
 }
 
-async function show_sfirat_haomer_if_needed(current_date, into_elem_id, two_lines){
-    return;
-    var omer_numeric = get_omer_numeric(current_date);
-    if((omer_numeric >= 0 && is_after_sunset(current_date)) && (omer_numeric <= 49 && !is_after_sunset(current_date))){
-        load_html_into_page_elem_end('omer_fouter.html', into_elem_id, () => {
-            set_sfirat_haomer_regular_days(current_date, two_lines);
-            show_by_id('omer');
-        });
-    }
-}
 
 async function show_footer_custom_message_if_needed(current_date, into_elem_id, caller_slee_seconds=60){
     var messages = [];
@@ -872,8 +859,6 @@ function apply_friday_shabat_eve_card_times(current_date, shabat_in){
 }
 
 async function present_prayer_times_single_page(current_date){
-    document.body.classList.add('tfilot-full-bleed');
-    sync_tfilot_top_hud_dates(current_date);
     var this_week_times;
     if ([5,6].includes(current_date.getDay())){
         this_week_times = get_next_week_times(current_date);
@@ -916,15 +901,6 @@ async function present_prayer_times_single_page(current_date){
 
     load_html_into_page_elem_end('day_times_inner_tfilot_weekday.html', 'day_times', () => {
         present_day_times(current_date, true);
-    });
-    show_sfirat_haomer_if_needed(current_date, 'tfilot_single_page', true);
-    show_footer_custom_message_if_needed(current_date, 'tfilot_single_page');
-    attachTfilotHeroClockResizeObserver();
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        syncTfilotHeroClockDiskSize();
-        fitTfilotHeroClock();
-      });
     });
     return await sleep_seconds(wait_seconds*10);
 }
@@ -1250,7 +1226,6 @@ async function present_pesach_7_times(current_date){
         present_day_times(current_date);
     });
     await show_footer_custom_message_if_needed(current_date, 'pesach_7', 10*60)
-    show_sfirat_haomer_if_needed(current_date, 'pesach_7', true);
     return sleep_seconds(10*60);
 }
 
@@ -1274,9 +1249,6 @@ function get_shavuot_kabalat_shabat_time(erev_friday_date, shabat_in){
 }
 
 async function present_shavuot_prayer_times(current_date) {
-    document.body.classList.add('tfilot-full-bleed');
-    sync_tfilot_top_hud_dates(current_date);
-
     var erevFriday = get_shavuot_erev_friday_date(current_date);
     var shabat_in = get_shabat_times(erevFriday)['in'];
     set_element_html('shavuot-hadlakat-kabalat-time', get_shavuot_kabalat_shabat_time(erevFriday, shabat_in));
@@ -1302,16 +1274,6 @@ async function present_shavuot_prayer_times(current_date) {
         present_day_times(current_date, false);
     });
 
-    attachTfilotHeroClockResizeObserver();
-    requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-            syncTfilotHeroClockDiskSize();
-            fitTfilotHeroClock();
-        });
-    });
-
-    show_footer_custom_message_if_needed(current_date, 'shavuot_single_page', wait_seconds * 10);
-    show_sfirat_haomer_if_needed(current_date, 'shavuot_single_page', true);
     return sleep_seconds(wait_seconds * 10);
 }
 
@@ -1418,9 +1380,6 @@ async function embed_next_week_prayer_times(current_date, parent_elem_id, plus_d
 }
 
 async function present_shabat_prayer_times(current_date){
-    /* Single-page layout: match weekday/friday “full bleed” behavior and reuse shared components. */
-    document.body.classList.add('tfilot-full-bleed');
-    sync_tfilot_top_hud_dates(current_date);
     var this_week_times = get_week_times(current_date);
     var this_shabat_times = get_shabat_times(current_date);
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
@@ -1490,15 +1449,6 @@ async function present_shabat_prayer_times(current_date){
         shabat_zachor_adaptions();
     }
 
-    attachTfilotHeroClockResizeObserver();
-    requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-            syncTfilotHeroClockDiskSize();
-            fitTfilotHeroClock();
-        });
-    });
-
-    show_footer_custom_message_if_needed(current_date, 'shabat_single_page', wait_seconds*10);
     return sleep_seconds(wait_seconds*10);
 }
 
@@ -1750,7 +1700,6 @@ async function present_shavuot_eve_page(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    show_sfirat_haomer_if_needed(current_date, bla, false);
     return sleep_seconds(wait_seconds*5);
 }
 
@@ -1780,8 +1729,6 @@ function populate_friday_prayer_times(current_date){
 }
 
 async function present_friday_single_page(current_date){
-    document.body.classList.add('tfilot-full-bleed');
-    sync_tfilot_top_hud_dates(current_date);
     var main_page_id = 'friday_single_page';
     await populate_friday_prayer_times(current_date);
 
@@ -1792,15 +1739,6 @@ async function present_friday_single_page(current_date){
 
     load_html_into_page_elem_end('day_times_inner_tfilot_weekday.html', 'day_times', () => {
         present_day_times(get_this_friday_date(current_date), true);
-    });
-    show_sfirat_haomer_if_needed(current_date, main_page_id, true);
-    show_footer_custom_message_if_needed(current_date, main_page_id);
-    attachTfilotHeroClockResizeObserver();
-    requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-            syncTfilotHeroClockDiskSize();
-            fitTfilotHeroClock();
-        });
     });
     return sleep_seconds(wait_seconds*5);
 }
@@ -2145,16 +2083,15 @@ let item_funcs = {
 
 async function loop_pages(){
     while (true){
-        document.body.classList.remove('tfilot-full-bleed');
         current_date_obj = current_date();
         set_main_area_background(current_date_obj);
-        present_header_dates(current_date_obj);
         var single_page_item = get_specific_single_page(current_date_obj)
         if(single_page_item){
             try{
                 await insert_html('./html/'+ single_page_item + '.html', "main-div");
                 var element = document.getElementById(single_page_item);
                 element.classList.add('background-opac');
+                setup_hero_slide(current_date_obj, single_page_item);
                 var item_func = item_funcs[single_page_item];
                 await item_func(current_date_obj);
             } catch (ex){
@@ -2172,6 +2109,7 @@ async function loop_pages(){
                         await insert_html('./html/'+ item + '.html', "main-div");
                         var item_func = item_funcs[item];
                         activate_element(item);
+                        setup_hero_slide(current_date_obj, item);
                         await item_func(current_date_obj);
                         await deactivate_element(item);
                     }
@@ -2184,9 +2122,6 @@ async function loop_pages(){
     }
 }
 
-function build_page_structure(){
-    return insert_html('./html/header.html', "header");
-}
 
 function get_today_property(date, property_name){
     var current_date_var = get_date_from_Date(date);

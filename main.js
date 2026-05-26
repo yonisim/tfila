@@ -20,6 +20,7 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: winWidth,
     height: winHeight,
+    frame: !isTestMode,          // hide native title bar in test mode
     show: !isScreenshotMode,   // keep hidden until capturePage() in screenshot mode
     autoHideMenuBar: true,
     webPreferences: {

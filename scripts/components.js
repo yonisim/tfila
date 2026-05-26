@@ -14,6 +14,7 @@
  * │  tz_time_column(opts)   Time + label       stacked vertically         │
  * │  tz_card(opts)          Glass card shell   rounded, gold-border       │
  * │  tz_time_card(opts)     ★ shorthand: card + time + label in one call  │
+ * │  tz_card_row(opts)      Flex row wrapper for a group of cards         │
  * │                                                                       │
  * └──────────────────────────────────────────────────────────────────────┘
  *
@@ -364,4 +365,58 @@ export function tz_time_card({
         : col;
 
     return tz_card({ id, layout: 'column-center', flex, size, accentColor, extraClass, style, children: inner });
+}
+
+
+// ─── tz_card_row ──────────────────────────────────────────────────────────────
+
+/**
+ * Builder for a flex-wrap row of equal-width cards.
+ *
+ * Returns an object with two methods:
+ *   .add(cards)  — accepts a single card HTML string or an array of them
+ *   .html()      — returns the final HTML string
+ *
+ * @param {string} [label]              aria-label for the row (e.g. 'אחרי שחרית')
+ * @param {object} [opts]
+ * @param {'sm'|'md'} [opts.gap='md']   Gap between cards
+ *          'sm' → gap-1.5 sm:gap-2     'md' → gap-2 sm:gap-3
+ * @param {string} [opts.extraClass]    Extra classes on the wrapper div
+ * @returns {{ add: function, html: function }}
+ *
+ * @example
+ * var row = tz_card_row('אחרי שחרית — ציר זמן');
+ * row.add([
+ *   tz_time_card({ id: 'card-a', timeId: 'time-a', label: 'כותרת א' }),
+ *   tz_time_card({ id: 'card-b', timeId: 'time-b', label: 'כותרת ב' }),
+ * ]);
+ * return row.html();
+ */
+export function tz_card_row(label, opts) {
+    var gap        = (opts && opts.gap)        || 'md';
+    var extraClass = (opts && opts.extraClass) || '';
+    var _cards = [];
+
+    return {
+        /** Add one card (string) or an array of cards. Chainable. */
+        add: function(cards) {
+            if (Array.isArray(cards)) {
+                _cards = _cards.concat(cards);
+            } else {
+                _cards.push(cards);
+            }
+            return this;
+        },
+        /** Finalise and return the HTML string. */
+        html: function() {
+            var gapClass = gap === 'sm' ? 'gap-1.5 sm:gap-2' : 'gap-2 sm:gap-3';
+            var extra    = extraClass ? ' ' + extraClass : '';
+            return (
+                '<div class="flex min-w-0 flex-wrap ' + gapClass + extra + '"' +
+                (label ? ' aria-label="' + label + '"' : '') + '>' +
+                _cards.join('') +
+                '</div>'
+            );
+        },
+    };
 }

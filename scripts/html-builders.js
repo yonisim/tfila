@@ -15,7 +15,7 @@
  */
 
 import { is_purim, is_10_tevet_friday } from './holiday-rules.js';
-import { tz_card, tz_time, tz_label, tz_time_column, tz_time_card } from './components.js';
+import { tz_card, tz_time, tz_label, tz_time_column, tz_time_card, tz_card_row } from './components.js';
 
 // ─── Layout / typography class constants ──────────────────────────────────────
 // Edit these to change how all prayer-time cards look across all pages.
@@ -515,28 +515,26 @@ export function fill_friday_prayer_grouped_cards(current_date, set_element_html_
 export function get_shabat_after_shacharit_timeline_cards_row_html() {
     // Shared sizes — change once, all four cards update.
     var D = { size: 'lg', timeSize: 'lg', labelSize: 'xl' };
-
-    return (
-        '<div class="flex min-w-0 flex-wrap gap-2 sm:gap-3" aria-label="אחרי שחרית — ציר זמן">' +
-        tz_time_card({ id: 'shabat-card-kidush-shiur',   timeId: 'kidush',                    label: 'קידוש ושיעור',   ...D }) +
-        tz_time_card({ id: 'shabat-card-tfilat-yeladim', timeId: 'shabat-tfilat-yeladim-time', label: 'תפילת ילדים',    ...D }) +
-        tz_time_card({ id: 'shabat-card-parents',        timeId: 'shabat-parents-time',        label: 'הורים וילדים', ...D }) +
-        tz_time_card({ id: 'shabat-card-maayan',         timeId: 'lesson-halacha',             label: 'מעיינים בחבורה', ...D }) +
-        '</div>'
-    );
+    var row = tz_card_row('אחרי שחרית — ציר זמן');
+    row.add([
+        tz_time_card({ id: 'shabat-card-kidush-shiur',   timeId: 'kidush',                    label: 'קידוש ושיעור',   ...D }),
+        tz_time_card({ id: 'shabat-card-tfilat-yeladim', timeId: 'shabat-tfilat-yeladim-time', label: 'תפילת ילדים',    ...D }),
+        tz_time_card({ id: 'shabat-card-parents',        timeId: 'shabat-parents-time',        label: 'הורים וילדים',   ...D }),
+        tz_time_card({ id: 'shabat-card-maayan',         timeId: 'lesson-halacha',             label: 'מעיינים בחבורה', ...D }),
+    ]);
+    return row.html();
 }
 
 export function get_shabat_afternoon_horizontal_cards_html() {
     var D = { size: 'lg', timeSize: 'lg', labelSize: 'xl' };
-
-    return (
-        '<div class="flex min-w-0 flex-wrap gap-2 sm:gap-3" aria-label="אחר הצהריים">' +
-        tz_time_card({ id: 'shabat-card-afternoon-tehilim', timeId: 'tehilim',           label: { text: 'תהלים לילדים בגן השמחה', wrap: 'normal' }, ...D }) +
-        tz_time_card({ id: 'shabat-card-afternoon-shiur',   timeId: 'shiur-pirkei-avot', label: 'שיעור בפרקי אבות',       ...D }) +
-        tz_time_card({ id: 'shabat-card-afternoon-arvit',   timeId: 'arvit-shabat',      label: 'צאת שבת וערבית',        extraClass: 'arvit-shabat',   ...D }) +
-        tz_time_card({ id: 'shabat-card-afternoon-arvit-2', timeId: 'arvit-shabat-2',    label: 'ערבית ב',                extraClass: 'arvit-shabat-2', ...D }) +
-        '</div>'
-    );
+    var row = tz_card_row('אחר הצהריים');
+    row.add([
+        tz_time_card({ id: 'shabat-card-afternoon-tehilim', timeId: 'tehilim',           label: { text: 'תהלים לילדים בגן השמחה', wrap: 'normal' }, ...D }),
+        tz_time_card({ id: 'shabat-card-afternoon-shiur',   timeId: 'shiur-pirkei-avot', label: 'שיעור בפרקי אבות',                                  ...D }),
+        tz_time_card({ id: 'shabat-card-afternoon-arvit',   timeId: 'arvit-shabat',      label: 'צאת שבת וערבית',        extraClass: 'arvit-shabat',   ...D }),
+        tz_time_card({ id: 'shabat-card-afternoon-arvit-2', timeId: 'arvit-shabat-2',    label: 'ערבית ב',                extraClass: 'arvit-shabat-2', ...D }),
+    ]);
+    return row.html();
 }
 
 // ─── Shavuot single-page card builders ───────────────────────────────────────

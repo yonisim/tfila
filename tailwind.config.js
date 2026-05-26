@@ -1,8 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  /* Comma-separated IDs break utilities (e.g. .hidden → display:none on each id). Use :is(). */
-  important:
-    ':is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #shabat_single_page, #shavuot_single_page)',
+  /* Scope all Tailwind utilities to .tz-page so they only affect single-page views */
+  important: '.tz-page',
   content: [
     './html/tfilot_single_page.html',
     './html/friday_single_page.html',
@@ -14,6 +13,7 @@ module.exports = {
     './html/day_times_inner_single_page.html',
     './html/day_times_inner_tfilot_weekday.html',
     './scripts/present-next-page.js',
+    './scripts/html-builders.js',
     './styles/src/**/*.css',
   ],
   theme: {
