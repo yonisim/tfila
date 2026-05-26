@@ -542,6 +542,35 @@
 
 
   /* ===========================================================
+     FRIDAY HEADER  — title + parasha on one line, parasha smaller
+     =========================================================== */
+
+  /* Parasha and separator must never truncate */
+  :is(#friday_single_page, #friday_single_page_plag) .tz-section-title--with-parasha .tz-section-parasha,
+  :is(#friday_single_page, #friday_single_page_plag) .tz-section-title--with-parasha .tz-section-title-sep {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  :is(#friday_single_page, #friday_single_page_plag) .tz-section-title-sep {
+    color: var(--color-cream-faint);
+    font-weight: 600;
+  }
+
+  /* Parasha a bit smaller than the main title */
+  :is(#friday_single_page, #friday_single_page_plag) .tz-section-parasha {
+    font-size: clamp(1.55rem, 3.75vmin, 2.4rem) !important;
+  }
+
+  @media (min-width: 640px) {
+    :is(#friday_single_page, #friday_single_page_plag) .tz-section-parasha {
+      font-size: clamp(1.75rem, 4.2vmin, 2.6rem) !important;
+    }
+  }
+
+
+  /* ===========================================================
      PRAYER ROW LABEL CHIP  (.tz-inline-prayer-label)
      e.g.  שחרית  /  מנחה  /  ערבית
      =========================================================== */
