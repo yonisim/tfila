@@ -868,18 +868,13 @@ async function present_prayer_times_single_page(current_date){
     var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
     var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
     if (is_shacharit_8_30(current_date) && is_mincha_13_30(current_date)){
-        add_class_to_element_style('prayer_times', 'table-line-height-less')
+        add_class_to_element_style('prayer_times', 'table-line-height-less');
     }
     var grouped_prayer_res = await fetch('./html/prayer_times_grouped_single_page.html');
     var grouped_prayer_html = await grouped_prayer_res.text();
     set_element_html('prayer_times', grouped_prayer_html);
     fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time, set_element_html);
-    if(is_war(current_date)){
-        //set_element_data("shacharit-830-name", "שחרית ד");
-    }
-    if(is_shacharit_8_30(current_date) || true){
-        show_shacharit_8_30();
-    }
+    show_shacharit_8_30();
     show_slichot(current_date);
 
     if(is_mincha_13_30(current_date)){
@@ -902,7 +897,7 @@ async function present_prayer_times_single_page(current_date){
     load_html_into_page_elem_end('day_times_inner_tfilot_weekday.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    return await sleep_seconds(wait_seconds*10);
+    return sleep_seconds(wait_seconds*10);
 }
 
 function set_arvit_times(current_date, arvit_time){
