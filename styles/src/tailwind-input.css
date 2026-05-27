@@ -311,10 +311,6 @@
     gap: clamp(0.35rem, 0.9vh, 0.65rem);
   }
 
-  /* Drop empty kabalat slot to avoid an extra gap below the plag card */
-  #friday_single_page_plag #kabalat-shabat-parent:empty {
-    display: none;
-  }
 
 
   /* ===========================================================

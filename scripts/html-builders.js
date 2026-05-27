@@ -505,7 +505,7 @@ export function get_shabat_erev_shabbat_cards_row_html() {
 }
 
 export function get_friday_plag_minyan_card_inner_html() {
-    var D = { size: 'lg', timeSize: 'lg', labelSize: 'xs' };
+    var D = { size: 'lg', timeSize: 'xl', labelSize: 'xl' };
     var row = tz_card_row();
     row.add([
         tz_time_card({ timeId: 'kabalat-shabat-early-mincha', label: 'מנחה וקבלת שבת מוקדמת', ...D }),
