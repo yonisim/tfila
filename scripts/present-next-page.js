@@ -51,8 +51,7 @@ import {
     get_tfilot_arvit_grouped_card_inner_html, get_tfilot_shabat_mincha_grouped_card_inner_html,
     tfilot_show_arvit_20_column,
     fill_tfilot_prayer_times_grouped_cards, fill_friday_prayer_grouped_cards,
-    get_friday_hadlakat_card_inner_html, get_friday_kabalat_card_inner_html,
-    get_friday_mincha_gedola_card_inner_html, get_friday_mincha_kabalat_card_inner_html,
+    get_friday_erev_shabbat_cards_row_html, get_shabat_erev_shabbat_cards_row_html,
     get_friday_plag_minyan_card_inner_html, get_friday_shacharit_card_inner_html,
     get_shabat_after_shacharit_timeline_cards_row_html, get_shabat_afternoon_horizontal_cards_html,
     get_shavuot_eve_cards_html, get_shavuot_day_prayer_cards_html,
@@ -1385,11 +1384,8 @@ async function present_shabat_prayer_times(current_date){
     var arvit_shabat = this_shabat_times["out"];
     var shacharit_main = '08:30';
 
-    /* Ensure Friday-style Erev Shabbat cards contain their inner HTML (ids like #hadlakat-nerot)
-       before show_shabat_eve_times() tries to populate times. */
-    if (document.getElementById('friday-prayer-row-erev-shabbat')){
-        set_element_html('friday-prayer-card-hadlakat', get_friday_hadlakat_card_inner_html());
-        set_element_html('friday-prayer-card-mincha-kabalat', get_friday_mincha_kabalat_card_inner_html());
+    if (document.getElementById('shabat-erev-shabbat-cards')){
+        set_element_html('shabat-erev-shabbat-cards', get_shabat_erev_shabbat_cards_row_html());
     }
     await show_shabat_eve_times(current_date, shabat_in, 'first_column');
 
@@ -1734,7 +1730,7 @@ async function present_friday_single_page(current_date){
 }
 
 async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
-    if (document.getElementById('friday-prayer-row-erev-shabbat')){
+    if (document.getElementById('friday-prayer-erev-shabbat-cards') || document.getElementById('shabat-erev-shabbat-cards')){
         apply_friday_shabat_eve_card_times(current_date, shabat_in);
         return;
     }

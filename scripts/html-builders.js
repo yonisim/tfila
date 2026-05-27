@@ -481,28 +481,27 @@ export function get_tfilot_shabat_mincha_grouped_card_inner_html() {
 
 // ─── Friday single-page card builders ────────────────────────────────────────
 
-export function get_friday_hadlakat_card_inner_html() {
-    return tz_shabat_centered_card_body_html('hadlakat-nerot', 'הדלקת נרות', null, tz_icon_shabbat_candles_svg());
+/** Three ערב שבת cards for the Friday single-page slide. */
+export function get_friday_erev_shabbat_cards_row_html() {
+    var D = { size: 'lg', timeSize: 'lg', labelSize: 'xl' };
+    var row = tz_card_row('ערב שבת');
+    row.add([
+        tz_time_card({ timeText: '13:15',                                            label: 'מנחה גדולה',     ...D }),
+        tz_time_card({ timeId: 'hadlakat-nerot',                                     label: 'הדלקת נרות',     ...D }),
+        tz_time_card({ timeId: 'mincha_shabat_eve', extraClass: 'mincha_shabat_eve', label: 'מנחה וקבלת שבת', ...D }),
+    ]);
+    return row.html();
 }
 
-export function get_friday_kabalat_card_inner_html() {
-    return tz_shabat_centered_card_body_html('kabalat_shabat', 'קבלת שבת', null, '', 'kabalat-shabat-name');
-}
-
-export function get_friday_mincha_gedola_card_inner_html() {
-    return tz_tfilot_grouped_time_strip_center_html_beside_icon(
-        tz_tfilot_grouped_time_column_html({
-            timeText: '13:15', captionText: 'מנחה גדולה', captionMaxClass: TZ_TF_CAP_NOWRAP,
-        }),
-        ''
-    );
-}
-
-export function get_friday_mincha_kabalat_card_inner_html() {
-    return tz_shabat_centered_card_body_html(
-        'mincha_shabat_eve', 'מנחה וקבלת שבת',
-        'mincha_shabat_eve flex min-w-0 flex-col items-center gap-0.5', ''
-    );
+/** Two ערב שבת cards (הדלקה + מנחה/קבלת שבת) for the Shabbat single-page slide. */
+export function get_shabat_erev_shabbat_cards_row_html() {
+    var D = { size: 'lg', timeSize: 'lg', labelSize: 'xl' };
+    var row = tz_card_row('ערב שבת');
+    row.add([
+        tz_time_card({ timeId: 'hadlakat-nerot',                                     label: 'הדלקת נרות',     ...D }),
+        tz_time_card({ timeId: 'mincha_shabat_eve', extraClass: 'mincha_shabat_eve', label: 'מנחה וקבלת שבת', ...D }),
+    ]);
+    return row.html();
 }
 
 export function get_friday_plag_minyan_card_inner_html() {
@@ -533,9 +532,7 @@ export function fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time,
 
 export function fill_friday_prayer_grouped_cards(current_date, set_element_html_fn) {
     set_element_html_fn('friday-prayer-card-shacharit',     get_friday_shacharit_card_inner_html(current_date));
-    set_element_html_fn('friday-prayer-card-mincha-gedola', get_friday_mincha_gedola_card_inner_html());
-    set_element_html_fn('friday-prayer-card-hadlakat',      get_friday_hadlakat_card_inner_html());
-    set_element_html_fn('friday-prayer-card-mincha-kabalat',get_friday_mincha_kabalat_card_inner_html());
+    set_element_html_fn('friday-prayer-erev-shabbat-cards', get_friday_erev_shabbat_cards_row_html());
 }
 
 // ─── Shabbat single-page card builders ───────────────────────────────────────
