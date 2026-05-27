@@ -56,6 +56,11 @@ import {
     get_shabat_after_shacharit_timeline_cards_row_html, get_shabat_afternoon_horizontal_cards_html,
     get_shavuot_eve_cards_html, get_shavuot_day_prayer_cards_html,
     get_shavuot_afternoon_horizontal_cards_html, get_shavuot_shiurim_footer_marquee_html,
+    get_tfilot_regular_days_grid_html,
+    get_friday_page_grid_html,
+    get_friday_plag_page_grid_html,
+    get_friday_prayers_col_html,
+    get_hero_hud_html,
 } from './html-builders.js';
 
 const chokidar = require('chokidar');
@@ -126,6 +131,7 @@ var HERO_SLIDE_IDS = new Set([
 
 function setup_hero_slide(date, page_id) {
     if (!HERO_SLIDE_IDS.has(page_id)) return;
+    insert_html_at_start_of_element(page_id, get_hero_hud_html());
     sync_tfilot_top_hud_dates(date);
     attachTfilotHeroClockResizeObserver();
     requestAnimationFrame(function () {
@@ -868,37 +874,41 @@ async function present_prayer_times_single_page(current_date){
         this_week_times = get_week_times(current_date);
     }
     var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
-    var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+    var arvit_time  = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+
+    /* Build the full two-column grid from components — no HTML file fetches needed. */
+    set_element_html('tfilot_page_grid', get_tfilot_regular_days_grid_html());
+
     if (is_shacharit_8_30(current_date) && is_mincha_13_30(current_date)){
         add_class_to_element_style('prayer_times', 'table-line-height-less');
     }
-    var grouped_prayer_res = await fetch('./html/prayer_times_grouped_single_page.html');
-    var grouped_prayer_html = await grouped_prayer_res.text();
-    set_element_html('prayer_times', grouped_prayer_html);
+
     fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time, set_element_html);
     show_shacharit_8_30();
     show_slichot(current_date);
 
-    if(is_mincha_13_30(current_date)){
+    if (is_mincha_13_30(current_date)){
         var mincha_gedola_time_min = get_today_mincha_gedola(current_date);
         var mincha_date = new Date(current_date);
-        mincha_date.setHours(mincha_gedola_time_min.split(":")[0]);
-        mincha_date.setMinutes(mincha_gedola_time_min.split(":")[1]);
+        mincha_date.setHours(mincha_gedola_time_min.split(':')[0]);
+        mincha_date.setMinutes(mincha_gedola_time_min.split(':')[1]);
         var mincha_gedola_time = '13:15';
         if (is_after_time(mincha_date, '13:17')){
             mincha_gedola_time = '13:20';
         }
-        var mincha_13_30 = create_tfilot_mincha_dynamic_row_html(mincha_gedola_time, 'מנחה גדולה');
-        insert_html_at_start_of_element('mincha-dynamic-prepend', mincha_13_30);
+        insert_html_at_start_of_element(
+            'mincha-dynamic-prepend',
+            create_tfilot_mincha_dynamic_row_html(mincha_gedola_time, 'מנחה גדולה')
+        );
     }
 
     set_element_html('mincha-regulr-days', mincha_time);
     set_element_html('arvit-regulr-days', arvit_time);
     set_arvit_times(current_date, arvit_time);
 
-    load_html_into_page_elem_end('day_times_inner_tfilot_weekday.html', 'day_times', () => {
-        present_day_times(current_date, true);
-    });
+    /* Day-times column is already in the DOM; just populate the spans. */
+    present_day_times(current_date, true);
+
     return sleep_seconds(wait_seconds*10);
 }
 
@@ -1706,23 +1716,29 @@ async function populate_friday_prayer_times(current_date){
     }
     set_element_html('prayer-times-title-parasha', parasha);
 
-    await load_html_into_page_elem_end('prayer_times_friday_single_page.html', 'friday_prayers', () => {
-        fill_friday_prayer_grouped_cards(current_date, set_element_html);
-        show_slichot(current_date);
-    });
+    // Column structure is pre-built by the grid builder on the Friday single page.
+    // For embedded contexts (e.g. kipur page), inject it when not yet present.
+    if (!document.getElementById('friday-prayer-card-shacharit')) {
+        set_element_html('friday_prayers', get_friday_prayers_col_html());
+    }
+    fill_friday_prayer_grouped_cards(current_date, set_element_html);
+    show_slichot(current_date);
     await show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
 }
 
 async function present_friday_single_page(current_date){
+    var showPlag = is_minyan_plag_active(current_date);
+    // Grid builder includes all column structure — no post-injection of col HTML needed.
+    set_element_html('friday_grid', showPlag ? get_friday_plag_page_grid_html() : get_friday_page_grid_html());
+
     await populate_friday_prayer_times(current_date);
 
-    if(is_minyan_plag_active(current_date)){
+    if (showPlag) {
         show_minyan_plag(current_date);
     }
 
-    load_html_into_page_elem_end('day_times_inner_tfilot_weekday.html', 'day_times', () => {
-        present_day_times(get_this_friday_date(current_date), true);
-    });
+    // Day-times structure already in the DOM from the grid builder; just populate the spans.
+    present_day_times(get_this_friday_date(current_date), true);
     return sleep_seconds(wait_seconds*5);
 }
 

@@ -12,6 +12,7 @@ module.exports = {
     './html/prayer_times_friday_single_page.html',
     './html/day_times_inner_single_page.html',
     './html/day_times_inner_tfilot_weekday.html',
+    './scripts/components.js',
     './scripts/present-next-page.js',
     './scripts/html-builders.js',
     './styles/src/**/*.css',

@@ -75,6 +75,39 @@ function _size_attr(size, defaultSize) {
 }
 
 
+// ─── tz_hero_hud ──────────────────────────────────────────────────────────────
+
+/**
+ * Hero slide top-right HUD: Hebrew date strip + hero clock.
+ * Identical across all hero slides (tfilot, friday, shabat, shavuot).
+ *
+ * Inject as the first children of the page-wrapper div via
+ * insert_html_at_start_of_element(page_id, tz_hero_hud()).
+ *
+ * @returns {string} HTML string (two sibling block elements)
+ */
+export function tz_hero_hud() {
+    return (
+        '<div class="tfilot-dates-strip pointer-events-none absolute right-0 top-0 z-10' +
+        ' flex max-w-[min(100%,22rem)] flex-wrap items-start justify-end' +
+        ' px-container-padding pb-1 pt-3 sm:pt-4" dir="rtl">' +
+        '<div class="header-hebrew-panel pointer-events-auto min-w-0 shrink-0">' +
+        '<div id="tz_hebrew_date" class="header-text"></div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="header-clock-circle tfilot-hero-clock tfilot-clock-corner pointer-events-none">' +
+        '<div class="clock pointer-events-auto" dir="ltr">' +
+        '<span class="clock-text hour">00</span>' +
+        '<b class="clock-text colon">:</b>' +
+        '<span class="clock-text min">00</span>' +
+        '<b class="clock-text colon">:</b>' +
+        '<span class="clock-text second">00</span>' +
+        '</div>' +
+        '</div>'
+    );
+}
+
+
 // ─── tz_time ──────────────────────────────────────────────────────────────────
 
 /**
@@ -365,6 +398,236 @@ export function tz_time_card({
         : col;
 
     return tz_card({ id, layout: 'column-center', flex, size, accentColor, extraClass, style, children: inner });
+}
+
+
+// ─── tz_section_header ────────────────────────────────────────────────────────
+
+/**
+ * Section header: title text + decorative horizontal rule.
+ *
+ * Used as the first-row item in a tz_page_grid column, or standalone anywhere
+ * a titled section is needed.
+ *
+ * @param {object} opts
+ * @param {string}  [opts.title='']           Heading text, e.g. 'זמני תפילות חול'
+ * @param {boolean} [opts.parasha=false]
+ *        When true, renders the parasha variant:
+ *          <title> – <span id="prayer-times-title-parasha">
+ *        Used on Friday and Shabbat slides.
+ * @param {'h2'|'h3'} [opts.level='h2']
+ *        Heading element level.  h3 also shifts the wrapper to the compact
+ *        min-h-[2.35rem] height (used for inline sub-section headers).
+ * @param {string}  [opts.titleExtraClass]    Extra classes on the heading element
+ * @param {string}  [opts.extraClass]         Extra classes on the wrapper div
+ * @returns {string} HTML string
+ */
+export function tz_section_header({ title = '', parasha = false, level = 'h2', titleExtraClass, extraClass } = {}) {
+    var wrapExtra  = extraClass      ? ' ' + extraClass      : '';
+    var titleExtra = titleExtraClass ? ' ' + titleExtraClass : '';
+    var h          = level === 'h3' ? 'h3' : 'h2';
+    var minH       = level === 'h3' ? 'min-h-[2.35rem]' : 'min-h-[2.6rem]';
+    var titleHtml  = parasha
+        ? '<' + h + ' class="tz-section-title tz-section-title--with-parasha flex min-w-0 flex-1 flex-nowrap items-baseline gap-x-1.5' + titleExtra + '">' +
+          '<span class="shrink-0">' + title + '</span>' +
+          '<span class="tz-section-title-sep shrink-0" aria-hidden="true">–</span>' +
+          '<span class="tz-section-parasha shrink-0" id="prayer-times-title-parasha"></span>' +
+          '</' + h + '>'
+        : '<' + h + ' class="tz-section-title' + titleExtra + '">' + title + '</' + h + '>';
+    return (
+        '<div class="tz-section-header flex ' + minH + ' min-w-0 shrink-0 items-center self-stretch py-1' + wrapExtra + '">' +
+        titleHtml +
+        '<div class="tz-section-rule" aria-hidden="true"></div>' +
+        '</div>'
+    );
+}
+
+
+// ─── tz_day_time_row ──────────────────────────────────────────────────────────
+
+/**
+ * Compact label + time row — the "day times in halacha" glass card.
+ *
+ * Renders a compact glass card (narrower border + rounded-lg) with a Hebrew
+ * label on the right and an updateable time on the left (layout is RTL).
+ *
+ * Structure (RTL):
+ *   <div.tz-glass-card  row, justify-between>
+ *     <span.label>  Hebrew label                   </span>
+ *     <span.time  id="…">  ← JS fills via set_element_data  </span>
+ *   </div>
+ *
+ * Used to build the "זמני היום בהלכה" sidebar column.
+ *
+ * @param {object} opts
+ * @param {string}  [opts.label='']       Hebrew label text, e.g. 'זריחה'
+ * @param {string}  [opts.id]             Id on the time <span> (JS fills via set_element_data)
+ * @param {boolean} [opts.hidden=false]   Start hidden — adds hidden-element on the card
+ * @param {string}  [opts.extraClass]     Extra classes on the card (e.g. 'talit_tfilin')
+ * @returns {string} HTML string
+ */
+export function tz_day_time_row({ label = '', id, hidden = false, extraClass } = {}) {
+    var labelSpan =
+        '<span class="min-w-0 flex-1 break-words font-headline-md leading-snug text-on-surface' +
+        ' text-sm sm:text-base md:text-lg">' + label + '</span>';
+
+    var timeSpan =
+        '<span class="shrink-0 whitespace-nowrap font-display-time tabular-nums' +
+        ' text-primary tz-time-glow text-lg sm:text-xl md:text-2xl"' +
+        (id ? ' id="' + id + '"' : '') + '></span>';
+
+    // Compact glass card — narrower border (4px) + smaller radius (lg) vs standard cards
+    var cardClass =
+        'tz-glass-card flex w-full min-w-0 max-w-full shrink-0' +
+        ' items-center justify-between gap-2 overflow-hidden' +
+        ' rounded-lg border-r-4 border-primary px-3 py-2 shadow-glass' +
+        ' sm:gap-2.5 sm:px-3.5 sm:py-2.5' +
+        (hidden     ? ' hidden-element' : '') +
+        (extraClass ? ' ' + extraClass  : '');
+
+    return '<div class="' + cardClass + '">' + labelSpan + timeSpan + '</div>';
+}
+
+
+// ─── tz_col ───────────────────────────────────────────────────────────────────
+
+/**
+ * Full-width flex column container — fills available height in its parent.
+ *
+ * The standard layout wrapper for column content inside grid cells.
+ * Replaces: <div class="flex min-h-0 min-w-0 w-full max-w-full flex-1 flex-col …">
+ *
+ * @param {object} opts
+ * @param {string}        [opts.children='']   Inner HTML string
+ * @param {string}        [opts.justify]       justify-content suffix — e.g. 'between', 'center'
+ *                                             Omit for default (flex-start)
+ * @param {string|number} [opts.gap='2']       Tailwind gap scale — '2', '2.5', '3', …
+ * @param {string}        [opts.extraClass]    Extra classes on the wrapper
+ * @returns {string} HTML string
+ */
+export function tz_col({ children = '', justify, gap = '2', extraClass } = {}) {
+    var justifyClass = justify    ? ' justify-' + justify : '';
+    var extra        = extraClass ? ' ' + extraClass      : '';
+    return (
+        '<div class="flex min-h-0 min-w-0 w-full max-w-full flex-1 flex-col gap-' + gap +
+        justifyClass + extra + '">' +
+        children +
+        '</div>'
+    );
+}
+
+
+// ─── tz_fill_slot ─────────────────────────────────────────────────────────────
+
+/**
+ * Named container div — optionally pre-filled or left empty for JS to fill later.
+ *
+ * Without children: a bare fill target (JS calls set_element_html on the id).
+ * With children:    a named wrapper whose content is already built by the caller.
+ *
+ * @param {object} opts
+ * @param {string} [opts.id]          Element id (required for JS to target it)
+ * @param {string} [opts.extraClass]  CSS classes on the div (e.g. 'shrink-0')
+ * @param {string} [opts.children=''] Inner HTML string (pre-fills the slot)
+ * @returns {string} HTML string
+ */
+export function tz_fill_slot({ id, extraClass, children = '' } = {}) {
+    var idAttr = id         ? ' id="' + id + '"'            : '';
+    var cls    = extraClass ? ' class="' + extraClass + '"' : '';
+    return '<div' + idAttr + cls + '>' + children + '</div>';
+}
+
+
+// ─── tz_flex_spacer ───────────────────────────────────────────────────────────
+
+/**
+ * Invisible flex-grow spacer for flex-col/flex-row layouts.
+ *
+ * Absorbs all remaining space in a flex container so surrounding items stay
+ * in their natural positions.  Always aria-hidden.
+ *
+ * @returns {string} HTML string
+ */
+export function tz_flex_spacer() {
+    return '<div class="min-h-0 min-w-0 flex-1 basis-0" aria-hidden="true"></div>';
+}
+
+
+// ─── tz_page_grid ─────────────────────────────────────────────────────────────
+
+/**
+ * Multi-column page grid — section headers in row 1, content cells in row 2.
+ *
+ * Accepts an array of column descriptors (left-to-right in display order).
+ * Each descriptor produces:
+ *   • one tz_section_header in the first CSS-grid row, and
+ *   • one content cell <div> in the second CSS-grid row.
+ *
+ * Adding a third column is as simple as pushing a third object into the array.
+ *
+ * @param {Array<{title?: string, id?: string, children?: string, cellClass?: string, cellOverflow?: string}>} columns
+ *   Column definitions.
+ *   @param {string} [col.title]        Section header heading text.
+ *   @param {string} [col.id]           id attribute on the content <div>.
+ *   @param {string} [col.children]     Pre-built HTML injected inside the cell.
+ *   @param {string} [col.cellClass]    Extra CSS classes on the content <div>.
+ *   @param {string} [col.cellOverflow] Overflow classes on the cell (default:
+ *                                      'overflow-y-auto overflow-x-hidden overscroll-contain').
+ *                                      Pass 'overflow-hidden' for cells that contain their own
+ *                                      independently-scrolling sub-sections.
+ *
+ * @param {object} [opts]
+ * @param {string} [opts.gridCols]    Tailwind grid-cols class override.
+ *   Defaults: 1 col → 'grid-cols-1'
+ *             2 col → 'grid-cols-[minmax(0,1.58fr)_minmax(0,1fr)]'
+ *             3 col → 'grid-cols-3'
+ *             N col → 'grid-cols-N'
+ * @param {string} [opts.extraClass]  Extra classes on the grid wrapper.
+ * @returns {string} HTML string
+ *
+ * @example
+ * tz_page_grid([
+ *   { title: 'זמני תפילות חול', id: 'prayer_times', children: get_tfilot_prayer_col_html()        },
+ *   { title: 'זמני היום בהלכה', id: 'day_times',    children: get_tfilot_day_times_col_weekday_html() },
+ * ])
+ */
+export function tz_page_grid(columns, opts) {
+    var extraClass   = (opts && opts.extraClass) || '';
+    var n            = columns.length;
+    var defaultCols  =
+        n === 1 ? 'grid-cols-1' :
+        n === 2 ? 'grid-cols-[minmax(0,1.58fr)_minmax(0,1fr)]' :
+        n === 3 ? 'grid-cols-3' :
+                  'grid-cols-' + n;
+    var gridCols = (opts && opts.gridCols) || defaultCols;
+
+    /* Row 1: one section header per column */
+    var headers = columns.map(function(col) {
+        return tz_section_header({ title: col.title || '', parasha: !!col.parasha });
+    }).join('');
+
+    /* Row 2: one content cell per column */
+    var cells = columns.map(function(col) {
+        var overflow = (col.cellOverflow !== undefined)
+            ? col.cellOverflow
+            : 'overflow-y-auto overflow-x-hidden overscroll-contain';
+        return (
+            '<div' + (col.id ? ' id="' + col.id + '"' : '') +
+            ' class="tz-tf-col-cell flex h-full min-h-0 min-w-0 max-w-full flex-col ' + overflow + ' pr-1' +
+            (col.cellClass ? ' ' + col.cellClass : '') + '">' +
+            (col.children || '') +
+            '</div>'
+        );
+    }).join('');
+
+    return (
+        '<div class="tz-two-col-grid grid w-full min-w-0 max-w-full shrink-0 ' +
+        gridCols + ' grid-rows-[auto_auto] items-stretch gap-x-4 gap-y-2 overflow-hidden' +
+        ' sm:gap-x-5 sm:gap-y-2 md:gap-x-6 md:gap-y-2.5' +
+        (extraClass ? ' ' + extraClass : '') + '">' +
+        headers + cells +
+        '</div>'
+    );
 }
 
 

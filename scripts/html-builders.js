@@ -15,7 +15,9 @@
  */
 
 import { is_purim, is_10_tevet_friday } from './holiday-rules.js';
-import { tz_card, tz_time, tz_label, tz_time_column, tz_time_card, tz_card_row } from './components.js';
+import { tz_card, tz_time, tz_label, tz_time_column, tz_time_card, tz_card_row,
+    tz_section_header, tz_day_time_row, tz_col, tz_fill_slot, tz_flex_spacer,
+    tz_page_grid, tz_hero_hud } from './components.js';
 
 // ─── Layout / typography class constants ──────────────────────────────────────
 // Edit these to change how all prayer-time cards look across all pages.
@@ -413,7 +415,7 @@ export function get_tfilot_shacharit_grouped_card_inner_html(current_date) {
     }
     row.add([
         tz_tfilot_col({ timeText: '06:50', timeId: 'shacharit_b', captionText: 'שחרית ב', ...D }),
-        tz_tfilot_col({ extraClass: 'hidden-element friday-shacharit', timeText: '08:30', timeId: 'shacharit_main', captionText: 'שחרית ג', captionId: 'shacharit-830-name', ...D }),
+        tz_tfilot_col({ timeText: '08:30', timeId: 'shacharit_main', captionText: 'שחרית ג', captionId: 'shacharit-830-name', ...D }),
     ]);
     return row.html();
 }
@@ -479,6 +481,155 @@ export function get_tfilot_shabat_mincha_grouped_card_inner_html() {
     return row.html();
 }
 
+// ─── Hero HUD ─────────────────────────────────────────────────────────────────
+
+/**
+ * The top-right date strip + hero clock shared by every hero slide.
+ * Called by setup_hero_slide() in present-next-page.js;
+ * injected as the first children of the page wrapper.
+ *
+ * @returns {string} HTML string
+ */
+export function get_hero_hud_html() {
+    return tz_hero_hud();
+}
+
+
+// ─── Regular-days single-page layout builders ─────────────────────────────────
+
+/**
+ * The three prayer-card shells for the regular-days left column.
+ * Replaces the static prayer_times_grouped_single_page.html.
+ * fill_tfilot_prayer_times_grouped_cards() populates each shell by id.
+ *
+ * @returns {string} HTML string
+ */
+export function get_tfilot_prayer_col_html() {
+    var shell = function(id) {
+        return tz_card({
+            id:         id,
+            layout:     'column',
+            flex:       'grow',
+            extraClass: 'min-h-0 w-full justify-center',
+        });
+    };
+    return tz_col({
+        children:
+            shell('tfilot-prayer-card-shacharit') +
+            shell('tfilot-prayer-card-mincha')    +
+            shell('tfilot-prayer-card-arvit'),
+    });
+}
+
+/**
+ * The six day-time rows for the regular-days right column.
+ * Replaces the static day_times_inner_tfilot_weekday.html.
+ * present_day_times() fills the time spans by id.
+ *
+ * @returns {string} HTML string
+ */
+export function get_tfilot_day_times_col_weekday_html() {
+    return tz_col({
+        justify: 'between',
+        children:
+            tz_day_time_row({ label: 'זמן טלית ותפילין', id: 'talit_tfilin',  hidden: true, extraClass: 'talit_tfilin' }) +
+            tz_day_time_row({ label: 'זריחה',             id: 'sunrise'        }) +
+            tz_day_time_row({ label: 'סוף זמן ק"ש',     id: 'shma_end'       }) +
+            tz_day_time_row({ label: 'זמן מנחה גדולה',   id: 'mincha_gedola'  }) +
+            tz_day_time_row({ label: 'שקיעה',            id: 'sunset'         }) +
+            tz_day_time_row({ label: 'צאת הכוכבים',      id: 'stars'          }),
+    });
+}
+
+/**
+ * Full two-column grid for the regular-days (tfilot_single_page) slide.
+ * Inject this into #tfilot_page_grid; all child ids are created here.
+ *
+ * Add a column by pushing another descriptor into the array:
+ *   { title: 'כותרת', id: 'my-col', children: my_col_html() }
+ *
+ * @returns {string} HTML string
+ */
+export function get_tfilot_regular_days_grid_html() {
+    return tz_page_grid([
+        {
+            title:    'זמני תפילות חול',
+            id:       'prayer_times',
+            children: get_tfilot_prayer_col_html(),
+        },
+        {
+            title:    'זמני היום בהלכה',
+            id:       'day_times',
+            children: get_tfilot_day_times_col_weekday_html(),
+        },
+    ]);
+}
+
+// ─── Friday single-page grid builders ────────────────────────────────────────
+
+/**
+ * Full two-column grid for friday_single_page (no plag section).
+ * Inject into #friday_grid; the column structures are pre-built as children
+ * so the orchestrator only needs to fill data (parasha, card times, day times).
+ *
+ * @returns {string} HTML string
+ */
+export function get_friday_page_grid_html() {
+    return tz_page_grid([
+        {
+            title:    'זמני תפילות שישי',
+            parasha:  true,
+            children: get_friday_prayers_col_html(),
+        },
+        {
+            title:    'זמני היום בהלכה',
+            id:       'day_times',
+            children: get_tfilot_day_times_col_weekday_html(),
+        },
+    ]);
+}
+
+/**
+ * Full two-column grid for friday_single_page_plag.
+ * Left column: prayers (pre-filled) + "מנין פלג" sub-header + #plag fill slot.
+ * Right column: day times (pre-filled).
+ *
+ * Inject into #friday_grid; the orchestrator only needs to call:
+ *   populate_friday_prayer_times() — fills prayer cards + erev-shabbat times
+ *   show_minyan_plag()             — fills #plag
+ *   present_day_times()            — fills day-time spans
+ *
+ * @returns {string} HTML string
+ */
+export function get_friday_plag_page_grid_html() {
+    var plagSubHeader = tz_section_header({ title: 'מנין פלג' });
+
+    return tz_page_grid([
+        {
+            title:        'זמני תפילות שישי',
+            parasha:      true,
+            cellOverflow: 'overflow-hidden',   // each sub-section scrolls independently
+            cellClass:    'gap-2',
+            children:
+                tz_fill_slot({
+                    id:         'friday_prayers',
+                    extraClass: 'min-h-0 min-w-0 max-w-full flex-1 overflow-y-auto overflow-x-hidden overscroll-contain',
+                    children:   get_friday_prayers_col_html(),
+                }) +
+                plagSubHeader +
+                tz_fill_slot({
+                    id:         'plag',
+                    extraClass: 'min-h-0 w-full min-w-0 shrink-0 overflow-y-auto overflow-x-hidden overscroll-contain',
+                }),
+        },
+        {
+            title:    'זמני היום בהלכה',
+            id:       'day_times',
+            children: get_tfilot_day_times_col_weekday_html(),
+        },
+    ]);
+}
+
 // ─── Friday single-page card builders ────────────────────────────────────────
 
 /** Three ערב שבת cards for the Friday single-page slide. */
@@ -502,6 +653,23 @@ export function get_shabat_erev_shabbat_cards_row_html() {
         tz_time_card({ timeId: 'mincha_shabat_eve', extraClass: 'mincha_shabat_eve', label: 'מנחה וקבלת שבת', ...D }),
     ]);
     return row.html();
+}
+
+/**
+ * Shell content for the prayers column of the Friday single-page slides.
+ * Set as the inner HTML of #friday_prayers; fill_friday_prayer_grouped_cards()
+ * then populates the two card shells by id.
+ *
+ * @returns {string} HTML string
+ */
+export function get_friday_prayers_col_html() {
+    return tz_col({
+        justify: 'between',
+        children:
+            tz_card({ id: 'friday-prayer-card-shacharit', layout: 'column', extraClass: 'w-full shrink-0' }) +
+            tz_fill_slot({ id: 'friday-prayer-erev-shabbat-cards', extraClass: 'shrink-0' }) +
+            tz_flex_spacer(),
+    });
 }
 
 export function get_friday_plag_minyan_card_inner_html() {
