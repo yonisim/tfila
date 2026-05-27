@@ -46,7 +46,7 @@ import {
     tz_tfilot_grouped_prayer_row_html,
     tz_tfilot_mincha_dynamic_prepend_container_html, create_tfilot_mincha_dynamic_row_html,
     tz_tf_cap_standalone_html, tz_tf_cap_standalone_two_lines_html,
-    tz_shabat_centered_card_body_html, tz_equal_width_cards_row_html,
+    tz_shabat_centered_card_body_html,
     get_tfilot_shacharit_grouped_card_inner_html, get_tfilot_mincha_grouped_card_inner_html,
     get_tfilot_arvit_grouped_card_inner_html, get_tfilot_shabat_mincha_grouped_card_inner_html,
     tfilot_show_arvit_20_column,
@@ -851,10 +851,13 @@ function apply_friday_shabat_eve_card_times(current_date, shabat_in){
     set_element_html('hadlakat-nerot', shabat_in);
     if (is_purim(current_date)){
         hide_element('mincha_shabat_eve');
-        set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 20));
+        set_element_html('kabalat_shabat', add_minutes_to_time(shabat_in, 20));
     }
     if (!is_10_tevet_friday(current_date)){
         set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
+    }
+    if (is_shabat_eve_chag(current_date)){
+        set_element_html('mincha_shabat_eve', '19:30');
     }
 }
 
@@ -1698,38 +1701,30 @@ async function present_shavuot_eve_page(current_date){
     return sleep_seconds(wait_seconds*5);
 }
 
-function populate_friday_prayer_times(current_date){
-    var this_week_times = get_week_times(current_date);
+async function populate_friday_prayer_times(current_date){
     var this_shabat_times = get_shabat_times(current_date);
-    var shabat_in = this_shabat_times["in"];
-    document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
-    if (is_10_tevet_friday(current_date)){
-        document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'] + ' (עשרה בטבת)';
+    var shabat_in = this_shabat_times['in'];
+    var parasha = this_shabat_times['parasha'];
+    if (is_10_tevet_friday(current_date)) {
+        parasha += ' (עשרה בטבת)';
     }
+    set_element_html('prayer-times-title-parasha', parasha);
 
-    return fetch('./html/prayer_times_friday_single_page.html')
-        .then(function (res){
-            return res.text();
-        })
-        .then(function (html){
-            set_element_html('friday_prayers', html);
-            fill_friday_prayer_grouped_cards(current_date, set_element_html);
-            show_slichot(current_date);
-            var elements = document.getElementsByClassName('friday-shacharit');
-            for (var i = 0; i < elements.length; i++){
-                elements[i].classList.add('show-element');
-            }
-            return show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
-        });
+    await load_html_into_page_elem_end('prayer_times_friday_single_page.html', 'friday_prayers', () => {
+        fill_friday_prayer_grouped_cards(current_date, set_element_html);
+        show_slichot(current_date);
+        for (var element of document.getElementsByClassName('friday-shacharit')) {
+            element.classList.add('show-element');
+        }
+    });
+    await show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
 }
 
 async function present_friday_single_page(current_date){
-    var main_page_id = 'friday_single_page';
     await populate_friday_prayer_times(current_date);
 
     if(is_minyan_plag_active(current_date)){
         show_minyan_plag(current_date);
-        main_page_id += '_plag';
     }
 
     load_html_into_page_elem_end('day_times_inner_tfilot_weekday.html', 'day_times', () => {
@@ -1777,11 +1772,8 @@ function show_minyan_plag(current_date) {
     for (var element of elements){
         element.classList.add('show-element');
     }
-    var plagRoot = document.getElementById('plag');
-    if (!plagRoot){
-        return;
-    }
-    plagRoot.innerHTML = get_friday_plag_minyan_card_inner_html();
+    if (!document.getElementById('plag')) { return; }
+    set_element_html('plag', get_friday_plag_minyan_card_inner_html());
     var day = current_date;
     if(is_in_weekdays(current_date, [4])){
         day = addDays(current_date, 1);
@@ -1797,26 +1789,6 @@ function show_minyan_plag(current_date) {
     set_element_html('kabalat-shabat-early', format_hour_and_minutes(plag));
 }
 
-async function present_friday_prayer_times(current_date){
-    var this_week_times = get_week_times(current_date);
-    var this_shabat_times = get_shabat_times(current_date);
-    var shabat_in = this_shabat_times["in"];
-    document.getElementById("prayer-times-title-parasha").innerText = this_week_times['parasha'];
-
-    if(is_in_weekdays(current_date, [4]) || (is_in_weekdays(current_date, [5]) && !is_after_time(current_date, '10:00'))){
-        load_html_into_page_elem_start('shacharit.html', 'friday_prayers', () => {
-            show_slichot(current_date);
-            var elements = document.getElementsByClassName('friday-shacharit');
-            for (var element of elements){
-                element.classList.add('show-element');
-            }
-        });
-    }
-    return load_html_into_page_elem_end('friday_times.html', 'friday_prayers', () => {
-        set_element_html('hadlakat-nerot', shabat_in);
-        set_element_html('kabalat-shabat', add_minutes_to_time(shabat_in, 10));
-    });
-}
 
 function present_sfirat_haomer(current_date){
     var elem_id = 'omer-count';
@@ -2042,7 +2014,6 @@ let item_funcs = {
     'omer': present_sfirat_haomer,
     'shabat': present_shabat_prayer_times,
     'shabat_single_page': present_shabat_prayer_times,
-    'friday': present_friday_prayer_times,
     'friday_single_page': present_friday_single_page,
     'friday_single_page_plag': present_friday_single_page,
     'tormim': present_donators,
