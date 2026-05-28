@@ -180,10 +180,36 @@
 
 
   /* ===========================================================
-     CLOCK PANEL  (top-left frosted badge)
+     HUD PANELS  (clock top-left + Hebrew date top-right — identical style)
      =========================================================== */
 
-  .tz-page .tfilot-clock-corner.header-clock-circle.tfilot-hero-clock {
+  .tz-page .header-hebrew-panel {
+    padding: 0.6rem 1.3rem 0.65rem;
+    background: linear-gradient(
+      155deg,
+      #2a3d5c 0%,
+      #1a2538 42%,
+      #0e141f 100%
+    );
+    border: 2px solid rgba(243, 225, 188, 0.42);
+    border-radius: 0.75rem;
+    box-shadow:
+      0 6px 24px rgba(0, 0, 0, 0.55),
+      inset 0 2px 10px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 244, 210, 0.07);
+  }
+
+  /* Date text inside the panel */
+  .tz-page .header-text {
+    font-size: clamp(1.1rem, 3.4vmin, 1.85rem);
+    color: var(--color-cream);
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+    letter-spacing: 0.02em;
+  }
+
+  /* Clock panel — positioning only; visual style comes from .header-hebrew-panel above */
+  .tz-page .tfilot-clock-corner.tfilot-hero-clock {
     position: absolute;
     top: 0.65rem;
     left: clamp(0.35rem, 1.2vw, 0.85rem);
@@ -195,25 +221,11 @@
     max-width: min(40rem, 98vw);
     min-width: 0;
     flex-shrink: 0;
-    border-radius: 0.55rem;
     overflow: visible;
-    padding: 0.65rem 1.35rem 0.72rem;
-    background: linear-gradient(
-      165deg,
-      var(--color-teal-dark)  0%,
-      rgba(3, 20, 17, 0.97)  50%,
-      rgba(1, 12, 10, 0.96) 100%
-    );
-    border: 1px solid var(--color-teal-border);
-    box-shadow:
-      0 4px 18px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 var(--color-teal-glow);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
   }
 
   @media (min-width: 640px) {
-    .tz-page .tfilot-clock-corner.header-clock-circle.tfilot-hero-clock {
+    .tz-page .tfilot-clock-corner.tfilot-hero-clock {
       top: 0.85rem;
     }
   }
@@ -249,31 +261,6 @@
     color: rgba(255, 244, 210, 0.5);
     padding: 0 0.02em;
     text-shadow: none;
-  }
-
-
-  /* ===========================================================
-     HEBREW DATE STRIP  (top-right, same teal panel as clock)
-     =========================================================== */
-
-  .tz-page .tfilot-dates-strip .header-text {
-    font-size: clamp(0.88rem, 2.8vmin, 1.45rem);
-    color: var(--color-cream);
-    font-weight: 600;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
-  }
-
-  .tz-page .tfilot-dates-strip .header-hebrew-panel {
-    background: linear-gradient(
-      165deg,
-      var(--color-teal-dark)  0%,
-      rgba(3, 20, 17, 0.97)  50%,
-      rgba(1, 12, 10, 0.96) 100%
-    );
-    border-color: var(--color-teal-border);
-    box-shadow:
-      0 4px 18px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 var(--color-teal-glow);
   }
 
 

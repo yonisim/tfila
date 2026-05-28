@@ -15,9 +15,12 @@
  */
 
 import { is_purim, is_10_tevet_friday } from './holiday-rules.js';
-import { tz_card, tz_time, tz_label, tz_time_column, tz_time_card, tz_card_row,
+import {
+    tz_card, tz_time, tz_label, tz_time_column, tz_time_card, tz_card_row,
     tz_section_header, tz_day_time_row, tz_col, tz_fill_slot, tz_flex_spacer,
-    tz_page_grid, tz_hero_hud } from './components.js';
+    tz_page_grid, tz_date_panel, tz_clock_hud, tz_hero_hud,
+    shabat_slide_theme, weekdays_slide_theme, friday_slide_theme
+} from './components.js';
 
 // ─── Layout / typography class constants ──────────────────────────────────────
 // Edit these to change how all prayer-time cards look across all pages.
@@ -67,6 +70,25 @@ export var SHAVUOT_COMPACT_TF_CARD_SHELL =
 
 /** Master switch: false hides all optional SVG icons beside times. */
 var TZ_TFICONS_ENABLED = false;
+
+// ─── Per-slide font-size themes ───────────────────────────────────────────────
+// One variable per slide — change here to resize all cards on that slide.
+// Spread onto tz_time_card / tz_tfilot_col calls:
+//   tz_time_card({ ...SHABAT_THEME.standalone, id: '...', label: '...' })
+//   tz_tfilot_col({ ...SHABAT_THEME.list, timeId: '...', captionText: '...' })
+
+/** Weekday tfilot slide: compact prayer-group list rows (שחרית, מנחה, ערבית). */
+var TFILOT_THEME = weekdays_slide_theme();
+// standalone defaults: { size: 'lg', timeSize: 'lg', labelSize: 'xl' }
+// list defaults:       {             timeSize: 'xl', labelSize: 'xl' }
+
+/** Friday slide: standalone ערב שבת cards + shacharit list rows. */
+var FRIDAY_THEME = friday_slide_theme();
+
+/** Shabbat slide: standalone hero cards + compact prayer-group list rows. */
+var SHABAT_THEME = shabat_slide_theme();
+// standalone defaults: { size: 'lg', timeSize: 'lg', labelSize: 'xl' }
+// list defaults:       {             timeSize: 'xl', labelSize: 'xl' }
 
 // ─── SVG icon helpers ─────────────────────────────────────────────────────────
 // Each returns an SVG string (currentColor). Keep aria-hidden="true" on all.
@@ -403,7 +425,7 @@ export function tz_shabat_centered_card_body_html(timeId, captionText, wrapperCl
 // ─── Weekday tfilot (חול) card builders ───────────────────────────────────────
 
 export function get_tfilot_shacharit_grouped_card_inner_html(current_date) {
-    var D = { timeSize: 'xl', labelSize: 'xl' };
+    var D = TFILOT_THEME.list;
     var row = tz_tfilot_row('שחרית', { iconSvg: tz_icon_sun_svg() });
     row.add(tz_tfilot_col({ timeText: '6:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D }));
     /* Slichot slot: show only during the slichot season. */
@@ -426,7 +448,7 @@ function is_between_dates_local(date, start, end) {
 }
 
 export function get_tfilot_mincha_grouped_card_inner_html() {
-    var D = { timeSize: 'lg', labelSize: 'xl' };
+    var D = TFILOT_THEME.list;
     var row = tz_tfilot_row('מנחה');
     row.add([
         tz_tfilot_mincha_dynamic_prepend_container_html(),
@@ -455,7 +477,7 @@ function is_after_time_local(date, time) {
 
 export function get_tfilot_arvit_grouped_card_inner_html(current_date, arvit_time) {
     var show_arvit_20 = tfilot_show_arvit_20_column(current_date, arvit_time);
-    var D = { timeSize: 'lg', labelSize: 'xl' };
+    var D = TFILOT_THEME.list;
     var row = tz_tfilot_row('ערבית', { iconSvg: tz_icon_moon_svg() });
     row.add(tz_tfilot_col({ timeId: 'arvit-regulr-days', captionText: 'ערבית א', ...D }));
     if (show_arvit_20) {
@@ -471,7 +493,7 @@ export function get_tfilot_arvit_grouped_card_inner_html(current_date, arvit_tim
 }
 
 export function get_tfilot_shabat_mincha_grouped_card_inner_html() {
-    var D = { timeSize: 'md', labelSize: 'xs' };
+    var D = SHABAT_THEME.list;
     var row = tz_tfilot_row('מנחה:');
     row.add([
         tz_tfilot_col({ timeId: 'mincha-shabat-a', captionText: 'מנחה א',    labelWrap: 'tight',  ...D }),
@@ -619,7 +641,7 @@ export function get_friday_plag_page_grid_html() {
                 plagSubHeader +
                 tz_fill_slot({
                     id:         'plag',
-                    extraClass: 'min-h-0 w-full min-w-0 shrink-0 overflow-y-auto overflow-x-hidden overscroll-contain',
+                    extraClass: 'min-h-0 w-full min-w-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain',
                 }),
         },
         {
@@ -634,7 +656,7 @@ export function get_friday_plag_page_grid_html() {
 
 /** Three ערב שבת cards for the Friday single-page slide. */
 export function get_friday_erev_shabbat_cards_row_html() {
-    var D = { size: 'lg', timeSize: 'xl', labelSize: 'xl' };
+    var D = FRIDAY_THEME.standalone;
     var row = tz_card_row('ערב שבת');
     row.add([
         tz_time_card({ timeText: '13:15',                                            label: 'מנחה גדולה',     ...D }),
@@ -646,7 +668,7 @@ export function get_friday_erev_shabbat_cards_row_html() {
 
 /** Two ערב שבת cards (הדלקה + מנחה/קבלת שבת) for the Shabbat single-page slide. */
 export function get_shabat_erev_shabbat_cards_row_html() {
-    var D = { size: 'lg', timeSize: 'lg', labelSize: 'xl' };
+    var D = SHABAT_THEME.standalone;
     var row = tz_card_row('ערב שבת');
     row.add([
         tz_time_card({ timeId: 'hadlakat-nerot',                                     label: 'הדלקת נרות',     ...D }),
@@ -673,8 +695,8 @@ export function get_friday_prayers_col_html() {
 }
 
 export function get_friday_plag_minyan_card_inner_html() {
-    var D = { size: 'lg', timeSize: 'xl', labelSize: 'xl' };
-    var row = tz_card_row();
+    var D = FRIDAY_THEME.standalone;
+    var row = tz_card_row(null, { extraClass: 'h-full items-stretch' });
     row.add([
         tz_time_card({ timeId: 'kabalat-shabat-early-mincha', label: 'מנחה וקבלת שבת מוקדמת', ...D }),
         tz_time_card({ timeId: 'kabalat-shabat-early',        label: 'פלג המנחה',              ...D }),
@@ -686,7 +708,7 @@ export function get_friday_shacharit_card_inner_html(current_date) {
     if (!is_10_tevet_friday(current_date)) {
         return get_tfilot_shacharit_grouped_card_inner_html(current_date);
     }
-    var D = { timeSize: 'lg', labelSize: 'xl' };
+    var D = FRIDAY_THEME.list;
     var tzomRow = tz_tfilot_row('כניסת הצום');
     tzomRow.add(tz_tfilot_col({ timeText: '05:06', ...D }));
     return tzomRow.html() + get_tfilot_shacharit_grouped_card_inner_html(current_date);
@@ -706,8 +728,7 @@ export function fill_friday_prayer_grouped_cards(current_date, set_element_html_
 // ─── Shabbat single-page card builders ───────────────────────────────────────
 
 export function get_shabat_after_shacharit_timeline_cards_row_html() {
-    // Shared sizes — change once, all four cards update.
-    var D = { size: 'lg', timeSize: 'lg', labelSize: 'xl' };
+    var D = SHABAT_THEME.standalone;
     var row = tz_card_row('אחרי שחרית — ציר זמן');
     row.add([
         tz_time_card({ id: 'shabat-card-kidush-shiur',   timeId: 'kidush',                    label: 'קידוש ושיעור',   ...D }),
@@ -719,7 +740,7 @@ export function get_shabat_after_shacharit_timeline_cards_row_html() {
 }
 
 export function get_shabat_afternoon_horizontal_cards_html() {
-    var D = { size: 'lg', timeSize: 'lg', labelSize: 'xl' };
+    var D = SHABAT_THEME.standalone;
     var row = tz_card_row('אחר הצהריים');
     row.add([
         tz_time_card({ id: 'shabat-card-afternoon-tehilim', timeId: 'tehilim',           label: { text: 'תהלים לילדים בגן השמחה', wrap: 'normal' }, ...D }),

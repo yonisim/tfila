@@ -16,6 +16,13 @@
  * │  tz_time_card(opts)     ★ shorthand: card + time + label in one call  │
  * │  tz_card_row(opts)      Flex row wrapper for a group of cards         │
  * │                                                                       │
+ * │  tz_date_panel(opts)    Hebrew date strip  top-right pill              │
+ * │  tz_clock_hud(opts)     DS-DIGI clock      top-left circle            │
+ * │  tz_hero_hud(opts)      ★ shorthand: date panel + clock in one call   │
+ * │                                                                       │
+ * │  weekdays_slide_theme / friday_slide_theme / shabat_slide_theme       │
+ * │                         Per-slide font-size themes { standalone, list }│
+ * │                                                                       │
  * └──────────────────────────────────────────────────────────────────────┘
  *
  * ─── SIZE SCALE ─────────────────────────────────────────────────────────
@@ -75,27 +82,41 @@ function _size_attr(size, defaultSize) {
 }
 
 
-// ─── tz_hero_hud ──────────────────────────────────────────────────────────────
+// ─── tz_date_panel ────────────────────────────────────────────────────────────
 
 /**
- * Hero slide top-right HUD: Hebrew date strip + hero clock.
- * Identical across all hero slides (tfilot, friday, shabat, shavuot).
+ * Hebrew date pill — navy rounded panel shown in the top-right corner of every
+ * hero slide.  Runtime JS fills the inner element via its id.
  *
- * Inject as the first children of the page-wrapper div via
- * insert_html_at_start_of_element(page_id, tz_hero_hud()).
- *
- * @returns {string} HTML string (two sibling block elements)
+ * @param {object} opts
+ * @param {string} [opts.id='tz_hebrew_date']  Element id for the date text (runtime target)
+ * @param {string} [opts.text='']              Initial text content (usually left empty)
+ * @returns {string} HTML string
  */
-export function tz_hero_hud() {
+export function tz_date_panel({ id = 'tz_hebrew_date', text = '' } = {}) {
     return (
         '<div class="tfilot-dates-strip pointer-events-none absolute right-0 top-0 z-10' +
         ' flex max-w-[min(100%,22rem)] flex-wrap items-start justify-end' +
         ' px-container-padding pb-1 pt-3 sm:pt-4" dir="rtl">' +
         '<div class="header-hebrew-panel pointer-events-auto min-w-0 shrink-0">' +
-        '<div id="tz_hebrew_date" class="header-text"></div>' +
+        '<div' + (id ? ' id="' + id + '"' : '') + ' class="header-text">' + text + '</div>' +
         '</div>' +
-        '</div>' +
-        '<div class="header-clock-circle tfilot-hero-clock tfilot-clock-corner pointer-events-none">' +
+        '</div>'
+    );
+}
+
+
+// ─── tz_clock_hud ─────────────────────────────────────────────────────────────
+
+/**
+ * DS-DIGI clock circle — the circular clock shown in the top-left corner of
+ * every hero slide.  Runtime JS writes the time digits via class selectors.
+ *
+ * @returns {string} HTML string
+ */
+export function tz_clock_hud() {
+    return (
+        '<div class="header-hebrew-panel tfilot-hero-clock tfilot-clock-corner pointer-events-none">' +
         '<div class="clock pointer-events-auto" dir="ltr">' +
         '<span class="clock-text hour">00</span>' +
         '<b class="clock-text colon">:</b>' +
@@ -105,6 +126,25 @@ export function tz_hero_hud() {
         '</div>' +
         '</div>'
     );
+}
+
+
+// ─── tz_hero_hud ──────────────────────────────────────────────────────────────
+
+/**
+ * Hero slide HUD: Hebrew date strip + DS-DIGI clock.
+ * Shorthand for tz_date_panel() + tz_clock_hud().
+ * Identical across all hero slides (tfilot, friday, shabat, shavuot).
+ *
+ * Inject as the first children of the page-wrapper div via
+ * insert_html_at_start_of_element(page_id, tz_hero_hud()).
+ *
+ * @param {object} opts
+ * @param {string} [opts.dateId='tz_hebrew_date']  Element id for the date text
+ * @returns {string} HTML string (two sibling block elements)
+ */
+export function tz_hero_hud({ dateId = 'tz_hebrew_date' } = {}) {
+    return tz_date_panel({ id: dateId }) + tz_clock_hud();
 }
 
 
@@ -685,5 +725,62 @@ export function tz_card_row(label, opts) {
                 '</div>'
             );
         },
+    };
+}
+
+
+// ─── tz_slide_theme ───────────────────────────────────────────────────────────
+
+/**
+ * Per-slide font-size configuration for time digits and labels.
+ *
+ * Returns two spread objects — .standalone and .list — for the two card
+ * variants used on a slide.  Spread onto tz_time_card / tz_tfilot_col to
+ * control all cards from a single variable:
+ *
+ *   var THEME = tz_slide_theme({
+ *       standalone: { timeSize: 'lg', labelSize: 'xl' },
+ *       list:       { timeSize: 'xl', labelSize: 'xl' },
+ *   });
+ *
+ *   // hero card (קידוש, תפילת ילדים, …):
+ *   tz_time_card({ ...THEME.standalone, id: 'kidush', label: 'קידוש' })
+ *
+ *   // compact list row (שחרית, מנחה, …):
+ *   tz_tfilot_col({ ...THEME.list, timeId: 'shacharit', captionText: 'שחרית' })
+ *
+ * Size scale:  'xs' | 'sm' | 'md' | 'lg' | 'xl'
+ *
+ * Card variants:
+ *   standalone — big hero cards that stand alone (קידוש ושיעור, הדלקת נרות, …)
+ *   list       — compact rows inside a prayer-group card (שחרית א/ב, מנחה, …)
+ *
+ * @param {object} [opts]
+ * @param {{ timeSize?: string, labelSize?: string, size?: string }} [opts.standalone]
+ *   Overrides for standalone/hero cards.
+ *   Defaults: size='lg', timeSize='lg', labelSize='xl'
+ * @param {{ timeSize?: string, labelSize?: string }} [opts.list]
+ *   Overrides for compact list-row cards.
+ *   Defaults: timeSize='xl', labelSize='xl'
+ * @returns {{ standalone: object, list: object }}
+ */
+export function shabat_slide_theme({ standalone = {}, list = {} } = {}) {
+    return {
+        standalone: Object.assign({ size: 'lg', timeSize: 'lg', labelSize: 'xl' }, standalone),
+        list:       Object.assign({              timeSize: 'lg', labelSize: 'xl' }, list),
+    };
+}
+
+export function weekdays_slide_theme({ standalone = {}, list = {} } = {}) {
+    return {
+        standalone: Object.assign({ size: 'lg', timeSize: 'lg', labelSize: 'xl' }, standalone),
+        list:       Object.assign({              timeSize: 'lg', labelSize: 'xl' }, list),
+    };
+}
+
+export function friday_slide_theme({ standalone = {}, list = {} } = {}) {
+    return {
+        standalone: Object.assign({ size: 'lg', timeSize: 'xl', labelSize: 'xl' }, standalone),
+        list:       Object.assign({              timeSize: 'lg', labelSize: 'xl' }, list),
     };
 }
