@@ -405,7 +405,7 @@ export function tz_shabat_centered_card_body_html(timeId, captionText, wrapperCl
 export function get_tfilot_shacharit_grouped_card_inner_html(current_date) {
     var D = { timeSize: 'xl', labelSize: 'xl' };
     var row = tz_tfilot_row('שחרית', { iconSvg: tz_icon_sun_svg() });
-    row.add(tz_tfilot_col({ timeText: '06:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D }));
+    row.add(tz_tfilot_col({ timeText: '6:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D }));
     /* Slichot slot: show only during the slichot season. */
     if (is_between_dates_local(current_date, '2025-09-14T10:00', '2025-10-01T18:00')) {
         row.add(tz_tfilot_col({
@@ -414,8 +414,8 @@ export function get_tfilot_shacharit_grouped_card_inner_html(current_date) {
         }));
     }
     row.add([
-        tz_tfilot_col({ timeText: '06:50', timeId: 'shacharit_b', captionText: 'שחרית ב', ...D }),
-        tz_tfilot_col({ timeText: '08:30', timeId: 'shacharit_main', captionText: 'שחרית ג', captionId: 'shacharit-830-name', ...D }),
+        tz_tfilot_col({ timeText: '6:50', timeId: 'shacharit_b', captionText: 'שחרית ב', ...D }),
+        tz_tfilot_col({ timeText: '8:30', timeId: 'shacharit_main', captionText: 'שחרית ג', captionId: 'shacharit-830-name', ...D }),
     ]);
     return row.html();
 }

@@ -576,6 +576,10 @@ export function tz_flex_spacer() {
  *                                      Pass 'overflow-hidden' for cells that contain their own
  *                                      independently-scrolling sub-sections.
  *
+ * Alignment guideline: cells carry no horizontal padding so glass cards share
+ * the exact left/right edges of the section-header bar above them.  Never add
+ * pr-* / pl-* / px-* to cellClass — see tailwind-input.css for the full rule.
+ *
  * @param {object} [opts]
  * @param {string} [opts.gridCols]    Tailwind grid-cols class override.
  *   Defaults: 1 col → 'grid-cols-1'
@@ -613,7 +617,7 @@ export function tz_page_grid(columns, opts) {
             : 'overflow-y-auto overflow-x-hidden overscroll-contain';
         return (
             '<div' + (col.id ? ' id="' + col.id + '"' : '') +
-            ' class="tz-tf-col-cell flex h-full min-h-0 min-w-0 max-w-full flex-col ' + overflow + ' pr-1' +
+            ' class="tz-tf-col-cell flex h-full min-h-0 min-w-0 max-w-full flex-col ' + overflow +
             (col.cellClass ? ' ' + col.cellClass : '') + '">' +
             (col.children || '') +
             '</div>'

@@ -323,17 +323,30 @@
     justify-items: stretch;
   }
 
+  /* STYLE GUIDELINE — column cell / section-header alignment
+     ─────────────────────────────────────────────────────────
+     Glass cards inside a column cell must share the exact left and right edges
+     of the section-header bar above them.  Two things break that alignment:
+
+       1. Horizontal cell padding (pr-1 etc.) shrinks the card area relative
+          to the header.  → tz_page_grid emits no horizontal padding on cells.
+
+       2. scrollbar-gutter: stable reserves inline-end space for a phantom
+          scrollbar, pushing content inward.  On a TV the column content never
+          grows tall enough to scroll, so the gutter is unnecessary.
+          → Only Shabbat's long card list keeps it (see below).
+
+     When adding a new page / column: do not add horizontal padding to cells
+     and do not set scrollbar-gutter: stable on cells whose content fits. */
+
   .tz-page .tz-tf-col-cell {
     box-sizing: border-box;
     min-height: 0;
   }
 
-  /* Scrollbar gutter keeps column width stable when the list grows to scroll */
-  :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag)
-    .tz-tf-col-cell.overflow-y-auto,
-  #shabat_single_page .tz-tf-col-cell--stack > section:first-of-type > div.overflow-y-auto,
-  :is(#friday_single_page_plag) #friday_prayers.overflow-y-auto,
-  :is(#friday_single_page_plag) #plag.overflow-y-auto {
+  /* Shabbat only: the after-Shacharit card list can grow long enough to scroll,
+     so keep a stable gutter there to prevent column-width jitter. */
+  #shabat_single_page .tz-tf-col-cell--stack > section:first-of-type > div.overflow-y-auto {
     scrollbar-gutter: stable;
   }
 
