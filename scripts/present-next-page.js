@@ -1743,28 +1743,7 @@ async function present_friday_single_page(current_date){
 }
 
 async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
-    if (document.getElementById('friday-prayer-erev-shabbat-cards') || document.getElementById('shabat-erev-shabbat-cards')){
-        apply_friday_shabat_eve_card_times(current_date, shabat_in);
-        return;
-    }
-    var friday_times_html = 'friday_times.html';
-    if (is_10_tevet_friday(current_date)) {
-        friday_times_html = 'friday_times_10_tevet.html';
-    }
-    insert_html_at_end_of_element(parent_element, create_table_row_html('13:15', 'מנחה גדולה'))
-    return load_html_into_page_elem_end(friday_times_html, parent_element, () => {
-        set_element_html('hadlakat-nerot', shabat_in);
-        if(is_purim(current_date)){
-            hide_element('mincha_shabat_eve')
-            set_element_data('kabalat_shabat', add_minutes_to_time(shabat_in, 20))
-        }
-        if (!is_10_tevet_friday(current_date)) {
-            set_element_html('mincha_shabat_eve', add_minutes_to_time(shabat_in, 10));
-        }
-        if (is_shabat_eve_chag(current_date)) {
-            set_element_html('mincha_shabat_eve', '19:30');
-        }
-    });
+    apply_friday_shabat_eve_card_times(current_date, shabat_in);
 }
 
 async function show_chag_eve_times(current_date, chag_in, parent_element) {

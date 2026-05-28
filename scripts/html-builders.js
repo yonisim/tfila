@@ -403,7 +403,7 @@ export function tz_shabat_centered_card_body_html(timeId, captionText, wrapperCl
 // ─── Weekday tfilot (חול) card builders ───────────────────────────────────────
 
 export function get_tfilot_shacharit_grouped_card_inner_html(current_date) {
-    var D = { timeSize: 'lg', labelSize: 'xl' };
+    var D = { timeSize: 'xl', labelSize: 'xl' };
     var row = tz_tfilot_row('שחרית', { iconSvg: tz_icon_sun_svg() });
     row.add(tz_tfilot_col({ timeText: '06:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D }));
     /* Slichot slot: show only during the slichot season. */
@@ -634,7 +634,7 @@ export function get_friday_plag_page_grid_html() {
 
 /** Three ערב שבת cards for the Friday single-page slide. */
 export function get_friday_erev_shabbat_cards_row_html() {
-    var D = { size: 'lg', timeSize: 'lg', labelSize: 'xl' };
+    var D = { size: 'lg', timeSize: 'xl', labelSize: 'xl' };
     var row = tz_card_row('ערב שבת');
     row.add([
         tz_time_card({ timeText: '13:15',                                            label: 'מנחה גדולה',     ...D }),
