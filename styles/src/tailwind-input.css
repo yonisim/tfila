@@ -230,6 +230,15 @@
     }
   }
 
+  /* Shabbat / Shavuot: hero clock sits on physical left (RTL day-times column) — cap width */
+  :is(#shabat_single_page, #shavuot_single_page) .tfilot-clock-corner.tfilot-hero-clock {
+    max-width: min(10.75rem, 36vw);
+  }
+
+  :is(#shabat_single_page, #shavuot_single_page) .tfilot-clock-corner .clock {
+    font-size: clamp(1.58rem, 4.85vmin, 2.55rem);
+  }
+
   /* Clock size container */
   .tz-page .tfilot-clock-corner .clock {
     font-size: clamp(1.76rem, 5.6vmin, 2.9rem);
@@ -381,6 +390,7 @@
     .text-lg,
     .font-headline-md,
     .tz-inline-prayer-label,
+    .tz-label,
     .tz-standalone-cap
   ) {
     font-weight: 600 !important;
@@ -517,10 +527,20 @@
   }
 
   #shabat_single_page .tz-section-title--with-parasha {
-    flex-shrink: 1;
-    min-width: 0;
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+    min-width: max-content !important;
     overflow: visible;
     white-space: nowrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Decorative line fills only the space after the full title + parasha */
+  #shabat_single_page .tz-section-header:has(.tz-section-title--with-parasha) .tz-section-rule {
+    flex: 1 1 0%;
+    min-width: 0.75rem;
+    align-self: center;
   }
 
   /* Both parasha text and "–" separator must never truncate */
@@ -735,7 +755,7 @@
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact) main.tfilot-main-offset {
     flex: 1 1 0% !important;
     min-height: 0 !important;
-    padding-top: clamp(2.35rem, 8.5vh, 5.75rem) !important;
+    padding-top: clamp(2.85rem, 9.75vh, 6.35rem) !important;
     padding-left: clamp(0.85rem, 2.2vw, 1.35rem) !important;
     padding-right: clamp(0.85rem, 2.2vw, 1.35rem) !important;
   }
@@ -1015,7 +1035,7 @@
     gap: 0.5rem !important;
   }
 
-  /* Caption below the time  ("מנחה וקבלת שבת" etc.) */
+  /* Caption below the time — .tz-standalone-cap (Shavuot legacy paths) */
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
     .tz-standalone-cap {
     font-size: clamp(1.05rem, 2.05vmin, 1.4rem) !important;
@@ -1029,10 +1049,38 @@
     text-overflow: clip;
   }
 
+  /* Hero standalone cards from tz_time_card — .tz-label data-size="xl" (SHABAT_THEME.standalone) */
+  :is(#shabat_single_page.shabat-single-page-compact)
+    :is(
+      #shabat-erev-shabbat-cards > .flex.flex-wrap > .tz-glass-card,
+      #second_column > .flex.flex-wrap > .tz-glass-card
+    ) .tz-label[data-size="xl"] {
+    font-size: clamp(1.25rem, 2.6vmin, 1.7rem) !important;
+    --tz-label-size: clamp(1.25rem, 2.6vmin, 1.7rem);
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    max-width: 100% !important;
+    --tz-label-max-w: 100%;
+    overflow: visible;
+    display: block;
+    white-space: normal;
+    word-break: normal;
+    text-overflow: clip;
+  }
+
   @media (min-width: 640px) {
     :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
       .tz-standalone-cap {
       font-size: clamp(1.15rem, 2.25vmin, 1.55rem) !important;
+    }
+
+    :is(#shabat_single_page.shabat-single-page-compact)
+      :is(
+        #shabat-erev-shabbat-cards > .flex.flex-wrap > .tz-glass-card,
+        #second_column > .flex.flex-wrap > .tz-glass-card
+      ) .tz-label[data-size="xl"] {
+      font-size: clamp(1.35rem, 2.75vmin, 1.85rem) !important;
+      --tz-label-size: clamp(1.35rem, 2.75vmin, 1.85rem);
     }
   }
 
@@ -1113,16 +1161,37 @@
   /* Tighter vertical gaps between שחרית / timeline / מנחה / afternoon rows */
   #shabat_single_page.shabat-single-page-compact #second_column {
     gap: clamp(0.25rem, 0.5vh, 0.4rem) !important;
+    justify-content: flex-start !important;
   }
 
-  /* Timeline + afternoon horizontal rows — gap and card padding drive row height */
-  #shabat_single_page.shabat-single-page-compact #second_column > .flex.flex-wrap {
+  /* Prayer-group cards: content height only — don't steal space from timeline / afternoon rows */
+  #shabat_single_page.shabat-single-page-compact #second_column > .shabat-compact-tf {
+    flex: 0 0 auto !important;
+    min-height: 0;
+  }
+
+  /* Outer shell around #second_column — less padding so bottom row fits */
+  #shabat_single_page.shabat-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:last-of-type {
+    padding: clamp(0.38rem, 0.85vmin, 0.55rem) clamp(0.62rem, 1.45vw, 0.88rem) !important;
     gap: clamp(0.25rem, 0.5vh, 0.4rem) !important;
   }
 
-  #shabat_single_page.shabat-single-page-compact #second_column > .flex.flex-wrap > .tz-glass-card {
-    padding: clamp(0.55rem, 1.2vmin, 0.78rem) clamp(0.72rem, 1.75vw, 1.02rem) !important;
-    gap: 0.35rem !important;
+  /* Timeline + afternoon horizontal rows */
+  #shabat_single_page.shabat-single-page-compact #second_column > .flex.flex-wrap {
+    gap: clamp(0.25rem, 0.5vh, 0.4rem) !important;
+    align-items: flex-start;
+  }
+
+  #shabat_single_page.shabat-single-page-compact
+    :is(#shabat-erev-shabbat-cards, #second_column) > .flex.flex-wrap > .tz-glass-card {
+    flex: 1 1 0 !important;
+    align-self: flex-start !important;
+    height: auto !important;
+    min-height: 0 !important;
+    justify-content: flex-start !important;
+    padding: clamp(0.35rem, 0.75vmin, 0.5rem) clamp(0.5rem, 1.2vw, 0.75rem) !important;
+    gap: 0.25rem !important;
+    overflow: visible !important;
   }
 
   /* Header → erev row: tighter grid row-gap and less shell padding at top */
@@ -1130,35 +1199,66 @@
     row-gap: clamp(0.25rem, 0.45vh, 0.4rem) !important;
   }
 
+  /* RTL: 2nd header = day-times column (physical left) — indent past hero clock */
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    :is(.shabat-main-grid, .shavuot-main-grid).tz-two-col-grid > .tz-section-header:nth-child(2) {
+    padding-inline-end: clamp(5.5rem, 17.5vw, 10.25rem);
+    min-width: 0;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #shabat-erev-shabbat-cards {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
   #shabat_single_page.shabat-single-page-compact #shabat-erev-shabbat-cards > .flex.flex-wrap {
     gap: clamp(0.25rem, 0.5vh, 0.4rem) !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    box-sizing: border-box;
   }
 
   #shabat_single_page.shabat-single-page-compact #shabat-erev-shabbat-cards > .flex.flex-wrap > .tz-glass-card {
-    padding: clamp(0.48rem, 1.05vmin, 0.68rem) clamp(0.65rem, 1.55vw, 0.95rem) !important;
-    gap: 0.32rem !important;
+    max-width: 50%;
+    box-sizing: border-box;
   }
 
-  /* Left column card fills available height; overflow visible so erev-shabbat
-     captions aren't clipped when the section shrinks to make room for second_column */
+  /* Erev shell: size to content, clip nested cards inside the gold border */
   #shabat_single_page.shabat-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:first-of-type {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    width: 100%;
+    max-width: 100%;
+    min-height: min-content !important;
+    min-width: 0 !important;
     display: flex !important;
     flex-direction: column !important;
-    overflow: visible !important;
-    /* top padding minimal — title-to-erev gap lives mostly in grid row-gap */
-    padding: clamp(0.38rem, 0.85vmin, 0.55rem) clamp(0.85rem, 1.92vw, 1.12rem) clamp(0.5rem, 1.1vmin, 0.7rem) !important;
+    overflow: hidden !important;
+    box-sizing: border-box;
+    padding: clamp(0.42rem, 0.9vmin, 0.58rem) clamp(0.62rem, 1.45vw, 0.88rem) !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:first-of-type > div {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0 !important;
+    min-height: min-content !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
-    overflow: visible !important;
+    overflow: hidden !important;
     gap: clamp(0.2rem, 0.4vh, 0.35rem) !important;
+    box-sizing: border-box;
+  }
+
+  /* Align erev shell with section header — drop cell inline-end padding */
+  #shabat_single_page.shabat-single-page-compact .tz-tf-col-cell--stack:first-of-type {
+    padding-inline-end: 0 !important;
   }
 
   #shabat_single_page.shabat-single-page-compact #shabat-week-footer {
