@@ -985,6 +985,8 @@
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
     #friday-prayer-row-erev-shabbat,
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    #shabat-erev-shabbat-cards > .flex.flex-wrap,
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
     #shavuot-eve-row {
     flex-shrink: 0;
     overflow: visible !important;
@@ -992,6 +994,8 @@
 
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
     #friday-prayer-row-erev-shabbat > .tz-glass-card,
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    #shabat-erev-shabbat-cards > .flex.flex-wrap > .tz-glass-card,
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
     #shavuot-eve-row > .tz-glass-card {
     overflow: visible !important;
@@ -1001,6 +1005,8 @@
   /* Erev + afternoon horizontal cards */
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
     #friday-prayer-row-erev-shabbat > .tz-glass-card,
+  :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
+    #shabat-erev-shabbat-cards > .flex.flex-wrap > .tz-glass-card,
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
     #shavuot-eve-row > .tz-glass-card,
   :is(#shabat_single_page.shabat-single-page-compact, #shavuot_single_page.shavuot-single-page-compact)
@@ -1104,6 +1110,35 @@
     display: none !important;
   }
 
+  /* Tighter vertical gaps between שחרית / timeline / מנחה / afternoon rows */
+  #shabat_single_page.shabat-single-page-compact #second_column {
+    gap: clamp(0.25rem, 0.5vh, 0.4rem) !important;
+  }
+
+  /* Timeline + afternoon horizontal rows — gap and card padding drive row height */
+  #shabat_single_page.shabat-single-page-compact #second_column > .flex.flex-wrap {
+    gap: clamp(0.25rem, 0.5vh, 0.4rem) !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #second_column > .flex.flex-wrap > .tz-glass-card {
+    padding: clamp(0.55rem, 1.2vmin, 0.78rem) clamp(0.72rem, 1.75vw, 1.02rem) !important;
+    gap: 0.35rem !important;
+  }
+
+  /* Header → erev row: tighter grid row-gap and less shell padding at top */
+  #shabat_single_page.shabat-single-page-compact .shabat-main-grid.tz-two-col-grid {
+    row-gap: clamp(0.25rem, 0.45vh, 0.4rem) !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #shabat-erev-shabbat-cards > .flex.flex-wrap {
+    gap: clamp(0.25rem, 0.5vh, 0.4rem) !important;
+  }
+
+  #shabat_single_page.shabat-single-page-compact #shabat-erev-shabbat-cards > .flex.flex-wrap > .tz-glass-card {
+    padding: clamp(0.48rem, 1.05vmin, 0.68rem) clamp(0.65rem, 1.55vw, 0.95rem) !important;
+    gap: 0.32rem !important;
+  }
+
   /* Left column card fills available height; overflow visible so erev-shabbat
      captions aren't clipped when the section shrinks to make room for second_column */
   #shabat_single_page.shabat-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:first-of-type {
@@ -1112,6 +1147,8 @@
     display: flex !important;
     flex-direction: column !important;
     overflow: visible !important;
+    /* top padding minimal — title-to-erev gap lives mostly in grid row-gap */
+    padding: clamp(0.38rem, 0.85vmin, 0.55rem) clamp(0.85rem, 1.92vw, 1.12rem) clamp(0.5rem, 1.1vmin, 0.7rem) !important;
   }
 
   #shabat_single_page.shabat-single-page-compact .tz-tf-col-cell--stack > section.tz-glass-card:first-of-type > div {
@@ -1121,6 +1158,7 @@
     flex-direction: column !important;
     justify-content: flex-start !important;
     overflow: visible !important;
+    gap: clamp(0.2rem, 0.4vh, 0.35rem) !important;
   }
 
   #shabat_single_page.shabat-single-page-compact #shabat-week-footer {

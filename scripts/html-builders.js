@@ -425,7 +425,7 @@ export function tz_shabat_centered_card_body_html(timeId, captionText, wrapperCl
 // ─── Weekday tfilot (חול) card builders ───────────────────────────────────────
 
 export function get_tfilot_shacharit_grouped_card_inner_html(current_date) {
-    var D = TFILOT_THEME.list;
+    var D = SHABAT_THEME.list;
     var row = tz_tfilot_row('שחרית', { iconSvg: tz_icon_sun_svg() });
     row.add(tz_tfilot_col({ timeText: '6:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D }));
     /* Slichot slot: show only during the slichot season. */
@@ -669,7 +669,7 @@ export function get_friday_erev_shabbat_cards_row_html() {
 /** Two ערב שבת cards (הדלקה + מנחה/קבלת שבת) for the Shabbat single-page slide. */
 export function get_shabat_erev_shabbat_cards_row_html() {
     var D = SHABAT_THEME.standalone;
-    var row = tz_card_row('ערב שבת');
+    var row = tz_card_row('ערב שבת', { gap: 'sm' });
     row.add([
         tz_time_card({ timeId: 'hadlakat-nerot',                                     label: 'הדלקת נרות',     ...D }),
         tz_time_card({ timeId: 'mincha_shabat_eve', extraClass: 'mincha_shabat_eve', label: 'מנחה וקבלת שבת', ...D }),
@@ -729,7 +729,7 @@ export function fill_friday_prayer_grouped_cards(current_date, set_element_html_
 
 export function get_shabat_after_shacharit_timeline_cards_row_html() {
     var D = SHABAT_THEME.standalone;
-    var row = tz_card_row('אחרי שחרית — ציר זמן');
+    var row = tz_card_row('אחרי שחרית — ציר זמן', { gap: 'sm' });
     row.add([
         tz_time_card({ id: 'shabat-card-kidush-shiur',   timeId: 'kidush',                    label: 'קידוש ושיעור',   ...D }),
         tz_time_card({ id: 'shabat-card-tfilat-yeladim', timeId: 'shabat-tfilat-yeladim-time', label: 'תפילת ילדים',    ...D }),
@@ -741,7 +741,7 @@ export function get_shabat_after_shacharit_timeline_cards_row_html() {
 
 export function get_shabat_afternoon_horizontal_cards_html() {
     var D = SHABAT_THEME.standalone;
-    var row = tz_card_row('אחר הצהריים');
+    var row = tz_card_row('אחר הצהריים', { gap: 'sm' });
     row.add([
         tz_time_card({ id: 'shabat-card-afternoon-tehilim', timeId: 'tehilim',           label: { text: 'תהלים לילדים בגן השמחה', wrap: 'normal' }, ...D }),
         tz_time_card({ id: 'shabat-card-afternoon-shiur',   timeId: 'shiur-pirkei-avot', label: 'שיעור בפרקי אבות',                                  ...D }),

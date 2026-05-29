@@ -767,7 +767,7 @@ export function tz_card_row(label, opts) {
 export function shabat_slide_theme({ standalone = {}, list = {} } = {}) {
     return {
         standalone: Object.assign({ size: 'lg', timeSize: 'lg', labelSize: 'xl' }, standalone),
-        list:       Object.assign({              timeSize: 'lg', labelSize: 'xl' }, list),
+        list:       Object.assign({              timeSize: 'lg', labelSize: 'md' }, list),
     };
 }
 
