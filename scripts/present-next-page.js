@@ -47,6 +47,7 @@ import {
     tz_tfilot_mincha_dynamic_prepend_container_html, create_tfilot_mincha_dynamic_row_html,
     tz_tf_cap_standalone_html, tz_tf_cap_standalone_two_lines_html,
     tz_shabat_centered_card_body_html,
+    set_mincha_gedola_time,
     get_tfilot_shacharit_grouped_card_inner_html, get_tfilot_mincha_grouped_card_inner_html,
     get_tfilot_arvit_grouped_card_inner_html, get_tfilot_shabat_mincha_grouped_card_inner_html,
     tfilot_show_arvit_20_column,
@@ -370,10 +371,13 @@ function get_slide_show_items_ids(){
 }
 
 
+let MINCHA_GEDOLA_TIME = '13:15';
+set_mincha_gedola_time(MINCHA_GEDOLA_TIME);
+
 let shacharit_regular_days = ['06:00', '06:50', '08:30(שישי)'];
 let kabalat_shabat = ['17:46', '17:56'];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
-let mincha_shabat = ['13:15', '14:00', '18:00'];
+let mincha_shabat = ['13:15', '14:00', '18:30'];
 let arvit_shabat = ['18:44', '19:00'];
 
 function get_week_start_date(current_date){
@@ -698,6 +702,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         show_footer = true;
     }
 
+    if(is_between_dates(current_date, '2026-07-02T05:00', '2026-07-02T20:30')){
+        messages.push('צום יז בתמוז | מנחה: 19:20 | ערבית וצאת הצום: 20:12');
+        show_footer = true;
+    }
+
     if(is_between_dates(current_date, '2025-10-28T17:10', '2025-11-05T22:00') & !is_between_dates(current_date, '2024-11-12T21:00', '2024-11-12T22:00') & !is_shabat_time(current_date, -25)){
         messages.push('ותן טל ומטר לברכה');
         show_footer = true;
@@ -883,22 +892,15 @@ async function present_prayer_times_single_page(current_date){
         add_class_to_element_style('prayer_times', 'table-line-height-less');
     }
 
+    set_mincha_gedola_time(get_mincha_gedola_tfilot_time(current_date));
     fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time, set_element_html);
     show_shacharit_8_30();
     show_slichot(current_date);
 
     if (is_mincha_13_30(current_date)){
-        var mincha_gedola_time_min = get_today_mincha_gedola(current_date);
-        var mincha_date = new Date(current_date);
-        mincha_date.setHours(mincha_gedola_time_min.split(':')[0]);
-        mincha_date.setMinutes(mincha_gedola_time_min.split(':')[1]);
-        var mincha_gedola_time = '13:15';
-        if (is_after_time(mincha_date, '13:17')){
-            mincha_gedola_time = '13:20';
-        }
         insert_html_at_start_of_element(
             'mincha-dynamic-prepend',
-            create_tfilot_mincha_dynamic_row_html(mincha_gedola_time, 'מנחה גדולה')
+            create_tfilot_mincha_dynamic_row_html(get_mincha_gedola_tfilot_time(current_date), 'מנחה גדולה')
         );
     }
 
@@ -954,7 +956,7 @@ async function present_tisha_beav_times(current_date){
 
 async function present_taanit_times(current_date){
     var start_of_fest = create_table_row_html('04:54', 'כניסת הצום');
-    var mincha_gedola = create_table_row_html('13:15', 'מנחה גדולה');
+    var mincha_gedola = create_table_row_html(get_mincha_gedola_tfilot_time(current_date), 'מנחה גדולה');
     var mincha_ktana = create_table_row_html('17:00', 'מנחה קטנה');
     var arvit = create_table_row_html('18:00', 'ערבית וקריאת מגילה');
     var megila_2 = create_table_row_html('19:45', 'קריאת מגילה לנשים');
@@ -1262,7 +1264,7 @@ async function present_shavuot_prayer_times(current_date) {
     set_element_html('shavuot-kabalat-divrei-torah-time', '19:30');
 
     set_element_html('shavuot-eve-row', get_shavuot_eve_cards_html());
-    set_element_html('shavuot-mincha-gedola-eve', '13:15');
+    set_element_html('shavuot-mincha-gedola-eve', get_mincha_gedola_tfilot_time(current_date));
     set_element_html('shavuot-chag-in', '19:12');
     set_element_html('shavuot-mincha-eve', '19:22');
     set_element_html('shavuot-maariv-chag', '20:00');
@@ -1615,7 +1617,7 @@ async function present_shachcarit_with_8_30(parent_elem){
 
 async function present_simchat_tora_eve_full(current_date){
     await present_shachcarit_with_8_30('first_column');
-    insert_html_at_end_of_element('first_column', create_table_row_html('13:15', 'מנחה גדולה'));
+    insert_html_at_end_of_element('first_column', create_table_row_html(get_mincha_gedola_tfilot_time(current_date), 'מנחה גדולה'));
     show_chag_eve_times(current_date, '17:47', 'first_column');
     load_html_into_page_elem_end('hakafot.html', 'second_column');
 
@@ -1721,6 +1723,7 @@ async function populate_friday_prayer_times(current_date){
     if (!document.getElementById('friday-prayer-card-shacharit')) {
         set_element_html('friday_prayers', get_friday_prayers_col_html());
     }
+    set_mincha_gedola_time(get_mincha_gedola_tfilot_time(current_date));
     fill_friday_prayer_grouped_cards(current_date, set_element_html);
     show_slichot(current_date);
     await show_shabat_eve_times(current_date, shabat_in, 'friday_prayers');
@@ -2100,6 +2103,20 @@ function get_today_mid_day(date){
 
 function get_today_mincha_gedola(date){
     return get_today_property(date, 'mincha_gedola');
+}
+
+// Rounds the zmanim mincha gedola time up to the nearest 5-minute interval.
+// Falls back to MINCHA_GEDOLA_TIME when the zmanim value is unavailable.
+function get_mincha_gedola_tfilot_time(date) {
+    var zmanim = get_today_mincha_gedola(date);
+    if (!zmanim) return MINCHA_GEDOLA_TIME;
+    var parts = zmanim.split(':');
+    var h = parseInt(parts[0], 10);
+    var m = Math.ceil(parseInt(parts[1], 10) / 5) * 5;
+    if (m >= 15 && h === 13) {
+        return '13:20'
+    }
+    return MINCHA_GEDOLA_TIME
 }
 
 function get_today_plag(date){

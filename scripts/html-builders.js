@@ -22,6 +22,10 @@ import {
     shabat_slide_theme, weekdays_slide_theme, friday_slide_theme
 } from './components.js';
 
+// ─── Configurable defaults ────────────────────────────────────────────────────
+var mincha_gedola_time = '13:15';
+export function set_mincha_gedola_time(t) { mincha_gedola_time = t; }
+
 // ─── Layout / typography class constants ──────────────────────────────────────
 // Edit these to change how all prayer-time cards look across all pages.
 
@@ -452,7 +456,7 @@ export function get_tfilot_mincha_grouped_card_inner_html() {
     var row = tz_tfilot_row('מנחה');
     row.add([
         tz_tfilot_mincha_dynamic_prepend_container_html(),
-        tz_tfilot_col({ extraClass: 'hidden-element mincha-gedola', timeText: '13:15', captionText: 'מנחה גדולה', ...D }),
+        tz_tfilot_col({ extraClass: 'hidden-element mincha-gedola', timeText: mincha_gedola_time, captionText: 'מנחה גדולה', ...D }),
         tz_tfilot_col({ timeId: 'mincha-regulr-days', captionText: 'מנחה קטנה', labelWrap: 'nowrap', ...D }),
     ]);
     return row.html();
@@ -659,7 +663,7 @@ export function get_friday_erev_shabbat_cards_row_html() {
     var D = FRIDAY_THEME.standalone;
     var row = tz_card_row('ערב שבת');
     row.add([
-        tz_time_card({ timeText: '13:15',                                            label: 'מנחה גדולה',     ...D }),
+        tz_time_card({ timeText: mincha_gedola_time,                                  label: 'מנחה גדולה',     ...D }),
         tz_time_card({ timeId: 'hadlakat-nerot',                                     label: 'הדלקת נרות',     ...D }),
         tz_time_card({ timeId: 'mincha_shabat_eve', extraClass: 'mincha_shabat_eve', label: 'מנחה וקבלת שבת', ...D }),
     ]);
@@ -788,7 +792,7 @@ export function get_shavuot_mincha_grouped_card_inner_html() {
     var D = { timeSize: 'md', labelSize: 'xs' };
     var row = tz_tfilot_row('מנחה');
     row.add([
-        tz_tfilot_col({ timeText: '13:15', captionText: 'מנחה גדולה', labelWrap: 'tight',  ...D }),
+        tz_tfilot_col({ timeText: mincha_gedola_time, captionText: 'מנחה גדולה', labelWrap: 'tight',  ...D }),
         tz_tfilot_col({ timeText: '14:00', captionText: 'מנחה גדולה', labelWrap: 'tight',  ...D }),
         tz_tfilot_col({ timeId: 'shavuot-mincha-ktana', captionText: 'מנחה קטנה', labelWrap: 'nowrap', ...D }),
     ]);

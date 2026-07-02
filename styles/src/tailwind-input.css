@@ -675,8 +675,8 @@
     flex-shrink: 0;
     margin-top: auto;
     box-sizing: border-box;
-    min-height: clamp(2.35rem, 5vh, 3.35rem);
-    padding: 0.42rem clamp(0.75rem, 3vw, 1.35rem);
+    min-height: clamp(3.5rem, 7.5vh, 5rem);
+    padding: 0.65rem clamp(0.75rem, 3vw, 1.35rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -700,7 +700,7 @@
   .tz-page .fouter #footer-custom-message {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-weight: 500;
-    font-size: clamp(1.2rem, 2.85vw, 1.75rem) !important;
+    font-size: clamp(1.8rem, 4.3vw, 2.6rem) !important;
     letter-spacing: 0.02em;
     line-height: 1.28;
     max-width: min(96vw, 72rem);
@@ -712,13 +712,13 @@
   /* Smaller variant — for long messages or the Shabbat page */
   .tz-page .fouter #footer-custom-message.my-text-footer-small,
   .tz-page .fouter #footer-custom-message.text-single-page-shaba {
-    font-size: clamp(1.08rem, 2.45vw, 1.52rem) !important;
+    font-size: clamp(1.62rem, 3.68vw, 2.28rem) !important;
   }
 
   /* Omer counter */
   .tz-page .fouter #omer-text,
   .tz-page .fouter #omer-text-weeks {
-    font-size: clamp(1.2rem, 2.85vw, 1.75rem) !important;
+    font-size: clamp(1.8rem, 4.3vw, 2.6rem) !important;
     line-height: 1.28;
     font-weight: 500;
   }
