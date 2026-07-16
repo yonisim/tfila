@@ -591,6 +591,51 @@ export function get_tfilot_regular_days_grid_html() {
     ]);
 }
 
+// ─── Tisha B'Av grid builders ──────────────────────────────────────────────
+
+/**
+ * Full two-column grid for the Tisha B'Av standalone slide.
+ * Right (RTL-first) column: fast-day prayer times, split into two subsections —
+ * ערב תשעה באב (the panel's own title) and, inline below it, a תשעה באב
+ * sub-header for the fast day's own rows. Static — never change year to year.
+ * Left column: shared halachic day-times list, filled at runtime by present_day_times().
+ *
+ * @param {object} [opts]
+ * @param {boolean} [opts.eveOnly=false]
+ *        When true, renders only the ערב תשעה באב subsection (used during
+ *        TISHA_BEAV_EVE, before the fast day's own times are relevant).
+ *
+ * Inject into #tisha_beav_grid — no other setup needed on the left column;
+ * present_day_times() finds the right column's spans by id as usual.
+ *
+ * @returns {string} HTML string
+ */
+export function get_tisha_beav_page_grid_html(opts) {
+    var eveOnly = !!(opts && opts.eveOnly);
+
+    var eveRows =
+        tz_day_time_row({ label: 'מנחה קטנה',        timeText: '17:00' }) +
+        tz_day_time_row({ label: 'כניסת הצום',       timeText: '19:43' }) +
+        tz_day_time_row({ label: 'ערבית ומגילת איכה', timeText: '20:10' });
+
+    var dayRows =
+        tz_section_header({ title: 'תשעה באב' }) +
+        tz_day_time_row({ label: 'שחרית א',         timeText: '06:50' }) +
+        tz_day_time_row({ label: 'שחרית ב',         timeText: '08:30' }) +
+        tz_day_time_row({ label: 'מנחה גדולה',      timeText: '13:20' }) +
+        tz_day_time_row({ label: 'מנחה קטנה',       timeText: '19:15' }) +
+        tz_day_time_row({ label: 'ערבית וצאת הצום', timeText: '20:11' });
+
+    var taanitCol = tz_col({
+        children: eveRows + dayRows,
+    });
+
+    return tz_page_grid([
+        { title: 'ערב תשעה באב',    id: 'taanit_times', children: taanitCol },
+        { title: 'זמני היום בהלכה', id: 'day_times',    children: get_tfilot_day_times_col_weekday_html() },
+    ]);
+}
+
 // ─── Friday single-page grid builders ────────────────────────────────────────
 
 /**

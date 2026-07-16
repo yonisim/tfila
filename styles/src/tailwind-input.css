@@ -166,7 +166,8 @@
   #main-div:has(#friday_single_page)       > #friday_single_page,
   #main-div:has(#friday_single_page_plag)  > #friday_single_page_plag,
   #main-div:has(#shabat_single_page)       > #shabat_single_page,
-  #main-div:has(#shavuot_single_page)      > #shavuot_single_page {
+  #main-div:has(#shavuot_single_page)      > #shavuot_single_page,
+  #main-div:has(#tisha_beav)               > #tisha_beav {
     flex: 1 1 0;
     min-height: 0;
     display: flex;
@@ -230,12 +231,12 @@
     }
   }
 
-  /* Shabbat / Shavuot: hero clock sits on physical left (RTL day-times column) — cap width */
-  :is(#shabat_single_page, #shavuot_single_page) .tfilot-clock-corner.tfilot-hero-clock {
+  /* Shabbat / Shavuot / Tisha B'Av: hero clock sits on physical left (RTL day-times column) — cap width */
+  :is(#shabat_single_page, #shavuot_single_page, #tisha_beav) .tfilot-clock-corner.tfilot-hero-clock {
     max-width: min(10.75rem, 36vw);
   }
 
-  :is(#shabat_single_page, #shavuot_single_page) .tfilot-clock-corner .clock {
+  :is(#shabat_single_page, #shavuot_single_page, #tisha_beav) .tfilot-clock-corner .clock {
     font-size: clamp(1.58rem, 4.85vmin, 2.55rem);
   }
 
@@ -572,6 +573,24 @@
   :is(#friday_single_page, #friday_single_page_plag) .tz-section-title-sep {
     color: var(--color-cream-faint);
     font-weight: 600;
+  }
+
+  /* Title takes its natural width so the decorating line never overlaps the parasha name */
+  :is(#friday_single_page, #friday_single_page_plag) .tz-section-title--with-parasha {
+    flex: 0 0 auto !important;
+    flex-shrink: 0 !important;
+    min-width: max-content !important;
+    overflow: visible;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Decorating line fills only the space after the full title + parasha */
+  :is(#friday_single_page, #friday_single_page_plag) .tz-section-header:has(.tz-section-title--with-parasha) .tz-section-rule {
+    flex: 1 1 0%;
+    min-width: 0.5rem;
+    align-self: center;
   }
 
   /* Parasha a bit smaller than the main title */
@@ -1501,6 +1520,73 @@
   @media (min-width: 640px) {
     :is(#friday_single_page, #friday_single_page_plag) #day_times span.font-display-time,
     :is(#friday_single_page, #friday_single_page_plag) #day_times :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
+      font-size: clamp(2.3rem, 5.6vmin, 3.45rem) !important;
+    }
+  }
+
+
+  /* ===========================================================
+     TISHA B'AV — LAYOUT
+     The footer message (when shown) shrinks <main>'s available height.
+     #taanit_times has 9 flex children (8 rows + 1 inline sub-header) —
+     the tallest content on the page — so its rows use small, fixed
+     (non-viewport-scaling) padding/gap sized to comfortably fit even
+     when <main> is at its smallest (footer visible, worst case ~2 lines).
+     #tisha_beav_grid clips instead of scrolling as a last-resort safety
+     net — a hard scrollbar on an ambient display is worse than a tiny
+     clip that should never actually trigger given the sizing below.
+     =========================================================== */
+
+  /* Clear the hero clock — this page has no title strip pushing content
+     down, so it needs more top clearance than the default nudge.
+     Reuses the Shabbat/Shavuot clamp since it also pairs with the
+     narrower clock variant set above. */
+  #tisha_beav main.tfilot-main-offset {
+    padding-top: clamp(2.85rem, 9.75vh, 6.35rem) !important;
+  }
+
+  #tisha_beav #tisha_beav_grid {
+    overflow: hidden !important;
+  }
+
+  /* ─── TIME-ROW SIZING — mirror the compact-mode day-times sizing from #tfilot_single_page ─── */
+
+  #tisha_beav :is(#taanit_times, #day_times) .tz-glass-card {
+    padding: clamp(0.4rem, 0.9vmin, 0.6rem) clamp(0.75rem, 1.75vw, 1.05rem) !important;
+    gap: 0.5rem !important;
+    min-height: 0;
+    overflow: visible !important;
+  }
+
+  #tisha_beav #taanit_times .tz-glass-card {
+    padding: 0.25rem clamp(0.75rem, 1.75vw, 1.05rem) !important;
+  }
+
+  #tisha_beav #taanit_times > div {
+    gap: 0.15rem !important;
+  }
+
+  #tisha_beav :is(#taanit_times, #day_times) span.font-display-time {
+    font-size: clamp(2.05rem, 5vmin, 3.15rem) !important;
+    font-weight: 600 !important;
+    line-height: 1.06 !important;
+    text-shadow:
+      0 0 32px rgba(106, 93, 65, 0.65),
+      0 2px 6px rgba(27, 28, 26, 0.2);
+  }
+
+  #tisha_beav :is(#taanit_times, #day_times) :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
+    font-family: 'Work Sans', system-ui, sans-serif;
+    font-size: clamp(2.05rem, 5vmin, 3.15rem) !important;
+    font-weight: 600 !important;
+    line-height: 1.06 !important;
+    letter-spacing: 0.02em;
+    color: var(--color-cream) !important;
+  }
+
+  @media (min-width: 640px) {
+    #tisha_beav :is(#taanit_times, #day_times) span.font-display-time,
+    #tisha_beav :is(#taanit_times, #day_times) :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
       font-size: clamp(2.3rem, 5.6vmin, 3.45rem) !important;
     }
   }

@@ -502,11 +502,12 @@ export function tz_section_header({ title = '', parasha = false, level = 'h2', t
  * @param {object} opts
  * @param {string}  [opts.label='']       Hebrew label text, e.g. 'זריחה'
  * @param {string}  [opts.id]             Id on the time <span> (JS fills via set_element_data)
+ * @param {string}  [opts.timeText='']    Static time text — for rows that never change at runtime
  * @param {boolean} [opts.hidden=false]   Start hidden — adds hidden-element on the card
  * @param {string}  [opts.extraClass]     Extra classes on the card (e.g. 'talit_tfilin')
  * @returns {string} HTML string
  */
-export function tz_day_time_row({ label = '', id, hidden = false, extraClass } = {}) {
+export function tz_day_time_row({ label = '', id, timeText = '', hidden = false, extraClass } = {}) {
     var labelSpan =
         '<span class="min-w-0 flex-1 break-words font-headline-md leading-snug text-on-surface' +
         ' text-sm sm:text-base md:text-lg">' + label + '</span>';
@@ -514,7 +515,7 @@ export function tz_day_time_row({ label = '', id, hidden = false, extraClass } =
     var timeSpan =
         '<span class="shrink-0 whitespace-nowrap font-display-time tabular-nums' +
         ' text-primary tz-time-glow text-lg sm:text-xl md:text-2xl"' +
-        (id ? ' id="' + id + '"' : '') + '></span>';
+        (id ? ' id="' + id + '"' : '') + '>' + timeText + '</span>';
 
     // Compact glass card — narrower border (4px) + smaller radius (lg) vs standard cards
     var cardClass =

@@ -44,7 +44,9 @@ export const DATES = {
     PESACH_VACATION:         { start: '2025-04-05T23:00',    end: '2025-04-20T12:00'    },
     SHABAT_HAGADOL:          { start: '2025-04-11T17:00',    end: '2025-04-12T17:00'    },
 
-    TISHA_BEAV:              { start: '2025-08-02T20:00',    end: '2025-08-03T20:30'    },
+    TISHA_BEAV_EVE_PRE:      { start: '2026-07-21T17:00',    end: '2026-07-22T17:00'    },
+    TISHA_BEAV_EVE:          { start: '2026-07-22T17:00',    end: '2026-07-22T22:00'    },
+    TISHA_BEAV:              { start: '2026-07-22T22:00',    end: '2026-07-23T20:30'    },
     SHABAT_CHAZON:           { start: '2025-08-01T19:00',    end: '2025-08-02T20:00'    },
     SLICHOT_DAYS:            { start: '2025-08-26T00:00',    end: '2025-09-30T23:00'    },
 

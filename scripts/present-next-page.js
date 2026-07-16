@@ -19,7 +19,7 @@ import {
     is_war, is_big_vacation, is_sukot_vacation, is_pesach_vacation, is_minyan_plag_active,
     is_shacharit_8_30, is_mincha_13_30,
     is_show_taanit, is_taanit,
-    is_tisha_beav, is_tisha_beav_eve, is_shabat_chazon,
+    is_tisha_beav, is_tisha_beav_eve, is_tisha_beav_eve_pre, is_shabat_chazon,
     is_slihot_days,
     is_hanuka,
     is_purim, is_show_megila, is_shabat_zachor,
@@ -62,6 +62,7 @@ import {
     get_friday_plag_page_grid_html,
     get_friday_prayers_col_html,
     get_hero_hud_html,
+    get_tisha_beav_page_grid_html,
 } from './html-builders.js';
 
 const chokidar = require('chokidar');
@@ -128,6 +129,7 @@ var HERO_SLIDE_IDS = new Set([
     'friday_single_page_plag',
     'shabat_single_page',
     'shavuot_single_page',
+    'tisha_beav',
 ]);
 
 function setup_hero_slide(date, page_id) {
@@ -243,7 +245,7 @@ function get_specific_single_page(current_date){
         item = 'chag_eve'
     } else if(is_pesach_7(current_date_obj)){
         item = 'pesach_7'
-    } else if(is_tisha_beav(current_date_obj)){
+    } else if(is_tisha_beav(current_date_obj) || is_tisha_beav_eve(current_date_obj)){
         item = 'tisha_beav'
     } else if(is_shavout(current_date_obj)){
         item = 'shavuot_single_page'
@@ -294,7 +296,7 @@ function get_slide_show_items_ids(){
     } else if(is_shabat_time(date) & !is_kipur(date) & !is_kipur_eve(date)){
         slide_show_items.push('shabat_single_page')
     }
-    if(is_taanit(date) | is_show_taanit(date) | is_tisha_beav_eve(date)){
+    if(is_taanit(date) | is_show_taanit(date)){
         slide_show_items.push('taanit');
     }
     if (is_in_weekdays(date, [4,5]) & !is_special_day(date)){
@@ -356,6 +358,10 @@ function get_slide_show_items_ids(){
 
     if(is_present_atzmaut(date)){
         slide_show_items.push('atzmaut')
+    }
+
+    if( is_tisha_beav_eve_pre(date)){
+        slide_show_items.push('tisha_beav')
     }
 
     //slide_show_items.push('day_times');
@@ -939,18 +945,14 @@ async function present_purim_times(current_date){
 }
 
 async function present_tisha_beav_times(current_date){
-    insert_html_at_end_of_element('taanit_times', create_table_row_html('19:35', 'כניסת הצום'));
-    insert_html_at_end_of_element('taanit_times', create_table_row_html('20:30', 'ערבית ומגילת איכה'));
-    insert_html_at_end_of_element('taanit_times', create_table_row_html('06:50', 'שחרית א'));
-    insert_html_at_end_of_element('taanit_times', create_table_row_html('08:30', 'שחרית ב'));
-    insert_html_at_end_of_element('taanit_times', create_table_row_html('13:20', 'מנחה גדולה'));
-    insert_html_at_end_of_element('taanit_times', create_table_row_html('19:00', 'מנחה קטנה'));
-    insert_html_at_end_of_element('taanit_times', create_table_row_html('20:02', 'ערבית וצאת הצום'));
+    /* Build the full two-column grid from components — no HTML file fetches needed.
+       Hero HUD (clock + date) and the footer message are handled by setup_hero_slide().
+       During TISHA_BEAV_EVE only the ערב תשעה באב subsection is relevant (the fast day
+       times are still hours away); TISHA_BEAV_EVE_PRE and the fast day itself show both. */
+    var eveOnly = is_tisha_beav_eve(current_date);
+    set_element_html('tisha_beav_grid', get_tisha_beav_page_grid_html({ eveOnly: eveOnly }));
+    present_day_times(current_date, true);
 
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date, true);
-    });
-    show_footer_custom_message_if_needed(current_date, "tisha_beav")
     return sleep_seconds(wait_seconds*5);
 }
 

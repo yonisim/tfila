@@ -91,9 +91,12 @@ export function is_taanit(date) {
     return is_between_dates(date, DATES.TAANIT_ESTHER.start, DATES.TAANIT_ESTHER.end);
 }
 
+export function is_tisha_beav_eve_pre(date) {
+    return is_between_dates(date, DATES.TISHA_BEAV_EVE_PRE.start, DATES.TISHA_BEAV_EVE_PRE.end);
+}
+
 export function is_tisha_beav_eve(date) {
-    /* Note: TISHA_BEAV.start is the previous evening (after sunset = eve of the fast). */
-    return is_between_dates(date, DATES.TISHA_BEAV.start, DATES.TISHA_BEAV.start);
+    return is_between_dates(date, DATES.TISHA_BEAV_EVE.start, DATES.TISHA_BEAV_EVE.end);
 }
 
 export function is_tisha_beav(date) {

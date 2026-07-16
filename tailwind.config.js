@@ -8,6 +8,7 @@ module.exports = {
     './html/friday_single_page_plag.html',
     './html/shabat_single_page.html',
     './html/shavuot_single_page.html',
+    './html/tisha_beav.html',
     './html/prayer_times_grouped_single_page.html',
     './html/prayer_times_friday_single_page.html',
     './html/day_times_inner_single_page.html',
