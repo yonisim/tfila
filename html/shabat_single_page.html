@@ -1,98 +1,76 @@
 <div
   id="shabat_single_page"
-  class="tz-page shabat-single-page-compact tz-page-bg relative flex h-full min-h-0 w-full max-w-full min-w-0 flex-col overflow-hidden text-on-surface fade-in"
+  class="tz-page shabat-tl-page tz-page-bg relative flex h-full min-h-0 w-full max-w-full min-w-0 flex-col overflow-hidden text-on-surface"
   dir="rtl"
 >
   <main
-    class="tfilot-main-offset relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-4 pb-2 pt-2 font-body-md sm:px-5 sm:pb-2.5 md:px-6"
+    class="tfilot-main-offset relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden"
   >
-    <div class="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-contain">
-      <div
-        class="shabat-main-grid tz-two-col-grid mt-auto grid w-full min-w-0 max-w-full shrink-0 grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] grid-rows-[auto_auto] items-stretch gap-x-2.5 gap-y-2 overflow-hidden max-h-full sm:gap-x-4 sm:gap-y-2 md:gap-x-5 md:gap-y-2.5"
-      >
-        <div class="tz-section-header flex min-h-[2.55rem] min-w-0 shrink-0 items-center self-stretch py-1 sm:min-h-[2.85rem]">
-          <h2 class="tz-section-title tz-section-title--with-parasha flex min-w-0 flex-1 flex-nowrap items-baseline gap-x-1.5">
-            <span class="shrink-0">זמני תפילות שבת</span>
-            <span class="tz-section-title-sep shrink-0" aria-hidden="true">–</span>
-            <span class="tz-section-parasha shrink-0" id="prayer-times-title-parasha"></span>
-          </h2>
-          <div class="tz-section-rule" aria-hidden="true"></div>
-        </div>
-
-        <div class="tz-section-header flex min-h-[2.55rem] min-w-0 shrink-0 items-center self-stretch py-1 sm:min-h-[2.85rem]">
-          <h2 class="tz-section-title">זמני היום בהלכה</h2>
-          <div class="tz-section-rule" aria-hidden="true"></div>
-        </div>
-
-        <div
-          class="tz-tf-col-cell tz-tf-col-cell--stack flex h-full min-h-0 min-w-0 max-w-full flex-col gap-2 overflow-hidden pr-1 sm:gap-2.5"
-        >
-          <section class="tz-glass-card flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden p-4 sm:p-5">
-            <div
-              class="flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-hidden sm:gap-2.5"
-            >
-              <!-- RTL timeline: right = earliest — הדלקה → מנחה וקבלת שבת -->
-              <div id="shabat-erev-shabbat-cards"></div>
-              <div id="first_column" class="shabat-grid tfilot-shabat-grid-horizontal"></div>
-            </div>
-          </section>
-
-          <section class="tz-glass-card flex shrink-0 flex-col gap-2 p-4 sm:p-5">
-            <div id="second_column" class="flex min-w-0 max-w-full flex-col gap-2 sm:gap-3"></div>
-          </section>
-        </div>
-
-        <div
-          class="tz-tf-col-cell tz-tf-col-cell--stack flex h-full min-h-0 min-w-0 max-w-full flex-col gap-2 overflow-hidden pr-1 sm:gap-2.5"
-        >
-          <div
-            id="day_times"
-            class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden"
-          ></div>
-
-          <section
-            id="shabat-week-footer"
-            class="flex min-w-0 shrink-0 flex-col gap-2"
-          >
-            <div class="tz-section-header flex min-h-[2.55rem] min-w-0 w-full shrink-0 items-center self-stretch py-1 sm:min-h-[2.85rem]">
-              <h2 class="tz-section-title">זמני השבוע</h2>
-              <div class="tz-section-rule" aria-hidden="true"></div>
-            </div>
-            <div
-              class="tz-glass-card tz-week-time-row flex w-full min-w-0 max-w-full items-center justify-between gap-1 overflow-hidden rounded-lg border-r-4 border-primary px-3 py-2.5 shadow-glass sm:px-3.5 sm:py-3"
-            >
-              <span
-                class="min-w-0 shrink break-words text-sm font-headline-md leading-snug text-on-surface sm:text-base md:text-lg"
-                >מנחה</span>
-              <span
-                class="shrink-0 whitespace-nowrap font-display-time text-lg tabular-nums text-primary tz-time-glow sm:text-xl md:text-2xl"
-                id="mincha-regulr-days-footer"
-              ></span>
-            </div>
-            <div
-              class="tz-glass-card tz-week-time-row flex w-full min-w-0 max-w-full items-center justify-between gap-1 overflow-hidden rounded-lg border-r-4 border-primary px-3 py-2.5 shadow-glass sm:px-3.5 sm:py-3"
-            >
-              <span
-                class="min-w-0 shrink break-words text-sm font-headline-md leading-snug text-on-surface sm:text-base md:text-lg"
-                >ערבית</span>
-              <span
-                class="shrink-0 whitespace-nowrap font-display-time text-lg tabular-nums text-primary tz-time-glow sm:text-xl md:text-2xl"
-                id="arvit-regulr-days-footer"
-              ></span>
-            </div>
-
-            <div class="hidden-element" id="shabat-zachor">
-              <div class="tz-inline-prayer-label self-start whitespace-nowrap">קריאת זכור</div>
-              <div class="shabat-grid tfilot-shabat-grid-horizontal w-full" id="mincha_arvit_zachor">
-                <div class="grid-box-right grid-body-box">09:30</div>
-                <div class="grid-box-right grid-body-box">10:30</div>
-                <div class="grid-box-right grid-body-box">16:45</div>
-                <div class="grid-box-right grid-body-box"></div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
+    <!-- Centered page title with parasha (clock + date HUD float over the ends) -->
+    <div class="shabat-tl-title">
+      <h1>
+        <span>זמני תפילות שבת</span>
+        <span class="shabat-tl-title-sep" aria-hidden="true">–</span>
+        <span class="shabat-tl-title-parasha" id="prayer-times-title-parasha"></span>
+      </h1>
     </div>
+
+    <div class="shabat-tl-grid">
+
+      <!-- ══ Column 1 (RTL-first, right): ערב שבת + יום השבת ══ -->
+      <section class="shabat-tl-col">
+        <div class="shabat-tl-band"><span class="shabat-tl-dot"></span><h2>ערב שבת</h2><span class="shabat-tl-rule"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">הדלקת נרות</span><span class="shabat-tl-time" id="hadlakat-nerot"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">מנחה וקבלת שבת</span><span class="shabat-tl-time" id="mincha_shabat_eve"></span></div>
+
+        <div class="shabat-tl-band"><span class="shabat-tl-dot"></span><h2>יום השבת</h2><span class="shabat-tl-rule"></span></div>
+        <div class="shabat-tl-row shabat-tl-block">
+          <span class="shabat-tl-name">שחרית</span>
+          <div class="shabat-tl-times">
+            <span class="shabat-tl-tg"><span class="shabat-tl-time" id="shacharit_a"></span></span>
+            <span class="shabat-tl-tg"><span class="shabat-tl-time" id="shacharit_b"></span></span>
+            <span class="shabat-tl-tg"><span class="shabat-tl-time" id="shacharit_main"></span></span>
+          </div>
+        </div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">קידוש ושיעור · תפילת ילדים</span><span class="shabat-tl-time" id="kidush"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">מנחה גדולה</span><span class="shabat-tl-time" id="mincha-shabat-a"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">הורים וילדים</span><span class="shabat-tl-time" id="shabat-parents-time"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">מנחה ב</span><span class="shabat-tl-time" id="mincha-shabat-b"></span></div>
+      </section>
+
+      <!-- ══ Column 2 (middle): אחר הצהריים + צאת שבת ══ -->
+      <section class="shabat-tl-col">
+        <div class="shabat-tl-band"><span class="shabat-tl-dot"></span><h2>אחר הצהריים</h2><span class="shabat-tl-rule"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">מעיינים בחבורה</span><span class="shabat-tl-time" id="lesson-halacha"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">מנחה קטנה</span><span class="shabat-tl-time" id="mincha-shabat-c"></span></div>
+        <div class="shabat-tl-row tehilim"><span class="shabat-tl-name">תהלים לילדים <small>בגן השמחה</small></span><span class="shabat-tl-time" id="tehilim"></span></div>
+        <div class="shabat-tl-row shiur-pirkei-avot"><span class="shabat-tl-name">שיעור בפרקי אבות</span><span class="shabat-tl-time" id="shiur-pirkei-avot"></span></div>
+
+        <div class="shabat-tl-band"><span class="shabat-tl-dot"></span><h2>צאת שבת</h2><span class="shabat-tl-rule"></span></div>
+        <div id="shabat-motzash-rows" class="shabat-tl-motzash">
+          <div class="shabat-tl-row arvit-shabat"><span class="shabat-tl-name">צאת שבת וערבית</span><span class="shabat-tl-time" id="arvit-shabat"></span></div>
+          <div class="shabat-tl-row arvit-shabat-2"><span class="shabat-tl-name">ערבית ב</span><span class="shabat-tl-time" id="arvit-shabat-2"></span></div>
+        </div>
+      </section>
+
+      <!-- ══ Column 3 (left): halacha rail + week times ══ -->
+      <section class="shabat-tl-col shabat-tl-rail">
+        <div class="shabat-tl-band"><span class="shabat-tl-dot"></span><h2>זמני היום בהלכה</h2><span class="shabat-tl-rule"></span></div>
+        <div class="shabat-tl-row talit_tfilin hidden-element"><span class="shabat-tl-name">טלית ותפילין</span><span class="shabat-tl-time" id="talit_tfilin"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">זריחה</span><span class="shabat-tl-time" id="sunrise"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">סוף זמן ק"ש</span><span class="shabat-tl-time" id="shma_end"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">זמן מנחה גדולה</span><span class="shabat-tl-time" id="mincha_gedola"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">שקיעה</span><span class="shabat-tl-time" id="sunset"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">צאת הכוכבים</span><span class="shabat-tl-time" id="stars"></span></div>
+
+        <div class="shabat-tl-band"><span class="shabat-tl-dot"></span><h2>זמני השבוע</h2><span class="shabat-tl-rule"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">מנחה</span><span class="shabat-tl-time" id="mincha-regulr-days-footer"></span></div>
+        <div class="shabat-tl-row"><span class="shabat-tl-name">ערבית</span><span class="shabat-tl-time" id="arvit-regulr-days-footer"></span></div>
+      </section>
+
+    </div>
+
+    <!-- Hidden holder kept so shabat_zachor_adaptions() has a target -->
+    <div class="hidden-element" id="shabat-zachor"></div>
   </main>
 </div>

@@ -197,7 +197,7 @@ test.describe('Shabbat slide', () => {
   test.afterAll(async () => { await close(); });
 
   test('all criteria pass', async () => {
-    // §1
+    // §1 — slide container within viewport
     const slideBox = await window.locator('#shabat_single_page').boundingBox();
     expect(slideBox).not.toBeNull();
     expect(slideBox.x).toBeGreaterThanOrEqual(0);
@@ -205,55 +205,50 @@ test.describe('Shabbat slide', () => {
     expect(slideBox.x + slideBox.width).toBeLessThanOrEqual(VW + 1);
     expect(slideBox.y + slideBox.height).toBeLessThanOrEqual(VH + 1);
 
-    // §1 — no horizontal card overflow
-    await forEachVisible(window.locator('.tz-glass-card'), async (_el, box) => {
+    // §1 — three timeline columns, none overflowing horizontally
+    const cols = window.locator('#shabat_single_page .shabat-tl-col');
+    expect(await cols.count()).toBe(3);
+    await forEachVisible(cols, async (_el, box) => {
       expect(box.x).toBeGreaterThanOrEqual(-1);
       expect(box.x + box.width).toBeLessThanOrEqual(VW + 1);
     });
 
-    // §2 — times never wrap
-    await forEachVisible(window.locator('span.font-display-time'), async (el) => {
+    // §2 — times never wrap / clip
+    await forEachVisible(window.locator('.shabat-tl-time'), async (el) => {
       expect(await el.evaluate(n => n.scrollWidth > n.clientWidth + 1)).toBe(false);
     });
 
-    // §2 & §3 — captions ≤ 2 lines
-    await forEachVisible(window.locator('span.text-on-surface-variant'), async (el) => {
+    // §2 — no row is clipped vertically by its column (e.g. the last row of the
+    // tallest column overflowing at shorter viewport heights)
+    const anyRowClipped = await window.evaluate(() =>
+      [...document.querySelectorAll('#shabat_single_page .shabat-tl-row')].some((row) => {
+        const col = row.closest('.shabat-tl-col');
+        return row.getBoundingClientRect().bottom > col.getBoundingClientRect().bottom + 1;
+      })
+    );
+    expect(anyRowClipped).toBe(false);
+
+    // §2 — row labels ≤ 2 lines (merged rows may wrap to 2)
+    await forEachVisible(window.locator('.shabat-tl-name'), async (el) => {
       expect(await lineCount(el)).toBeLessThanOrEqual(2);
     });
 
-    // §2 — row labels ≤ 2 lines
-    await forEachVisible(window.locator('span.break-words'), async (el) => {
-      expect(await lineCount(el)).toBeLessThanOrEqual(2);
-    });
-
-    // §4 — section titles on one line
-    await forEachVisible(window.locator('h2.tz-section-title'), async (el) => {
+    // §4 — band titles + page title on one line, parasha filled
+    await forEachVisible(window.locator('.shabat-tl-band h2'), async (el) => {
       expect(await lineCount(el)).toBeLessThanOrEqual(1);
     });
+    expect(await lineCount(window.locator('.shabat-tl-title h1'))).toBeLessThanOrEqual(1);
+    await expect(window.locator('#prayer-times-title-parasha')).not.toBeEmpty();
 
     // §5 — clock and hebrew date
     await expect(window.locator('.tfilot-clock-corner .clock')).toBeVisible();
     await expect(window.locator('#tz_hebrew_date')).toBeVisible();
 
-    // §6 Shabbat-specific — erev-shabbat cards must be fully inside their parent glass card,
-    // not merely "visible" (Playwright counts clipped elements as visible).
-    // The parent is the nearest ancestor <section> of the erev-shabbat row.
-    const erevSection = window.locator('#friday-prayer-row-erev-shabbat').locator('xpath=ancestor::section[1]');
-
-    await assertContainedIn(
-      window.locator('#friday-prayer-card-hadlakat'),
-      erevSection,
-      '#friday-prayer-card-hadlakat'
-    );
-    await assertContainedIn(
-      window.locator('#friday-prayer-card-mincha-kabalat'),
-      erevSection,
-      '#friday-prayer-card-mincha-kabalat'
-    );
-
-    // §6 Shabbat-specific — week footer times visible
-    await expect(window.locator('#shabat-week-footer')).toBeVisible();
-    await expect(window.locator('#mincha-regulr-days-footer')).toBeVisible();
-    await expect(window.locator('#arvit-regulr-days-footer')).toBeVisible();
+    // §6 Shabbat-specific — erev, motzash and week-times populated at runtime
+    for (const id of ['hadlakat-nerot', 'mincha_shabat_eve', 'shacharit_a', 'kidush',
+                      'arvit-shabat', 'arvit-shabat-2',
+                      'mincha-regulr-days-footer', 'arvit-regulr-days-footer']) {
+      await expect(window.locator('#' + id)).not.toBeEmpty();
+    }
   });
 });

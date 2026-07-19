@@ -1715,4 +1715,177 @@
   #shavuot_single_page .shavuot-shiurim-name {
     color: var(--color-cream) !important;
   }
+
+
+  /* ===========================================================
+     SHABBAT TIMELINE REDESIGN  (#shabat_single_page.shabat-tl-page)
+     A static, no-scroll 3-column day timeline. One uniform text size
+     for every time + label; only descriptive sub-labels are smaller.
+     =========================================================== */
+
+  #shabat_single_page.shabat-tl-page {
+    /* One shared size for all row text (times + names + band titles).
+       The vh term is kept modest so the tallest column (two 2-line rows) fits
+       without clipping on shorter displays (768/800/900 h), not just 1080. */
+    --shabat-tl-fs:     clamp(1.4rem, 4.5vh, 2.95rem);
+    --shabat-tl-fs-sub: clamp(0.8rem, 2.3vh, 1.55rem);
+  }
+
+  #shabat_single_page.shabat-tl-page main.tfilot-main-offset {
+    /* Bottom padding permanently reserves the footer strip so the layout never
+       shifts whether or not an announcement is showing. */
+    padding: clamp(0.25rem, 0.8vh, 0.6rem) clamp(0.6rem, 1.1vw, 1.2rem)
+             calc(clamp(3.5rem, 7.5vh, 5rem) + 0.25rem);
+    gap: clamp(0.15rem, 0.5vh, 0.45rem);
+  }
+
+  /* The injected announcement bar overlays the reserved strip (absolute) rather
+     than adding its own height below the content. */
+  #shabat_single_page.shabat-tl-page > .fouter {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    margin-top: 0;
+  }
+
+  /* ── Centered page title (clock + date HUD float over the ends) ── */
+  #shabat_single_page .shabat-tl-title {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: clamp(11rem, 24vw, 20rem);   /* clear the clock / date panels */
+    min-height: clamp(1.9rem, 4vh, 2.8rem);
+  }
+  #shabat_single_page .shabat-tl-title h1 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: var(--shabat-tl-fs);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    color: var(--color-cream);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+    /* Navy panel so the title reads clearly over the page background */
+    padding: clamp(0.15rem, 0.5vh, 0.4rem) clamp(1rem, 2.4vw, 2rem);
+    border-radius: 0.7rem;
+    background: linear-gradient(155deg, #2a3d5c 0%, #1a2538 45%, #0e141f 100%);
+    border: 2px solid rgba(200, 169, 91, 0.5);
+    border-top: 3px solid rgba(248, 193, 55, 0.8);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 244, 210, 0.07);
+  }
+  #shabat_single_page .shabat-tl-title-sep   { color: var(--color-gold); }
+  #shabat_single_page .shabat-tl-title-parasha { color: var(--color-cream-warm); font-weight: 600; }
+
+  /* ── Body grid: three columns (RTL: right → middle → left rail) ── */
+  #shabat_single_page .shabat-tl-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.1fr 1.1fr 0.95fr;
+    gap: clamp(0.4rem, 0.8vw, 1rem);
+    min-height: 0;
+  }
+
+  /* Each column is one space-filling card; band-separated rows inside. */
+  #shabat_single_page .shabat-tl-col {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.4vh clamp(0.5rem, 0.95vw, 1rem);
+    border: 2px solid var(--color-gold);
+    border-radius: 0.9rem;
+    background: linear-gradient(180deg, var(--color-card-top) 0%, var(--color-card-bottom) 100%);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  }
+  /* The halacha rail uses the same card background as the other columns. */
+
+  /* ── Time-of-day band header ── */
+  #shabat_single_page .shabat-tl-band {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.3vh 0 0.15vh;
+  }
+  #shabat_single_page .shabat-tl-band:first-child { padding-top: 0.1vh; }
+  #shabat_single_page .shabat-tl-dot {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, var(--color-gold-bright), var(--color-gold-deep));
+    box-shadow: 0 0 10px rgba(248, 193, 55, 0.55);
+  }
+  #shabat_single_page .shabat-tl-band h2 {
+    font-size: var(--shabat-tl-fs);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    color: var(--color-gold-bright);
+  }
+  #shabat_single_page .shabat-tl-rule {
+    flex: 1;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgba(200, 169, 91, 0.55), transparent);
+  }
+
+  /* ── Uniform time + label row ── */
+  #shabat_single_page .shabat-tl-motzash { display: contents; }
+  #shabat_single_page .shabat-tl-row {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0.32vh 0;
+    border-bottom: 1px solid rgba(200, 169, 91, 0.26);
+  }
+  #shabat_single_page .shabat-tl-col .shabat-tl-row:last-child { border-bottom: none; }
+  #shabat_single_page .shabat-tl-name {
+    font-size: var(--shabat-tl-fs);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--color-cream);
+  }
+  #shabat_single_page .shabat-tl-name small {
+    display: block;
+    font-size: var(--shabat-tl-fs-sub);
+    font-weight: 600;
+    line-height: 1.05;
+    color: var(--color-cream-faint);
+  }
+  #shabat_single_page .shabat-tl-time {
+    font-size: var(--shabat-tl-fs);
+    font-weight: 700;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    color: var(--color-cream);
+    text-shadow: 0 0 24px rgba(255, 244, 210, 0.38), 0 2px 6px rgba(0, 0, 0, 0.35);
+  }
+
+  /* ── Multi-time block: one label, times spread across the row (שחרית) ── */
+  #shabat_single_page .shabat-tl-block {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6vh;
+  }
+  #shabat_single_page .shabat-tl-block .shabat-tl-name { text-align: center; }
+  #shabat_single_page .shabat-tl-times {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  /* Struck-through rows on שבת חזון (tehilim / pirkei-avot cancelled) */
+  #shabat_single_page .shabat-tl-row.strikethrough .shabat-tl-name,
+  #shabat_single_page .shabat-tl-row.strikethrough .shabat-tl-time {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
 }

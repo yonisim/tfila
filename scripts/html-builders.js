@@ -496,17 +496,6 @@ export function get_tfilot_arvit_grouped_card_inner_html(current_date, arvit_tim
     return row.html();
 }
 
-export function get_tfilot_shabat_mincha_grouped_card_inner_html() {
-    var D = SHABAT_THEME.list;
-    var row = tz_tfilot_row('מנחה:');
-    row.add([
-        tz_tfilot_col({ timeId: 'mincha-shabat-a', captionText: 'מנחה א',    labelWrap: 'tight',  ...D }),
-        tz_tfilot_col({ timeId: 'mincha-shabat-b', captionText: 'מנחה ב',    labelWrap: 'tight',  ...D }),
-        tz_tfilot_col({ timeId: 'mincha-shabat-c', captionText: 'מנחה קטנה', labelWrap: 'nowrap', ...D }),
-    ]);
-    return row.html();
-}
-
 // ─── Hero HUD ─────────────────────────────────────────────────────────────────
 
 /**
@@ -715,17 +704,6 @@ export function get_friday_erev_shabbat_cards_row_html() {
     return row.html();
 }
 
-/** Two ערב שבת cards (הדלקה + מנחה/קבלת שבת) for the Shabbat single-page slide. */
-export function get_shabat_erev_shabbat_cards_row_html() {
-    var D = SHABAT_THEME.standalone;
-    var row = tz_card_row('ערב שבת', { gap: 'sm' });
-    row.add([
-        tz_time_card({ timeId: 'hadlakat-nerot',                                     label: 'הדלקת נרות',     ...D }),
-        tz_time_card({ timeId: 'mincha_shabat_eve', extraClass: 'mincha_shabat_eve', label: 'מנחה וקבלת שבת', ...D }),
-    ]);
-    return row.html();
-}
-
 /**
  * Shell content for the prayers column of the Friday single-page slides.
  * Set as the inner HTML of #friday_prayers; fill_friday_prayer_grouped_cards()
@@ -772,32 +750,6 @@ export function fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time,
 export function fill_friday_prayer_grouped_cards(current_date, set_element_html_fn) {
     set_element_html_fn('friday-prayer-card-shacharit',     get_friday_shacharit_card_inner_html(current_date));
     set_element_html_fn('friday-prayer-erev-shabbat-cards', get_friday_erev_shabbat_cards_row_html());
-}
-
-// ─── Shabbat single-page card builders ───────────────────────────────────────
-
-export function get_shabat_after_shacharit_timeline_cards_row_html() {
-    var D = SHABAT_THEME.standalone;
-    var row = tz_card_row('אחרי שחרית — ציר זמן', { gap: 'sm' });
-    row.add([
-        tz_time_card({ id: 'shabat-card-kidush-shiur',   timeId: 'kidush',                    label: 'קידוש ושיעור',   ...D }),
-        tz_time_card({ id: 'shabat-card-tfilat-yeladim', timeId: 'shabat-tfilat-yeladim-time', label: 'תפילת ילדים',    ...D }),
-        tz_time_card({ id: 'shabat-card-parents',        timeId: 'shabat-parents-time',        label: 'הורים וילדים',   ...D }),
-        tz_time_card({ id: 'shabat-card-maayan',         timeId: 'lesson-halacha',             label: 'מעיינים בחבורה', ...D }),
-    ]);
-    return row.html();
-}
-
-export function get_shabat_afternoon_horizontal_cards_html() {
-    var D = SHABAT_THEME.standalone;
-    var row = tz_card_row('אחר הצהריים', { gap: 'sm' });
-    row.add([
-        tz_time_card({ id: 'shabat-card-afternoon-tehilim', timeId: 'tehilim',           label: { text: 'תהלים לילדים בגן השמחה', wrap: 'normal' }, ...D }),
-        tz_time_card({ id: 'shabat-card-afternoon-shiur',   timeId: 'shiur-pirkei-avot', label: 'שיעור בפרקי אבות',                                  ...D }),
-        tz_time_card({ id: 'shabat-card-afternoon-arvit',   timeId: 'arvit-shabat',      label: 'צאת שבת וערבית',        extraClass: 'arvit-shabat',   ...D }),
-        tz_time_card({ id: 'shabat-card-afternoon-arvit-2', timeId: 'arvit-shabat-2',    label: 'ערבית ב',                extraClass: 'arvit-shabat-2', ...D }),
-    ]);
-    return row.html();
 }
 
 // ─── Shavuot single-page card builders ───────────────────────────────────────
