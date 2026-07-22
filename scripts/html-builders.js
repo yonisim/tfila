@@ -603,7 +603,7 @@ export function get_tisha_beav_page_grid_html(opts) {
     var eveOnly = !!(opts && opts.eveOnly);
 
     var eveRows =
-        tz_day_time_row({ label: 'מנחה קטנה',        timeText: '17:00' }) +
+        tz_day_time_row({ label: 'מנחה קטנה',        timeText: '17:30' }) +
         tz_day_time_row({ label: 'כניסת הצום',       timeText: '19:43' }) +
         tz_day_time_row({ label: 'ערבית ומגילת איכה', timeText: '20:10' });
 
