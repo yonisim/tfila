@@ -1791,8 +1791,8 @@
     /* One shared size for all row text (times + names + band titles).
        The vh term is kept modest so the tallest column (two 2-line rows) fits
        without clipping on shorter displays (768/800/900 h), not just 1080. */
-    --shabat-tl-fs:     clamp(1.4rem, 4.5vh, 2.95rem);
-    --shabat-tl-fs-sub: clamp(0.8rem, 2.3vh, 1.55rem);
+    --shabat-tl-fs:     clamp(1.5rem, 5.1vh, 3.3rem);
+    --shabat-tl-fs-sub: clamp(0.85rem, 2.6vh, 1.75rem);
   }
 
   #shabat_single_page.shabat-tl-page main.tfilot-main-offset {
@@ -1857,7 +1857,7 @@
     flex-direction: column;
     min-height: 0;
     overflow: hidden;
-    padding: 0.4vh clamp(0.5rem, 0.95vw, 1rem);
+    padding: 0.25vh clamp(0.5rem, 0.95vw, 1rem);
     border: 2px solid var(--color-gold);
     border-radius: 0.9rem;
     background: linear-gradient(180deg, var(--color-card-top) 0%, var(--color-card-bottom) 100%);
@@ -1871,9 +1871,9 @@
     display: flex;
     align-items: center;
     gap: 0.55rem;
-    padding: 0.3vh 0 0.15vh;
+    padding: 0.2vh 0 0.1vh;
   }
-  #shabat_single_page .shabat-tl-band:first-child { padding-top: 0.1vh; }
+  #shabat_single_page .shabat-tl-band:first-child { padding-top: 0.05vh; }
   #shabat_single_page .shabat-tl-dot {
     width: 0.7rem;
     height: 0.7rem;
@@ -1896,6 +1896,34 @@
     background: linear-gradient(90deg, rgba(200, 169, 91, 0.55), transparent);
   }
 
+  /* ── Bare divider: replaces a band header where the title is dropped
+     (e.g. between ערב שבת/יום השבת and מעיינים/צאת שבת) but the section
+     break must still read clearly at a glance. ── */
+  #shabat_single_page .shabat-tl-divider {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0.35vh 0;
+  }
+  #shabat_single_page .shabat-tl-divider::before,
+  #shabat_single_page .shabat-tl-divider::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, rgba(248, 193, 55, 0.9));
+  }
+  #shabat_single_page .shabat-tl-divider::after { background: linear-gradient(90deg, rgba(248, 193, 55, 0.9), transparent); }
+  #shabat_single_page .shabat-tl-divider-mark {
+    width: 0.7rem;
+    height: 0.7rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--color-gold-bright), var(--color-gold-deep));
+    box-shadow: 0 0 10px rgba(248, 193, 55, 0.55);
+  }
+
   /* ── Uniform time + label row ── */
   #shabat_single_page .shabat-tl-motzash { display: contents; }
   #shabat_single_page .shabat-tl-row {
@@ -1905,7 +1933,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.6rem;
-    padding: 0.32vh 0;
+    padding: 0.22vh 0;
     border-bottom: 1px solid rgba(200, 169, 91, 0.26);
   }
   #shabat_single_page .shabat-tl-col .shabat-tl-row:last-child { border-bottom: none; }
