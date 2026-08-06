@@ -349,11 +349,7 @@ export function tz_tfilot_mincha_dynamic_prepend_container_html() {
 }
 
 export function create_tfilot_mincha_dynamic_row_html(time, label) {
-    return tz_tfilot_grouped_time_column_html({
-        timeText: time,
-        captionText: label,
-        captionMaxClass: TZ_TF_CAP_MD,
-    });
+    return tz_tfilot_col({ timeText: time, captionText: label, ...TFILOT_THEME.list });
 }
 
 // ─── Standalone card captions (Shabbat / Friday glass cards) ──────────────────
@@ -429,7 +425,7 @@ export function tz_shabat_centered_card_body_html(timeId, captionText, wrapperCl
 // ─── Weekday tfilot (חול) card builders ───────────────────────────────────────
 
 export function get_tfilot_shacharit_grouped_card_inner_html(current_date) {
-    var D = SHABAT_THEME.list;
+    var D = TFILOT_THEME.list;
     var row = tz_tfilot_row('שחרית', { iconSvg: tz_icon_sun_svg() });
     row.add(tz_tfilot_col({ timeText: '6:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D }));
     /* Slichot slot: show only during the slichot season. */
