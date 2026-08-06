@@ -382,7 +382,7 @@ set_mincha_gedola_time(MINCHA_GEDOLA_TIME);
 let shacharit_regular_days = ['06:00', '06:50', '08:30(שישי)'];
 let kabalat_shabat = ['17:46', '17:56'];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
-let mincha_shabat = ['13:15', '14:00', '18:30'];
+let mincha_shabat = ['13:15', '14:00', '18:00'];
 let arvit_shabat = ['18:44', '19:00'];
 
 function get_week_start_date(current_date){
