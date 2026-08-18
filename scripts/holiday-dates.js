@@ -48,7 +48,7 @@ export const DATES = {
     TISHA_BEAV_EVE:          { start: '2026-07-22T17:00',    end: '2026-07-22T22:00'    },
     TISHA_BEAV:              { start: '2026-07-22T22:00',    end: '2026-07-23T20:30'    },
     SHABAT_CHAZON:           { start: '2025-08-01T19:00',    end: '2025-08-02T20:00'    },
-    SLICHOT_DAYS:            { start: '2025-08-26T00:00',    end: '2025-09-30T23:00'    },
+    SLICHOT_DAYS:            { start: '2026-08-13T00:00',    end: '2026-09-30T23:00'    },
 
     SHOW_ROSH_HASHANA_EVE:   { start: '2025-09-21T00:01',    end: '2025-09-21T23:00'    },
     ROSH_HASHANA_EVE:        { start: '2025-09-22T00:01',    end: '2025-09-23T02:00'    },

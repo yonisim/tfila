@@ -667,11 +667,17 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     var messages = [];
     var show_footer = false;
 
-    if(is_shabat_time(current_date) && is_after_time(current_date, '05:00') && is_before_time(current_date, '10:30')    ){
-        var shabat_times = get_shabat_times(current_date);
-        if(shabat_times.mevarchim){
-            let mevarchim_message = format_rosh_hodesh_message(shabat_times.mevarchim.hodesh_name, shabat_times.mevarchim.days);
-            messages.push(mevarchim_message);
+    if(is_shabat_time(current_date)){
+        if(is_after_time(current_date, '05:00') && is_before_time(current_date, '10:30')) {
+            var shabat_times = get_shabat_times(current_date);
+            if (shabat_times.mevarchim) {
+                let mevarchim_message = format_rosh_hodesh_message(shabat_times.mevarchim.hodesh_name, shabat_times.mevarchim.days);
+                messages.push(mevarchim_message);
+            }
+        }
+        if(is_slihot_days(current_date)){
+            let siftei_renanot_message = 'שפתי רננות בשעה 5:30 לפנות בוקר'
+            messages.push(siftei_renanot_message)
         }
     }
 
