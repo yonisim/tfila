@@ -6,8 +6,8 @@ from pyluach import parshios
 
 
 def get_parasha(sunday_date):
-    """Parasha (or holiday) for the Shabbat right before the given Sunday, per the Israel reading schedule."""
-    saturday = sunday_date - timedelta(days=1)
+    """Parasha (or holiday) for the Shabbat right after the given Sunday, per the Israel reading schedule."""
+    saturday = sunday_date + timedelta(days=6)
     gd = pyluach_dates.GregorianDate(saturday.year, saturday.month, saturday.day)
     parasha = parshios.getparsha_string(gd, hebrew=True, israel=True)
     if parasha is None:
