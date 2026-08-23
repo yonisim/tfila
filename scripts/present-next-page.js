@@ -95,10 +95,10 @@ var images_dir = `${base_data_folder}/images`;
 console.log(data_dir);
 
 async function read_initial_data(){
-    return read_json(`${data_dir}/parsed_dates_tashpav.json`).then(times => {
+    return read_json(`${data_dir}/parsed_dates_tashpaz.json`).then(times => {
         day_times = times;
     }).then(() => {
-        return read_json(`${data_dir}/mincha_maariv_tashpav.json`).then(prayer_times => {
+        return read_json(`${data_dir}/mincha_maariv_tashpaz.json`).then(prayer_times => {
             week_times = prayer_times;
         });
     }).then(() => {
@@ -468,7 +468,7 @@ function normalize_mincha_maariv_entry(entry){
     };
 }
 
-/** mincha_maariv_tashpav.json stores one object per WEEK, keyed only by THAT week’s YOM ROSH (Sunday) — lookups by Mon–Thu never hit unless data was extended manually. Prefer Sunday anchors, then legacy day-scan. */
+/** mincha_maariv_tashpaz.json stores one object per WEEK, keyed only by THAT week’s YOM ROSH (Sunday) — lookups by Mon–Thu never hit unless data was extended manually. Prefer Sunday anchors, then legacy day-scan. */
 function get_next_week_mincha_maariv_for_footer(current_date){
     var anchorSundays = [
         get_next_week_start_date(current_date),

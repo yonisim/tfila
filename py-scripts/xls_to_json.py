@@ -65,14 +65,14 @@ def dump_to_file(formatted_json, output_file_path):
     with open(output_file_path, 'w+', encoding='utf-8') as f:
         f.write(json_for_print)
 
-parent_dir = "C:\\Users\\Yonatan Simkins\\Downloads\\day_times"
+parent_dir = "C:\\Users\\Yonatan.Simkins\\Downloads\\day_times_tashpaz"
 all_dates = {}
 for filename in os.listdir(parent_dir):
     month_name = os.path.splitext(filename)[0]
     print(month_name)
     month_json = csv_to_json(os.path.join(parent_dir, filename), month_name)
     all_dates.update(month_json)
-dump_to_file(all_dates, "../tfila-data/data/parsed_dates_tashpah.json",)
+dump_to_file(all_dates, "../tfila-data/data/parsed_dates_tashpaz.json",)
 
 def sort_shagririm():
     print(os.getcwd())
