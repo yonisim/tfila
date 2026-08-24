@@ -2085,7 +2085,7 @@ function get_mincha_gedola_tfilot_time(date) {
     var parts = zmanim.split(':');
     var h = parseInt(parts[0], 10);
     var m = Math.ceil(parseInt(parts[1], 10) / 5) * 5;
-    if (m >= 15 && h === 13) {
+    if (m > 15 && h === 13) {
         return '13:20'
     }
     return MINCHA_GEDOLA_TIME
