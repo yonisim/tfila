@@ -64,27 +64,7 @@ import {
     get_tisha_beav_page_grid_html,
 } from './html-builders.js';
 
-const chokidar = require('chokidar');
 const { execSync } = require('child_process');
-
-async function watch_files(){
-    var cwd = process.cwd()
-    console.log('cwd: ' + cwd);
-    chokidar.watch([data_dir, cwd], {ignored: /\.venv|node_modules|\.git|\.vscode/}).on('all', (event, path) => {
-        console.log(event, path);
-        if(['change'].includes(event)){
-            location.replace(window.location.href);
-            var main_div_elem_id = "main-div";
-            load_html_into_page_elem_end("data_updated_notification.html", main_div_elem_id);
-            setTimeout(function(){
-                var notification_elem = document.getElementById("data_updated_notification");
-                notification_elem.classList.add('fade-out');
-                wait_for_scroll(notification_elem).then(() => {notification_elem.remove()});
-            }, 10000);
-        }
-
-      });
-}
 
 var day_times, week_times, shabat_times, advertisements;
 var current_date_obj;
@@ -166,7 +146,6 @@ function sync_tfilot_top_hud_dates(current_date){
 
 function present_first_page(){
     clockFunc();
-    watch_files();
     present_last_commit();
     loop_pages();
 }
@@ -668,6 +647,11 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     var show_footer = false;
 
     if(is_shabat_time(current_date)){
+        var shabat_times = get_shabat_times(current_date);
+        if(shabat_times.messages){
+            messages.push(...shabat_times.messages);
+        }
+
         if(is_after_time(current_date, '05:00') && is_before_time(current_date, '10:30')) {
             var shabat_times = get_shabat_times(current_date);
             if (shabat_times.mevarchim) {
@@ -681,19 +665,12 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         }
     }
 
-    if(is_shabat_time(current_date)){
-        var shabat_times = get_shabat_times(current_date);
-        if(shabat_times.messages){
-            messages.push(...shabat_times.messages);
-        }
-    }
-
     if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
         messages.push('במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30');
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2024-10-05T10:00', '2024-10-11T14:00')){
+    if(is_between_dates(current_date, '2026-09-14T01:00', '2026-09-21T14:00')){
         messages.push('המלך הקדוש   |   המלך המשפט');
         show_footer = true;
     }
