@@ -820,8 +820,8 @@ export function get_rosh_hashana_eve_page_grid_html() {
     });
     return tz_page_grid([
         { title: 'ערב ראש השנה', children: tz_col({ gap: '1', children: rosh_hashana_eve_rows_html_main(S) }) },
-        { title: '', children: col2_html },
-        { title: '', children: col3_html },
+        { noHeader: true, children: col2_html },
+        { noHeader: true, children: col3_html },
     ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.25fr_0.85fr_1.05fr]' });
 }
 

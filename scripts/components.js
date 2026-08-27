@@ -632,7 +632,13 @@ export function tz_flex_spacer() {
  *                                      outermost columns (first = physical right, last = physical
  *                                      left) to keep long titles clear of the absolutely-positioned
  *                                      hero clock (top-left) / date pill (top-right).
+ *   @param {boolean} [col.noHeader]    Skip this column's header row entirely and stretch its
+ *                                      content cell to span both grid rows — for a column whose
+ *                                      first content is a spillover from the previous one, with
+ *                                      nothing of its own to title at the top (a blank `title: ''`
+ *                                      still reserves a full header-row-height strip of dead space).
  *
+
 
  * Alignment guideline: cells carry no horizontal padding so glass cards share
  * the exact left/right edges of the section-header bar above them.  Never add
@@ -663,23 +669,43 @@ export function tz_page_grid(columns, opts) {
                   'grid-cols-' + n;
     var gridCols = (opts && opts.gridCols) || defaultCols;
 
-    /* Row 1: one section header per column */
-    var headers = columns.map(function(col) {
+    // Tailwind's content scanner only finds *literal* class-name tokens in the
+    // source; 'col-start-' + (i+1) never appears as a complete string anywhere
+    // in this file, so it silently compiles to nothing. A lookup table of whole
+    // literal class names is what actually gets detected and generated.
+    var COL_START = ['col-start-1', 'col-start-2', 'col-start-3', 'col-start-4', 'col-start-5', 'col-start-6'];
+
+    /* Row 1: one section header per column — omitted (and that column's content
+       cell stretched to span both grid rows instead, via col-start/row-start/
+       row-span utilities) when col.noHeader is set. That's for a column whose
+       first content is a spillover from the previous column, so it has nothing
+       of its own to title at the top — with a normal (blank) header it would
+       still reserve a header-row-height strip of dead space, sized to whichever
+       *other* column in the row has a real title. Explicit column placement is
+       required here (Tailwind's plain `grid-cols-N` relies on source-order
+       auto-flow, which breaks the moment one column's header is missing — every
+       later header would silently shift left into the gap) but is harmless for
+       every existing caller, none of which set noHeader, since it reproduces
+       exactly the placement auto-flow already gave them. */
+    var headers = columns.map(function(col, i) {
+        if (col.noHeader) { return ''; }
         return tz_section_header({
             title: col.title || '',
             parasha: !!col.parasha,
             titleExtraClass: col.titleExtraClass,
+            extraClass: COL_START[i] + ' row-start-1',
         });
     }).join('');
 
     /* Row 2: one content cell per column */
-    var cells = columns.map(function(col) {
+    var cells = columns.map(function(col, i) {
         var overflow = (col.cellOverflow !== undefined)
             ? col.cellOverflow
             : 'overflow-y-auto overflow-x-hidden overscroll-contain';
+        var placement = COL_START[i] + (col.noHeader ? ' row-start-1 row-span-2' : ' row-start-2');
         return (
             '<div' + (col.id ? ' id="' + col.id + '"' : '') +
-            ' class="tz-tf-col-cell flex h-full min-h-0 min-w-0 max-w-full flex-col ' + overflow +
+            ' class="tz-tf-col-cell flex h-full min-h-0 min-w-0 max-w-full flex-col ' + overflow + ' ' + placement +
             (col.cellClass ? ' ' + col.cellClass : '') + '">' +
             (col.children || '') +
             '</div>'
