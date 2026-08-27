@@ -543,18 +543,31 @@ export function get_tfilot_prayer_col_html() {
  * @param {object} [rowOpts] Forwarded to every tz_day_time_row() call — e.g.
  *        { labelSizeClass, timeSizeClass, paddingClass } to resize all six rows
  *        together for a slide with headroom to spare (default: component defaults).
+ * @returns {string} The six row HTML strings only, no wrapping tz_col — use this
+ *        (not get_tfilot_day_times_col_weekday_html) when splicing these rows into
+ *        a column that already has other content, e.g. Rosh Hashana eve's col 3.
+ */
+export function get_day_times_rows_html(rowOpts) {
+    var D = rowOpts || {};
+    return (
+        tz_day_time_row({ label: 'זמן טלית ותפילין', id: 'talit_tfilin',  hidden: true, extraClass: 'talit_tfilin', ...D }) +
+        tz_day_time_row({ label: 'זריחה',             id: 'sunrise',       ...D }) +
+        tz_day_time_row({ label: 'סוף זמן ק"ש',     id: 'shma_end',      ...D }) +
+        tz_day_time_row({ label: 'זמן מנחה גדולה',   id: 'mincha_gedola', ...D }) +
+        tz_day_time_row({ label: 'שקיעה',            id: 'sunset',        ...D }) +
+        tz_day_time_row({ label: 'צאת הכוכבים',      id: 'stars',         ...D })
+    );
+}
+
+/**
+ * @param {object} [rowOpts] Forwarded to every tz_day_time_row() call — e.g.
+ *        { labelSizeClass, timeSizeClass, paddingClass } to resize all six rows
+ *        together for a slide with headroom to spare (default: component defaults).
  */
 export function get_tfilot_day_times_col_weekday_html(rowOpts) {
-    var D = rowOpts || {};
     return tz_col({
         justify: 'between',
-        children:
-            tz_day_time_row({ label: 'זמן טלית ותפילין', id: 'talit_tfilin',  hidden: true, extraClass: 'talit_tfilin', ...D }) +
-            tz_day_time_row({ label: 'זריחה',             id: 'sunrise',       ...D }) +
-            tz_day_time_row({ label: 'סוף זמן ק"ש',     id: 'shma_end',      ...D }) +
-            tz_day_time_row({ label: 'זמן מנחה גדולה',   id: 'mincha_gedola', ...D }) +
-            tz_day_time_row({ label: 'שקיעה',            id: 'sunset',        ...D }) +
-            tz_day_time_row({ label: 'צאת הכוכבים',      id: 'stars',         ...D }),
+        children: get_day_times_rows_html(rowOpts),
     });
 }
 
@@ -647,7 +660,12 @@ var ROSH_HASHANA_ROW_SIZE = {
     paddingClass:   'px-3 py-1',
 };
 
-function rosh_hashana_eve_rows_html(sizeOverride) {
+/* Eve's morning+evening schedule (9 rows) and day A's schedule (8 rows) are each
+   split into a "main" and "overflow" part so get_rosh_hashana_eve_page_grid_html
+   can cascade the overflow of column 1 into column 2, and column 2's own overflow
+   into column 3, instead of leaving one 9-row column towering over a 6-row one. */
+
+function rosh_hashana_eve_rows_html_main(sizeOverride) {
     var S = sizeOverride || ROSH_HASHANA_ROW_SIZE;
     return (
         // ערב ראש השנה is a full calendar day — regular weekday shacharit/mincha
@@ -658,13 +676,20 @@ function rosh_hashana_eve_rows_html(sizeOverride) {
         tz_day_time_row({ label: 'שחרית ג',                        timeText: '08:30', ...S }) +
         tz_day_time_row({ label: 'מנחה גדולה',                     timeText: '13:15', ...S }) +
         tz_day_time_row({ label: 'הדלקת נרות (נר נשמה ל-48 שעות)', timeText: '18:14', ...S }) +
-        tz_day_time_row({ label: 'מנחה ערב חג',                    timeText: '18:24', ...S }) +
-        tz_day_time_row({ label: 'דבר תורה - הרב נחום',             ...S }) +
-        tz_day_time_row({ label: 'ערבית של חג - ברק אפרתי',         ...S })
+        tz_day_time_row({ label: 'מנחה ערב חג',                    timeText: '18:24', ...S })
     );
 }
 
-function rosh_hashana_day_a_rows_html(sizeOverride) {
+/** Eve's last 2 rows (evening) — cascaded to the top of column 2 on the eve grid. */
+function rosh_hashana_eve_rows_html_overflow(sizeOverride) {
+    var S = sizeOverride || ROSH_HASHANA_ROW_SIZE;
+    return (
+        tz_day_time_row({ label: 'דבר תורה - הרב נחום',     ...S }) +
+        tz_day_time_row({ label: 'ערבית של חג - ברק אפרתי', ...S })
+    );
+}
+
+function rosh_hashana_day_a_rows_html_main(sizeOverride) {
     var S = sizeOverride || ROSH_HASHANA_ROW_SIZE;
     return (
         tz_day_time_row({ label: 'שחרית',                      timeText: '07:30', ...S }) +
@@ -672,10 +697,23 @@ function rosh_hashana_day_a_rows_html(sizeOverride) {
         tz_day_time_row({ label: 'מוסף',                                          ...S }) +
         tz_day_time_row({ label: 'תקיעת שופר לנשים',            timeText: '17:45', ...S }) +
         tz_day_time_row({ label: 'מנחה ותשליך',                 timeText: '18:00', ...S }) +
-        tz_day_time_row({ label: 'שיעור - איציק וולף',          timeText: '18:30', ...S }) +
-        tz_day_time_row({ label: 'ערבית של חג',                 timeText: '19:00', ...S }) +
-        tz_day_time_row({ label: 'הדלקת נרות וחימום האוכל',     timeText: '19:11', ...S })
+        tz_day_time_row({ label: 'שיעור - איציק וולף',          timeText: '18:30', ...S })
     );
+}
+
+/** Day A's last 2 rows (evening) — cascaded to the top of column 3 on the eve grid. */
+function rosh_hashana_day_a_rows_html_overflow(sizeOverride) {
+    var S = sizeOverride || ROSH_HASHANA_ROW_SIZE;
+    return (
+        tz_day_time_row({ label: 'ערבית של חג',             timeText: '19:00', ...S }) +
+        tz_day_time_row({ label: 'הדלקת נרות וחימום האוכל', timeText: '19:11', ...S })
+    );
+}
+
+/** Full (unsplit) day A schedule — used as-is by the 'a' slide, where it's a
+ *  whole column on its own rather than being cascaded across two columns. */
+function rosh_hashana_day_a_rows_html(sizeOverride) {
+    return rosh_hashana_day_a_rows_html_main(sizeOverride) + rosh_hashana_day_a_rows_html_overflow(sizeOverride);
 }
 
 function rosh_hashana_day_b_rows_html() {
@@ -747,23 +785,44 @@ var ROSH_HASHANA_GRID_BASE_OPTS = { extraClass: 'mt-[84px]' };
    here is taller, roomier cards instead of bigger text — padding grown from the
    shared 4px/side up to 10px/side, sized to eve's own 9-row column (the tallest)
    so it still clears the viewport with margin to spare. */
-var ROSH_HASHANA_EVE_ROW_SIZE = { ...ROSH_HASHANA_ROW_SIZE, paddingClass: 'px-3 py-[10px]' };
+var ROSH_HASHANA_EVE_ROW_SIZE = {
+    ...ROSH_HASHANA_ROW_SIZE,
+    labelSizeClass: 'text-[23px]',
+    timeSizeClass:  'text-[25px]',
+    paddingClass:   'px-3 py-[10px]',
+};
 
+/* Cascaded layout: 9 + 8 + 6 rows (23 total) read as one continuous right-to-left
+   flow rather than three sealed-off days. Column 1 keeps eve's own 7 morning/early-
+   evening rows; its last 2 (evening) rows spill into the top of column 2, ahead of
+   day A's own 6; day A's last 2 (evening) rows spill into the top of column 3,
+   ahead of the day_times reference rows — landing on 7/8/7 (day_times' hidden
+   טלית ותפילין row makes col 3 look like 7, not 8, since it renders empty).
+   A column whose first rows are a spillover from the previous column gets no outer
+   title (would misdescribe what's actually at the top) — instead an inline h3 marks
+   where that column's own named section actually begins, same idiom Tisha B'Av uses
+   for its own day-within-a-column sub-header. */
 export function get_rosh_hashana_eve_page_grid_html() {
+    var S = ROSH_HASHANA_EVE_ROW_SIZE;
+    var col2_html = tz_col({
+        gap: '1', justify: 'between',
+        children:
+            rosh_hashana_eve_rows_html_overflow(S) +
+            tz_section_header({ title: 'א\' דראש השנה', level: 'h3' }) +
+            rosh_hashana_day_a_rows_html_main(S),
+    });
+    var col3_html = tz_col({
+        gap: '1', justify: 'between',
+        children:
+            rosh_hashana_day_a_rows_html_overflow(S) +
+            tz_section_header({ title: 'זמני היום בהלכה', level: 'h3', titleExtraClass: 'text-[34px]' }) +
+            get_day_times_rows_html(S),
+    });
     return tz_page_grid([
-        // ערב ראש השנה: 9 rows, one very long label (הדלקת נרות נר נשמה ל-48 שעות).
-        { title: 'ערב ראש השנה',    children: tz_col({ gap: '1', children: rosh_hashana_eve_rows_html(ROSH_HASHANA_EVE_ROW_SIZE) }) },
-        // א' דראש השנה: 8 rows, the longest single label of the three (הדלקת נרות וחימום האוכל).
-        // justify:'between' spreads these across the full stretched cell height (it
-        // otherwise stacks at the top, leaving a bare ~46px gap below the last row —
-        // the ערב ראש השנה column next to it is naturally taller and sets the row height).
-        { title: 'א\' דראש השנה',   children: tz_col({ gap: '1', justify: 'between', children: rosh_hashana_day_a_rows_html(ROSH_HASHANA_EVE_ROW_SIZE) }) },
-        // זמני היום בהלכה: 6 rows, all short labels — needs the least width. Already
-        // spreads full-height on its own (get_tfilot_day_times_col_weekday_html uses
-        // justify:'between' internally); left at the shared size since its own ceiling
-        // is title width (see ROSH_HASHANA_DAY_TIMES_COL), not row height.
-        { title: 'זמני היום בהלכה', children: rosh_hashana_day_times_col_html(), ...ROSH_HASHANA_DAY_TIMES_COL },
-    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.4fr_1.4fr_1fr]' });
+        { title: 'ערב ראש השנה', children: tz_col({ gap: '1', children: rosh_hashana_eve_rows_html_main(S) }) },
+        { title: '', children: col2_html },
+        { title: '', children: col3_html },
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.25fr_0.85fr_1.05fr]' });
 }
 
 export function get_rosh_hashana_a_page_grid_html() {
