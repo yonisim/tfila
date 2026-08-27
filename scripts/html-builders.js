@@ -234,8 +234,8 @@ export function tz_tfilot_grouped_time_column_html(options) {
  * Uses tz_time_column under the hood — sizes are fully controllable via props.
  *
  * Share sizes across a row with a var D spread:
- *   var ROSH_HASHANA_ROW_SIZE = { timeSize: 'lg', labelSize: 'sm' };
- *   tz_tfilot_col({ timeText: '06:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...ROSH_HASHANA_ROW_SIZE })
+ *   var D = { timeSize: 'lg', labelSize: 'sm' };
+ *   tz_tfilot_col({ timeText: '06:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D })
  *
  * @param {object} opts
  * @param {string}  [opts.timeText='']                              Static time, e.g. '06:00'
@@ -311,8 +311,8 @@ export function tz_tfilot_grouped_prayer_row_html(prayerTitle, columnsHtml, titl
  *   var D = { timeSize: 'lg', labelSize: 'sm' };
  *   var row = tz_tfilot_row('שחרית', { iconSvg: tz_icon_sun_svg() });
  *   row.add([
- *       tz_tfilot_col({ timeText: '06:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...ROSH_HASHANA_ROW_SIZE }),
- *       tz_tfilot_col({ timeText: '06:50', timeId: 'shacharit_b', captionText: 'שחרית ב', ...ROSH_HASHANA_ROW_SIZE }),
+ *       tz_tfilot_col({ timeText: '06:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D }),
+ *       tz_tfilot_col({ timeText: '06:50', timeId: 'shacharit_b', captionText: 'שחרית ב', ...D }),
  *   ]);
  *   return row.html();
  *
@@ -427,17 +427,17 @@ export function tz_shabat_centered_card_body_html(timeId, captionText, wrapperCl
 export function get_tfilot_shacharit_grouped_card_inner_html(current_date) {
     var D = TFILOT_THEME.list;
     var row = tz_tfilot_row('שחרית', { iconSvg: tz_icon_sun_svg() });
-    row.add(tz_tfilot_col({ timeText: '6:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...ROSH_HASHANA_ROW_SIZE }));
+    row.add(tz_tfilot_col({ timeText: '6:00', timeId: 'shacharit_a', captionText: 'שחרית א', ...D }));
     /* Slichot slot: show only during the slichot season. */
     if (is_between_dates_local(current_date, '2025-09-14T10:00', '2025-10-01T18:00')) {
         row.add(tz_tfilot_col({
             extraClass: 'hidden-element slichot',
-            timeText: '06:30', timeId: 'slichot', captionText: 'סליחות (משוער)', ...ROSH_HASHANA_ROW_SIZE,
+            timeText: '06:30', timeId: 'slichot', captionText: 'סליחות (משוער)', ...D,
         }));
     }
     row.add([
-        tz_tfilot_col({ timeText: '6:50', timeId: 'shacharit_b', captionText: 'שחרית ב', ...ROSH_HASHANA_ROW_SIZE }),
-        tz_tfilot_col({ timeText: '8:30', timeId: 'shacharit_main', captionText: 'שחרית ג', captionId: 'shacharit-830-name', ...ROSH_HASHANA_ROW_SIZE }),
+        tz_tfilot_col({ timeText: '6:50', timeId: 'shacharit_b', captionText: 'שחרית ב', ...D }),
+        tz_tfilot_col({ timeText: '8:30', timeId: 'shacharit_main', captionText: 'שחרית ג', captionId: 'shacharit-830-name', ...D }),
     ]);
     return row.html();
 }
@@ -452,8 +452,8 @@ export function get_tfilot_mincha_grouped_card_inner_html() {
     var row = tz_tfilot_row('מנחה');
     row.add([
         tz_tfilot_mincha_dynamic_prepend_container_html(),
-        tz_tfilot_col({ extraClass: 'hidden-element mincha-gedola', timeText: mincha_gedola_time, captionText: 'מנחה גדולה', ...ROSH_HASHANA_ROW_SIZE }),
-        tz_tfilot_col({ timeId: 'mincha-regulr-days', captionText: 'מנחה קטנה', labelWrap: 'nowrap', ...ROSH_HASHANA_ROW_SIZE }),
+        tz_tfilot_col({ extraClass: 'hidden-element mincha-gedola', timeText: mincha_gedola_time, captionText: 'מנחה גדולה', ...D }),
+        tz_tfilot_col({ timeId: 'mincha-regulr-days', captionText: 'מנחה קטנה', labelWrap: 'nowrap', ...D }),
     ]);
     return row.html();
 }
@@ -479,15 +479,15 @@ export function get_tfilot_arvit_grouped_card_inner_html(current_date, arvit_tim
     var show_arvit_20 = tfilot_show_arvit_20_column(current_date, arvit_time);
     var D = TFILOT_THEME.list;
     var row = tz_tfilot_row('ערבית', { iconSvg: tz_icon_moon_svg() });
-    row.add(tz_tfilot_col({ timeId: 'arvit-regulr-days', captionText: 'ערבית א', ...ROSH_HASHANA_ROW_SIZE }));
+    row.add(tz_tfilot_col({ timeId: 'arvit-regulr-days', captionText: 'ערבית א', ...D }));
     if (show_arvit_20) {
-        row.add(tz_tfilot_col({ extraClass: 'arvit-8', timeText: '20:00', captionText: 'ערבית ב', ...ROSH_HASHANA_ROW_SIZE }));
+        row.add(tz_tfilot_col({ extraClass: 'arvit-8', timeText: '20:00', captionText: 'ערבית ב', ...D }));
     }
     row.add(tz_tfilot_col({
         timeText: '21:00',
         captionText: show_arvit_20 ? 'ערבית ג' : 'ערבית ב',
         captionId: 'arvit-9',
-        ...ROSH_HASHANA_ROW_SIZE,
+        ...D,
     }));
     return row.html();
 }
@@ -549,12 +549,12 @@ export function get_tfilot_day_times_col_weekday_html(rowOpts) {
     return tz_col({
         justify: 'between',
         children:
-            tz_day_time_row({ label: 'זמן טלית ותפילין', id: 'talit_tfilin',  hidden: true, extraClass: 'talit_tfilin', ...ROSH_HASHANA_ROW_SIZE }) +
-            tz_day_time_row({ label: 'זריחה',             id: 'sunrise',       ...ROSH_HASHANA_ROW_SIZE }) +
-            tz_day_time_row({ label: 'סוף זמן ק"ש',     id: 'shma_end',      ...ROSH_HASHANA_ROW_SIZE }) +
-            tz_day_time_row({ label: 'זמן מנחה גדולה',   id: 'mincha_gedola', ...ROSH_HASHANA_ROW_SIZE }) +
-            tz_day_time_row({ label: 'שקיעה',            id: 'sunset',        ...ROSH_HASHANA_ROW_SIZE }) +
-            tz_day_time_row({ label: 'צאת הכוכבים',      id: 'stars',         ...ROSH_HASHANA_ROW_SIZE }),
+            tz_day_time_row({ label: 'זמן טלית ותפילין', id: 'talit_tfilin',  hidden: true, extraClass: 'talit_tfilin', ...D }) +
+            tz_day_time_row({ label: 'זריחה',             id: 'sunrise',       ...D }) +
+            tz_day_time_row({ label: 'סוף זמן ק"ש',     id: 'shma_end',      ...D }) +
+            tz_day_time_row({ label: 'זמן מנחה גדולה',   id: 'mincha_gedola', ...D }) +
+            tz_day_time_row({ label: 'שקיעה',            id: 'sunset',        ...D }) +
+            tz_day_time_row({ label: 'צאת הכוכבים',      id: 'stars',         ...D }),
     });
 }
 
