@@ -505,24 +505,36 @@ export function tz_section_header({ title = '', parasha = false, level = 'h2', t
  * @param {string}  [opts.timeText='']    Static time text — for rows that never change at runtime
  * @param {boolean} [opts.hidden=false]   Start hidden — adds hidden-element on the card
  * @param {string}  [opts.extraClass]     Extra classes on the card (e.g. 'talit_tfilin')
+ * @param {string}  [opts.labelSizeClass] Override the label's text-size classes (default
+ *                                        'text-sm sm:text-base md:text-lg') — replaces, not appends,
+ *                                        so it can't lose a Tailwind cascade-order tie.
+ * @param {string}  [opts.timeSizeClass]  Override the time's text-size classes (default
+ *                                        'text-lg sm:text-xl md:text-2xl') — replaces, not appends.
+ * @param {string}  [opts.paddingClass]   Override the card's padding classes (default
+ *                                        'px-3 py-2 sm:px-3.5 sm:py-2.5') — replaces, not appends.
  * @returns {string} HTML string
  */
-export function tz_day_time_row({ label = '', id, timeText = '', hidden = false, extraClass } = {}) {
+export function tz_day_time_row({
+    label = '', id, timeText = '', hidden = false, extraClass,
+    labelSizeClass = 'text-sm sm:text-base md:text-lg',
+    timeSizeClass  = 'text-lg sm:text-xl md:text-2xl',
+    paddingClass   = 'px-3 py-2 sm:px-3.5 sm:py-2.5',
+} = {}) {
     var labelSpan =
-        '<span class="min-w-0 flex-1 break-words font-headline-md leading-snug text-on-surface' +
-        ' text-sm sm:text-base md:text-lg">' + label + '</span>';
+        '<span class="min-w-0 flex-1 break-words font-headline-md leading-snug text-on-surface ' +
+        labelSizeClass + '">' + label + '</span>';
 
     var timeSpan =
         '<span class="shrink-0 whitespace-nowrap font-display-time tabular-nums' +
-        ' text-primary tz-time-glow text-lg sm:text-xl md:text-2xl"' +
+        ' text-primary tz-time-glow ' + timeSizeClass + '"' +
         (id ? ' id="' + id + '"' : '') + '>' + timeText + '</span>';
 
     // Compact glass card — narrower border (4px) + smaller radius (lg) vs standard cards
     var cardClass =
         'tz-glass-card flex w-full min-w-0 max-w-full shrink-0' +
         ' items-center justify-between gap-2 overflow-hidden' +
-        ' rounded-lg border-r-4 border-primary px-3 py-2 shadow-glass' +
-        ' sm:gap-2.5 sm:px-3.5 sm:py-2.5' +
+        ' rounded-lg border-r-4 border-primary shadow-glass' +
+        ' sm:gap-2.5 ' + paddingClass +
         (hidden     ? ' hidden-element' : '') +
         (extraClass ? ' ' + extraClass  : '');
 
@@ -616,7 +628,12 @@ export function tz_flex_spacer() {
  *                                      'overflow-y-auto overflow-x-hidden overscroll-contain').
  *                                      Pass 'overflow-hidden' for cells that contain their own
  *                                      independently-scrolling sub-sections.
+ *   @param {string} [col.titleExtraClass] Extra classes on the header <h2>/<h3> — use on the
+ *                                      outermost columns (first = physical right, last = physical
+ *                                      left) to keep long titles clear of the absolutely-positioned
+ *                                      hero clock (top-left) / date pill (top-right).
  *
+
  * Alignment guideline: cells carry no horizontal padding so glass cards share
  * the exact left/right edges of the section-header bar above them.  Never add
  * pr-* / pl-* / px-* to cellClass — see tailwind-input.css for the full rule.
@@ -648,7 +665,11 @@ export function tz_page_grid(columns, opts) {
 
     /* Row 1: one section header per column */
     var headers = columns.map(function(col) {
-        return tz_section_header({ title: col.title || '', parasha: !!col.parasha });
+        return tz_section_header({
+            title: col.title || '',
+            parasha: !!col.parasha,
+            titleExtraClass: col.titleExtraClass,
+        });
     }).join('');
 
     /* Row 2: one content cell per column */

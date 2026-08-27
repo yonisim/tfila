@@ -49,12 +49,13 @@ export const DATES = {
     TISHA_BEAV:              { start: '2026-07-22T22:00',    end: '2026-07-23T20:30'    },
     SHABAT_CHAZON:           { start: '2025-08-01T19:00',    end: '2025-08-02T20:00'    },
     SLICHOT_DAYS:            { start: '2026-08-13T00:00',    end: '2026-09-30T23:00'    },
+    TSHUVA_DAYS:             { start: '2026-09-14T00:00',    end: '2026-09-21T23:00'    },
 
     SHOW_ROSH_HASHANA_EVE:   { start: '2025-09-21T00:01',    end: '2025-09-21T23:00'    },
-    ROSH_HASHANA_EVE:        { start: '2025-09-22T00:01',    end: '2025-09-23T02:00'    },
-    ROSH_HASHANA_A:          { start: '2025-09-23T02:01',    end: '2025-09-24T02:00'    },
-    ROSH_HASHANA_B:          { start: '2025-09-24T02:01',    end: '2025-09-24T19:00'    },
-    GEDALIA:                 { start: '2025-09-25T02:00',    end: '2025-09-25T23:00'    },
+    ROSH_HASHANA_EVE:        { start: '2026-09-11T00:01',    end: '2026-09-12T02:00'    },
+    ROSH_HASHANA_A:          { start: '2026-09-12T02:01',    end: '2026-09-13T02:00'    },
+    ROSH_HASHANA_B:          { start: '2026-09-13T02:01',    end: '2026-09-13T19:00'    },
+    GEDALIA:                 { start: '2026-09-14T02:00',    end: '2026-09-14T23:00'    },
 
     SHOW_KIPUR_EVE:          { start: '2025-09-30T02:00',    end: '2025-10-01T10:00'    },
     KIPUR_EVE:               { start: '2025-10-01T02:00',    end: '2025-10-01T22:00'    },

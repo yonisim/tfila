@@ -113,6 +113,10 @@ export function is_slihot_days(date) {
     return is_between_dates(date, DATES.SLICHOT_DAYS.start, DATES.SLICHOT_DAYS.end);
 }
 
+export function is_10_tshuva_days(date) {
+    return is_between_dates(date, DATES.TSHUVA_DAYS.start, DATES.TSHUVA_DAYS.end);
+}
+
 // ─── Chanuka ──────────────────────────────────────────────────────────────────
 
 export function is_hanuka(date) {

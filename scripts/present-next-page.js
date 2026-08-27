@@ -33,7 +33,7 @@ import {
     is_sukot_eve, is_sukot,
     is_present_simchat_tora_eve, is_simchat_tora_eve, is_simchat_tora,
     is_present_hakafot_single_page,
-    is_10_tevet_friday,
+    is_10_tevet_friday, is_slichot_season, is_10_tshuva_days
 } from './holiday-rules.js';
 
 import {
@@ -62,6 +62,10 @@ import {
     get_friday_prayers_col_html,
     get_hero_hud_html,
     get_tisha_beav_page_grid_html,
+    get_rosh_hashana_eve_page_grid_html,
+    get_rosh_hashana_a_page_grid_html,
+    get_rosh_hashana_b_page_grid_html,
+    get_rosh_hashana_b_shabat_shuva_eve_page_grid_html,
 } from './html-builders.js';
 
 const { execSync } = require('child_process');
@@ -109,6 +113,10 @@ var HERO_SLIDE_IDS = new Set([
     'shabat_single_page',
     'shavuot_single_page',
     'tisha_beav',
+    'rosh_hashana_eve_single_page',
+    'rosh_hashana_a_single_page',
+    'rosh_hashana_b_single_page',
+    'rosh_hashana_b_shabat_shuva_eve',
 ]);
 
 function setup_hero_slide(date, page_id) {
@@ -122,7 +130,11 @@ function setup_hero_slide(date, page_id) {
             fitTfilotHeroClock();
         });
     });
-    show_footer_custom_message_if_needed(date, page_id, wait_seconds * 10);
+    // רה"ש eve: skip the footer — the slichot time it would show is already a row
+    // in the main schedule, and the page uses the extra vertical room for larger text.
+    if (page_id !== 'rosh_hashana_eve_single_page') {
+        show_footer_custom_message_if_needed(date, page_id, wait_seconds * 10);
+    }
 }
 var donators_start_point = 0;
 var donators_slice_count = 20;
@@ -519,13 +531,9 @@ function round_to_five(some_date, round_down=false, reverse_round_offset=1){
 }
 
 function show_slichot(date){
-    if(is_between_dates(date, '2025-09-14T10:00', '2025-10-01T18:00')){
+    if(is_10_tshuva_days(date)){
         set_element_data('shacharit_a', '05:50');
         set_element_data('shacharit_b', '06:55');
-        var elements = document.getElementsByClassName('slichot');
-        for (var element of elements){
-            element.classList.add('show-element');
-        }
     }
 }
 
@@ -661,18 +669,24 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         }
         if(is_slihot_days(current_date)){
             let siftei_renanot_message = 'שפתי רננות בשעה 5:30 לפנות בוקר'
-            messages.push(siftei_renanot_message)
+            messages.push('שפתי רננות בשעה 5:30 לפנות בוקר')
         }
     }
 
-    if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
+    if(is_between_dates(current_date, '2026-09-27T16:00', '2024-09-29T03:00')){
         messages.push('במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30');
-        show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2026-09-14T01:00', '2026-09-21T14:00')){
+    if(is_slihot_days(current_date) && !is_shabat_time(current_date)){
+        if(is_shabat_time(current_date)) {
+            messages.push('שפתי רננות בשעה 5:30 לפנות בוקר')
+        } else {
+            messages.push('סליחות בשעה 6:35 (משוער)')
+        }
+    }
+
+    if(is_10_tshuva_days(current_date)){
         messages.push('המלך הקדוש   |   המלך המשפט');
-        show_footer = true;
     }
 
     if(is_between_dates(current_date, '2025-10-14T10:00', '2025-10-21T09:00')){
@@ -883,7 +897,9 @@ async function present_prayer_times_single_page(current_date){
     set_mincha_gedola_time(get_mincha_gedola_tfilot_time(current_date));
     fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time, set_element_html);
     show_shacharit_8_30();
-    show_slichot(current_date);
+    if(is_slichot_season(current_date)) {
+        show_slichot(current_date);
+    }
 
     if (is_mincha_13_30(current_date)){
         insert_html_at_start_of_element(
@@ -1271,59 +1287,32 @@ async function present_shavuot_prayer_times(current_date) {
 }
 
 async function present_rosh_hashana_eve_prayer_times(current_date){
-    load_html_into_page_elem_start('rosh_hashana_eve_1.html', 'first_column');
-    load_html_into_page_elem_end('rosh_hashana_eve_2.html', 'first_column');
-    load_html_into_page_elem_end('rosh_hashana_a.html', 'rosh_hashana_day');
-
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(get_date_plus_days(current_date, 1));
-    });
+    set_element_html('rosh_hashana_eve_grid', get_rosh_hashana_eve_page_grid_html());
+    present_day_times(get_date_plus_days(current_date, 1));
     return sleep_seconds(10*60);
 }
 
 async function present_rosh_hashana_a_prayer_times(current_date){
-    load_html_into_page_elem_end('rosh_hashana_a.html', 'first_column');
-    load_html_into_page_elem_end('rosh_hashana_b.html', 'rosh_hashana_day');
-    //load_html_into_page_elem_end('shabat_shuva_eve.html', 'rosh_hashana_day');
-
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date);
-    });
+    set_element_html('rosh_hashana_a_grid', get_rosh_hashana_a_page_grid_html());
+    present_day_times(current_date);
     return sleep_seconds(10*60);
 }
 
 async function present_rosh_hashana_b_prayer_times(current_date){
-    load_html_into_page_elem_end('rosh_hashana_b.html', 'first_column');
+    set_element_html('rosh_hashana_b_grid', get_rosh_hashana_b_page_grid_html());
 
-    var gedalia_date = get_date_plus_days(current_date, 1);
     var mincha_gedalia = '18:00'; //add_minutes_to_time(get_today_sunset(gedalia_date), -30);
     var arvit_gedalia = '18:52'; //get_today_stars(gedalia_date);
     set_element_html('mincha_gedalia', format_hour_and_minutes(mincha_gedalia));
     set_element_html('arvit_gedalia', format_hour_and_minutes(arvit_gedalia));
 
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date);
-    });
-
-    var this_week_times = get_week_times(current_date);
-    var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
-    var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
-    load_html_into_page_elem_start('shacharit.html', 'prayer_times');
-
-    load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
-        set_element_html('mincha-regulr-days', mincha_time);
-        set_element_html('arvit-regulr-days', arvit_time);
-    });
+    present_day_times(current_date);
     return sleep_seconds(10*60);
 }
 
 async function present_rosh_hashana_b_shabat_shuva_eve_prayer_times(current_date){
-    load_html_into_page_elem_end('rosh_hashana_b.html', 'first_column');
-    load_html_into_page_elem_end('shabat_shuva_eve.html', 'shabat');
-
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date);
-    });
+    set_element_html('rosh_hashana_b_shabat_shuva_grid', get_rosh_hashana_b_shabat_shuva_eve_page_grid_html());
+    present_day_times(current_date);
     return sleep_seconds(wait_seconds*10);
 }
 
