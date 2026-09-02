@@ -716,15 +716,16 @@ function rosh_hashana_day_a_rows_html(sizeOverride) {
     return rosh_hashana_day_a_rows_html_main(sizeOverride) + rosh_hashana_day_a_rows_html_overflow(sizeOverride);
 }
 
-function rosh_hashana_day_b_rows_html() {
+function rosh_hashana_day_b_rows_html(sizeOverride) {
+    var S = sizeOverride || ROSH_HASHANA_ROW_SIZE;
     return (
-        tz_day_time_row({ label: 'שחרית',                      timeText: '07:30', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'תקיעת שופר (משוער)',         timeText: '09:45', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'מוסף',                                          ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'תקיעת שופר לנשים',            timeText: '17:45', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'מנחה',                        timeText: '18:00', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'שיעור - עומר פדור',           timeText: '18:15', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'צאת החג וערבית',              timeText: '19:10', ...ROSH_HASHANA_ROW_SIZE })
+        tz_day_time_row({ label: 'שחרית',                      timeText: '07:30', ...S }) +
+        tz_day_time_row({ label: 'תקיעת שופר (משוער)',         timeText: '09:45', ...S }) +
+        tz_day_time_row({ label: 'מוסף',                                          ...S }) +
+        tz_day_time_row({ label: 'תקיעת שופר לנשים',            timeText: '17:45', ...S }) +
+        tz_day_time_row({ label: 'מנחה',                        timeText: '18:00', ...S }) +
+        tz_day_time_row({ label: 'שיעור - עומר פדור',           timeText: '18:15', ...S }) +
+        tz_day_time_row({ label: 'צאת החג וערבית',              timeText: '19:10', ...S })
     );
 }
 
@@ -761,8 +762,8 @@ function shabat_shuva_eve_rows_html() {
  *  this title down a notch rather than widening the column and re-cramping
  *  the row content that's sized correctly. */
 var ROSH_HASHANA_DAY_TIMES_COL = { titleExtraClass: 'text-[34px]' };
-function rosh_hashana_day_times_col_html() {
-    return tz_col({ gap: '1', children: get_tfilot_day_times_col_weekday_html(ROSH_HASHANA_ROW_SIZE) });
+function rosh_hashana_day_times_col_html(sizeOverride) {
+    return tz_col({ gap: '1', children: get_tfilot_day_times_col_weekday_html(sizeOverride || ROSH_HASHANA_ROW_SIZE) });
 }
 
 /* The hero HUD (clock top-left, date pill top-right) is absolutely positioned on
@@ -827,10 +828,11 @@ export function get_rosh_hashana_eve_page_grid_html() {
 }
 
 export function get_rosh_hashana_a_page_grid_html() {
+    var S = ROSH_HASHANA_EVE_ROW_SIZE;
     return tz_page_grid([
-        { title: 'א\' דראש השנה',   children: tz_col({ gap: '1', children: rosh_hashana_day_a_rows_html() }) },
-        { title: 'ב\' דראש השנה',   children: tz_col({ gap: '1', children: rosh_hashana_day_b_rows_html() }) },
-        { title: 'זמני היום בהלכה', children: rosh_hashana_day_times_col_html(), ...ROSH_HASHANA_DAY_TIMES_COL },
+        { title: 'א\' דראש השנה',   children: tz_col({ gap: '1', children: rosh_hashana_day_a_rows_html(S) }) },
+        { title: 'ב\' דראש השנה',   children: tz_col({ gap: '1', children: rosh_hashana_day_b_rows_html(S) }) },
+        { title: 'זמני היום בהלכה', children: rosh_hashana_day_times_col_html(S), ...ROSH_HASHANA_DAY_TIMES_COL },
     ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.35fr_1.3fr_1fr]' });
 }
 
