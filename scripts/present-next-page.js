@@ -119,6 +119,16 @@ var HERO_SLIDE_IDS = new Set([
     'rosh_hashana_b_shabat_shuva_eve',
 ]);
 
+/* Rosh Hashana slides skip the footer entirely: any time it would show already
+   appears as a row in the main schedule, and the pages use the extra vertical
+   room for larger text. */
+var ROSH_HASHANA_PAGE_IDS = new Set([
+    'rosh_hashana_eve_single_page',
+    'rosh_hashana_a_single_page',
+    'rosh_hashana_b_single_page',
+    'rosh_hashana_b_shabat_shuva_eve',
+]);
+
 function setup_hero_slide(date, page_id) {
     if (!HERO_SLIDE_IDS.has(page_id)) return;
     insert_html_at_start_of_element(page_id, get_hero_hud_html());
@@ -130,9 +140,7 @@ function setup_hero_slide(date, page_id) {
             fitTfilotHeroClock();
         });
     });
-    // רה"ש eve: skip the footer — the slichot time it would show is already a row
-    // in the main schedule, and the page uses the extra vertical room for larger text.
-    if (page_id !== 'rosh_hashana_eve_single_page') {
+    if (!ROSH_HASHANA_PAGE_IDS.has(page_id)) {
         show_footer_custom_message_if_needed(date, page_id, wait_seconds * 10);
     }
 }
