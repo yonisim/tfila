@@ -730,15 +730,16 @@ function rosh_hashana_day_b_rows_html(sizeOverride) {
 
 /** Fast of Gedalia rows shown under day_times on the ב' day slide. mincha_gedalia/
  *  arvit_gedalia are filled at runtime — see present_rosh_hashana_b_prayer_times(). */
-function gedalia_fast_rows_html() {
+function gedalia_fast_rows_html(sizeOverride) {
+    var S = sizeOverride || ROSH_HASHANA_ROW_SIZE;
     return (
-        tz_day_time_row({ label: 'שחרית א',         timeText: '05:50', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'סליחות',           timeText: '06:30', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'שחרית ב',         timeText: '07:00', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'מנחה',             id: 'mincha_gedalia', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'צאת הצום וערבית', id: 'arvit_gedalia',   ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'ערבית ב',         timeText: '20:00', ...ROSH_HASHANA_ROW_SIZE }) +
-        tz_day_time_row({ label: 'ערבית ג',         timeText: '21:00', ...ROSH_HASHANA_ROW_SIZE })
+        tz_day_time_row({ label: 'שחרית א',         timeText: '05:50', ...S }) +
+        tz_day_time_row({ label: 'סליחות',           timeText: '06:30', ...S }) +
+        tz_day_time_row({ label: 'שחרית ב',         timeText: '07:00', ...S }) +
+        tz_day_time_row({ label: 'מנחה',             id: 'mincha_gedalia', ...S }) +
+        tz_day_time_row({ label: 'צאת הצום וערבית', id: 'arvit_gedalia',   ...S }) +
+        tz_day_time_row({ label: 'ערבית ב',         timeText: '20:00', ...S }) +
+        tz_day_time_row({ label: 'ערבית ג',         timeText: '21:00', ...S })
     );
 }
 
@@ -836,10 +837,11 @@ export function get_rosh_hashana_a_page_grid_html() {
 }
 
 export function get_rosh_hashana_b_page_grid_html() {
+    var S = ROSH_HASHANA_EVE_ROW_SIZE;
     return tz_page_grid([
-        { title: 'ב\' דראש השנה',   children: tz_col({ gap: '1', children: rosh_hashana_day_b_rows_html() }) },
-        { title: 'צום גדליה',       children: tz_col({ gap: '1', children: gedalia_fast_rows_html() }) },
-        { title: 'זמני היום בהלכה', children: rosh_hashana_day_times_col_html(), ...ROSH_HASHANA_DAY_TIMES_COL },
+        { title: 'ב\' דראש השנה',   children: tz_col({ gap: '1', children: rosh_hashana_day_b_rows_html(S) }) },
+        { title: 'צום גדליה',       children: tz_col({ gap: '1', children: gedalia_fast_rows_html(S) }) },
+        { title: 'זמני היום בהלכה', children: rosh_hashana_day_times_col_html(S), ...ROSH_HASHANA_DAY_TIMES_COL },
     ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.3fr_1.05fr_1fr]' });
 }
 
