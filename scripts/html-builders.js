@@ -782,14 +782,14 @@ var ROSH_HASHANA_GRID_BASE_OPTS = { extraClass: 'mt-[84px]' };
    slichot time it would have shown is already the "סליחות" row below. That frees
    the ~174px the footer used to reserve at the bottom of the viewport, spent here
    as taller, roomier cards (padding grown from the shared 4px/side up to 10px/side).
-   Label/time size is capped by column WIDTH, not that freed vertical room, and the
-   three columns are equal-width (see get_rosh_hashana_eve_page_grid_html) — 19px/
-   21px is the largest that still avoids wrapping the longest label in the set,
-   "הדלקת נרות (נר נשמה ל-48 שעות)"; 20px already wraps it. */
+   Sized against the tallest column (8 rows) so it still clears the viewport even
+   with the longest label, "הדלקת נרות (נר נשמה ל-48 שעות)", wrapping to 2 lines —
+   wrapping that one row is accepted in exchange for larger text everywhere else,
+   rather than shrinking every row's font to keep that one row single-line. */
 var ROSH_HASHANA_EVE_ROW_SIZE = {
     ...ROSH_HASHANA_ROW_SIZE,
-    labelSizeClass: 'text-[19px]',
-    timeSizeClass:  'text-[21px]',
+    labelSizeClass: 'text-[27px] font-bold',
+    timeSizeClass:  'text-[30px] font-bold',
     paddingClass:   'px-3 py-[10px]',
 };
 

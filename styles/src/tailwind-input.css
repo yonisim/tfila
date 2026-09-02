@@ -403,6 +403,23 @@
     font-weight: 600 !important;
   }
 
+  /* Opt-in escape hatch for the rule above: a label/caption that explicitly asks
+     for `font-bold` (e.g. Rosh Hashana eve's larger row text) gets true bold (700)
+     instead of the semibold every other card label is forced to. One extra class
+     in the selector out-specifies the rule above regardless of source order. */
+  .tz-page .tz-glass-card :is(
+    .text-xs,
+    .text-sm,
+    .text-base,
+    .text-lg,
+    .font-headline-md,
+    .tz-inline-prayer-label,
+    .tz-label,
+    .tz-standalone-cap
+  ).font-bold {
+    font-weight: 700 !important;
+  }
+
 
   /* ===========================================================
      PAGE BACKGROUND  (Jerusalem stone photo behind all pages)
