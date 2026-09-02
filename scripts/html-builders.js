@@ -845,6 +845,18 @@ export function get_rosh_hashana_b_page_grid_html() {
     ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.3fr_1.05fr_1fr]' });
 }
 
+/** Standalone Tzom Gedalia — shown on its own (not as a rosh_hashana_b column)
+ *  when the fast falls on a day other than day B of Rosh Hashana. Reuses the
+ *  exact same row builders as the rosh_hashana_b page's gedalia/day_times
+ *  columns, just without the day-B column alongside them. */
+export function get_gedalia_page_grid_html() {
+    var S = ROSH_HASHANA_EVE_ROW_SIZE;
+    return tz_page_grid([
+        { title: 'צום גדליה',       children: tz_col({ gap: '1', children: gedalia_fast_rows_html(S) }) },
+        { title: 'זמני היום בהלכה', children: rosh_hashana_day_times_col_html(S), ...ROSH_HASHANA_DAY_TIMES_COL },
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.1fr_1fr]' });
+}
+
 export function get_rosh_hashana_b_shabat_shuva_eve_page_grid_html() {
     return tz_page_grid([
         { title: 'ב\' דראש השנה',   children: tz_col({ gap: '1', children: rosh_hashana_day_b_rows_html() }) },

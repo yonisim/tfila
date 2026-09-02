@@ -66,6 +66,7 @@ import {
     get_rosh_hashana_a_page_grid_html,
     get_rosh_hashana_b_page_grid_html,
     get_rosh_hashana_b_shabat_shuva_eve_page_grid_html,
+    get_gedalia_page_grid_html,
 } from './html-builders.js';
 
 const { execSync } = require('child_process');
@@ -117,9 +118,11 @@ var HERO_SLIDE_IDS = new Set([
     'rosh_hashana_a_single_page',
     'rosh_hashana_b_single_page',
     'rosh_hashana_b_shabat_shuva_eve',
+    'gedalia',
 ]);
 
-/* Rosh Hashana slides skip the footer entirely: any time it would show already
+/* Rosh Hashana slides (and the standalone Gedalia fast, which shares the same
+   שחרית/סליחות rows) skip the footer entirely: any time it would show already
    appears as a row in the main schedule, and the pages use the extra vertical
    room for larger text. */
 var ROSH_HASHANA_PAGE_IDS = new Set([
@@ -127,6 +130,7 @@ var ROSH_HASHANA_PAGE_IDS = new Set([
     'rosh_hashana_a_single_page',
     'rosh_hashana_b_single_page',
     'rosh_hashana_b_shabat_shuva_eve',
+    'gedalia',
 ]);
 
 function setup_hero_slide(date, page_id) {
@@ -1326,16 +1330,14 @@ async function present_rosh_hashana_b_shabat_shuva_eve_prayer_times(current_date
 
 
 async function present_gedalia_times(current_date){
-    var this_week_times = get_week_times(current_date);
+    set_element_html('gedalia_grid', get_gedalia_page_grid_html());
 
     var mincha_gedalia = '18:00'; //add_minutes_to_time(get_today_sunset(gedalia_date), -30);
     var arvit_gedalia = '18:52'; //get_today_stars(gedalia_date);
     set_element_html('mincha_gedalia', format_hour_and_minutes(mincha_gedalia));
     set_element_html('arvit_gedalia', format_hour_and_minutes(arvit_gedalia));
 
-    load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
-        present_day_times(current_date, true);
-    });
+    present_day_times(current_date);
     return sleep_seconds(wait_seconds*10);
 }
 
