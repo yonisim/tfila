@@ -780,15 +780,16 @@ var ROSH_HASHANA_GRID_BASE_OPTS = { extraClass: 'mt-[84px]' };
 
 /* Eve is the one Rosh Hashana slide with no footer (see setup_hero_slide) — the
    slichot time it would have shown is already the "סליחות" row below. That frees
-   the ~174px the footer used to reserve at the bottom of the viewport. Row width
-   is still the wrap ceiling (see ROSH_HASHANA_ROW_SIZE's own comment), so the win
-   here is taller, roomier cards instead of bigger text — padding grown from the
-   shared 4px/side up to 10px/side, sized to eve's own 9-row column (the tallest)
-   so it still clears the viewport with margin to spare. */
+   the ~174px the footer used to reserve at the bottom of the viewport, spent here
+   as taller, roomier cards (padding grown from the shared 4px/side up to 10px/side).
+   Label/time size is capped by column WIDTH, not that freed vertical room, and the
+   three columns are equal-width (see get_rosh_hashana_eve_page_grid_html) — 19px/
+   21px is the largest that still avoids wrapping the longest label in the set,
+   "הדלקת נרות (נר נשמה ל-48 שעות)"; 20px already wraps it. */
 var ROSH_HASHANA_EVE_ROW_SIZE = {
     ...ROSH_HASHANA_ROW_SIZE,
-    labelSizeClass: 'text-[23px]',
-    timeSizeClass:  'text-[25px]',
+    labelSizeClass: 'text-[19px]',
+    timeSizeClass:  'text-[21px]',
     paddingClass:   'px-3 py-[10px]',
 };
 
@@ -822,7 +823,7 @@ export function get_rosh_hashana_eve_page_grid_html() {
         { title: 'ערב ראש השנה', children: tz_col({ gap: '1', children: rosh_hashana_eve_rows_html_main(S) }) },
         { noHeader: true, children: col2_html },
         { noHeader: true, children: col3_html },
-    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.25fr_0.85fr_1.05fr]' });
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_1fr_1fr]' });
 }
 
 export function get_rosh_hashana_a_page_grid_html() {
