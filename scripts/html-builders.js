@@ -696,8 +696,7 @@ function rosh_hashana_day_a_rows_html_main(sizeOverride) {
         tz_day_time_row({ label: 'תקיעת שופר (משוער)',         timeText: '09:45', ...S }) +
         tz_day_time_row({ label: 'מוסף',                                          ...S }) +
         tz_day_time_row({ label: 'תקיעת שופר לנשים',            timeText: '17:45', ...S }) +
-        tz_day_time_row({ label: 'מנחה ותשליך',                 timeText: '18:00', ...S }) +
-        tz_day_time_row({ label: 'שיעור - איציק וולף',          timeText: '18:30', ...S })
+        tz_day_time_row({ label: 'מנחה ותשליך',                 timeText: '18:00', ...S })
     );
 }
 
