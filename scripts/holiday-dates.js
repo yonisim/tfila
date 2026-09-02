@@ -28,7 +28,7 @@ export const DATES = {
     PESACH_7_EVE:            { start: '2026-04-06T21:00',    end: '2026-04-07T17:00'    },
     PESACH_7:                { start: '2026-04-07T17:00',    end: '2026-04-08T20:00'    },
 
-    MINYAN_PLAG_ACTIVE:      { start: '2026-04-10T00:00',    end: '2026-09-10T23:00'    },
+    MINYAN_PLAG_ACTIVE:      { start: '2026-04-10T00:00',    end: '2026-09-02T23:00'    },
 
     MEMORIAL_DAY_SHOW:       { start: '2026-04-21T01:00',    end: '2026-04-21T22:00'    },
     ATZMAUT_SHOW:            { start: '2026-04-21T01:00',    end: '2026-04-22T20:00'    },
@@ -48,7 +48,7 @@ export const DATES = {
     TISHA_BEAV_EVE:          { start: '2026-07-22T17:00',    end: '2026-07-22T22:00'    },
     TISHA_BEAV:              { start: '2026-07-22T22:00',    end: '2026-07-23T20:30'    },
     SHABAT_CHAZON:           { start: '2025-08-01T19:00',    end: '2025-08-02T20:00'    },
-    SLICHOT_DAYS:            { start: '2026-08-13T00:00',    end: '2026-09-30T23:00'    },
+    SLICHOT_DAYS:            { start: '2026-09-06T16:00',    end: '2026-09-21T23:00'    },
     TSHUVA_DAYS:             { start: '2026-09-14T00:00',    end: '2026-09-21T23:00'    },
 
     SHOW_ROSH_HASHANA_EVE:   { start: '2025-09-21T00:01',    end: '2025-09-21T23:00'    },
