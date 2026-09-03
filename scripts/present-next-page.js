@@ -234,9 +234,11 @@ function is_shabat_irgun(date){
 
 function is_special_day(date){
     return is_shabat_time(date) |
-        is_pesach_eve(date) | is_taanit(date) | is_kipur(date) | 
+        is_pesach_eve(date) | is_taanit(date) | is_kipur(date) |
         is_present_memorial_day(date) | is_present_atzmaut(date) |
-        is_simchat_tora_eve(date) | is_simchat_tora(date) | is_purim(date)
+        is_simchat_tora_eve(date) | is_simchat_tora(date) | is_purim(date) |
+        is_rosh_hashana_eve(date) | is_rosh_hashana(date) | is_rosh_hashana_b(date) |
+        is_gedalia(date)
 }
 
 function get_specific_single_page(current_date){
@@ -301,7 +303,7 @@ function get_slide_show_items_ids(){
     if(is_taanit(date) | is_show_taanit(date)){
         slide_show_items.push('taanit');
     }
-    if (is_in_weekdays(date, [4,5]) & !is_special_day(date)){
+    if (is_in_weekdays(date, [4,5]) & !is_special_day(date) & !is_special_day(get_this_friday_date(date))){
         if(is_minyan_plag_active(date)){
             slide_show_items.push('friday_single_page_plag')
         } else {
@@ -1309,8 +1311,8 @@ async function present_rosh_hashana_a_prayer_times(current_date){
 async function present_rosh_hashana_b_prayer_times(current_date){
     set_element_html('rosh_hashana_b_grid', get_rosh_hashana_b_page_grid_html());
 
-    var mincha_gedalia = '18:00'; //add_minutes_to_time(get_today_sunset(gedalia_date), -30);
-    var arvit_gedalia = '18:52'; //get_today_stars(gedalia_date);
+    var mincha_gedalia = '18:15'; //add_minutes_to_time(get_today_sunset(gedalia_date), -30);
+    var arvit_gedalia = '19:07'; //get_today_stars(gedalia_date);
     set_element_html('mincha_gedalia', format_hour_and_minutes(mincha_gedalia));
     set_element_html('arvit_gedalia', format_hour_and_minutes(arvit_gedalia));
 
@@ -1328,8 +1330,8 @@ async function present_rosh_hashana_b_shabat_shuva_eve_prayer_times(current_date
 async function present_gedalia_times(current_date){
     set_element_html('gedalia_grid', get_gedalia_page_grid_html());
 
-    var mincha_gedalia = '18:00'; //add_minutes_to_time(get_today_sunset(gedalia_date), -30);
-    var arvit_gedalia = '18:52'; //get_today_stars(gedalia_date);
+    var mincha_gedalia = '18:15'; //add_minutes_to_time(get_today_sunset(gedalia_date), -30);
+    var arvit_gedalia = '19:07'; //get_today_stars(gedalia_date);
     set_element_html('mincha_gedalia', format_hour_and_minutes(mincha_gedalia));
     set_element_html('arvit_gedalia', format_hour_and_minutes(arvit_gedalia));
 

@@ -52,7 +52,7 @@ export const DATES = {
     SLICHOT_DAYS:            { start: '2026-09-06T16:00',    end: '2026-09-21T23:00'    },
     TSHUVA_DAYS:             { start: '2026-09-14T00:00',    end: '2026-09-21T23:00'    },
 
-    SHOW_ROSH_HASHANA_EVE:   { start: '2025-09-21T00:01',    end: '2025-09-21T23:00'    },
+    SHOW_ROSH_HASHANA_EVE:   { start: '2026-09-10T12:01',    end: '2026-09-11T23:00'    },
     ROSH_HASHANA_EVE:        { start: '2026-09-11T00:01',    end: '2026-09-12T02:00'    },
     ROSH_HASHANA_A:          { start: '2026-09-12T02:01',    end: '2026-09-13T02:00'    },
     ROSH_HASHANA_B:          { start: '2026-09-13T02:01',    end: '2026-09-13T19:00'    },

@@ -675,8 +675,8 @@ function rosh_hashana_eve_rows_html_main(sizeOverride) {
         tz_day_time_row({ label: 'שחרית ב',                        timeText: '07:30', ...S }) +
         tz_day_time_row({ label: 'שחרית ג',                        timeText: '08:30', ...S }) +
         tz_day_time_row({ label: 'מנחה גדולה',                     timeText: '13:15', ...S }) +
-        tz_day_time_row({ label: 'הדלקת נרות (נר נשמה ל-48 שעות)', timeText: '18:14', ...S }) +
-        tz_day_time_row({ label: 'מנחה ערב חג',                    timeText: '18:24', ...S })
+        tz_day_time_row({ label: 'הדלקת נרות (נר נשמה ל-48 שעות)', timeText: '18:29', ...S }) +
+        tz_day_time_row({ label: 'מנחה ערב חג',                    timeText: '18:39', ...S })
     );
 }
 
@@ -704,8 +704,8 @@ function rosh_hashana_day_a_rows_html_main(sizeOverride) {
 function rosh_hashana_day_a_rows_html_overflow(sizeOverride) {
     var S = sizeOverride || ROSH_HASHANA_ROW_SIZE;
     return (
-        tz_day_time_row({ label: 'ערבית של חג',             timeText: '19:00', ...S }) +
-        tz_day_time_row({ label: 'הדלקת נרות וחימום האוכל', timeText: '19:11', ...S })
+        tz_day_time_row({ label: 'ערבית של חג',             timeText: '19:15', ...S }) +
+        tz_day_time_row({ label: 'הדלקת נרות וחימום האוכל', timeText: '19:27', ...S })
     );
 }
 
@@ -723,8 +723,8 @@ function rosh_hashana_day_b_rows_html(sizeOverride) {
         tz_day_time_row({ label: 'מוסף',                                          ...S }) +
         tz_day_time_row({ label: 'תקיעת שופר לנשים',            timeText: '17:45', ...S }) +
         tz_day_time_row({ label: 'מנחה',                        timeText: '18:00', ...S }) +
-        tz_day_time_row({ label: 'שיעור - עומר פדור',           timeText: '18:15', ...S }) +
-        tz_day_time_row({ label: 'צאת החג וערבית',              timeText: '19:10', ...S })
+        tz_day_time_row({ label: 'שיעור - עומר פדור',           timeText: '18:45', ...S }) +
+        tz_day_time_row({ label: 'צאת החג וערבית',              timeText: '19:25', ...S })
     );
 }
 
@@ -733,6 +733,7 @@ function rosh_hashana_day_b_rows_html(sizeOverride) {
 function gedalia_fast_rows_html(sizeOverride) {
     var S = sizeOverride || ROSH_HASHANA_ROW_SIZE;
     return (
+        tz_day_time_row({ label: 'תחילת הצום',       timeText: '04:51', ...S }) +
         tz_day_time_row({ label: 'שחרית א',         timeText: '05:50', ...S }) +
         tz_day_time_row({ label: 'סליחות',           timeText: '06:30', ...S }) +
         tz_day_time_row({ label: 'שחרית ב',         timeText: '07:00', ...S }) +
