@@ -33,7 +33,7 @@ import {
     is_sukot_eve, is_sukot,
     is_present_simchat_tora_eve, is_simchat_tora_eve, is_simchat_tora,
     is_present_hakafot_single_page,
-    is_10_tevet_friday, is_slichot_season, is_10_tshuva_days
+    is_10_tevet_friday, is_sefardi_slichot_season, is_10_tshuva_days
 } from './holiday-rules.js';
 
 import {
@@ -679,18 +679,18 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
                 messages.push(mevarchim_message);
             }
         }
+
+        if(is_sefardi_slichot_season(current_date)){
+            messages.push('שפתי רננות בשעה 5:30 לפנות בוקר')
+        }
     }
 
-    if(is_between_dates(current_date, '2026-09-27T16:00', '2024-09-29T03:00')){
+    if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
         messages.push('במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30');
     }
 
     if(is_slihot_days(current_date)){
-        if(is_shabat_time(current_date)) {
-            messages.push('שפתי רננות בשעה 5:30 לפנות בוקר')
-        } else {
-            messages.push('סליחות בשעה 6:35 (משוער)')
-        }
+        messages.push('סליחות בשעה 6:35 (משוער)')
     }
 
     if(is_10_tshuva_days(current_date)){

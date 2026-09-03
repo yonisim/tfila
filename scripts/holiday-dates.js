@@ -48,6 +48,7 @@ export const DATES = {
     TISHA_BEAV_EVE:          { start: '2026-07-22T17:00',    end: '2026-07-22T22:00'    },
     TISHA_BEAV:              { start: '2026-07-22T22:00',    end: '2026-07-23T20:30'    },
     SHABAT_CHAZON:           { start: '2025-08-01T19:00',    end: '2025-08-02T20:00'    },
+    SIFTEI_RENANOT:          { start: '2026-08-13T19:00',    end: '2026-09-21T19:00'    },
     SLICHOT_DAYS:            { start: '2026-09-06T16:00',    end: '2026-09-21T23:00'    },
     TSHUVA_DAYS:             { start: '2026-09-14T00:00',    end: '2026-09-21T23:00'    },
 

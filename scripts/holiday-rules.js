@@ -117,6 +117,10 @@ export function is_10_tshuva_days(date) {
     return is_between_dates(date, DATES.TSHUVA_DAYS.start, DATES.TSHUVA_DAYS.end);
 }
 
+export function is_sefardi_slichot_season(date) {
+    return is_between_dates(date, DATES.SIFTEI_RENANOT.start, DATES.SIFTEI_RENANOT.end);
+}
+
 // ─── Chanuka ──────────────────────────────────────────────────────────────────
 
 export function is_hanuka(date) {
@@ -251,8 +255,3 @@ export function is_10_tevet_friday(date) {
     return is_between_dates(date, DATES.TEN_TEVET_FRIDAY.start, DATES.TEN_TEVET_FRIDAY.end);
 }
 
-// ─── Slichot season ───────────────────────────────────────────────────────────
-
-export function is_slichot_season(date) {
-    return is_slihot_days(date);
-}
