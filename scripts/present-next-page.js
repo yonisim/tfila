@@ -905,7 +905,7 @@ async function present_prayer_times_single_page(current_date){
     set_mincha_gedola_time(get_mincha_gedola_tfilot_time(current_date));
     fill_tfilot_prayer_times_grouped_cards(current_date, arvit_time, set_element_html);
     show_shacharit_8_30();
-    if(is_slichot_season(current_date)) {
+    if(is_slihot_days(current_date)) {
         show_slichot(current_date);
     }
 
