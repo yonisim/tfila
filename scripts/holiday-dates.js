@@ -49,7 +49,7 @@ export const DATES = {
     TISHA_BEAV:              { start: '2026-07-22T22:00',    end: '2026-07-23T20:30'    },
     SHABAT_CHAZON:           { start: '2025-08-01T19:00',    end: '2025-08-02T20:00'    },
     SIFTEI_RENANOT:          { start: '2026-08-13T19:00',    end: '2026-09-21T19:00'    },
-    SLICHOT_DAYS:            { start: '2026-09-06T16:00',    end: '2026-09-21T23:00'    },
+    SLICHOT_DAYS:            { start: '2026-09-06T16:00',    end: '2026-09-19T23:00'    },
     TSHUVA_DAYS:             { start: '2026-09-14T00:00',    end: '2026-09-21T23:00'    },
 
     SHOW_ROSH_HASHANA_EVE:   { start: '2026-09-10T12:01',    end: '2026-09-11T23:00'    },
@@ -58,9 +58,9 @@ export const DATES = {
     ROSH_HASHANA_B:          { start: '2026-09-13T02:01',    end: '2026-09-13T19:00'    },
     GEDALIA:                 { start: '2026-09-14T02:00',    end: '2026-09-14T23:00'    },
 
-    SHOW_KIPUR_EVE:          { start: '2025-09-30T02:00',    end: '2025-10-01T10:00'    },
-    KIPUR_EVE:               { start: '2025-10-01T02:00',    end: '2025-10-01T22:00'    },
-    KIPUR:                   { start: '2025-10-01T18:00',    end: '2025-10-02T19:00'    },
+    SHOW_KIPUR_EVE:          { start: '2026-09-19T02:00',    end: '2026-09-20T12:00'    },
+    KIPUR_EVE:               { start: '2026-09-20T02:00',    end: '2026-09-20T18:00'    },
+    KIPUR:                   { start: '2026-09-20T18:00',    end: '2026-09-21T19:00'    },
 
     SUKOT_VACATION:          { start: '2025-10-04',          end: '2025-10-15'          },
     SUKOT_EVE:               { start: '2025-10-05T19:00',    end: '2025-10-06T14:00'    },

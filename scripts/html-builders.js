@@ -866,6 +866,134 @@ export function get_rosh_hashana_b_shabat_shuva_eve_page_grid_html() {
     ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.3fr_0.9fr_1fr]' });
 }
 
+// ─── Yom Kippur single-page grid builders ────────────────────────────────────
+// Static per-year content (times don't move night to night) — update the rows
+// below each year, same convention as the Rosh Hashana section above.
+//
+// Erev Yom Kippur has too much content (morning shacharit/slichot + candle-
+// lighting/kol nidrei + a full preview of the next day) for one legible slide,
+// so it runs in two modes depending on is_show_kipur_eve(current_date):
+//   - true  (until noon): the morning rows are still relevant, so the eve
+//     schedule and the day's schedule alternate as two full-width, single-
+//     column slides — see get_kipur_eve_full_page_grid_html/
+//     get_kipur_day_full_page_grid_html and present_kipur_eve_times().
+//   - false (after noon): the morning rows no longer apply, freeing enough
+//     room to show the (now-shorter) eve schedule and the day schedule
+//     side by side in one slide — get_kipur_eve_combined_page_grid_html().
+// No footer on any Kipur slide (see ROSH_HASHANA_PAGE_IDS in present-next-
+// page.js) — that space goes to larger row text instead.
+
+/** Row size for the two full-width single-column slides (10-11 rows, but with
+ *  the full page height to themselves and no footer). */
+var KIPUR_FULL_ROW_SIZE = {
+    labelSizeClass: 'text-[24px]',
+    timeSizeClass:  'text-[26px]',
+    paddingClass:   'px-3 py-1.5',
+};
+
+/** Row size for the combined 2-column slide (eve + day side by side) and the
+ *  standalone day slide's own column — half the width of the full slides, so
+ *  smaller than KIPUR_FULL_ROW_SIZE despite also having the footer's space. */
+var KIPUR_SPLIT_ROW_SIZE = {
+    labelSizeClass: 'text-[20px]',
+    timeSizeClass:  'text-[22px]',
+    paddingClass:   'px-3 py-1',
+};
+
+/** Erev Yom Kippur's own weekday morning shacharit/slichot — relevant only
+ *  while is_show_kipur_eve(current_date) is true (until noon). Not part of
+ *  the Yamim Noraim schedule itself, so untouched by the yearly PDF —
+ *  carried over unchanged. */
+function kipur_eve_morning_rows_html(sizeOverride) {
+    var S = sizeOverride || KIPUR_FULL_ROW_SIZE;
+    return (
+        tz_day_time_row({ label: 'שחרית א',           timeText: '06:00', ...S }) +
+        tz_day_time_row({ label: 'סליחות (משוער)',     timeText: '06:35', ...S }) +
+        tz_day_time_row({ label: 'שחרית ב',           timeText: '06:50', ...S }) +
+        tz_day_time_row({ label: 'סליחות מניין שני',   timeText: '08:15', ...S }) +
+        tz_day_time_row({ label: 'שחרית ג',           timeText: '08:30', ...S })
+    );
+}
+
+/** Candle lighting → arvit — always shown on the eve slide(s), with or
+ *  without the morning rows ahead of it. chag_in/kol_nidrei are filled at
+ *  runtime — see present_kipur_eve_times(). */
+function kipur_eve_prayer_rows_html(sizeOverride) {
+    var S = sizeOverride || KIPUR_FULL_ROW_SIZE;
+    return (
+        tz_day_time_row({ label: 'מנחה',                      timeText: '13:15', ...S }) +
+        tz_day_time_row({ label: 'הדלקת נרות וכניסת הצום',   id: 'chag_in',    ...S }) +
+        tz_day_time_row({ label: 'כל נדרי - הרב נחום',        id: 'kol_nidrei', ...S }) +
+        tz_day_time_row({ label: 'דבר תורה - הרב נחום',                        ...S }) +
+        tz_day_time_row({ label: 'ערבית - ברק אפרתי',                          ...S })
+    );
+}
+
+/** Full Yom Kippur day schedule — shown as its own slide/column in every mode. */
+function kipur_day_rows_html(sizeOverride) {
+    var S = sizeOverride || KIPUR_FULL_ROW_SIZE;
+    return (
+        tz_day_time_row({ label: 'שחרית - ברוך קורצוויל',                     timeText: '07:30', ...S }) +
+        tz_day_time_row({ label: 'קריאת התורה - נועם מייזל',                                     ...S }) +
+        tz_day_time_row({ label: 'יזכור (משוער)',                             timeText: '10:20', ...S }) +
+        tz_day_time_row({ label: 'מוסף - צביקה לוין',                                            ...S }) +
+        tz_day_time_row({ label: 'מנחה',                                      timeText: '16:00', ...S }) +
+        tz_day_time_row({ label: '"אל נורא עלילה" ודבר תורה - הרב נחום',       timeText: '17:10', ...S }) +
+        tz_day_time_row({ label: 'נעילה - ברק אפרתי',                         timeText: '17:25', ...S }) +
+        tz_day_time_row({ label: 'שקיעת החמה',                                timeText: '18:41', ...S }) +
+        tz_day_time_row({ label: 'תקיעת שופר',                                timeText: '19:00', ...S }) +
+        tz_day_time_row({ label: 'צאת הצום',                                  timeText: '19:15', ...S }) +
+        tz_day_time_row({ label: 'ערבית וקידוש לבנה',                                            ...S })
+    );
+}
+
+/** Morning phase, slide 1/2: ערב יום כיפור alone, full width. */
+export function get_kipur_eve_full_page_grid_html() {
+    var S = KIPUR_FULL_ROW_SIZE;
+    var col_html = tz_col({ gap: '1.5', children: kipur_eve_morning_rows_html(S) + kipur_eve_prayer_rows_html(S) });
+    return tz_page_grid([
+        { title: 'ערב יום כיפור', children: col_html },
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-1' });
+}
+
+/** Morning phase, slide 2/2: יום כיפור alone, full width — alternates with
+ *  get_kipur_eve_full_page_grid_html() in present_kipur_eve_times(). */
+export function get_kipur_day_full_page_grid_html() {
+    return tz_page_grid([
+        { title: 'יום כיפור', id: 'kipur_day', children: kipur_day_rows_html(KIPUR_FULL_ROW_SIZE) },
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-1' });
+}
+
+/** Afternoon phase (after noon, once the morning rows no longer apply): eve
+ *  (candle-lighting → arvit only) and the day's schedule side by side. */
+export function get_kipur_eve_combined_page_grid_html() {
+    var S = KIPUR_SPLIT_ROW_SIZE;
+    return tz_page_grid([
+        { title: 'ערב יום כיפור', children: tz_col({ gap: '1', children: kipur_eve_prayer_rows_html(S) }) },
+        { title: 'יום כיפור',     id: 'kipur_day', children: kipur_day_rows_html(S) },
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_1fr]' });
+}
+
+/** Day slide: col 1 is יום כיפור's own schedule, col 2 stacks the halachic
+ *  day-times for the day after (present_day_times fills it) above זמני השבוע
+ *  — the same Friday-vs-regular-week fragment every other holiday's second
+ *  column reuses, so that swap is left as-is; see present_kipur_times(). */
+export function get_kipur_page_grid_html() {
+    var S = KIPUR_SPLIT_ROW_SIZE;
+    var col2_html = tz_col({
+        id: 'second_column', gap: '1', justify: 'between',
+        children:
+            tz_section_header({ title: 'זמני היום בהלכה', level: 'h3' }) +
+            tz_col({ gap: '1', children: get_day_times_rows_html(S) }) +
+            tz_section_header({ title: 'זמני השבוע', level: 'h3' }) +
+            tz_col({ id: 'prayer_times', gap: '1', children: '' }),
+    });
+    return tz_page_grid([
+        { title: 'יום כיפור', id: 'kipur_day', children: kipur_day_rows_html(S) },
+        { noHeader: true, children: col2_html },
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_1fr]' });
+}
+
 // ─── Friday single-page grid builders ────────────────────────────────────────
 
 /**

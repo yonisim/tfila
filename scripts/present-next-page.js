@@ -67,6 +67,10 @@ import {
     get_rosh_hashana_b_page_grid_html,
     get_rosh_hashana_b_shabat_shuva_eve_page_grid_html,
     get_gedalia_page_grid_html,
+    get_kipur_eve_full_page_grid_html,
+    get_kipur_day_full_page_grid_html,
+    get_kipur_eve_combined_page_grid_html,
+    get_kipur_page_grid_html,
 } from './html-builders.js';
 
 const { execSync } = require('child_process');
@@ -119,18 +123,23 @@ var HERO_SLIDE_IDS = new Set([
     'rosh_hashana_b_single_page',
     'rosh_hashana_b_shabat_shuva_eve',
     'gedalia',
+    'kipur_eve_single_page',
+    'kipur_single_page',
 ]);
 
 /* Rosh Hashana slides (and the standalone Gedalia fast, which shares the same
    שחרית/סליחות rows) skip the footer entirely: any time it would show already
    appears as a row in the main schedule, and the pages use the extra vertical
-   room for larger text. */
+   room for larger text. Both Kipur slides join them for the same reason —
+   the footer message duplicated a row that's already on screen. */
 var ROSH_HASHANA_PAGE_IDS = new Set([
     'rosh_hashana_eve_single_page',
     'rosh_hashana_a_single_page',
     'rosh_hashana_b_single_page',
     'rosh_hashana_b_shabat_shuva_eve',
     'gedalia',
+    'kipur_eve_single_page',
+    'kipur_single_page',
 ]);
 
 function setup_hero_slide(date, page_id) {
@@ -545,7 +554,7 @@ function round_to_five(some_date, round_down=false, reverse_round_offset=1){
 }
 
 function show_slichot(date){
-    if(is_10_tshuva_days(date)){
+    if(is_slihot_days(date)){
         set_element_data('shacharit_a', '05:50');
         set_element_data('shacharit_b', '06:55');
     }
@@ -692,7 +701,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     }
 
     if(is_slihot_days(current_date)){
-        messages.push('סליחות בשעה 6:35 (משוער)')
+        messages.push('סליחות בשעה 6:30 (משוער)')
     }
 
     if(is_10_tshuva_days(current_date)){
@@ -1444,39 +1453,41 @@ async function present_day_times_page(current_date){
     return sleep_seconds(20);
 }
 
+/* Toggles which of the two morning-phase Kipur eve slides shows next — see
+   present_kipur_eve_times(). Flips on every call, so each pass through
+   loop_pages() alternates eve/day instead of picking one and sticking to it. */
+var kipur_eve_view_toggle = false;
+
 async function present_kipur_eve_times(current_date){
-    var chag_in = '18:02';
-    if(is_show_kipur_eve(current_date)){
-        load_html_into_page_elem_start('kipur_eve_morning.html', 'kipur_eve_times');
-    } else {
-        load_html_into_page_elem_end('day_times_embedded_with_title.html', 'first_column', () => {
-            load_html_into_page_elem_start('day_times_inner.html', 'day_times_inner', () => {
-                present_day_times(current_date);
-            });
-        });
+    var chag_in = '18:17';
+
+    if (is_show_kipur_eve(current_date)){
+        // Morning phase: too much content (weekday morning + candle-lighting +
+        // a full day preview) for one legible slide, so eve and day alternate
+        // as two full-width slides instead of sharing a cramped 2-column one.
+        kipur_eve_view_toggle = !kipur_eve_view_toggle;
+        if (kipur_eve_view_toggle){
+            set_element_html('kipur_eve_grid', get_kipur_eve_full_page_grid_html());
+            set_element_html('chag_in', chag_in);
+            set_element_html('kol_nidrei', add_minutes_to_time(chag_in, 10));
+        } else {
+            set_element_html('kipur_eve_grid', get_kipur_day_full_page_grid_html());
+        }
+        return sleep_seconds(60);
     }
 
-    load_html_into_page_elem_end('kipur_eve_a.html', 'kipur_eve_times', () => {
-        set_element_html('chag_in', chag_in);
-        set_element_html('kol_nidrei', add_minutes_to_time(chag_in, 10));
-    });
-    load_html_into_page_elem_start('kipur.html', 'kipur_day');
-    load_html_into_page_elem_end('kipur_a.html', 'kipur_day');
-
-    show_footer_custom_message_if_needed(current_date, 'kipur_eve_single_page');
+    // Afternoon phase: the morning rows no longer apply, so eve (candle-
+    // lighting → arvit only) and the day's schedule fit side by side.
+    set_element_html('kipur_eve_grid', get_kipur_eve_combined_page_grid_html());
+    set_element_html('chag_in', chag_in);
+    set_element_html('kol_nidrei', add_minutes_to_time(chag_in, 10));
 
     return sleep_seconds(60*3);
 }
 
 async function present_kipur_times(current_date){
-    load_html_into_page_elem_start('kipur.html', 'kipur_day');
-    load_html_into_page_elem_end('kipur_a.html', 'kipur_day');
-
-    load_html_into_page_elem_start('day_times_embedded_with_title.html', 'second_column', () => {
-        load_html_into_page_elem_start('day_times_inner.html', 'day_times_inner', () => {
-            present_day_times(get_date_plus_days(current_date, 1));
-        });
-    });
+    set_element_html('kipur_grid', get_kipur_page_grid_html());
+    present_day_times(get_date_plus_days(current_date, 1));
 
     if(is_in_weekdays(current_date, [4,5])){
         load_html_into_page_elem_start('friday_times_embedded_with_title.html', 'second_column', () => {

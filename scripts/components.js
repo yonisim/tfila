@@ -556,13 +556,16 @@ export function tz_day_time_row({
  *                                             Omit for default (flex-start)
  * @param {string|number} [opts.gap='2']       Tailwind gap scale — '2', '2.5', '3', …
  * @param {string}        [opts.extraClass]    Extra classes on the wrapper
+ * @param {string}        [opts.id]            Id attribute on the wrapper — for a column that JS
+ *                                             fills later (e.g. via set_element_html/insert_html_at_*)
  * @returns {string} HTML string
  */
-export function tz_col({ children = '', justify, gap = '2', extraClass } = {}) {
+export function tz_col({ children = '', justify, gap = '2', extraClass, id } = {}) {
     var justifyClass = justify    ? ' justify-' + justify : '';
     var extra        = extraClass ? ' ' + extraClass      : '';
+    var idAttr        = id         ? ' id="' + id + '"'    : '';
     return (
-        '<div class="flex min-h-0 min-w-0 w-full max-w-full flex-1 flex-col gap-' + gap +
+        '<div' + idAttr + ' class="flex min-h-0 min-w-0 w-full max-w-full flex-1 flex-col gap-' + gap +
         justifyClass + extra + '">' +
         children +
         '</div>'
