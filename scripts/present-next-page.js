@@ -1306,7 +1306,7 @@ async function present_shavuot_prayer_times(current_date) {
 }
 
 async function present_rosh_hashana_eve_prayer_times(current_date){
-    set_element_html('rosh_hashana_eve_grid', get_rosh_hashana_eve_page_grid_html());
+    set_element_html('rosh_hashana_eve_grid', get_rosh_hashana_eve_page_grid_html(current_date));
     present_day_times(get_date_plus_days(current_date, 1));
     return sleep_seconds(10*60);
 }

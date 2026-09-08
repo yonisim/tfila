@@ -641,6 +641,12 @@ export function tz_flex_spacer() {
  *                                      nothing of its own to title at the top (a blank `title: ''`
  *                                      still reserves a full header-row-height strip of dead space).
  *
+ *   @param {number} [col.headerColSpan] Widen this column's header bar to cover the next
+ *                                      (headerColSpan - 1) columns as well, for a section whose
+ *                                      content runs on into them; those columns emit no header of
+ *                                      their own but keep their content in the normal content row,
+ *                                      so every column's first row still starts at the same height.
+ *
 
 
  * Alignment guideline: cells carry no horizontal padding so glass cards share
@@ -677,6 +683,7 @@ export function tz_page_grid(columns, opts) {
     // in this file, so it silently compiles to nothing. A lookup table of whole
     // literal class names is what actually gets detected and generated.
     var COL_START = ['col-start-1', 'col-start-2', 'col-start-3', 'col-start-4', 'col-start-5', 'col-start-6'];
+    var COL_SPAN  = ['col-span-1',  'col-span-2',  'col-span-3',  'col-span-4',  'col-span-5',  'col-span-6'];
 
     /* Row 1: one section header per column — omitted (and that column's content
        cell stretched to span both grid rows instead, via col-start/row-start/
@@ -690,13 +697,23 @@ export function tz_page_grid(columns, opts) {
        later header would silently shift left into the gap) but is harmless for
        every existing caller, none of which set noHeader, since it reproduces
        exactly the placement auto-flow already gave them. */
+    /* A col.headerColSpan of n means the columns after it are already covered by that
+       header bar and must not emit one of their own (two bars in the same grid cell
+       would overlap); their content cells stay in the content row regardless, which
+       is what keeps their first row level with the spanning column's first row. */
+    var covered = {};
+    columns.forEach(function(col, i) {
+        for (var k = 1; k < (col.headerColSpan || 1); k++) { covered[i + k] = true; }
+    });
+
     var headers = columns.map(function(col, i) {
-        if (col.noHeader) { return ''; }
+        if (col.noHeader || covered[i]) { return ''; }
+        var span = col.headerColSpan > 1 ? ' ' + COL_SPAN[col.headerColSpan - 1] : '';
         return tz_section_header({
             title: col.title || '',
             parasha: !!col.parasha,
             titleExtraClass: col.titleExtraClass,
-            extraClass: COL_START[i] + ' row-start-1',
+            extraClass: COL_START[i] + ' row-start-1' + span,
         });
     }).join('');
 
