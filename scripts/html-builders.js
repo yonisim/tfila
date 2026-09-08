@@ -776,8 +776,13 @@ function shabat_shuva_eve_rows_html() {
  *  this title down a notch rather than widening the column and re-cramping
  *  the row content that's sized correctly. */
 var ROSH_HASHANA_DAY_TIMES_COL = { titleExtraClass: 'text-[34px]' };
+/*  Rows are packed at the column's own gap rather than spread down its full height:
+ *  the shared weekday builder (get_tfilot_day_times_col_weekday_html) wraps them in a
+ *  justify-between column, which reads as airy on a slide of its own but as adrift
+ *  beside the packed prayer columns of every Rosh Hashana slide — where this column
+ *  always has the fewest rows of the page. Hence the rows, not that wrapper. */
 function rosh_hashana_day_times_col_html(sizeOverride) {
-    return tz_col({ gap: '1', children: get_tfilot_day_times_col_weekday_html(sizeOverride || ROSH_HASHANA_ROW_SIZE) });
+    return tz_col({ gap: '1', children: get_day_times_rows_html(sizeOverride || ROSH_HASHANA_ROW_SIZE) });
 }
 
 /* The hero HUD (clock top-left, date pill top-right) is absolutely positioned on

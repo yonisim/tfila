@@ -694,14 +694,12 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
         if(is_sefardi_slichot_season(current_date)){
             messages.push('שפתי רננות בשעה 5:30 לפנות בוקר')
         }
+    } else if(is_slihot_days(current_date)){
+        messages.push('סליחות בשעה 6:30 (משוער)')
     }
 
     if(is_between_dates(current_date, '2024-09-27T16:00', '2024-09-29T03:00')){
         messages.push('במוצאי שבת שיחה בשעה 00:00, סליחות בשעה 00:30');
-    }
-
-    if(is_slihot_days(current_date)){
-        messages.push('סליחות בשעה 6:30 (משוער)')
     }
 
     if(is_10_tshuva_days(current_date)){
