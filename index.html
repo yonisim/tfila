@@ -8,6 +8,7 @@
     <link href="./styles/scroll.css" rel="stylesheet">
     <link href="./styles/tfilot.css" rel="stylesheet">
     <link href="./styles/tailwind-tfilot-single-page.css" rel="stylesheet">
+    <link href="./styles/time-travel.css" rel="stylesheet">
     <title>משכן תחיה</title>
   </head>
   <body class="main-bg">
@@ -15,6 +16,9 @@
     <div id="main-div">
     </div>      
 
+    <!-- Ctrl+D — בחירת תאריך/שעה לבדיקה. חייב לרוץ לפני present-next-page.js
+         (script רגיל רץ לפני module נדחה) כדי לעטוף את Date בזמן. -->
+    <script src="./scripts/time-travel.js"></script>
     <script src="./scripts/present-next-page.js" type="module"></script>
   </body>
 </html>

@@ -1,0 +1,111 @@
+/* Time travel — כלי פיתוח (Ctrl+D). עומד בפני עצמו: לא Tailwind ולא CSS
+   של השקופיות, כדי שלא ישפיע על שום שקופית ולא יידרש build:css. */
+
+/* למטה משמאל — הפינה היחידה שאין בה שעון, תאריך עברי או כותרת */
+.tt-badge {
+  position: fixed;
+  bottom: 0.4rem;
+  left: 0.4rem;
+  z-index: 100000;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(200, 169, 91, 0.6);
+  border-radius: 0.4rem;
+  background: rgba(0, 0, 0, 0.75);
+  color: #c8a95b;
+  font-family: system-ui, sans-serif;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.tt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  font-family: system-ui, sans-serif;
+}
+
+.tt-panel {
+  min-width: 20rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(200, 169, 91, 0.5);
+  border-radius: 0.75rem;
+  background: #14161a;
+  color: #e8e6e1;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.6);
+}
+
+.tt-title {
+  margin-bottom: 1rem;
+  color: #c8a95b;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.tt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.tt-label {
+  font-size: 0.9rem;
+  color: #b7b2a8;
+}
+
+.tt-input {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgba(200, 169, 91, 0.4);
+  border-radius: 0.4rem;
+  background: #1e2126;
+  color: #e8e6e1;
+  font-family: inherit;
+  font-size: 1rem;
+  direction: ltr;
+}
+
+.tt-input:focus {
+  outline: 2px solid #c8a95b;
+  outline-offset: 1px;
+}
+
+.tt-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.tt-btn {
+  flex: 1;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tt-btn-primary {
+  background: #c8a95b;
+  color: #14161a;
+  font-weight: 600;
+}
+
+.tt-btn-ghost {
+  border-color: rgba(200, 169, 91, 0.4);
+  background: transparent;
+  color: #c8a95b;
+}
+
+.tt-hint {
+  margin-top: 0.75rem;
+  color: #8d887e;
+  font-size: 0.75rem;
+  text-align: center;
+}
