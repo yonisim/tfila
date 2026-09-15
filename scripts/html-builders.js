@@ -674,8 +674,8 @@ function rosh_hashana_eve_rows_html_main(sizeOverride, opts) {
         // ערב ראש השנה is a full calendar day — regular weekday shacharit/mincha
         // happen that morning before the chag-eve items below take over.
         (morning ? tz_day_time_row({ label: 'שחרית א',    timeText: '05:50', ...S }) : '') +
-        (morning ? tz_day_time_row({ label: 'סליחות',      timeText: '06:40', ...S }) : '') +
-        (morning ? tz_day_time_row({ label: 'שחרית ב',    timeText: '07:30', ...S }) : '') +
+        (morning ? tz_day_time_row({ label: 'סליחות',      timeText: '06:30', ...S }) : '') +
+        (morning ? tz_day_time_row({ label: 'שחרית ב',    timeText: '07:20', ...S }) : '') +
         (morning ? tz_day_time_row({ label: 'שחרית ג',    timeText: '08:30', ...S }) : '') +
         (morning ? tz_day_time_row({ label: 'מנחה גדולה', timeText: '13:15', ...S }) : '') +
         tz_day_time_row({ label: 'הדלקת נרות (נר נשמה ל-48 שעות)', timeText: '18:29', ...S }) +
