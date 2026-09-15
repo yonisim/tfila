@@ -915,34 +915,62 @@ export function get_rosh_hashana_b_shabat_shuva_eve_page_grid_html() {
 // Static per-year content (times don't move night to night) — update the rows
 // below each year, same convention as the Rosh Hashana section above.
 //
-// Erev Yom Kippur has too much content (morning shacharit/slichot + candle-
-// lighting/kol nidrei + a full preview of the next day) for one legible slide,
-// so it runs in two modes depending on is_show_kipur_eve(current_date):
-//   - true  (until noon): the morning rows are still relevant, so the eve
-//     schedule and the day's schedule alternate as two full-width, single-
-//     column slides — see get_kipur_eve_full_page_grid_html/
-//     get_kipur_day_full_page_grid_html and present_kipur_eve_times().
-//   - false (after noon): the morning rows no longer apply, freeing enough
-//     room to show the (now-shorter) eve schedule and the day schedule
-//     side by side in one slide — get_kipur_eve_combined_page_grid_html().
+// Yom Kippur carries more rows than any other slide here: erev Kipur's own
+// morning tfilot (5), the run-up to the fast (5), the fast day itself (11), the
+// halachic day times (6) and the week that resumes after (3). None of that goes
+// in a single tall column — see the sizing note below — so every Kipur slide
+// follows the Rosh Hashana idiom instead: a three-column grid, and a section
+// with more rows than one column holds cascades into the next column under a
+// headerColSpan bar (get_rosh_hashana_eve_page_grid_html does the same).
+//
+// Erev Yom Kippur runs in two modes depending on is_show_kipur_eve() — see
+// present_kipur_eve_times():
+//   - true  (until noon): eve's morning rows are still ahead, so eve and the
+//     fast day alternate as two slides — get_kipur_eve_full_page_grid_html() /
+//     get_kipur_day_full_page_grid_html(), the latter carrying the fast day's
+//     own halachic times.
+//   - false (after noon): the morning rows no longer apply, so what is left of
+//     eve sits beside the day in one slide, on screen the whole phase —
+//     get_kipur_eve_combined_page_grid_html().
 // No footer on any Kipur slide (see ROSH_HASHANA_PAGE_IDS in present-next-
-// page.js) — that space goes to larger row text instead.
+// page.js) — that space goes to the rows instead.
 
-/** Row size for the two full-width single-column slides (10-11 rows, but with
- *  the full page height to themselves and no footer). */
-var KIPUR_FULL_ROW_SIZE = {
-    labelSizeClass: 'text-[24px]',
-    timeSizeClass:  'text-[26px]',
-    paddingClass:   'px-3 py-1.5',
-};
+/* THE VERTICAL BUDGET. The kiosk runs 1920x1080 at 150% DPI, so its real CSS
+   viewport is 1280x672 — not the 1280x800 the screenshot scripts use. Measured
+   there (tests/_measure-kipur.js): the grid starts at y=106, its column header
+   is 47px, and main's bottom padding takes 8, leaving ~500px of column height
+   for rows. Every column below is kept inside that; a full-width single column
+   of ten or eleven rows (which is what these slides used to be) runs 60-70px
+   past the bottom edge of the real display even though it looks fine at 800px
+   tall. */
 
-/** Row size for the combined 2-column slide (eve + day side by side) and the
- *  standalone day slide's own column — half the width of the full slides, so
- *  smaller than KIPUR_FULL_ROW_SIZE despite also having the footer's space. */
-var KIPUR_SPLIT_ROW_SIZE = {
-    labelSizeClass: 'text-[20px]',
-    timeSizeClass:  'text-[22px]',
-    paddingClass:   'px-3 py-1',
+/* One size for every Kipur slide, and it is the Rosh Hashana slides' own —
+   ROSH_HASHANA_EVE_ROW_SIZE, what all four of those grids actually render at.
+   The two sets run back to back in the same fortnight on the same screen at the
+   same reading distance, so a Kipur-specific notch smaller (and unbolded) read
+   as a different display rather than as the same one.
+
+   The cost is width: at this size the fast day's longest labels want more room
+   on one line than a third of the grid gives them, so the fr-shares on each
+   grid below carry the difference (the size is fixed here; only the column
+   split moves). Where a label still wraps it is the same trade Rosh Hashana
+   eve already makes for 'הדלקת נרות (נר נשמה ל-48 שעות)' — one row on two lines
+   in exchange for larger type on every other row. tests/_measure-kipur.js
+   reports fill, overflow and per-column needed width for all four slides at
+   1280x672. */
+var KIPUR_ROW_SIZE = ROSH_HASHANA_EVE_ROW_SIZE;
+
+/** The day slide is the only Kipur grid that carries the week ahead as well as
+ *  the fast itself, so its column 2 holds eight rows plus an inline h3 — two
+ *  rows more than the tallest column on any other slide in the set, and 196px
+ *  past the bottom edge at the shared padding. The type is the same 27/30 bold
+ *  as everywhere else; the row padding is what gives way (down to px-3 py-1,
+ *  a notch under the tighter of the two Rosh Hashana paddings). At px-3 py-1 the
+ *  column landed 3px inside the bottom edge — true, but inside the margin a
+ *  different font fallback would eat, so it goes two notches rather than one. */
+var KIPUR_DAY_ROW_SIZE = {
+    ...KIPUR_ROW_SIZE,
+    paddingClass: 'px-3 py-[2px]',
 };
 
 /** Erev Yom Kippur's own weekday morning shacharit/slichot — relevant only
@@ -950,7 +978,7 @@ var KIPUR_SPLIT_ROW_SIZE = {
  *  the Yamim Noraim schedule itself, so untouched by the yearly PDF —
  *  carried over unchanged. */
 function kipur_eve_morning_rows_html(sizeOverride) {
-    var S = sizeOverride || KIPUR_FULL_ROW_SIZE;
+    var S = sizeOverride || KIPUR_ROW_SIZE;
     return (
         tz_day_time_row({ label: 'שחרית א',           timeText: '06:00', ...S }) +
         tz_day_time_row({ label: 'סליחות (משוער)',     timeText: '06:35', ...S }) +
@@ -964,7 +992,7 @@ function kipur_eve_morning_rows_html(sizeOverride) {
  *  without the morning rows ahead of it. chag_in/kol_nidrei are filled at
  *  runtime — see present_kipur_eve_times(). */
 function kipur_eve_prayer_rows_html(sizeOverride) {
-    var S = sizeOverride || KIPUR_FULL_ROW_SIZE;
+    var S = sizeOverride || KIPUR_ROW_SIZE;
     return (
         tz_day_time_row({ label: 'מנחה',                      timeText: '13:15', ...S }) +
         tz_day_time_row({ label: 'הדלקת נרות וכניסת הצום',   id: 'chag_in',    ...S }) +
@@ -974,69 +1002,157 @@ function kipur_eve_prayer_rows_html(sizeOverride) {
     );
 }
 
-/** Full Yom Kippur day schedule — shown as its own slide/column in every mode. */
-function kipur_day_rows_html(sizeOverride) {
-    var S = sizeOverride || KIPUR_FULL_ROW_SIZE;
+/* The fast day's eleven rows are over the per-column budget on every slide they
+ *  appear on, so they are split once here and every caller lays the two halves
+ *  out across two columns under one spanning title. The split is at נעילה —
+ *  roughly even (6/5) and, since both halves sit under the same header bar,
+ *  read as one continuous list rather than two sections. */
+
+/** שחרית → "אל נורא עלילה" (rows 1-6). */
+function kipur_day_rows_html_first(sizeOverride) {
+    var S = sizeOverride || KIPUR_ROW_SIZE;
     return (
         tz_day_time_row({ label: 'שחרית - ברוך קורצוויל',                     timeText: '07:30', ...S }) +
         tz_day_time_row({ label: 'קריאת התורה - נועם מייזל',                                     ...S }) +
         tz_day_time_row({ label: 'יזכור (משוער)',                             timeText: '10:20', ...S }) +
         tz_day_time_row({ label: 'מוסף - צביקה לוין',                                            ...S }) +
         tz_day_time_row({ label: 'מנחה',                                      timeText: '16:00', ...S }) +
-        tz_day_time_row({ label: '"אל נורא עלילה" ודבר תורה - הרב נחום',       timeText: '17:10', ...S }) +
-        tz_day_time_row({ label: 'נעילה - ברק אפרתי',                         timeText: '17:25', ...S }) +
-        tz_day_time_row({ label: 'שקיעת החמה',                                timeText: '18:41', ...S }) +
-        tz_day_time_row({ label: 'תקיעת שופר',                                timeText: '19:00', ...S }) +
-        tz_day_time_row({ label: 'צאת הצום',                                  timeText: '19:15', ...S }) +
-        tz_day_time_row({ label: 'ערבית וקידוש לבנה',                                            ...S })
+        tz_day_time_row({ label: '"אל נורא עלילה" ודבר תורה - הרב נחום',       timeText: '17:10', ...S })
     );
 }
 
-/** Morning phase, slide 1/2: ערב יום כיפור alone, full width. */
+/** נעילה → ערבית וקידוש לבנה (rows 7-11). */
+function kipur_day_rows_html_rest(sizeOverride) {
+    var S = sizeOverride || KIPUR_ROW_SIZE;
+    return (
+        tz_day_time_row({ label: 'נעילה - ברק אפרתי',   timeText: '17:25', ...S }) +
+        tz_day_time_row({ label: 'שקיעת החמה',          timeText: '18:41', ...S }) +
+        tz_day_time_row({ label: 'תקיעת שופר',          timeText: '19:00', ...S }) +
+        tz_day_time_row({ label: 'צאת הצום',            timeText: '19:15', ...S }) +
+        tz_day_time_row({ label: 'ערבית וקידוש לבנה',                        ...S })
+    );
+}
+
+/** The halachic day-times column — always the last (leftmost) one, the same
+ *  convention every Rosh Hashana slide follows. present_day_times() fills it. */
+function kipur_day_times_col(sizeOverride) {
+    return {
+        title: 'זמני היום בהלכה',
+        children: tz_col({ gap: '1', children: get_day_times_rows_html(sizeOverride || KIPUR_ROW_SIZE) }),
+        ...ROSH_HASHANA_DAY_TIMES_COL,
+    };
+}
+
+/** The week that starts again once the fast is out — the foot of the day
+ *  slide's third column, under the halachic times. The three shacharit minyanim are fixed, so they ride
+ *  in one row rather than three; מנחה/ערבית move week to week and are filled by
+ *  present_kipur_times(). Yom Kippur on a Thursday is the one case where the
+ *  next day is not an ordinary weekday, so that variant shows Erev Shabbat's
+ *  rows instead. */
+function kipur_week_ahead_rows_html(sizeOverride, opts) {
+    var S = sizeOverride || KIPUR_ROW_SIZE;
+    /* Three times in one span is the widest thing in this column; at the row's
+       normal time size it pushed the label onto a second line. */
+    var M = { ...S, timeSizeClass: 'text-[19px]' };
+    var shacharit_row = tz_day_time_row({ label: 'שחרית א/ב/ג', timeText: '06:00 / 06:50 / 08:30', ...M });
+    if (opts && opts.friday) {
+        return (
+            shacharit_row +
+            tz_day_time_row({ label: 'הדלקת נרות',     id: 'kipur_week_shabat_in',      ...S }) +
+            tz_day_time_row({ label: 'מנחה וקבלת שבת', id: 'kipur_week_kabalat_shabat', ...S })
+        );
+    }
+    return (
+        shacharit_row +
+        tz_day_time_row({ label: 'מנחה',        id: 'kipur_week_mincha', ...S }) +
+        tz_day_time_row({ label: 'ערבית א/ב/ג', id: 'kipur_week_arvit',  ...M })
+    );
+}
+
+/** Morning phase, slide 1/2: erev Yom Kippur's own day. Its ten rows run across
+ *  columns 1-2 under one spanning title — the morning tfilot, then the run-up to
+ *  the fast — with today's halachic times alongside. */
 export function get_kipur_eve_full_page_grid_html() {
-    var S = KIPUR_FULL_ROW_SIZE;
-    var col_html = tz_col({ gap: '1.5', children: kipur_eve_morning_rows_html(S) + kipur_eve_prayer_rows_html(S) });
+    var S = KIPUR_ROW_SIZE;
     return tz_page_grid([
-        { title: 'ערב יום כיפור', children: col_html },
-    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-1' });
+        { title: 'ערב יום כיפור', headerColSpan: 2, children: tz_col({ gap: '1', children: kipur_eve_morning_rows_html(S) }) },
+        { children: tz_col({ gap: '1', children: kipur_eve_prayer_rows_html(S) }) },
+        kipur_day_times_col(S),
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_1.28fr_1fr]' });
 }
 
-/** Morning phase, slide 2/2: יום כיפור alone, full width — alternates with
- *  get_kipur_eve_full_page_grid_html() in present_kipur_eve_times(). */
+/** Morning phase, slide 2/2: the fast day, previewed in full — alternates with
+ *  get_kipur_eve_full_page_grid_html() in present_kipur_eve_times(). The
+ *  halachic column here is the fast day's own, not today's, so this is where a
+ *  viewer on erev reads the fast's שקיעה and צאת הכוכבים off their own day. */
 export function get_kipur_day_full_page_grid_html() {
+    var S = KIPUR_ROW_SIZE;
     return tz_page_grid([
-        { title: 'יום כיפור', id: 'kipur_day', children: kipur_day_rows_html(KIPUR_FULL_ROW_SIZE) },
-    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-1' });
+        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
+        { children: tz_col({ gap: '1', children: kipur_day_rows_html_rest(S) }) },
+        kipur_day_times_col(S),
+        /* Column 1's longest label ('"אל נורא עלילה" ודבר תורה - הרב נחום')
+           wants ~597px on one line, which no split of a 1168px grid affords, so
+           it wraps whatever the shares are. They are set to what columns 2 and 3
+           need instead — 377 and 356 — so those two stay single-line. */
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.2fr_1.08fr_1.02fr]' });
 }
 
-/** Afternoon phase (after noon, once the morning rows no longer apply): eve
- *  (candle-lighting → arvit only) and the day's schedule side by side. */
+/** Afternoon phase (after noon, once the morning rows no longer apply): what is
+ *  left of eve beside the fast day in full. The day's two columns use up the
+ *  grid, so this is the one Kipur slide without a halachic column — the two times
+ *  it would add that matter at this hour, שקיעה and צאת הכוכבים, are already on
+ *  screen as הדלקת נרות and as the day column's own rows. */
 export function get_kipur_eve_combined_page_grid_html() {
-    var S = KIPUR_SPLIT_ROW_SIZE;
+    var S = KIPUR_ROW_SIZE;
     return tz_page_grid([
         { title: 'ערב יום כיפור', children: tz_col({ gap: '1', children: kipur_eve_prayer_rows_html(S) }) },
-        { title: 'יום כיפור',     id: 'kipur_day', children: kipur_day_rows_html(S) },
-    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_1fr]' });
+        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
+        { children: tz_col({ gap: '1', children: kipur_day_rows_html_rest(S) }) },
+        /* Three columns of long labels want ~1382px between them against the
+           1168px on offer, so two rows wrap here whatever the split. These
+           shares are the ones that keep the wraps in the FIVE-row columns:
+           widening column 1 to un-wrap הדלקת נרות moves a wrap into column 2's
+           six, and six rows plus a wrap is 4px over the bottom edge. */
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_1.3fr_1fr]' });
 }
 
-/** Day slide: col 1 is יום כיפור's own schedule, col 2 stacks the halachic
- *  day-times for the day after (present_day_times fills it) above זמני השבוע
- *  — the same Friday-vs-regular-week fragment every other holiday's second
- *  column reuses, so that swap is left as-is; see present_kipur_times(). */
-export function get_kipur_page_grid_html() {
-    var S = KIPUR_SPLIT_ROW_SIZE;
-    var col2_html = tz_col({
-        id: 'second_column', gap: '1', justify: 'between',
+/** Day slide: the fast day's own schedule across columns 1-2 in full, and
+ *  column 3 given over to reference times — the fast day's halachic times, with
+ *  the week that resumes once it is out beneath them. present_kipur_times()
+ *  fills both the halachic rows and the week's.
+ *
+ *  @param {object}  [opts]
+ *  @param {boolean} [opts.friday=false] Yom Kippur falls on a Thursday, so the
+ *         week-ahead section is Erev Shabbat's rows — see
+ *         kipur_week_ahead_rows_html(). */
+export function get_kipur_page_grid_html(opts) {
+    var S = KIPUR_DAY_ROW_SIZE;
+    var friday = !!(opts && opts.friday);
+    /* The week that resumes once the fast is out rides under the halachic times
+       in column 3, not under the fast's own schedule — both are reference times
+       rather than parts of today's service, so they read as one column, and it
+       leaves the fast day's eleven rows to run across columns 1-2 uninterrupted.
+       A flex spacer keeps it a separate block at the foot of the column rather
+       than a continuation of the times above it. */
+    var col3_html = tz_col({
+        gap: '1',
         children:
-            tz_section_header({ title: 'זמני היום בהלכה', level: 'h3' }) +
-            tz_col({ gap: '1', children: get_day_times_rows_html(S) }) +
-            tz_section_header({ title: 'זמני השבוע', level: 'h3' }) +
-            tz_col({ id: 'prayer_times', gap: '1', children: '' }),
+            get_day_times_rows_html(S) +
+            tz_flex_spacer() +
+            tz_section_header({ title: friday ? 'זמני ערב שבת' : 'זמני השבוע', level: 'h3' }) +
+            kipur_week_ahead_rows_html(S, { friday: friday }),
     });
     return tz_page_grid([
-        { title: 'יום כיפור', id: 'kipur_day', children: kipur_day_rows_html(S) },
-        { noHeader: true, children: col2_html },
-    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_1fr]' });
+        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
+        { children: tz_col({ gap: '1', children: kipur_day_rows_html_rest(S) }) },
+        { title: 'זמני היום בהלכה', children: col3_html, ...ROSH_HASHANA_DAY_TIMES_COL },
+        /* Column 1's longest label wants ~597px on one line and no split of a
+           1168px grid gives it that, so it wraps either way (the Rosh Hashana
+           eve trade). The shares go to what columns 2 and 3 need to stay
+           single-line — ~377 for נעילה, ~379 for the week's שחרית א/ב/ג, now
+           that the week block sets column 3's width rather than column 2's. */
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.15fr_1.07fr_1.08fr]' });
 }
 
 // ─── Friday single-page grid builders ────────────────────────────────────────

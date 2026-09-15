@@ -154,7 +154,7 @@ function setup_hero_slide(date, page_id) {
         });
     });
     if (!ROSH_HASHANA_PAGE_IDS.has(page_id)) {
-        show_footer_custom_message_if_needed(date, page_id, wait_seconds * 10);
+        show_footer_custom_message_if_needed(date, page_id);
     }
 }
 var donators_start_point = 0;
@@ -673,7 +673,7 @@ function format_rosh_hodesh_message(hodesh_name, days) {
 }
 
 
-async function show_footer_custom_message_if_needed(current_date, into_elem_id, caller_slee_seconds=60){
+async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     var messages = [];
     var show_footer = false;
 
@@ -843,28 +843,74 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id, 
     }
 
     if(messages.length > 0){
-        var messages_html = messages; //.join('<br>');
-        if (messages.length > 1){
-            var delay_between_message = caller_slee_seconds / messages.length;
-        }
+        footer_message_cycle_generation += 1;
+        var cycle_generation = footer_message_cycle_generation;
         load_html_into_page_elem_end('custom_fouter.html', into_elem_id, () => {
             show_by_id('custom-footer');
-            show_messages(messages, delay_between_message);
+            show_messages(messages, cycle_generation);
         });
     }
 }
 
-async function show_messages(messages, delay_between_message_seconds){
-    for(const message of messages){
-        if(message.length > 50){
-            add_class_to_element_style('footer-custom-message', 'my-text-footer-small');
-        }
-        else if(message.length > 54){
-            add_class_to_element_style('footer-custom-message', 'text-single-page-shaba');
-        };
-        set_element_html('footer-custom-message', message)
-        await sleep(delay_between_message_seconds*1000, "ArrowLeft");
+/* Bumped on every footer that goes up, so the cycle of the footer that was
+   replaced stops instead of writing into a message element that left the DOM. */
+var footer_message_cycle_generation = 0;
+
+/* Number of background tones the footer card can wear. */
+var FOOTER_TONE_COUNT = 5;
+
+/* One tone per message, so a message always comes back up on the colour it
+   had last time round. Neighbours differ because the tones simply run in
+   order; the one seam is the wrap from the last message back to the first,
+   which is why the last one steps aside when it would land on the first's. */
+function get_footer_tones(message_count){
+    var tones = [];
+    for(var i = 0; i < message_count; i++){
+        tones.push(i % FOOTER_TONE_COUNT);
     }
+    if(message_count > 1 && tones[message_count - 1] == tones[0]){
+        tones[message_count - 1] = (tones[0] + 1) % FOOTER_TONE_COUNT;
+    }
+    return tones;
+}
+
+/* A single message just sits there; more than one flips every
+   message_wait_seconds and starts over until the slide is replaced. */
+async function show_messages(messages, cycle_generation){
+    var tones = get_footer_tones(messages.length);
+    if(messages.length == 1){
+        set_footer_message(messages[0], tones[0], 0);
+        return;
+    }
+    var flip_count = 0;
+    while(footer_message_cycle_generation == cycle_generation &&
+          document.getElementById('footer-flip')){
+        var message_index = flip_count % messages.length;
+        set_footer_message(messages[message_index], tones[message_index], flip_count);
+        flip_count += 1;
+        await sleep(message_wait_seconds*1000, "ArrowLeft");
+    }
+}
+
+/* Writes the message onto the face that is currently hidden, then turns the
+   card half a revolution so that face comes up. The angle keeps accumulating
+   instead of alternating 0/180 so every flip turns the same way. */
+function set_footer_message(message, tone, flip_count){
+    var card = document.getElementById('footer-flip');
+    if(!card){
+        return;
+    }
+    var is_front = flip_count % 2 == 0;
+    var face_id = is_front ? 'footer-flip-front' : 'footer-flip-back';
+    var text_id = is_front ? 'footer-custom-message' : 'footer-custom-message-back';
+    var text_element = document.getElementById(text_id);
+
+    /* Re-applied per message: the cycle repeats, so a long message must not
+       leave its smaller text behind for the short one that follows it. */
+    text_element.classList.toggle('my-text-footer-small', message.length > 50);
+    set_element_html(text_id, message);
+    document.getElementById(face_id).dataset.tone = tone;
+    card.style.transform = 'rotateX(' + (flip_count * 180) + 'deg)';
 }
 
 function create_table_row_html(key, value){
@@ -1212,7 +1258,7 @@ async function present_pesach_eve(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    await show_footer_custom_message_if_needed(current_date, 'pesach_eve', wait_seconds*5);
+    await show_footer_custom_message_if_needed(current_date, 'pesach_eve');
     return sleep_seconds(wait_seconds*5);
 }
 
@@ -1230,7 +1276,7 @@ async function present_pesach_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
     });
-    await show_footer_custom_message_if_needed(current_date, 'pesach_single_page', 10*60);
+    await show_footer_custom_message_if_needed(current_date, 'pesach_single_page');
 
     return sleep_seconds(10*60);
 }
@@ -1251,7 +1297,7 @@ async function present_pesach_7_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date);
     });
-    await show_footer_custom_message_if_needed(current_date, 'pesach_7', 10*60)
+    await show_footer_custom_message_if_needed(current_date, 'pesach_7')
     return sleep_seconds(10*60);
 }
 
@@ -1456,26 +1502,43 @@ async function present_day_times_page(current_date){
    loop_pages() alternates eve/day instead of picking one and sticking to it. */
 var kipur_eve_view_toggle = false;
 
+/** The fast day previewed on erev Kipur: its full schedule plus its own
+ *  halachic times (not today's — the day the viewer is reading about starts
+ *  tonight). The morning phase's other half; after noon the combined slide
+ *  carries the same schedule itself. */
+function present_kipur_day_preview(current_date){
+    set_element_html('kipur_eve_grid', get_kipur_day_full_page_grid_html());
+    present_day_times(get_date_plus_days(current_date, 1));
+}
+
 async function present_kipur_eve_times(current_date){
     var chag_in = '18:17';
 
     if (is_show_kipur_eve(current_date)){
         // Morning phase: too much content (weekday morning + candle-lighting +
-        // a full day preview) for one legible slide, so eve and day alternate
-        // as two full-width slides instead of sharing a cramped 2-column one.
+        // a full day preview) for one slide even across three columns, so eve
+        // and the day preview alternate.
         kipur_eve_view_toggle = !kipur_eve_view_toggle;
         if (kipur_eve_view_toggle){
             set_element_html('kipur_eve_grid', get_kipur_eve_full_page_grid_html());
             set_element_html('chag_in', chag_in);
             set_element_html('kol_nidrei', add_minutes_to_time(chag_in, 10));
+            present_day_times(current_date);
         } else {
-            set_element_html('kipur_eve_grid', get_kipur_day_full_page_grid_html());
+            present_kipur_day_preview(current_date);
         }
         return sleep_seconds(60);
     }
 
-    // Afternoon phase: the morning rows no longer apply, so eve (candle-
-    // lighting → arvit only) and the day's schedule fit side by side.
+    /* Afternoon phase: eve keeps the screen to itself. The combined slide
+       already carries the fast day's whole schedule beside what is left of eve,
+       so the separate day slide that alternates in before noon would only be
+       repeating it here — and alternating cost erev its own slide for half the
+       afternoon, which is the hour it is most wanted.
+
+       No present_day_times() on this one — it is the single Kipur slide with no
+       halachic column (see get_kipur_eve_combined_page_grid_html), and
+       set_element_data throws on an id the slide doesn't have. */
     set_element_html('kipur_eve_grid', get_kipur_eve_combined_page_grid_html());
     set_element_html('chag_in', chag_in);
     set_element_html('kol_nidrei', add_minutes_to_time(chag_in, 10));
@@ -1484,25 +1547,33 @@ async function present_kipur_eve_times(current_date){
 }
 
 async function present_kipur_times(current_date){
-    set_element_html('kipur_grid', get_kipur_page_grid_html());
-    present_day_times(get_date_plus_days(current_date, 1));
+    /* The slide runs from the fast's start on eve night straight through the
+       fast day, so the day it is *about* is tomorrow only while it is still eve
+       night — from midnight on it is today. Getting this wrong showed the day
+       after Yom Kippur's שקיעה/צאת הכוכבים all through the fast itself, which
+       is exactly the pair of times a viewer reads off this slide. */
+    var kipur_date = current_date.getHours() >= 17
+        ? get_date_plus_days(current_date, 1)
+        : current_date;
+    /* Thursday is the only weekday Yom Kippur can fall on and be followed by
+       something other than an ordinary weekday. */
+    var is_erev_shabat_after = is_in_weekdays(kipur_date, [4]);
 
-    if(is_in_weekdays(current_date, [4,5])){
-        load_html_into_page_elem_start('friday_times_embedded_with_title.html', 'second_column', () => {
-           populate_friday_prayer_times(current_date);
-        });
+    set_element_html('kipur_grid', get_kipur_page_grid_html({ friday: is_erev_shabat_after }));
+    present_day_times(kipur_date);
+
+    if (is_erev_shabat_after){
+        var shabat_in = get_shabat_times(kipur_date)['in'];
+        set_element_html('kipur_week_shabat_in', shabat_in);
+        set_element_html('kipur_week_kabalat_shabat', add_minutes_to_time(shabat_in, 10));
     } else {
-        var this_week_times = get_week_times(current_date);
-        var mincha_time = get_single_prayer_times_from_date_obj(this_week_times, 'mincha');
-        var arvit_time = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
+        var this_week_times = get_week_times(kipur_date);
+        var mincha_time = normalize_prayer_slot_for_display(get_single_prayer_times_from_date_obj(this_week_times, 'mincha'));
+        var arvit_time = normalize_prayer_slot_for_display(get_single_prayer_times_from_date_obj(this_week_times, 'maariv'));
 
-        load_html_into_page_elem_start('shacharit.html', 'prayer_times', () => {
-            show_shacharit_8_30();
-        });
-        load_html_into_page_elem_end('mincha_arvit.html', 'prayer_times', () => {
-            set_element_html('mincha-regulr-days', mincha_time);
-            set_element_html('arvit-regulr-days', arvit_time);
-        });
+        set_element_html('kipur_week_mincha', mincha_time);
+        /* ערבית ב/ג are fixed all year — only ערבית א moves week to week. */
+        set_element_html('kipur_week_arvit', arvit_time ? arvit_time + ' / 20:00 / 21:00' : '20:00 / 21:00');
     }
 
     return sleep_seconds(60*3);
@@ -1526,7 +1597,7 @@ async function present_chag_eve_times(current_date){
     load_html_into_page_elem_end('day_times_inner.html', 'day_times', () => {
         present_day_times(current_date, true);
     });
-    await show_footer_custom_message_if_needed(current_date, 'chag_eve', wait_seconds*10);
+    await show_footer_custom_message_if_needed(current_date, 'chag_eve');
     return sleep_seconds(wait_seconds*10);
 }
 

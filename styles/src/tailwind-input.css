@@ -522,6 +522,16 @@
     flex-shrink: 0;
   }
 
+  /* Every Kipur column carries two sections, so each has an inline sub-header
+     (tz_section_header level 'h3') sitting under the column's own header. At the
+     shared size the two bars read as siblings and the column loses its hierarchy
+     — one step down the scale is enough to separate them, and the height it
+     gives back goes to the rows. Scoped to the Kipur pages: the only other h3
+     sub-header (Rosh Hashana eve's א' דראש השנה) heads a column of its own. */
+  :is(#kipur_single_page, #kipur_eve_single_page) h3.tz-section-title {
+    font-size: clamp(1.45rem, 3.4vmin, 2.05rem);
+  }
+
   /* Parasha name — slightly warmer shade to distinguish from the heading */
   .tz-page .tz-section-parasha {
     color: var(--color-cream-warm) !important;
@@ -738,8 +748,82 @@
     line-height: 1.28;
   }
 
+  /* ── Announcement bar as a flip-card housing ──────────────────
+     When more than one message is showing they alternate by flipping a
+     card around its horizontal axis, so the bar itself keeps only the
+     frame (border, shadow, depth) and hands the colour to the two faces.
+     The dark ground shows for the instant the card is edge-on. */
+  .tz-page .fouter#custom-footer {
+    padding: 0;
+    overflow: hidden;
+    perspective: 55rem;
+    background: rgba(20, 21, 19, 0.95);
+  }
+
+  .footer-flip {
+    display: grid;                 /* both faces share one cell, so the card
+                                      is as tall as the message inside it */
+    width: 100%;
+    align-self: stretch;
+    transform-style: preserve-3d;
+    /* A touch past 180deg and back: the card settles like a physical one. */
+    transition: transform 720ms cubic-bezier(0.34, 0.74, 0.28, 1.04);
+    will-change: transform;
+  }
+
+  .footer-flip-face {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: clamp(3.5rem, 7.5vh, 5rem);
+    padding: 0.65rem clamp(0.75rem, 3vw, 1.35rem);
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: linear-gradient(
+      105deg,
+      var(--footer-tone-start) 0%,
+      var(--footer-tone-mid) 44%,
+      var(--footer-tone-end) 100%
+    );
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  /* The back face starts flipped so it reads upright once the card lands. */
+  .footer-flip-face-back {
+    transform: rotateX(180deg);
+  }
+
+  /* ── Face palette — one warm-dark family, cream text on every tone ── */
+  .footer-flip-face[data-tone="0"] {          /* bronze / olive */
+    --footer-tone-start: #242623;
+    --footer-tone-mid:   #6a5d41;
+    --footer-tone-end:   #483e2a;
+  }
+  .footer-flip-face[data-tone="1"] {          /* deep teal */
+    --footer-tone-start: #16272b;
+    --footer-tone-mid:   #2f6062;
+    --footer-tone-end:   #1d3e40;
+  }
+  .footer-flip-face[data-tone="2"] {          /* wine */
+    --footer-tone-start: #2a171d;
+    --footer-tone-mid:   #6b3041;
+    --footer-tone-end:   #40212b;
+  }
+  .footer-flip-face[data-tone="3"] {          /* indigo */
+    --footer-tone-start: #181d2f;
+    --footer-tone-mid:   #3a4676;
+    --footer-tone-end:   #232b49;
+  }
+  .footer-flip-face[data-tone="4"] {          /* plum */
+    --footer-tone-start: #251b2d;
+    --footer-tone-mid:   #573a68;
+    --footer-tone-end:   #34253f;
+  }
+
   /* Main announcement text */
-  .tz-page .fouter #footer-custom-message {
+  .tz-page .fouter .footer-flip-text {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-weight: 500;
     font-size: clamp(1.8rem, 4.3vw, 2.6rem) !important;
@@ -751,9 +835,8 @@
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   }
 
-  /* Smaller variant — for long messages or the Shabbat page */
-  .tz-page .fouter #footer-custom-message.my-text-footer-small,
-  .tz-page .fouter #footer-custom-message.text-single-page-shaba {
+  /* Smaller variant — for long messages */
+  .tz-page .fouter .footer-flip-text.my-text-footer-small {
     font-size: clamp(1.62rem, 3.68vw, 2.28rem) !important;
   }
 
