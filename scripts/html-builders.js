@@ -944,34 +944,40 @@ export function get_rosh_hashana_b_shabat_shuva_eve_page_grid_html() {
    past the bottom edge of the real display even though it looks fine at 800px
    tall. */
 
-/* One size for every Kipur slide, and it is the Rosh Hashana slides' own —
-   ROSH_HASHANA_EVE_ROW_SIZE, what all four of those grids actually render at.
-   The two sets run back to back in the same fortnight on the same screen at the
-   same reading distance, so a Kipur-specific notch smaller (and unbolded) read
-   as a different display rather than as the same one.
-
-   The cost is width: at this size the fast day's longest labels want more room
-   on one line than a third of the grid gives them, so the fr-shares on each
-   grid below carry the difference (the size is fixed here; only the column
-   split moves). Where a label still wraps it is the same trade Rosh Hashana
-   eve already makes for 'הדלקת נרות (נר נשמה ל-48 שעות)' — one row on two lines
-   in exchange for larger type on every other row. tests/_measure-kipur.js
-   reports fill, overflow and per-column needed width for all four slides at
-   1280x672. */
-var KIPUR_ROW_SIZE = ROSH_HASHANA_EVE_ROW_SIZE;
+/* Same type as the Rosh Hashana slides' own ROSH_HASHANA_EVE_ROW_SIZE (27/30,
+   bold) but with taller row padding — the vertical budget here has more slack
+   than any Rosh Hashana grid (the week-ahead trim left the tallest Kipur
+   column at 6 rows, versus Rosh Hashana eve's 8-9), so the rows can afford to
+   sit roomier without wrapping anything that doesn't already wrap. Padding is
+   horizontal-plus-vertical (px-3 py-*) and only the vertical half changed, so
+   this doesn't touch any column's width budget or the fr-shares below.
+   Bounded by the tightest Kipur column (the eve-afternoon / day-preview
+   slides' 6-row column) — see tests/_measure-kipur.js for the per-slide fill
+   numbers this was checked against at 1280x672. */
+var KIPUR_ROW_SIZE = {
+    ...ROSH_HASHANA_EVE_ROW_SIZE,
+    paddingClass: 'px-3 py-[13px]',
+};
 
 /** The day slide is the only Kipur grid that carries the week ahead as well as
- *  the fast itself, so its column 2 holds eight rows plus an inline h3 — two
- *  rows more than the tallest column on any other slide in the set, and 196px
- *  past the bottom edge at the shared padding. The type is the same 27/30 bold
- *  as everywhere else; the row padding is what gives way (down to px-3 py-1,
- *  a notch under the tighter of the two Rosh Hashana paddings). At px-3 py-1 the
- *  column landed 3px inside the bottom edge — true, but inside the margin a
- *  different font fallback would eat, so it goes two notches rather than one. */
+ *  the fast itself, so its column 3 holds seven rows plus an inline h3 — one
+ *  row more than the tallest column on any other slide in the set. The type is
+ *  the same 27/30 bold as everywhere else; the row padding gives way to fit,
+ *  but — like KIPUR_ROW_SIZE above — still roomier than the old shared
+ *  Rosh-Hashana padding now that the week-ahead trim freed a row's worth of
+ *  height here too. */
 var KIPUR_DAY_ROW_SIZE = {
     ...KIPUR_ROW_SIZE,
-    paddingClass: 'px-3 py-[2px]',
+    paddingClass: 'px-3 py-[3px]',
 };
+
+/** Every Kipur column header, "זמני היום בהלכה" included — one fixed size
+ *  so no title reads smaller than its neighbors, bigger than the shared
+ *  default clamp(~33px at this viewport) now that the rows themselves are
+ *  bigger too. Fixed rather than the default's fluid clamp because the
+ *  narrowest column ("זמני היום בהלכה", 15 characters) needs a size checked
+ *  to actually fit it — see tests/_measure-kipur.js. */
+var KIPUR_TITLE_CLASS = { titleExtraClass: 'text-[38px]' };
 
 /** Erev Yom Kippur's own weekday morning shacharit/slichot — relevant only
  *  while is_show_kipur_eve(current_date) is true (until noon). Not part of
@@ -1039,33 +1045,28 @@ function kipur_day_times_col(sizeOverride) {
     return {
         title: 'זמני היום בהלכה',
         children: tz_col({ gap: '1', children: get_day_times_rows_html(sizeOverride || KIPUR_ROW_SIZE) }),
-        ...ROSH_HASHANA_DAY_TIMES_COL,
+        ...KIPUR_TITLE_CLASS,
     };
 }
 
 /** The week that starts again once the fast is out — the foot of the day
- *  slide's third column, under the halachic times. The three shacharit minyanim are fixed, so they ride
- *  in one row rather than three; מנחה/ערבית move week to week and are filled by
- *  present_kipur_times(). Yom Kippur on a Thursday is the one case where the
- *  next day is not an ordinary weekday, so that variant shows Erev Shabbat's
- *  rows instead. */
+ *  slide's third column, under the halachic times. Like the regular Shabbat
+ *  slide's own "זמני השבוע" footer, only the times that actually move week to
+ *  week appear here — מנחה and ערבית — not the fixed שחרית minyanim. Both are
+ *  filled by present_kipur_times(). Yom Kippur on a Thursday is the one case
+ *  where the next day is not an ordinary weekday, so that variant shows Erev
+ *  Shabbat's rows instead. */
 function kipur_week_ahead_rows_html(sizeOverride, opts) {
     var S = sizeOverride || KIPUR_ROW_SIZE;
-    /* Three times in one span is the widest thing in this column; at the row's
-       normal time size it pushed the label onto a second line. */
-    var M = { ...S, timeSizeClass: 'text-[19px]' };
-    var shacharit_row = tz_day_time_row({ label: 'שחרית א/ב/ג', timeText: '06:00 / 06:50 / 08:30', ...M });
     if (opts && opts.friday) {
         return (
-            shacharit_row +
             tz_day_time_row({ label: 'הדלקת נרות',     id: 'kipur_week_shabat_in',      ...S }) +
             tz_day_time_row({ label: 'מנחה וקבלת שבת', id: 'kipur_week_kabalat_shabat', ...S })
         );
     }
     return (
-        shacharit_row +
-        tz_day_time_row({ label: 'מנחה',        id: 'kipur_week_mincha', ...S }) +
-        tz_day_time_row({ label: 'ערבית א/ב/ג', id: 'kipur_week_arvit',  ...M })
+        tz_day_time_row({ label: 'מנחה',   id: 'kipur_week_mincha', ...S }) +
+        tz_day_time_row({ label: 'ערבית',  id: 'kipur_week_arvit',  ...S })
     );
 }
 
@@ -1075,7 +1076,7 @@ function kipur_week_ahead_rows_html(sizeOverride, opts) {
 export function get_kipur_eve_full_page_grid_html() {
     var S = KIPUR_ROW_SIZE;
     return tz_page_grid([
-        { title: 'ערב יום כיפור', headerColSpan: 2, children: tz_col({ gap: '1', children: kipur_eve_morning_rows_html(S) }) },
+        { title: 'ערב יום כיפור', headerColSpan: 2, ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: kipur_eve_morning_rows_html(S) }) },
         { children: tz_col({ gap: '1', children: kipur_eve_prayer_rows_html(S) }) },
         kipur_day_times_col(S),
     ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_1.28fr_1fr]' });
@@ -1088,7 +1089,7 @@ export function get_kipur_eve_full_page_grid_html() {
 export function get_kipur_day_full_page_grid_html() {
     var S = KIPUR_ROW_SIZE;
     return tz_page_grid([
-        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
+        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
         { children: tz_col({ gap: '1', children: kipur_day_rows_html_rest(S) }) },
         kipur_day_times_col(S),
         /* Column 1's longest label ('"אל נורא עלילה" ודבר תורה - הרב נחום')
@@ -1106,8 +1107,8 @@ export function get_kipur_day_full_page_grid_html() {
 export function get_kipur_eve_combined_page_grid_html() {
     var S = KIPUR_ROW_SIZE;
     return tz_page_grid([
-        { title: 'ערב יום כיפור', children: tz_col({ gap: '1', children: kipur_eve_prayer_rows_html(S) }) },
-        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
+        { title: 'ערב יום כיפור', ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: kipur_eve_prayer_rows_html(S) }) },
+        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
         { children: tz_col({ gap: '1', children: kipur_day_rows_html_rest(S) }) },
         /* Three columns of long labels want ~1382px between them against the
            1168px on offer, so two rows wrap here whatever the split. These
@@ -1140,19 +1141,175 @@ export function get_kipur_page_grid_html(opts) {
         children:
             get_day_times_rows_html(S) +
             tz_flex_spacer() +
-            tz_section_header({ title: friday ? 'זמני ערב שבת' : 'זמני השבוע', level: 'h3' }) +
+            /* !text-[38px]: a plain titleExtraClass loses to the Kipur-page h3
+               shrink rule in tailwind-input.css (id + class + type beats a
+               single utility class on specificity alone), so the Tailwind
+               important-modifier is needed here to actually win. */
+            tz_section_header({ title: friday ? 'זמני ערב שבת' : 'זמני השבוע', level: 'h3', titleExtraClass: '!text-[38px]' }) +
             kipur_week_ahead_rows_html(S, { friday: friday }),
     });
     return tz_page_grid([
-        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
+        { title: 'יום כיפור', id: 'kipur_day', headerColSpan: 2, ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: kipur_day_rows_html_first(S) }) },
         { children: tz_col({ gap: '1', children: kipur_day_rows_html_rest(S) }) },
-        { title: 'זמני היום בהלכה', children: col3_html, ...ROSH_HASHANA_DAY_TIMES_COL },
+        { title: 'זמני היום בהלכה', children: col3_html, ...KIPUR_TITLE_CLASS },
         /* Column 1's longest label wants ~597px on one line and no split of a
            1168px grid gives it that, so it wraps either way (the Rosh Hashana
            eve trade). The shares go to what columns 2 and 3 need to stay
            single-line — ~377 for נעילה, ~379 for the week's שחרית א/ב/ג, now
            that the week block sets column 3's width rather than column 2's. */
     ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.15fr_1.07fr_1.08fr]' });
+}
+
+// ─── Shabbat timeline slide builders (#shabat_single_page) ─────────────
+
+/* The Shabbat slide is a bespoke, no-scroll 3-column day timeline (.shabat-tl-*),
+   deliberately not the tz-card system the other hero slides use. Its HTML file
+   holds only the page shell — the title and three empty columns; everything
+   inside them is built here.
+
+   Three element shapes repeat across those columns, one builder each:
+     shabat_tl_band()    — titled section header
+     shabat_tl_divider() — untitled section break
+     shabat_tl_row()     — every line of label + time, single- or multi-time
+
+   Times are left empty: present_shabat_prayer_times() fills them by id. */
+
+/** One time span. `id` is what the orchestrator fills; `text` is for the few
+ *  rows whose time is fixed in the markup (the שבת חזון additions). */
+function shabat_tl_time_html(id, text) {
+    return '<span class="shabat-tl-time"' + (id ? ' id="' + id + '"' : '') + '>' +
+           (text || '') + '</span>';
+}
+
+/** Titled section header — gold dot, title, trailing rule. */
+export function shabat_tl_band(title) {
+    return '<div class="shabat-tl-band">' +
+               '<span class="shabat-tl-dot"></span>' +
+               '<h2>' + title + '</h2>' +
+               '<span class="shabat-tl-rule"></span>' +
+           '</div>';
+}
+
+/** Untitled section break — used where a band title would only repeat what the
+ *  rows below it already say (ערב שבת → יום השבת). */
+export function shabat_tl_divider() {
+    return '<div class="shabat-tl-divider" aria-hidden="true">' +
+               '<span class="shabat-tl-divider-mark"></span>' +
+           '</div>';
+}
+
+/**
+ * One timeline row — every line on the slide comes from here.
+ *
+ * @param {string}   opts.name         row label
+ * @param {string}   [opts.sub]        smaller second line under the label (בגן השמחה)
+ * @param {string}   [opts.timeId]     id of the time span, filled at runtime
+ * @param {string}   [opts.timeText]   literal time, for rows the orchestrator never fills
+ * @param {string[]} [opts.timeIds]    several times spread under one centered
+ *                                     label (שחרית) — renders the block variant
+ * @param {string}   [opts.extraClass] extra row classes: the show/hide and
+ *                                     strikethrough hooks JS looks the row up by
+ * @returns {string} HTML string
+ */
+export function shabat_tl_row({ name = '', sub, timeId, timeText, timeIds, extraClass } = {}) {
+    var isBlock = !!(timeIds && timeIds.length);
+    var rowClass = 'shabat-tl-row' +
+                   (isBlock ? ' shabat-tl-block' : '') +
+                   (extraClass ? ' ' + extraClass : '');
+    var label = '<span class="shabat-tl-name">' + name +
+                (sub ? '<small>' + sub + '</small>' : '') +
+                '</span>';
+    var times = isBlock
+        ? '<div class="shabat-tl-times">' +
+              timeIds.map(function (id) { return shabat_tl_time_html(id); }).join('') +
+          '</div>'
+        : shabat_tl_time_html(timeId, timeText);
+    return '<div class="' + rowClass + '">' + label + times + '</div>';
+}
+
+/** Wrapper (display: contents) holding the צאת שבת rows, so shabat_chazon_adaptions()
+ *  has one container to append its own rows to. */
+function shabat_tl_motzash_group_html(rowsHtml) {
+    return '<div id="shabat-motzash-rows" class="shabat-tl-motzash">' + rowsHtml + '</div>';
+}
+
+/** Column 1 (RTL-first, right): ערב שבת, then יום השבת up to מנחה ב. */
+export function get_shabat_tl_eve_and_day_col_html() {
+    return (
+        shabat_tl_band('ערב שבת') +
+        shabat_tl_row({ name: 'הדלקת נרות',     timeId: 'hadlakat-nerot' }) +
+        shabat_tl_row({ name: 'מנחה וקבלת שבת', timeId: 'mincha_shabat_eve' }) +
+
+        shabat_tl_divider() +
+        shabat_tl_row({ name: 'שחרית',
+                        timeIds: ['shacharit_a', 'shacharit_b', 'shacharit_main'] }) +
+        shabat_tl_row({ name: 'קידוש ושיעור · תפילת ילדים', timeId: 'kidush' }) +
+        shabat_tl_row({ name: 'מנחה גדולה',   timeId: 'mincha-shabat-a' }) +
+        shabat_tl_row({ name: 'הורים וילדים', timeId: 'shabat-parents-time' }) +
+        shabat_tl_row({ name: 'מנחה ב',        timeId: 'mincha-shabat-b' })
+    );
+}
+
+/**
+ * Column 2 (middle): the afternoon shiurim, then צאת שבת.
+ *
+ * @param {{ pirkeiAvotSeason?: boolean }} [opts]
+ *   pirkeiAvotSeason — שיעור בפרקי אבות only runs part of the year
+ *   (is_pirkei_avot_season); off-season the row is left out altogether, so the
+ *   caller must skip filling #shiur-pirkei-avot too.
+ */
+export function get_shabat_tl_afternoon_col_html(opts) {
+    var pirkeiAvotSeason = !!(opts && opts.pirkeiAvotSeason);
+    var isShabatShuva = !!(opts && opts.shabatShuva);
+    return (
+        shabat_tl_row({ name: 'מעיינים בחבורה', timeId: 'lesson-halacha' }) +
+        shabat_tl_row({ name: 'מנחה קטנה',     timeId: 'mincha-shabat-c' }) +
+        (isShabatShuva
+            ? shabat_tl_row({ name: 'דרשת שבת שובה', timeId: 'drashat-shabat-shuva',
+                        timeText: '17:45'})
+            : '') +
+        shabat_tl_row({ name: 'תהלים לילדים', sub: 'בגן השמחה',
+                        timeId: 'tehilim', extraClass: 'tehilim' }) +
+        (pirkeiAvotSeason
+            ? shabat_tl_row({ name: 'שיעור בפרקי אבות', timeId: 'shiur-pirkei-avot',
+                              extraClass: 'shiur-pirkei-avot' })
+            : '') +
+
+        shabat_tl_band('צאת שבת') +
+        shabat_tl_motzash_group_html(
+            shabat_tl_row({ name: 'צאת שבת וערבית', timeId: 'arvit-shabat',
+                            extraClass: 'arvit-shabat' }) +
+            shabat_tl_row({ name: 'ערבית ב', timeId: 'arvit-shabat-2',
+                            extraClass: 'arvit-shabat-2' })
+        )
+    );
+}
+
+/** Column 3 (left rail): the halachic times of the day, then next week's. */
+export function get_shabat_tl_halacha_col_html() {
+    return (
+        shabat_tl_band('זמני היום בהלכה') +
+        /* present_day_times() fills טלית ותפילין too and throws on a missing id,
+           so the row exists even though Shabbat never shows it. */
+        shabat_tl_row({ name: 'טלית ותפילין', timeId: 'talit_tfilin',
+                        extraClass: 'talit_tfilin hidden-element' }) +
+        shabat_tl_row({ name: 'זריחה',         timeId: 'sunrise' }) +
+        shabat_tl_row({ name: 'סוף זמן ק"ש',   timeId: 'shma_end' }) +
+        shabat_tl_row({ name: 'זמן מנחה גדולה', timeId: 'mincha_gedola' }) +
+        shabat_tl_row({ name: 'שקיעה',         timeId: 'sunset' }) +
+        shabat_tl_row({ name: 'צאת הכוכבים',   timeId: 'stars' }) +
+
+        shabat_tl_band('זמני השבוע') +
+        shabat_tl_row({ name: 'מנחה',  timeId: 'mincha-regulr-days-footer' }) +
+        shabat_tl_row({ name: 'ערבית', timeId: 'arvit-regulr-days-footer' })
+    );
+}
+
+/** Off-screen holder that shabat_zachor_adaptions() targets. Injected into the
+ *  page's <main>, not into a column: shown, it would break the column's
+ *  "last row has no bottom border" rule. */
+export function get_shabat_tl_zachor_holder_html() {
+    return '<div class="hidden-element" id="shabat-zachor"></div>';
 }
 
 // ─── Friday single-page grid builders ────────────────────────────────────────

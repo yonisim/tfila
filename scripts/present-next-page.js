@@ -20,6 +20,7 @@ import {
     is_shacharit_8_30, is_mincha_13_30,
     is_show_taanit, is_taanit,
     is_tisha_beav, is_tisha_beav_eve, is_tisha_beav_eve_pre, is_shabat_chazon,
+    is_pirkei_avot_season,
     is_slihot_days,
     is_hanuka,
     is_purim, is_show_megila, is_shabat_zachor,
@@ -71,6 +72,11 @@ import {
     get_kipur_day_full_page_grid_html,
     get_kipur_eve_combined_page_grid_html,
     get_kipur_page_grid_html,
+    shabat_tl_row,
+    get_shabat_tl_eve_and_day_col_html,
+    get_shabat_tl_afternoon_col_html,
+    get_shabat_tl_halacha_col_html,
+    get_shabat_tl_zachor_holder_html,
 } from './html-builders.js';
 
 const { execSync } = require('child_process');
@@ -396,7 +402,7 @@ set_mincha_gedola_time(MINCHA_GEDOLA_TIME);
 let shacharit_regular_days = ['06:00', '06:50', '08:30(שישי)'];
 let kabalat_shabat = ['17:46', '17:56'];
 let shacharit_shabat = ['06:00', '07:20', '08:30'];
-let mincha_shabat = ['13:15', '14:00', '18:00'];
+let mincha_shabat = ['13:15', '14:00', '17:30'];
 let arvit_shabat = ['18:44', '19:00'];
 
 function get_week_start_date(current_date){
@@ -1392,18 +1398,15 @@ async function present_gedalia_times(current_date){
     return sleep_seconds(wait_seconds*10);
 }
 
-function shabat_tl_row_html(name, time){
-    return '<div class="shabat-tl-row"><span class="shabat-tl-name">' + name + '</span>' +
-           '<span class="shabat-tl-time">' + time + '</span></div>';
-}
-
 function shabat_chazon_adaptions(){
     add_class_to_elements_by_class_name('tehilim','strikethrough');
     add_class_to_elements_by_class_name('shiur-pirkei-avot','strikethrough');
     hide_element('arvit-shabat');
     hide_element('arvit-shabat-2');
-    insert_html_at_end_of_element('shabat-motzash-rows', shabat_tl_row_html('צאת השבת', '20:16'));
-    insert_html_at_end_of_element('shabat-motzash-rows', shabat_tl_row_html('ערבית ומגילת איכה', '20:30'));
+    insert_html_at_end_of_element('shabat-motzash-rows',
+        shabat_tl_row({ name: 'צאת השבת', timeText: '20:16' }));
+    insert_html_at_end_of_element('shabat-motzash-rows',
+        shabat_tl_row({ name: 'ערבית ומגילת איכה', timeText: '20:30' }));
 }
 
 function shabat_zachor_adaptions(){
@@ -1428,8 +1431,17 @@ async function embed_next_week_prayer_times(current_date, parent_elem_id, plus_d
 }
 
 async function present_shabat_prayer_times(current_date){
-    /* Static 3-column timeline layout (shabat_single_page.html) — this fills the
-       time spans by id; the structure/labels/bands are all in the HTML file. */
+    /* 3-column timeline layout: the HTML file is just the page shell, so build
+       the columns' bands/dividers/rows first — everything below fills the time
+       spans those rows carry, by id. */
+    var pirkei_avot_season = is_pirkei_avot_season(current_date);
+    var shabat_shuva = is_10_tshuva_days(current_date);
+    set_element_html('shabat_tl_col_eve',       get_shabat_tl_eve_and_day_col_html());
+    set_element_html('shabat_tl_col_afternoon',
+        get_shabat_tl_afternoon_col_html({ pirkeiAvotSeason: pirkei_avot_season, shabatShuva: shabat_shuva }));
+    set_element_html('shabat_tl_col_halacha',   get_shabat_tl_halacha_col_html());
+    insert_html_at_end_of_element('shabat_tl_main', get_shabat_tl_zachor_holder_html());
+
     var this_shabat_times = get_shabat_times(current_date);
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
@@ -1455,7 +1467,10 @@ async function present_shabat_prayer_times(current_date){
     set_element_html('lesson-halacha', add_minutes_to_time(mincha_ktana, -60));
     set_element_html('mincha-shabat-c', mincha_ktana);
     set_element_html('tehilim', add_minutes_to_time(mincha_ktana, 20));
-    set_element_html('shiur-pirkei-avot', add_minutes_to_time(mincha_ktana, 20));
+    /* Off-season the row isn't on the slide at all — set_element_html would throw. */
+    if (pirkei_avot_season){
+        set_element_html('shiur-pirkei-avot', add_minutes_to_time(mincha_ktana, 20));
+    }
 
     /* ── צאת שבת ── */
     set_element_html('arvit-shabat', arvit_out);
@@ -1572,8 +1587,7 @@ async function present_kipur_times(current_date){
         var arvit_time = normalize_prayer_slot_for_display(get_single_prayer_times_from_date_obj(this_week_times, 'maariv'));
 
         set_element_html('kipur_week_mincha', mincha_time);
-        /* ערבית ב/ג are fixed all year — only ערבית א moves week to week. */
-        set_element_html('kipur_week_arvit', arvit_time ? arvit_time + ' / 20:00 / 21:00' : '20:00 / 21:00');
+        set_element_html('kipur_week_arvit', arvit_time);
     }
 
     return sleep_seconds(60*3);

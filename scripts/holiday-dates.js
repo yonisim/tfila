@@ -44,6 +44,12 @@ export const DATES = {
     PESACH_VACATION:         { start: '2025-04-05T23:00',    end: '2025-04-20T12:00'    },
     SHABAT_HAGADOL:          { start: '2025-04-11T17:00',    end: '2025-04-12T17:00'    },
 
+    /* פרקי אבות season — the weeks the Shabbat afternoon שיעור בפרקי אבות runs.
+       Both ends carry a clock component on purpose: a bare '2026-05-10' parses as
+       UTC midnight, i.e. 03:00 local in summer, which would drop the first hours
+       of the first day. The 23:59 end makes the last day count in full. */
+    PIRKEI_AVOT_SEASON:      { start: '2026-05-10T00:00',    end: '2026-09-13T23:59'    },
+
     TISHA_BEAV_EVE_PRE:      { start: '2026-07-21T17:00',    end: '2026-07-22T17:00'    },
     TISHA_BEAV_EVE:          { start: '2026-07-22T17:00',    end: '2026-07-22T22:00'    },
     TISHA_BEAV:              { start: '2026-07-22T22:00',    end: '2026-07-23T20:30'    },
@@ -58,8 +64,8 @@ export const DATES = {
     ROSH_HASHANA_B:          { start: '2026-09-13T02:01',    end: '2026-09-13T19:00'    },
     GEDALIA:                 { start: '2026-09-14T02:00',    end: '2026-09-14T23:00'    },
 
-    SHOW_KIPUR_EVE:          { start: '2026-09-19T02:00',    end: '2026-09-20T12:00'    },
-    KIPUR_EVE:               { start: '2026-09-20T02:00',    end: '2026-09-20T18:00'    },
+    SHOW_KIPUR_EVE:          { start: '2026-09-19T19:15',    end: '2026-09-20T12:00'    },
+    KIPUR_EVE:               { start: '2026-09-19T19:20',    end: '2026-09-20T18:00'    },
     KIPUR:                   { start: '2026-09-20T18:00',    end: '2026-09-21T19:00'    },
 
     SUKOT_VACATION:          { start: '2025-10-04',          end: '2025-10-15'          },

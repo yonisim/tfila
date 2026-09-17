@@ -107,6 +107,14 @@ export function is_shabat_chazon(date) {
     return is_between_dates(date, DATES.SHABAT_CHAZON.start, DATES.SHABAT_CHAZON.end);
 }
 
+// ─── פרקי אבות ────────────────────────────────────────────────
+
+/** The season the Shabbat afternoon שיעור בפרקי אבות runs in — outside it the
+ *  row is left off the Shabbat slide entirely. */
+export function is_pirkei_avot_season(date) {
+    return is_between_dates(date, DATES.PIRKEI_AVOT_SEASON.start, DATES.PIRKEI_AVOT_SEASON.end);
+}
+
 // ─── Slichot ──────────────────────────────────────────────────────────────────
 
 export function is_slihot_days(date) {

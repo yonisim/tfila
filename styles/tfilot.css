@@ -11,9 +11,11 @@
  * styles/src/tailwind-input.css instead.
  */
 
-/* LEGACY — used by legacy slides; gives a semi-transparent dark background to slide containers */
+/* LEGACY — used by legacy slides. Used to wash slide containers in a
+   semi-transparent tint; dropped so the body background (main-bg) shows
+   through instead, matching the tz-page single-page slides. */
 .background-opac{
-    background-color: var(--default-text-background-color);
+    background-color: transparent;
 }
 
 /* LEGACY — base RTL grid container used by old tfilot/shabat/chag slides */

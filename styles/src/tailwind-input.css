@@ -434,10 +434,11 @@
   }
 
   /* activate_element() adds the legacy .background-color class to every slide
-     root, which washes the page in rgba(245,245,245,0.5).  Single-page slides
-     let the body background show through instead, so drop the wash here.  Two
-     class selectors out-specify the .background-color rule in main.css. */
-  .tz-page.background-color {
+     root, which washes the page in rgba(245,245,245,0.5).  Every slide should
+     let the body background (main-bg) show through instead, so drop the wash
+     here for all of them, not just the tz-page single-page slides.  Repeating
+     the class selector out-specifies the .background-color rule in main.css. */
+  .background-color.background-color {
     background-color: transparent;
   }
 
