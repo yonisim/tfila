@@ -340,7 +340,7 @@ function get_slide_show_items_ids(){
     }
     if (is_show_kipur_eve(date) || is_kipur_eve(date)){
         slide_show_items.push('kipur_eve_single_page');
-        slide_show_items.push('kipur');
+        slide_show_items.push('kipur_single_page');
     }
     if (is_between_dates(date, "2022-10-09T05:00", "2022-10-09T19:30")){
         slide_show_items.push('sukot_eve');
@@ -1531,34 +1531,11 @@ function present_kipur_day_preview(current_date){
 async function present_kipur_eve_times(current_date){
     var chag_in = '18:17';
 
-    if (is_show_kipur_eve(current_date)){
-        // Morning phase: too much content (weekday morning + candle-lighting +
-        // a full day preview) for one slide even across three columns, so eve
-        // and the day preview alternate.
-        kipur_eve_view_toggle = !kipur_eve_view_toggle;
-        if (kipur_eve_view_toggle){
             set_element_html('kipur_eve_grid', get_kipur_eve_full_page_grid_html());
             set_element_html('chag_in', chag_in);
             set_element_html('kol_nidrei', add_minutes_to_time(chag_in, 10));
             present_day_times(current_date);
-        } else {
-            present_kipur_day_preview(current_date);
-        }
-        return sleep_seconds(60);
-    }
 
-    /* Afternoon phase: eve keeps the screen to itself. The combined slide
-       already carries the fast day's whole schedule beside what is left of eve,
-       so the separate day slide that alternates in before noon would only be
-       repeating it here — and alternating cost erev its own slide for half the
-       afternoon, which is the hour it is most wanted.
-
-       No present_day_times() on this one — it is the single Kipur slide with no
-       halachic column (see get_kipur_eve_combined_page_grid_html), and
-       set_element_data throws on an id the slide doesn't have. */
-    set_element_html('kipur_eve_grid', get_kipur_eve_combined_page_grid_html());
-    set_element_html('chag_in', chag_in);
-    set_element_html('kol_nidrei', add_minutes_to_time(chag_in, 10));
 
     return sleep_seconds(60*3);
 }
