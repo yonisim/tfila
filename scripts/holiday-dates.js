@@ -56,7 +56,7 @@ export const DATES = {
     SHABAT_CHAZON:           { start: '2025-08-01T19:00',    end: '2025-08-02T20:00'    },
     SIFTEI_RENANOT:          { start: '2026-08-13T19:00',    end: '2026-09-21T19:00'    },
     SLICHOT_DAYS:            { start: '2026-09-06T16:00',    end: '2026-09-19T23:00'    },
-    TSHUVA_DAYS:             { start: '2026-09-14T00:00',    end: '2026-09-21T23:00'    },
+    TSHUVA_DAYS:             { start: '2026-09-14T00:00',    end: '2026-09-21T19:00'    },
 
     SHOW_ROSH_HASHANA_EVE:   { start: '2026-09-10T12:01',    end: '2026-09-11T23:00'    },
     ROSH_HASHANA_EVE:        { start: '2026-09-11T00:01',    end: '2026-09-12T02:00'    },
@@ -66,16 +66,16 @@ export const DATES = {
 
     SHOW_KIPUR_EVE:          { start: '2026-09-19T19:15',    end: '2026-09-20T12:00'    },
     KIPUR_EVE:               { start: '2026-09-19T19:20',    end: '2026-09-20T18:00'    },
-    KIPUR:                   { start: '2026-09-20T18:00',    end: '2026-09-21T19:00'    },
+    KIPUR:                   { start: '2026-09-20T18:00',    end: '2026-09-21T19:30'    },
 
-    SUKOT_VACATION:          { start: '2025-10-04',          end: '2025-10-15'          },
-    SUKOT_EVE:               { start: '2025-10-05T19:00',    end: '2025-10-06T14:00'    },
-    SUKOT:                   { start: '2025-10-06T14:01',    end: '2025-10-07T19:20'    },
+    SUKOT_VACATION:          { start: '2026-09-21T19:30',          end: '2026-10-04'          },
+    SUKOT_EVE:               { start: '2026-09-24T19:00',    end: '2026-09-25T14:00'    },
+    SUKOT:                   { start: '2026-09-25T14:01',    end: '2026-09-26T19:20'    },
 
-    SIMCHAT_TORA_EVE_SHOW:   { start: '2025-10-12T10:00',    end: '2025-10-12T23:59'    },
-    SIMCHAT_TORA_EVE:        { start: '2025-10-13T00:01',    end: '2025-10-13T23:59'    },
-    SIMCHAT_TORA:            { start: '2025-10-14T00:01',    end: '2025-10-14T19:00'    },
-    HAKAFOT_SINGLE_PAGE:     { start: '2025-10-14T00:01',    end: '2025-10-14T13:15'    },
+    SIMCHAT_TORA_EVE_SHOW:   { start: '2026-10-02T10:00',    end: '2026-10-02T23:59'    },
+    SIMCHAT_TORA_EVE:        { start: '2026-10-02T00:01',    end: '2026-10-02T23:59'    },
+    SIMCHAT_TORA:            { start: '2026-10-03T00:01',    end: '2026-10-04T19:00'    },
+    HAKAFOT_SINGLE_PAGE:     { start: '2026-10-14T00:01',    end: '2026-10-04T13:15'    },
 
     HANUKA:                  { start: '2025-12-14T16:55',    end: '2025-12-22T16:40'    },
 };

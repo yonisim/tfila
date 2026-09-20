@@ -1,18 +1,14 @@
 'esversion: 8';
-import { insert_html, append_html, activate_element, deactivate_element,
-    wait_for_scroll, toggle_element_show, show_by_id } from "./main-div-setter.js";
+import { append_html, mount_slide, fade_in_slide,
+    wait_for_animations, wait_for_scroll_animation, next_frame,
+    toggle_element_show, show_by_id } from "./main-div-setter.js";
 import {current_date, get_date_from_Date, read_json} from "./read_data.js";
 import {set_element_data, set_element_html, set_element_background, insert_html_at_start_of_element,
     insert_html_at_end_of_element,
     get_element_background, set_element_background_image, add_class_to_element_style} from "./main-div-setter.js";
 import {get_hebrew_date, parse_sfirat_haomer, omer_days_count_to_hebrew, omer_days_count_to_hebrew_weeks} from "./parse_hebrew_date.js";
 import {load_file} from "./scroll.js";
-import {
-  clockFunc,
-  fitTfilotHeroClock,
-  attachTfilotHeroClockResizeObserver,
-  syncTfilotHeroClockDiskSize,
-} from "./clock-time.js";
+import { clockFunc } from "./clock-time.js";
 
 import {
     is_between_dates, is_in_weekdays, is_after_time, is_before_time, is_weekend,
@@ -30,7 +26,7 @@ import {
     is_shavout, is_shabat_eve_chag,
     is_show_rosh_hashana_eve, is_rosh_hashana_eve, is_rosh_hashana, is_rosh_hashana_b,
     is_gedalia,
-    is_show_kipur_eve, is_kipur_eve, is_kipur,
+    is_show_kipur_eve, is_kipur_eve, is_kipur, is_between_kipur_and_sukot,
     is_sukot_eve, is_sukot,
     is_present_simchat_tora_eve, is_simchat_tora_eve, is_simchat_tora,
     is_present_hakafot_single_page,
@@ -148,17 +144,22 @@ var ROSH_HASHANA_PAGE_IDS = new Set([
     'kipur_single_page',
 ]);
 
+/* Cross-cutting per-slide setup. The clock + Hebrew date themselves are NOT
+   mounted here — they are permanent chrome in #hero-hud-host, mounted once by
+   present_first_page(). All this does is keep their content current and expose
+   the slide id to CSS, so rules like the narrow shabat clock can still key off
+   which slide is showing (see styles/src/tailwind-input.css). */
 function setup_hero_slide(date, page_id) {
+    document.body.dataset.slide = page_id;
+    /* The HUD is shared chrome now — a date with no entry in day_times must not
+       take the whole slide down with it, as it would when the HUD was mounted
+       as part of the slide. Leave the previous date text up and carry on. */
+    try {
+        sync_tfilot_top_hud_dates(date);
+    } catch (ex) {
+        console.error('could not refresh the HUD hebrew date', ex);
+    }
     if (!HERO_SLIDE_IDS.has(page_id)) return;
-    insert_html_at_start_of_element(page_id, get_hero_hud_html());
-    sync_tfilot_top_hud_dates(date);
-    attachTfilotHeroClockResizeObserver();
-    requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-            syncTfilotHeroClockDiskSize();
-            fitTfilotHeroClock();
-        });
-    });
     if (!ROSH_HASHANA_PAGE_IDS.has(page_id)) {
         show_footer_custom_message_if_needed(date, page_id);
     }
@@ -184,28 +185,33 @@ function sync_tfilot_top_hud_dates(current_date){
 }
 
 function present_first_page(){
+    /* Mount the clock + Hebrew date once, into the host that lives outside
+       #main-div. Nothing ever unmounts them, so they never fade with a slide. */
+    set_element_html('hero-hud-host', get_hero_hud_html());
     clockFunc();
     present_last_commit();
     loop_pages();
 }
 
-function present_next_main_div(item){
-    insert_html('./html/'+ item + '.html', "main-div");
-}
-
 function sleep(ms, abort_key='ArrowRight') {
     let timeoutId;
     return new Promise((resolve) => {
-        timeoutId = setTimeout(resolve, ms);
+        /* Always detach the listener — on the timeout path too. Leaving it
+           attached leaked one handler per slide, and a later ArrowRight then
+           resolved every stale promise at once. */
+        function finish() {
+            clearTimeout(timeoutId);
+            document.removeEventListener("keydown", handleKeyDown);
+            resolve();
+        }
 
         function handleKeyDown(event) {
             if (event.key === abort_key) {
-                clearTimeout(timeoutId);
-                resolve(); // Resolve immediately when arrow right is pressed
-                document.removeEventListener("keydown", handleKeyDown);
+                finish(); // Resolve immediately when arrow right is pressed
             }
         }
 
+        timeoutId = setTimeout(finish, ms);
         document.addEventListener("keydown", handleKeyDown);
     });
 }
@@ -253,7 +259,7 @@ function is_special_day(date){
         is_present_memorial_day(date) | is_present_atzmaut(date) |
         is_simchat_tora_eve(date) | is_simchat_tora(date) | is_purim(date) |
         is_rosh_hashana_eve(date) | is_rosh_hashana(date) | is_rosh_hashana_b(date) |
-        is_gedalia(date)
+        is_gedalia(date) | is_kipur_eve(date) | is_kipur(date)
 }
 
 function get_specific_single_page(current_date){
@@ -281,8 +287,6 @@ function get_specific_single_page(current_date){
 
     } else if(is_gedalia(current_date_obj)){
         item = 'gedalia'
-    } else if (is_kipur_eve(current_date_obj)){
-        item = 'kipur_eve_single_page';
     } else if (is_kipur(current_date_obj)){
         item = 'kipur_single_page';
     } else if (is_sukot_eve(current_date_obj)){
@@ -334,10 +338,8 @@ function get_slide_show_items_ids(){
     if (is_between_dates(date, "2022-09-26T17:00", "2022-09-27T19:30")){
         slide_show_items.push('rosh_hashana_b');
     }
-    if (is_show_kipur_eve(date)){
+    if (is_show_kipur_eve(date) || is_kipur_eve(date)){
         slide_show_items.push('kipur_eve_single_page');
-    }
-    if (is_between_dates(date, "2022-10-04T05:00", "2022-10-05T19:30")){
         slide_show_items.push('kipur');
     }
     if (is_between_dates(date, "2022-10-09T05:00", "2022-10-09T19:30")){
@@ -1904,16 +1906,20 @@ function present_donators(date){
         document.getElementById('output')
             .innerHTML=content;
       });
-    return wait_for_scroll(document.getElementById('output'));
+    return wait_for_scroll_animation(document.getElementById('output'));
 }
 
 async function present_messages(date){
     async function display_message(messages_list, elem){
         var message = messages_list[0];
         elem.innerText = message;
-        elem.classList.add('fade-in');
-        await wait_for_scroll(elem);
-        elem.classList.remove('fade-in');
+        /* Same fade primitive as the slides: start hidden, add .is-visible, await
+           the transition. Removing it again leaves the next message ready to fade. */
+        elem.classList.add('slide-layer');
+        elem.classList.remove('is-visible');
+        await next_frame();
+        elem.classList.add('is-visible');
+        await wait_for_animations(elem);
         messages_list.shift();
         return sleep_seconds(message_wait_seconds).then(() => {
             if (messages_list.length) {
@@ -1938,10 +1944,10 @@ function set_main_area_background(date){
     if (date.getDay() == 6){
         //background = 'shabat_2';
     }
-    if(is_between_dates(date, '2024-10-02T02:00', '2024-10-05T23:00')){
+    if(is_10_tshuva_days(date)){
         background = 'shofar.jpg';
     }
-    if(is_between_dates(date, '2024-10-08T02:00', '2024-10-12T23:00')){
+    if(is_between_kipur_and_sukot(date)){
         background = 'beit-hamikdash-1.jpeg';
     }
     if(is_sukot_vacation(date)){
@@ -2030,14 +2036,13 @@ function get_items_to_present(current_date, items){
     return ads;
 }
 
+/* The ad image is painted on the #advertisement slide root rather than on <body>,
+   so it fades with the slide like every other page instead of hard-cutting.
+   The old code swapped body.className and overwrote the body background image,
+   which made the main-bg photo disappear for the length of the ad; painting on
+   the layer instead leaves the photo untouched behind it. */
 async function present_advertisement(current_date){
-    var body = document.getElementsByTagName('body')[0];
-    var header_element = document.getElementsByTagName('header')[0];
-    var main_div_element = document.getElementById('main-div');
-    toggle_element_show(header_element, true);
-    toggle_element_show(main_div_element, true);
-    var body_classes = body.className;
-    body.className = 'advertisement';
+    var ad_element = document.getElementById('advertisement');
     var ads_for_present;
     if (is_between_dates(current_date, "2022-10-09", "2022-10-18")){
         ads_for_present = get_sukot_ads();
@@ -2046,15 +2051,23 @@ async function present_advertisement(current_date){
     } else {
         ads_for_present = get_items_to_present(current_date, advertisements);
     }
+    var is_first_ad = true;
     for (var ad_definition of ads_for_present){
         var ad_file_name = ad_definition.image;
-        set_element_background_image(body, `${images_dir}/${ad_file_name}`);
+        if (!is_first_ad){
+            /* Cross-ad swap: fade the layer down, change the image, fade back up,
+               so a run of several ads reads the same as a slide change. */
+            ad_element.classList.remove('is-visible');
+            await wait_for_animations(ad_element);
+        }
+        set_element_background_image(ad_element, `${images_dir}/${ad_file_name}`);
+        if (!is_first_ad){
+            await fade_in_slide(ad_element);
+        }
+        is_first_ad = false;
         var exposure_time = ad_definition.exposure_time_seconds || ad_wait_seconds;
         await sleep_seconds(exposure_time);
     }
-    body.className = body_classes;
-    toggle_element_show(header_element, false);
-    toggle_element_show(main_div_element, false);
 }
 
 let item_funcs = {
@@ -2096,6 +2109,34 @@ let item_funcs = {
     'day_times': present_day_times_page
 };
 
+/* The one render path. Both loop branches go through here, so every slide fades
+   in and out identically — previously only the rotation branch faded, and only
+   for slides that happened to carry a hardcoded fade-in class.
+
+   The slide is filled while it is still at opacity 0. item_func is started but
+   not awaited: most of them are synchronous fills that finish within the two
+   frames we then wait for, while the few that keep running (donors scroll,
+   messages) double as the slide's dwell timer and are awaited at the end. */
+async function present_slide(item, date, { transition = 'fade' } = {}){
+    var root = await mount_slide(item, {
+        transition: transition,
+        on_mount: function () { setup_hero_slide(date, item); }
+    });
+    var dwell = Promise.resolve().then(function () { return item_funcs[item](date); });
+    dwell.catch(function () {});   // handled below; this only silences the unhandled-rejection warning
+    await next_frame();
+    await fade_in_slide(root);
+    await dwell;
+}
+
+/* A holiday page stays up for hours. Re-mounting it every dwell wasted a fade
+   cycle and threw away the DOM for no reason, but it can't simply be left alone
+   forever either — the night prefix, mincha rows and footer messages are all
+   time-of-day dependent. So: re-mount only on a real change, or every 10 minutes. */
+var last_mount = { item: null, day: null, at: 0 };
+var SINGLE_PAGE_REMOUNT_MINUTES = 10;
+var SINGLE_PAGE_POLL_SECONDS = wait_seconds;
+
 async function loop_pages(){
     while (true){
         current_date_obj = current_date();
@@ -2103,31 +2144,34 @@ async function loop_pages(){
         var single_page_item = get_specific_single_page(current_date_obj)
         if(single_page_item){
             try{
-                await insert_html('./html/'+ single_page_item + '.html', "main-div");
-                var element = document.getElementById(single_page_item);
-                element.classList.add('background-opac');
-                setup_hero_slide(current_date_obj, single_page_item);
-                var item_func = item_funcs[single_page_item];
-                await item_func(current_date_obj);
+                var is_same_item = last_mount.item === single_page_item;
+                var is_stale = !is_same_item
+                    || last_mount.day !== get_date_from_Date(current_date_obj)
+                    || Date.now() - last_mount.at > SINGLE_PAGE_REMOUNT_MINUTES * 60000;
+                if (is_stale){
+                    /* Timestamp the mount, not its end, and only record it on
+                       success — a failed mount must stay stale so it retries. */
+                    var mount_started = Date.now();
+                    await present_slide(single_page_item, current_date_obj,
+                        { transition: is_same_item ? 'none' : 'fade' });
+                    last_mount = {
+                        item: single_page_item,
+                        day: get_date_from_Date(current_date_obj),
+                        at: mount_started
+                    };
+                } else {
+                    await sleep_seconds(SINGLE_PAGE_POLL_SECONDS);
+                }
             } catch (ex){
                 console.log("An error occured while activating page " + single_page_item);
-                console.log('test');
                 console.error(ex.stack);
                 await sleep_seconds(30);
             }
         } else{
             for (var item of get_slide_show_items_ids()){
                 try{
-                    if (item == 'advertisement'){
-                        await present_advertisement(current_date_obj);
-                    }else{
-                        await insert_html('./html/'+ item + '.html', "main-div");
-                        var item_func = item_funcs[item];
-                        activate_element(item);
-                        setup_hero_slide(current_date_obj, item);
-                        await item_func(current_date_obj);
-                        await deactivate_element(item);
-                    }
+                    await present_slide(item, current_date_obj);
+                    last_mount = { item: item, day: get_date_from_Date(current_date_obj), at: Date.now() };
                 } catch (ex){
                     console.log("An error occured while activating page" + item);
                     console.log(ex);
@@ -2252,17 +2296,6 @@ function get_today_times_according_to_sunset(date){
     }
     return today_times;
 }
-
-function animationsTest (callback) {
-    // Test if ANY/ALL page animations are currently active
-
-    var testAnimationInterval = setInterval(function () {
-        if (!wait_for_animation) { // any page animations finished
-            clearInterval(testAnimationInterval);
-            callback();
-        }
-    }, 25);
-};
 
 function getLastCommitMessage(dir = ".") {
     try {

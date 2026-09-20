@@ -14,7 +14,12 @@
   <body class="main-bg">
       
     <div id="main-div">
-    </div>      
+    </div>
+
+    <!-- שעון + תאריך עברי — כרום קבוע מחוץ ל-main-div, כדי שלא ידהה עם המצגת.
+         class="tz-page" הכרחי: tailwind.config.js מגדיר important: '.tz-page',
+         כך שכל ה-utilities של לוח התאריכים פעילים רק בתוך אב כזה. -->
+    <div id="hero-hud-host" class="tz-page" aria-hidden="true"></div>
 
     <!-- Ctrl+D — בחירת תאריך/שעה לבדיקה. חייב לרוץ לפני present-next-page.js
          (script רגיל רץ לפני module נדחה) כדי לעטוף את Date בזמן. -->

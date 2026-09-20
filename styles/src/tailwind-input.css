@@ -161,13 +161,10 @@
     max-height: 100vh;
   }
 
-  /* Each page root stretches to fill the flex parent */
-  #main-div:has(#tfilot_single_page)      > #tfilot_single_page,
-  #main-div:has(#friday_single_page)       > #friday_single_page,
-  #main-div:has(#friday_single_page_plag)  > #friday_single_page_plag,
-  #main-div:has(#shabat_single_page)       > #shabat_single_page,
-  #main-div:has(#shavuot_single_page)      > #shavuot_single_page,
-  #main-div:has(#tisha_beav)               > #tisha_beav {
+  /* Each page root stretches to fill the flex parent.
+     Matches every .tz-page slide root — the previous hardcoded id list
+     silently missed kipur / rosh_hashana / gedalia. */
+  #main-div > .tz-page {
     flex: 1 1 0;
     min-height: 0;
     display: flex;
@@ -231,12 +228,19 @@
     }
   }
 
-  /* Shabbat / Shavuot / Tisha B'Av: hero clock sits on physical left (RTL day-times column) — cap width */
-  :is(#shabat_single_page, #shavuot_single_page, #tisha_beav) .tfilot-clock-corner.tfilot-hero-clock {
+  /* Shabbat / Shavuot / Tisha B'Av: hero clock sits on physical left (RTL day-times column) — cap width.
+     Keyed off body[data-slide] rather than the slide root id: the HUD lives in the
+     persistent #hero-hud-host, so it is no longer a descendant of the slide.
+     setup_hero_slide() sets document.body.dataset.slide on every mount. */
+  body[data-slide="shabat_single_page"] .tfilot-clock-corner.tfilot-hero-clock,
+  body[data-slide="shavuot_single_page"] .tfilot-clock-corner.tfilot-hero-clock,
+  body[data-slide="tisha_beav"] .tfilot-clock-corner.tfilot-hero-clock {
     max-width: min(10.75rem, 36vw);
   }
 
-  :is(#shabat_single_page, #shavuot_single_page, #tisha_beav) .tfilot-clock-corner .clock {
+  body[data-slide="shabat_single_page"] .tfilot-clock-corner .clock,
+  body[data-slide="shavuot_single_page"] .tfilot-clock-corner .clock,
+  body[data-slide="tisha_beav"] .tfilot-clock-corner .clock {
     font-size: clamp(1.58rem, 4.85vmin, 2.55rem);
   }
 
@@ -433,11 +437,11 @@
     background-attachment: fixed;
   }
 
-  /* activate_element() adds the legacy .background-color class to every slide
-     root, which washes the page in rgba(245,245,245,0.5).  Every slide should
-     let the body background (main-bg) show through instead, so drop the wash
-     here for all of them, not just the tz-page single-page slides.  Repeating
-     the class selector out-specifies the .background-color rule in main.css. */
+  /* Legacy .background-color washes an element in rgba(245,245,245,0.5).  No
+     slide root carries it any more (activate_element, which used to add it, is
+     gone), but data-driven markup still might, and every slide should let the
+     body background (main-bg) show through.  Repeating the class selector
+     out-specifies the .background-color rule in main.css. */
   .background-color.background-color {
     background-color: transparent;
   }

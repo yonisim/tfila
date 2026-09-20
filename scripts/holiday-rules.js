@@ -233,6 +233,10 @@ export function is_kipur(date) {
 
 // ─── Sukkot / Simchat Torah ───────────────────────────────────────────────────
 
+export function is_between_kipur_and_sukot(date) {
+    return is_between_dates(date, DATES.SUKOT.end, DATES.SIMCHAT_TORA_EVE.start);
+}
+
 export function is_sukot_eve(date) {
     return is_between_dates(date, DATES.SUKOT_EVE.start, DATES.SUKOT_EVE.end);
 }

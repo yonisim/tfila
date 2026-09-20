@@ -6,7 +6,19 @@ html{
   --default-text-background-color:  rgba(245, 245, 245, 0.5);
   #--title-color: rgb(44, 90, 160);
   --title-color: #3674B5;
+
+  /* Slide transition timing — see .slide-layer below */
+  --slide-fade-out: 500ms;
+  --slide-fade-in: 800ms;
+  --slide-fade-easing: cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    --slide-fade-out: 1ms;
+    --slide-fade-in: 1ms;
+  }
+}
 
 body, article {
   #background: var(--bgColor);  
@@ -23,6 +35,18 @@ body, article {
 
 #main-div {
   height: 100vh;
+}
+
+/* Persistent clock + Hebrew-date chrome. Lives outside #main-div so slide swaps
+   never destroy it and it never fades. Both HUD panels are position:absolute, so
+   this host reserves no layout space — it only supplies the containing block and
+   the .tz-page scope their CSS needs. */
+#hero-hud-host {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: none;
 }
 
 .container-1 {
@@ -146,6 +170,14 @@ body, article {
   background-position: center;
 }
 
+/* The ad slide paints the image on itself (present_advertisement) so it can fade
+   like any other slide. Deliberately transparent: the main-bg photo must stay
+   visible at all times, including in the letterboxing around a `contain` image. */
+#main-div > #advertisement {
+  height: 100%;
+  background-color: transparent;
+}
+
   .oval {
     width: fit-content;
     background: rgba(62, 115, 228, 0.724);
@@ -173,23 +205,17 @@ body, article {
     font-size: 15vh;
   }
 
-  .fade-in {
-    animation: fadeIn 1s;
-  }
-
-  .fade-out {
+  /* Slide transition. Every slide gets .slide-layer from mount_slide(); adding
+     .is-visible fades it in. Asymmetric timing — quick out, slower in — is what
+     makes the sequential swap read as a crossfade. Tune here, nowhere else. */
+  .slide-layer {
     opacity: 0;
-    animation: fadeOut 1s;
+    transition: opacity var(--slide-fade-out) var(--slide-fade-easing);
   }
 
-  @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-
-  @keyframes fadeOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
+  .slide-layer.is-visible {
+    opacity: 1;
+    transition-duration: var(--slide-fade-in);
   }
 
 .align-right{
