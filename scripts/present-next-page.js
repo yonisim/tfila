@@ -27,7 +27,7 @@ import {
     is_show_rosh_hashana_eve, is_rosh_hashana_eve, is_rosh_hashana, is_rosh_hashana_b,
     is_gedalia,
     is_show_kipur_eve, is_kipur_eve, is_kipur, is_between_kipur_and_sukot,
-    is_sukot_eve, is_sukot,
+    is_sukot_eve, is_sukot, is_sukot_on_shabat,
     is_present_simchat_tora_eve, is_simchat_tora_eve, is_simchat_tora,
     is_present_hakafot_single_page,
     is_10_tevet_friday, is_sefardi_slichot_season, is_10_tshuva_days
@@ -289,10 +289,26 @@ function get_specific_single_page(current_date){
         item = 'gedalia'
     } else if (is_kipur(current_date_obj)){
         item = 'kipur_single_page';
-    } else if (is_sukot_eve(current_date_obj)){
-        item = 'chag_eve';
-    } else if (is_sukot(current_date_obj)){
-        item = 'chag_single_page';
+    } else if (is_sukot_eve(current_date_obj) || is_sukot(current_date_obj)){
+        /* א' דחג סוכות falls on Shabbat in תשפ"ז, and a chag on Shabbat runs on
+           the Shabbat schedule — so it gets no slide of its own. The regular
+           Shabbat timeline already carries every time this day runs on, and
+           shabat.json names the day in its own 'parasha' entry ("חג סוכות" for
+           2026-09-26), which is what that slide's title span shows.
+
+           Erev is erev Shabbat for the same reason: until candle lighting there
+           is nothing chag-specific to show, so those hours deliberately return
+           null and fall through to the ordinary slideshow — friday_single_page
+           carries the same parasha in its own title, and is_shabat_time() picks
+           the day up from half an hour before הדלקת נרות onwards.
+
+           A year where סוכות lands midweek still needs the generic chag slides,
+           so that path stays. */
+        if (is_sukot_on_shabat()){
+            item = is_shabat_time(current_date_obj) ? 'shabat_single_page' : null;
+        } else {
+            item = is_sukot(current_date_obj) ? 'chag_single_page' : 'chag_eve';
+        }
     } else if (is_between_dates(current_date_obj, "2026-05-21T01:00", "2026-05-21T19:00")){
         item = 'shavuot_eve';
     } else if(is_gedalia(current_date_obj)){

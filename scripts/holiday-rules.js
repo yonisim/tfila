@@ -245,6 +245,17 @@ export function is_sukot(date) {
     return is_between_dates(date, DATES.SUKOT.start, DATES.SUKOT.end);
 }
 
+/** Does א' דחג סוכות fall on Shabbat this year? Read off DATES.SUKOT.end, which
+ *  is the chag day itself — the window opens the afternoon before, so its start
+ *  date is erev and only the end date names the day. Takes no argument: this is
+ *  a property of the year's calendar, not of the moment being rendered.
+ *
+ *  A chag that falls on Shabbat runs on the Shabbat schedule, so it gets no
+ *  slide of its own — see the סוכות branch of get_specific_single_page(). */
+export function is_sukot_on_shabat() {
+    return new Date(DATES.SUKOT.end).getDay() === 6;
+}
+
 export function is_present_simchat_tora_eve(date) {
     return is_between_dates(date, DATES.SIMCHAT_TORA_EVE_SHOW.start, DATES.SIMCHAT_TORA_EVE_SHOW.end);
 }
