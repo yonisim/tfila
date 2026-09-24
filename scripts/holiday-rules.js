@@ -233,7 +233,12 @@ export function is_kipur(date) {
 
 // ─── Sukkot / Simchat Torah ───────────────────────────────────────────────────
 
-export function is_between_kipur_and_sukot(date) {
+/** חול המועד סוכות — from the close of א' דחג (DATES.SUKOT.end) up to ערב
+ *  שמיני עצרת. Was named is_between_kipur_and_sukot, which described neither
+ *  end of the range it actually spans. The weekday slide runs on these days and
+ *  titles itself "זמני תפילות חול המועד" while this is true — see
+ *  get_tfilot_regular_days_grid_html(). */
+export function is_chol_hamoed_sukot(date) {
     return is_between_dates(date, DATES.SUKOT.end, DATES.SIMCHAT_TORA_EVE.start);
 }
 

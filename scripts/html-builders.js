@@ -14,7 +14,7 @@
  * in one place without hunting through the builders.
  */
 
-import { is_purim, is_10_tevet_friday, is_rosh_hashana_eve } from './holiday-rules.js';
+import { is_purim, is_10_tevet_friday, is_rosh_hashana_eve, is_chol_hamoed_sukot } from './holiday-rules.js';
 import {
     tz_card, tz_time, tz_label, tz_time_column, tz_time_card, tz_card_row,
     tz_section_header, tz_day_time_row, tz_col, tz_fill_slot, tz_flex_spacer,
@@ -578,12 +578,17 @@ export function get_tfilot_day_times_col_weekday_html(rowOpts) {
  * Add a column by pushing another descriptor into the array:
  *   { title: 'כותרת', id: 'my-col', children: my_col_html() }
  *
+ * @param {Date} [current_date] Only the title depends on it: the weekday slide is
+ *        what runs on חול המועד סוכות too, and on those days it names itself
+ *        "זמני תפילות חול המועד". Omitted (or any other date) → plain "חול".
  * @returns {string} HTML string
  */
-export function get_tfilot_regular_days_grid_html() {
+export function get_tfilot_regular_days_grid_html(current_date) {
+    var weekday_title = 'זמני תפילות חול' +
+        (current_date && is_chol_hamoed_sukot(current_date) ? ' המועד' : '');
     return tz_page_grid([
         {
-            title:    'זמני תפילות חול',
+            title:    weekday_title,
             id:       'prayer_times',
             children: get_tfilot_prayer_col_html(),
         },

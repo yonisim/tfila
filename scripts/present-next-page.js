@@ -26,7 +26,7 @@ import {
     is_shavout, is_shabat_eve_chag,
     is_show_rosh_hashana_eve, is_rosh_hashana_eve, is_rosh_hashana, is_rosh_hashana_b,
     is_gedalia,
-    is_show_kipur_eve, is_kipur_eve, is_kipur, is_between_kipur_and_sukot,
+    is_show_kipur_eve, is_kipur_eve, is_kipur, is_chol_hamoed_sukot,
     is_sukot_eve, is_sukot, is_sukot_on_shabat,
     is_present_simchat_tora_eve, is_simchat_tora_eve, is_simchat_tora,
     is_present_hakafot_single_page,
@@ -975,7 +975,7 @@ async function present_prayer_times_single_page(current_date){
     var arvit_time  = get_single_prayer_times_from_date_obj(this_week_times, 'maariv');
 
     /* Build the full two-column grid from components — no HTML file fetches needed. */
-    set_element_html('tfilot_page_grid', get_tfilot_regular_days_grid_html());
+    set_element_html('tfilot_page_grid', get_tfilot_regular_days_grid_html(current_date));
 
     if (is_shacharit_8_30(current_date) && is_mincha_13_30(current_date)){
         add_class_to_element_style('prayer_times', 'table-line-height-less');
@@ -1940,7 +1940,7 @@ function set_main_area_background(date){
     if(is_10_tshuva_days(date)){
         background = 'shofar.jpg';
     }
-    if(is_between_kipur_and_sukot(date)){
+    if(is_chol_hamoed_sukot(date)){
         background = 'beit-hamikdash-1.jpeg';
     }
     if(is_sukot_vacation(date)){
