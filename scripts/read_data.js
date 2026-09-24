@@ -1,9 +1,13 @@
 'esversion: 8';
 
 export function current_date(){
-    let cur_date = new Date('2023-05-26T19:40:02');
-    let time = new Date();
-    return time;
+    // Allow tests to freeze time by setting npm_config_test_date in the environment.
+    // Works because the Electron renderer runs with nodeIntegration: true.
+    // time-travel.js clears this var when ?sim= is active, so Ctrl+D always wins.
+    if (typeof process !== 'undefined' && process.env && process.env.npm_config_test_date) {
+        return new Date(process.env.npm_config_test_date);
+    }
+    return new Date();
 }
 
 function formatDate(date, reverse) {
