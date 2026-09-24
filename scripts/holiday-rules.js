@@ -78,7 +78,7 @@ export function is_shacharit_8_30(date) {
 }
 
 export function is_mincha_13_30(date) {
-    return is_big_vacation(date) || is_pesach_vacation(date) || is_war(date);
+    return is_big_vacation(date) || is_pesach_vacation(date) || is_sukot_vacation(date) || is_war(date);
 }
 
 // ─── Fast days ────────────────────────────────────────────────────────────────
