@@ -7,6 +7,12 @@
  *   - Fixed dates so the correct slide always loads.
  *
  * Viewport: 1280 × 800 px (--test-mode in main.js).
+ *
+ * NOTE: testDate must fall inside the range of the data file read_initial_data()
+ * loads (currently parsed_dates_tashpaz.json, 2026-08-14 → 2027-10-01). A date
+ * outside it leaves day_times empty, the slide renders blank and every criterion
+ * fails for a reason that has nothing to do with the slide. Update these dates
+ * whenever the loaded data year changes.
  */
 
 const { test, expect } = require('@playwright/test');
@@ -63,7 +69,7 @@ test.describe('Regular day slide', () => {
 
   test.beforeAll(async () => {
     ({ window, close } = await launchApp({
-      testDate: '2026-05-24T10:00:00',   // Sunday, no holiday → tfilot_single_page
+      testDate: '2026-11-15T10:00:00',   // Sunday, no holiday → tfilot_single_page
       waitMs: 4000,
     }));
   });
@@ -127,7 +133,7 @@ test.describe('Friday slide', () => {
 
   test.beforeAll(async () => {
     ({ window, close } = await launchApp({
-      testDate: '2026-05-15T10:00:00',   // Friday, MINYAN_PLAG_ACTIVE → friday_single_page_plag
+      testDate: '2026-08-28T10:00:00',   // Friday, MINYAN_PLAG_ACTIVE → friday_single_page_plag
       waitMs: 5000,
     }));
   });
@@ -190,7 +196,7 @@ test.describe('Shabbat slide', () => {
 
   test.beforeAll(async () => {
     ({ window, close } = await launchApp({
-      testDate: '2026-05-16T10:00:00',   // Saturday, no holiday → shabat_single_page
+      testDate: '2026-11-21T10:00:00',   // Saturday, no holiday → shabat_single_page
       waitMs: 5000,
     }));
   });
