@@ -68,6 +68,8 @@ import {
     get_kipur_day_full_page_grid_html,
     get_kipur_eve_combined_page_grid_html,
     get_kipur_page_grid_html,
+    get_simchat_tora_night_page_grid_html,
+    get_simchat_tora_day_page_grid_html,
     shabat_tl_row,
     get_shabat_tl_eve_and_day_col_html,
     get_shabat_tl_afternoon_col_html,
@@ -117,6 +119,7 @@ var HERO_SLIDE_IDS = new Set([
     'tfilot_single_page',
     'friday_single_page',
     'friday_single_page_plag',
+    'hoshana_raba_single_page',
     'shabat_single_page',
     'shavuot_single_page',
     'tisha_beav',
@@ -127,6 +130,8 @@ var HERO_SLIDE_IDS = new Set([
     'gedalia',
     'kipur_eve_single_page',
     'kipur_single_page',
+    'simchat_tora_night_single_page',
+    'simchat_tora_single_page',
 ]);
 
 /* Rosh Hashana slides (and the standalone Gedalia fast, which shares the same
@@ -142,6 +147,8 @@ var ROSH_HASHANA_PAGE_IDS = new Set([
     'gedalia',
     'kipur_eve_single_page',
     'kipur_single_page',
+    'simchat_tora_night_single_page',
+    'simchat_tora_single_page',
 ]);
 
 /* Cross-cutting per-slide setup. The clock + Hebrew date themselves are NOT
@@ -262,6 +269,22 @@ function is_special_day(date){
         is_gedalia(date) | is_kipur_eve(date) | is_kipur(date)
 }
 
+/* הושענא רבה is erev שמחת תורה, so that week's Friday counts as a special day
+   and the Friday slide above is suppressed. This slide stands in for it, on the
+   same Thursday/Friday window and dropping off at the same point — when
+   is_shabat_time() takes over on Friday afternoon. */
+function is_show_hoshana_raba(date){
+    return is_in_weekdays(date, [4,5]) && !is_shabat_time(date) &&
+        is_simchat_tora_eve(get_this_friday_date(date));
+}
+
+/* שמחת תורה on Shabbat (as in תשפ"ז): the Shabbat window — from half an hour
+   before candle lighting to half an hour after it goes out — runs on the chag's
+   schedule, not the regular Shabbat one, so only the Simchat Torah slides show. */
+function is_simchat_tora_shabat(date){
+    return is_shabat_time(date) && (is_simchat_tora_eve(date) || is_simchat_tora(date));
+}
+
 function get_specific_single_page(current_date){
     var item = null
     if(is_pesach_first_chag(current_date_obj)){
@@ -313,6 +336,11 @@ function get_specific_single_page(current_date){
         item = 'shavuot_eve';
     } else if(is_gedalia(current_date_obj)){
         item = 'gedalia'
+    } else if(is_simchat_tora_shabat(current_date_obj)){
+        /* Friday night falls through to the slideshow, which alternates the night
+           and day slides (see get_slide_show_items_ids); on the day itself only
+           the day's schedule is left to show. */
+        item = is_in_weekdays(current_date_obj, [5]) ? null : 'simchat_tora_single_page';
     } else if(is_shabat_time(current_date_obj) && !is_between_dates(current_date_obj, "2024-03-21T15:00", "2024-03-23T21:00") && !is_shabat_hagadol_tashpa(current_date_obj)){
         item = 'shabat_single_page'
     } else if(is_tisha_beav(current_date_obj)){
@@ -330,6 +358,9 @@ function get_slide_show_items_ids(){
     var current_date_var = get_date_from_Date(date);
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
+    if (is_simchat_tora_shabat(date)){
+        return ['simchat_tora_night_single_page', 'simchat_tora_single_page'];
+    }
     if(!is_in_weekdays(date, [5]) & !is_special_day(date)){
         slide_show_items.push('tfilot_single_page');
     } else if(is_shabat_time(date) & !is_kipur(date) & !is_kipur_eve(date)){
@@ -344,6 +375,9 @@ function get_slide_show_items_ids(){
         } else {
             slide_show_items.push('friday_single_page');
         }
+    }
+    if (is_show_hoshana_raba(date)){
+        slide_show_items.push('hoshana_raba_single_page');
     }
     if (is_show_rosh_hashana_eve(date)){
         slide_show_items.push('rosh_hashana_eve_single_page');
@@ -367,8 +401,10 @@ function get_slide_show_items_ids(){
     if (is_between_dates(date, "2022-10-15T17:00", "2022-10-16T13:30")){
         slide_show_items.push('hoshana_raba');
     }
-    if (is_present_simchat_tora_eve(date) | is_simchat_tora_eve(date)){
-        slide_show_items.push('simchat_tora_eve_single_page');
+    /* Tonight's schedule, alongside the Hoshana Raba slide through the day.
+       Replaces the old simchat_tora_eve_single_page, whose night half it carries. */
+    if (is_simchat_tora_eve(date) && !is_shabat_time(date)){
+        slide_show_items.push('simchat_tora_night_single_page');
     }
     if (is_simchat_tora_eve(date) | is_simchat_tora(date)){
         slide_show_items.push('simchat_tora_single_page');
@@ -1688,20 +1724,18 @@ async function present_simchat_tora_eve_full(current_date){
 }
 
 async function present_simchat_tora_full(current_date){
-    var chag_out = '18:45';
-    load_html_into_page_elem_start('simchat_tora.html', 'first_column');
-    await load_html_into_page_elem_end('simchat_tora_a.html', 'first_column');
-    load_html_into_page_elem_end('simchat_tora_b.html', 'second_column', () => {
-        set_element_html('arvit-shabat', chag_out);
-        set_element_html('arvit-shabat-2', add_minutes_to_time(chag_out, 15));
-    });
+    /* שמחת תורה falls on Shabbat in תשפ"ז, so the chag goes out with Shabbat —
+       read off this week's shabat.json entry rather than hardcoded each year. */
+    var chag_out = get_shabat_times(current_date)['out'];
+    set_element_html('simchat_tora_grid', get_simchat_tora_day_page_grid_html());
+    set_element_html('chag_out', chag_out);
+    set_element_html('arvit_b', add_minutes_to_time(chag_out, 15));
+    return sleep_seconds(wait_seconds*5);
+}
 
-    load_html_into_page_elem_end('day_times_inner_1.html', 'day_times_first_column', () => {
-        load_html_into_page_elem_end('day_times_inner_2.html', 'day_times_second_column', () => {
-            present_day_times('2025-10-14');
-        });
-    });
-    return sleep_seconds(wait_seconds*10);
+async function present_simchat_tora_night(current_date){
+    set_element_html('simchat_tora_night_grid', get_simchat_tora_night_page_grid_html());
+    return sleep_seconds(wait_seconds*5);
 }
 
 async function present_hakafot(current_date){
@@ -1788,6 +1822,18 @@ async function populate_friday_prayer_times(current_date){
 }
 
 async function present_friday_single_page(current_date){
+    await fill_friday_single_page(current_date);
+    return sleep_seconds(wait_seconds*5);
+}
+
+/* The Friday slide with "הושענא רבא" in the parasha slot of its title. */
+async function present_hoshana_raba_single_page(current_date){
+    await fill_friday_single_page(current_date);
+    set_element_html('prayer-times-title-parasha', 'הושענא רבא');
+    return sleep_seconds(wait_seconds*5);
+}
+
+async function fill_friday_single_page(current_date){
     var showPlag = is_minyan_plag_active(current_date);
     // Grid builder includes all column structure — no post-injection of col HTML needed.
     set_element_html('friday_grid', showPlag ? get_friday_plag_page_grid_html() : get_friday_page_grid_html());
@@ -1800,7 +1846,6 @@ async function present_friday_single_page(current_date){
 
     // Day-times structure already in the DOM from the grid builder; just populate the spans.
     present_day_times(get_this_friday_date(current_date), true);
-    return sleep_seconds(wait_seconds*5);
 }
 
 async function show_shabat_eve_times(current_date, shabat_in, parent_element) {
@@ -2071,6 +2116,7 @@ let item_funcs = {
     'shabat_single_page': present_shabat_prayer_times,
     'friday_single_page': present_friday_single_page,
     'friday_single_page_plag': present_friday_single_page,
+    'hoshana_raba_single_page': present_hoshana_raba_single_page,
     'tormim': present_donators,
     'messages': present_messages,
     'advertisement': present_advertisement,
@@ -2087,6 +2133,7 @@ let item_funcs = {
     'simchat_tora_eve_single_page': present_simchat_tora_eve_full,
     'simchat_tora_single_page': present_simchat_tora_full,
     'hakafot_single_page': present_hakafot,
+    'simchat_tora_night_single_page': present_simchat_tora_night,
     'megila': present_megila_times,
     'purim': present_purim_times,
     'pesach_eve': present_pesach_eve,

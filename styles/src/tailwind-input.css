@@ -288,7 +288,7 @@
   }
 
   /* Friday pages: taller gap because the parasha strip sits below the clock */
-  :is(#friday_single_page, #friday_single_page_plag) main.tfilot-main-offset {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) main.tfilot-main-offset {
     padding-top: clamp(4.05rem, 11vh, 7.95rem);
   }
 
@@ -298,7 +298,7 @@
     padding-top: clamp(4rem, 13.8vh, 7rem);
   }
 
-  :is(#friday_single_page, #friday_single_page_plag) .friday-tz-scroll-host {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .friday-tz-scroll-host {
     padding-top: clamp(0.5rem, 1.5vh, 1.1rem);
   }
 
@@ -557,8 +557,8 @@
 
   /* Wider screens: larger title on weekday + Friday pages */
   @media (min-width: 640px) {
-    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-section-title,
-    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag) .tz-section-parasha {
+    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-title,
+    :is(#tfilot_single_page, #friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-parasha {
       font-size: clamp(2.3rem, 5.6vmin, 3.45rem);
     }
   }
@@ -609,20 +609,20 @@
      =========================================================== */
 
   /* Parasha and separator must never truncate */
-  :is(#friday_single_page, #friday_single_page_plag) .tz-section-title--with-parasha .tz-section-parasha,
-  :is(#friday_single_page, #friday_single_page_plag) .tz-section-title--with-parasha .tz-section-title-sep {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-title--with-parasha .tz-section-parasha,
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-title--with-parasha .tz-section-title-sep {
     white-space: nowrap !important;
     overflow: visible !important;
     text-overflow: clip !important;
   }
 
-  :is(#friday_single_page, #friday_single_page_plag) .tz-section-title-sep {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-title-sep {
     color: var(--color-cream-faint);
     font-weight: 600;
   }
 
   /* Title takes its natural width so the decorating line never overlaps the parasha name */
-  :is(#friday_single_page, #friday_single_page_plag) .tz-section-title--with-parasha {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-title--with-parasha {
     flex: 0 0 auto !important;
     flex-shrink: 0 !important;
     min-width: max-content !important;
@@ -633,19 +633,19 @@
   }
 
   /* Decorating line fills only the space after the full title + parasha */
-  :is(#friday_single_page, #friday_single_page_plag) .tz-section-header:has(.tz-section-title--with-parasha) .tz-section-rule {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-header:has(.tz-section-title--with-parasha) .tz-section-rule {
     flex: 1 1 0%;
     min-width: 0.5rem;
     align-self: center;
   }
 
   /* Parasha a bit smaller than the main title */
-  :is(#friday_single_page, #friday_single_page_plag) .tz-section-parasha {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-parasha {
     font-size: clamp(1.55rem, 3.75vmin, 2.4rem) !important;
   }
 
   @media (min-width: 640px) {
-    :is(#friday_single_page, #friday_single_page_plag) .tz-section-parasha {
+    :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) .tz-section-parasha {
       font-size: clamp(1.75rem, 4.2vmin, 2.6rem) !important;
     }
   }
@@ -1671,14 +1671,14 @@
      single-page slides; the sizes must match so they look the same on TV.
      =========================================================== */
 
-  :is(#friday_single_page, #friday_single_page_plag) #day_times .tz-glass-card {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) #day_times .tz-glass-card {
     padding: clamp(0.7rem, 1.55vmin, 1rem) clamp(0.75rem, 1.75vw, 1.05rem) !important;
     gap: 0.5rem !important;
     min-height: 0;
     overflow: visible !important;
   }
 
-  :is(#friday_single_page, #friday_single_page_plag) #day_times span.font-display-time {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) #day_times span.font-display-time {
     font-size: clamp(2.05rem, 5vmin, 3.15rem) !important;
     font-weight: 600 !important;
     line-height: 1.06 !important;
@@ -1687,7 +1687,7 @@
       0 2px 6px rgba(27, 28, 26, 0.2);
   }
 
-  :is(#friday_single_page, #friday_single_page_plag) #day_times :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
+  :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) #day_times :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
     font-family: 'Work Sans', system-ui, sans-serif;
     font-size: clamp(2.05rem, 5vmin, 3.15rem) !important;
     font-weight: 600 !important;
@@ -1697,8 +1697,8 @@
   }
 
   @media (min-width: 640px) {
-    :is(#friday_single_page, #friday_single_page_plag) #day_times span.font-display-time,
-    :is(#friday_single_page, #friday_single_page_plag) #day_times :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
+    :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) #day_times span.font-display-time,
+    :is(#friday_single_page, #friday_single_page_plag, #hoshana_raba_single_page) #day_times :is(.font-headline-md, .text-sm, .text-base, .text-lg) {
       font-size: clamp(2.3rem, 5.6vmin, 3.45rem) !important;
     }
   }

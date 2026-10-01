@@ -512,10 +512,13 @@ export function tz_section_header({ title = '', parasha = false, level = 'h2', t
  *                                        'text-lg sm:text-xl md:text-2xl') — replaces, not appends.
  * @param {string}  [opts.paddingClass]   Override the card's padding classes (default
  *                                        'px-3 py-2 sm:px-3.5 sm:py-2.5') — replaces, not appends.
+ * @param {boolean} [opts.timeFirst=false] Put the time span at the start of the row (the right,
+ *                                        in RTL) ahead of the label — for a list keyed by a short
+ *                                        marker rather than a time, e.g. "הקפה א'" before its text.
  * @returns {string} HTML string
  */
 export function tz_day_time_row({
-    label = '', id, timeText = '', hidden = false, extraClass,
+    label = '', id, timeText = '', hidden = false, extraClass, timeFirst = false,
     labelSizeClass = 'text-sm sm:text-base md:text-lg',
     timeSizeClass  = 'text-lg sm:text-xl md:text-2xl',
     paddingClass   = 'px-3 py-2 sm:px-3.5 sm:py-2.5',
@@ -538,7 +541,8 @@ export function tz_day_time_row({
         (hidden     ? ' hidden-element' : '') +
         (extraClass ? ' ' + extraClass  : '');
 
-    return '<div class="' + cardClass + '">' + labelSpan + timeSpan + '</div>';
+    return '<div class="' + cardClass + '">' +
+        (timeFirst ? timeSpan + labelSpan : labelSpan + timeSpan) + '</div>';
 }
 
 
