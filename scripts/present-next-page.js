@@ -270,12 +270,15 @@ function is_special_day(date){
 }
 
 /* הושענא רבה is erev שמחת תורה, so that week's Friday counts as a special day
-   and the Friday slide above is suppressed. This slide stands in for it, on the
-   same Thursday/Friday window and dropping off at the same point — when
-   is_shabat_time() takes over on Friday afternoon. */
+   and the Friday slide above is suppressed. This slide stands in for it on the
+   same Thursday/Friday window, but stays up on Friday until 19:30 — past the
+   start of the chag — since it carries the ליל שמחת תורה rows. */
+var HOSHANA_RABA_SHOW_UNTIL = '19:30';
+
 function is_show_hoshana_raba(date){
-    return is_in_weekdays(date, [4,5]) && !is_shabat_time(date) &&
-        is_simchat_tora_eve(get_this_friday_date(date));
+    return is_in_weekdays(date, [4,5]) &&
+        is_simchat_tora_eve(get_this_friday_date(date)) &&
+        !(is_in_weekdays(date, [5]) && is_after_time(date, HOSHANA_RABA_SHOW_UNTIL));
 }
 
 /* שמחת תורה on Shabbat (as in תשפ"ז): the Shabbat window — from half an hour
@@ -365,7 +368,8 @@ function get_slide_show_items_ids(){
     var today_times = get_today_times(current_date_var);
     var slide_show_items = [];
     if (is_simchat_tora_shabat(date)){
-        return get_simchat_tora_slide_ids(date);
+        return (is_show_hoshana_raba(date) ? ['hoshana_raba_single_page'] : [])
+            .concat(get_simchat_tora_slide_ids(date));
     }
     if(!is_in_weekdays(date, [5]) & !is_special_day(date)){
         slide_show_items.push('tfilot_single_page');
