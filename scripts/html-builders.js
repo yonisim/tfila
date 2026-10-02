@@ -1165,35 +1165,95 @@ export function get_kipur_page_grid_html(opts) {
     ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.15fr_1.07fr_1.08fr]' });
 }
 
-// ─── Simchat Torah night slide (#simchat_tora_night_single_page) ─────────────
-// Static per-year content, same convention as Rosh Hashana / Yom Kippur above:
-// the evening from דבר תורה on, and the seven הקפות with their dedications.
-// No times on the evening rows — the old slide carried none either.
+// ─── Simchat Torah slides (#simchat_tora_single_page, #hakafot_single_page) ───
+// Static per-year content, same convention as Rosh Hashana / Yom Kippur above.
+// The night's rows ride on the Hoshana Raba (Friday) slide; the day's whole
+// schedule, הקפות included, is the festival slide; the hakafot slide carries
+// the seven dedications beside the day's halachic times and the week after.
 
-function simchat_tora_night_rows_html(sizeOverride) {
+/** ליל שמחת תורה, from דבר תורה to the הקפות after ערבית — a sub-section under
+ *  the ערב שבת cards of the Hoshana Raba slide (present_hoshana_raba_single_page). */
+export function get_hoshana_raba_simchat_tora_night_html() {
+    var S = KIPUR_DAY_ROW_SIZE;
+    return tz_col({
+        gap: '1',
+        extraClass: 'mt-3',
+        children:
+            tz_section_header({ title: 'ליל שמחת תורה', level: 'h3' }) +
+            tz_day_time_row({ label: 'דבר תורה - הרב נחום',      ...S }) +
+            tz_day_time_row({ label: 'ערבית', timeText: '18:45', ...S }) +
+            tz_day_time_row({ label: 'הקפות',                    ...S }),
+    });
+}
+
+/* The day's fifteen rows run across three columns of five under one spanning
+   title. There is no halachic column — that's on the hakafot slide, and the
+   time of the day that matters, צאת החג, is a row here anyway. */
+
+/** שחרית to יזכור. */
+function simchat_tora_day_rows_html_morning(sizeOverride) {
     var S = sizeOverride || KIPUR_ROW_SIZE;
     return (
-        tz_day_time_row({ label: 'דבר תורה', ...S }) +
-        tz_day_time_row({ label: 'ערבית',    timeText: '18:45', ...S }) +
-        tz_day_time_row({ label: 'הקפות',    ...S })
+        tz_day_time_row({ label: 'שחרית מניין א\' - ספרדי - בהרחבה',             timeText: '06:00', ...S }) +
+        tz_day_time_row({ label: 'שחרית מניין ב\'',                            timeText: '07:30', ...S }) +
+        tz_day_time_row({ label: 'קריאת התורה',                                                   ...S }) +
+        tz_day_time_row({ label: 'סיום סבבי עליות ועליית "כל הנערים"',           timeText: '09:15', ...S }) +
+        tz_day_time_row({ label: 'יזכור (משוער) - הזכרת הנופלים והנרצחים',        timeText: '10:15', ...S })
     );
+}
+
+/** מוסף and the הקפות, with the קידוש and תהלים between them. */
+function simchat_tora_day_rows_html_midday(sizeOverride) {
+    var S = sizeOverride || KIPUR_ROW_SIZE;
+    return (
+        tz_day_time_row({ label: 'מוסף ותפילת גשם',                                          ...S }) +
+        tz_day_time_row({ label: 'הקפות א\'-ד\'',                       timeText: '11:00', ...S }) +
+        tz_day_time_row({ label: 'קידוש',                              timeText: '11:45', ...S }) +
+        tz_day_time_row({ label: 'תהלים לילדים וחלוקת שקיות הפתעה',                          ...S }) +
+        tz_day_time_row({ label: 'הקפות ה-ז',                          timeText: '12:30', ...S })
+    );
+}
+
+/** מנחה גדולה to the end of the chag. chag_out / arvit_b are filled by
+ *  present_simchat_tora_full(). */
+function simchat_tora_day_rows_html_afternoon(sizeOverride) {
+    var S = sizeOverride || KIPUR_ROW_SIZE;
+    return (
+        tz_day_time_row({ label: 'מנחה גדולה',      timeText: '13:15', ...S }) +
+        tz_day_time_row({ label: 'מעיינים בחבורה',  timeText: '16:45', ...S }) +
+        tz_day_time_row({ label: 'מנחה קטנה',       timeText: '17:30', ...S }) +
+        tz_day_time_row({ label: 'ערבית וצאת החג',  id: 'chag_out',        ...S }) +
+        tz_day_time_row({ label: 'ערבית ב\'',       id: 'arvit_b',         ...S })
+    );
+}
+
+export function get_simchat_tora_page_grid_html() {
+    var S = KIPUR_ROW_SIZE;
+    return tz_page_grid([
+        { title: 'שמחת תורה', headerColSpan: 3, ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: simchat_tora_day_rows_html_morning(S) }) },
+        { children: tz_col({ gap: '1', children: simchat_tora_day_rows_html_midday(S) }) },
+        { children: tz_col({ gap: '1', children: simchat_tora_day_rows_html_afternoon(S) }) },
+        /* Column 1's two long labels (סיום סבבי עליות…, יזכור…) wrap to three
+           lines at an even split and push it past the bottom edge; column 3's
+           labels are the shortest, so the width comes from there. */
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.45fr_1.1fr_0.9fr]' });
 }
 
 /** One row per hakafa — its ordinal in the time slot at the start of the row,
  *  its dedication as the label. */
 var SIMCHAT_TORA_HAKAFOT = [
-    ['הקפה א\'', 'לכבודה של תורה'],
+    ['הקפה א\'', 'לכבודה של התורה'],
     ['הקפה ב\'', 'לכבודה של ארץ ישראל'],
     ['הקפה ג\'', 'לכבוד חיילי צה"ל, כוחות הבטחון, נשותיהם ומשפחתם'],
-    ['הקפה ד\'', 'בהודיה על השבת החטופים'],
-    ['הקפה ה\'', 'לבניין המקדש ולגאולה השלמה במהרה'],
-    ['הקפה ו\'', 'הקפה איטית לעילוי נשמת הנופלים והחללים'],
+    ['הקפה ד\'', 'הקפה איטית לע"נ הנופלים'],
+    ['הקפה ה\'', 'לבניין המקדש ולגאולה שלמה'],
+    ['הקפה ו\'', 'לבניין מבנה הקבע של בתי הכנסת'],
     ['הקפה ז\'', 'למען אחדות עם ישראל'],
 ];
 
-/* Seven rows is one more than the tallest Kipur column, so the hakafot get the
-   tighter Kipur-day padding; the dedications are a notch smaller than the
-   ordinals so the longest one (הקפה ג') wraps to two lines at most. */
+/* Seven rows is one more than the tallest Kipur column, so the hakafot get
+   tighter padding; the dedications are a notch smaller than the ordinals so
+   the longest one (הקפה ג') stays on one line. */
 var SIMCHAT_TORA_HAKAFA_ROW_SIZE = {
     ...KIPUR_DAY_ROW_SIZE,
     labelSizeClass: 'text-[25px]',
@@ -1206,60 +1266,29 @@ function simchat_tora_hakafot_rows_html() {
     }).join('');
 }
 
-export function get_simchat_tora_night_page_grid_html() {
+/** The chag day's halachic times, with the coming week's מנחה and ערבית under
+ *  them — like the Shabbat slide's own "זמני השבוע", only the times that move
+ *  week to week. present_hakafot() fills both. */
+function simchat_tora_times_col_html() {
+    /* Seven rows plus a sub-header — the same load as the Kipur day slide's
+       third column, so the same tight padding. */
+    var S = KIPUR_DAY_ROW_SIZE;
+    return tz_col({
+        gap: '1',
+        children:
+            get_day_times_rows_html(S) +
+            tz_flex_spacer() +
+            tz_section_header({ title: 'זמני השבוע', level: 'h3' }) +
+            tz_day_time_row({ label: 'מנחה',  id: 'simchat_tora_week_mincha', ...S }) +
+            tz_day_time_row({ label: 'ערבית', id: 'simchat_tora_week_arvit',  ...S }),
+    });
+}
+
+export function get_simchat_tora_hakafot_page_grid_html() {
     return tz_page_grid([
-        { title: 'ליל שמחת תורה', ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: simchat_tora_night_rows_html() }) },
-        { title: 'הקפות',         ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: simchat_tora_hakafot_rows_html() }) },
-    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1fr_2fr]' });
-}
-
-/* The day's fifteen rows run across three columns of five under one spanning
-   title. Like get_kipur_eve_combined_page_grid_html() there is no halachic
-   column — the time of the day that matters, צאת החג, is already a row.
-   chag_out / arvit_b are filled by present_simchat_tora_full(). */
-function simchat_tora_day_rows_html_morning(sizeOverride) {
-    var S = sizeOverride || KIPUR_ROW_SIZE;
-    return (
-        tz_day_time_row({ label: 'שחרית א - ספרדי (בהרחבה)',                    timeText: '06:00', ...S }) +
-        tz_day_time_row({ label: 'שחרית מניין מרכזי',                          timeText: '07:30', ...S }) +
-        tz_day_time_row({ label: 'קריאת התורה',                                                   ...S }) +
-        tz_day_time_row({ label: 'סיום סבבי עליות ועליית כל הנערים (משוער)',     timeText: '09:15', ...S }) +
-        tz_day_time_row({ label: 'יזכור (משוער) - הזכרת הנופלים והנרצחים',        timeText: '10:15', ...S })
-    );
-}
-
-function simchat_tora_day_rows_html_midday(sizeOverride) {
-    var S = sizeOverride || KIPUR_ROW_SIZE;
-    return (
-        tz_day_time_row({ label: 'מוסף ותפילת גשם (משוער)',            timeText: '10:25', ...S }) +
-        tz_day_time_row({ label: 'הקפות א-ד',                          timeText: '11:00', ...S }) +
-        tz_day_time_row({ label: 'קידוש (בשרי)',                       timeText: '11:45', ...S }) +
-        tz_day_time_row({ label: 'תהלים לילדים וחלוקת שקיות הפתעה',                          ...S }) +
-        tz_day_time_row({ label: 'המשך הקפות ה-ז',                     timeText: '12:30', ...S })
-    );
-}
-
-function simchat_tora_day_rows_html_afternoon(sizeOverride) {
-    var S = sizeOverride || KIPUR_ROW_SIZE;
-    return (
-        tz_day_time_row({ label: 'מנחה גדולה',      timeText: '13:15', ...S }) +
-        tz_day_time_row({ label: 'מנחה קטנה',       timeText: '17:30', ...S }) +
-        tz_day_time_row({ label: 'מעיינים בחבורה',  timeText: '17:45', ...S }) +
-        tz_day_time_row({ label: 'צאת החג וערבית',  id: 'chag_out',        ...S }) +
-        tz_day_time_row({ label: 'ערבית ב\'',     id: 'arvit_b',         ...S })
-    );
-}
-
-export function get_simchat_tora_day_page_grid_html() {
-    var S = KIPUR_ROW_SIZE;
-    return tz_page_grid([
-        { title: 'שמחת תורה', headerColSpan: 3, ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: simchat_tora_day_rows_html_morning(S) }) },
-        { children: tz_col({ gap: '1', children: simchat_tora_day_rows_html_midday(S) }) },
-        { children: tz_col({ gap: '1', children: simchat_tora_day_rows_html_afternoon(S) }) },
-        /* Column 1's two long labels (סיום סבבי עליות…, יזכור…) wrap to three
-           lines at an even split and push it past the bottom edge; column 3's
-           labels are the shortest, so the width comes from there. */
-    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.45fr_1.1fr_0.9fr]' });
+        { title: 'הקפות',           ...KIPUR_TITLE_CLASS, children: tz_col({ gap: '1', children: simchat_tora_hakafot_rows_html() }) },
+        { title: 'זמני היום בהלכה', ...KIPUR_TITLE_CLASS, children: simchat_tora_times_col_html() },
+    ], { ...ROSH_HASHANA_GRID_BASE_OPTS, gridCols: 'grid-cols-[1.75fr_1fr]' });
 }
 
 // ─── Shabbat timeline slide builders (#shabat_single_page) ─────────────

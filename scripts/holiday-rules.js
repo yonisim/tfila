@@ -273,10 +273,6 @@ export function is_simchat_tora(date) {
     return is_between_dates(date, DATES.SIMCHAT_TORA.start, DATES.SIMCHAT_TORA.end);
 }
 
-export function is_present_hakafot_single_page(date) {
-    return is_between_dates(date, DATES.HAKAFOT_SINGLE_PAGE.start, DATES.HAKAFOT_SINGLE_PAGE.end);
-}
-
 // ─── 10 Tevet ─────────────────────────────────────────────────────────────────
 
 export function is_10_tevet_friday(date) {

@@ -7,7 +7,7 @@ module.exports = {
     './html/friday_single_page.html',
     './html/friday_single_page_plag.html',
     './html/hoshana_raba_single_page.html',
-    './html/simchat_tora_night_single_page.html',
+    './html/hakafot_single_page.html',
     './html/simchat_tora_single_page.html',
     './html/shabat_single_page.html',
     './html/shavuot_single_page.html',
