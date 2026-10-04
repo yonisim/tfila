@@ -74,7 +74,7 @@ export const DATES = {
 
     SIMCHAT_TORA_EVE_SHOW:   { start: '2026-10-02T10:00',    end: '2026-10-02T23:59'    },
     SIMCHAT_TORA_EVE:        { start: '2026-10-02T00:01',    end: '2026-10-02T23:59'    },
-    SIMCHAT_TORA:            { start: '2026-10-03T00:01',    end: '2026-10-04T19:00'    },
+    SIMCHAT_TORA:            { start: '2026-10-03T00:01',    end: '2026-10-03T19:00'    },
 
     HANUKA:                  { start: '2025-12-14T16:55',    end: '2025-12-22T16:40'    },
 };
