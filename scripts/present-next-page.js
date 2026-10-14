@@ -248,10 +248,18 @@ function is_shabat_time(date, buffer_minutes=30){
 
 
 
-function is_rosh_chodesh(date){
-    var hebrew_date = get_today_hebrew_date(date)
+function is_rosh_chodesh(hebrew_date){
     var day_of_month = hebrew_date.split(' ')[0].replace("'", "")
     return day_of_month == 'א' || day_of_month == 'ל'
+}
+
+function is_show_tal_umatar(hebrew_date){
+    const month = hebrew_date.split(' ')[1]
+    if (month == 'מרחשוון'){
+        var day_of_month = hebrew_date.split(' ')[0].replace("'", "").replace("\"", "");
+        return ['ז','ח', 'ט','י','יא','יב'].includes(day_of_month);
+    }
+    return false;
 }
 
 // ─── Runtime-dependent predicates (keep here — need day_times / shabat_times) ──
@@ -738,6 +746,7 @@ function format_rosh_hodesh_message(hodesh_name, days) {
 async function show_footer_custom_message_if_needed(current_date, into_elem_id){
     var messages = [];
     var show_footer = false;
+    const hebrew_date = get_today_hebrew_date(current_date)
 
     if(is_shabat_time(current_date)){
         var shabat_times = get_shabat_times(current_date);
@@ -788,7 +797,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_between_dates(current_date, '2025-10-28T17:10', '2025-11-05T22:00') & !is_between_dates(current_date, '2024-11-12T21:00', '2024-11-12T22:00') & !is_shabat_time(current_date, -25)){
+    if(is_show_tal_umatar(hebrew_date) && !is_shabat_time(current_date, -20)){
         messages.push('ותן טל ומטר לברכה');
         show_footer = true;
     }
@@ -884,7 +893,7 @@ async function show_footer_custom_message_if_needed(current_date, into_elem_id){
         show_footer = true;
     }
 
-    if(is_rosh_chodesh(current_date)){
+    if(is_rosh_chodesh(hebrew_date)){
         messages.push('ראש חודש   |   יעלה ויבוא');
         show_footer = true
     }
