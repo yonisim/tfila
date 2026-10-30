@@ -1511,7 +1511,7 @@ async function present_shabat_prayer_times(current_date){
     document.getElementById("prayer-times-title-parasha").innerText = this_shabat_times['parasha'];
     var shabat_in = this_shabat_times["in"];
     var arvit_out = this_shabat_times["out"];
-    var shacharit_main = '08:30';
+    var shacharit_main = '08:15';
     var mincha_ktana = mincha_shabat[2];
 
     /* ── ערב שבת: הדלקת נרות + מנחה וקבלת שבת ── */
