@@ -1375,8 +1375,10 @@ export function get_shabat_tl_eve_and_day_col_html() {
         shabat_tl_row({ name: 'שחרית',
                         timeIds: ['shacharit_a', 'shacharit_b', 'shacharit_main'] }) +
         shabat_tl_row({ name: 'קידוש ושיעור · תפילת ילדים', timeId: 'kidush' }) +
-        shabat_tl_row({ name: 'מנחה גדולה',   timeId: 'mincha-shabat-a' }) +
-        shabat_tl_row({ name: 'מנחה ב',        timeId: 'mincha-shabat-b' }) +
+        // shabat_tl_row({ name: 'מנחה גדולה',   timeId: 'mincha-shabat-a' }) +
+        shabat_tl_row({ name: 'מנחה גדולה',
+                        timeIds: ['mincha-shabat-a', 'mincha-shabat-b', 'mincha-shabat-14'] }) +
+        // shabat_tl_row({ name: 'מנחה ב',        timeId: 'mincha-shabat-b' }) +
         shabat_tl_row({ name: 'הורים וילדים', timeId: 'shabat-parents-time' })
     );
 }

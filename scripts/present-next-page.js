@@ -466,7 +466,8 @@ set_mincha_gedola_time(MINCHA_GEDOLA_TIME);
 let shacharit_regular_days = ['06:00', '06:50', '08:30(שישי)'];
 let kabalat_shabat = ['17:46', '17:56'];
 let shacharit_shabat = ['06:00', '07:20', '08:15'];
-let mincha_shabat = ['12:30', '13:15', '16:00'];
+let mincha_shabat = ['12:30', '13:15', '14:00'];
+let mincha_ktana = '16:00';
 let arvit_shabat = ['18:44', '19:00'];
 
 function get_week_start_date(current_date){
@@ -1512,7 +1513,6 @@ async function present_shabat_prayer_times(current_date){
     var shabat_in = this_shabat_times["in"];
     var arvit_out = this_shabat_times["out"];
     var shacharit_main = '08:15';
-    var mincha_ktana = mincha_shabat[2];
 
     /* ── ערב שבת: הדלקת נרות + מנחה וקבלת שבת ── */
     apply_friday_shabat_eve_card_times(current_date, shabat_in);
@@ -1527,6 +1527,7 @@ async function present_shabat_prayer_times(current_date){
     set_element_html('mincha-shabat-a', mincha_shabat[0]);
     set_element_html('shabat-parents-time', '13:35');
     set_element_html('mincha-shabat-b', mincha_shabat[1]);
+    set_element_html('mincha-shabat-14', mincha_shabat[2]);
 
     /* ── אחר הצהריים ── */
     set_element_html('lesson-halacha', add_minutes_to_time(mincha_ktana, -60));
